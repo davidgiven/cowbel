@@ -1,10 +1,12 @@
 package com.cowlang2.parser.tokens;
 
+import java.util.List;
 import com.cowlang2.parser.core.Location;
 
 public class MethodCallNode extends ExpressionNode
 {
 	private TextToken _method;
+	
 	public MethodCallNode(Location start, Location end, ExpressionNode object,
 			TextToken method, ExpressionNode... arguments)
     {
@@ -15,6 +17,17 @@ public class MethodCallNode extends ExpressionNode
 		
 		_method = method;
     }
+	
+	public MethodCallNode(Location start, Location end, ExpressionNode object,
+			TextToken method, List<ExpressionNode> arguments)
+	{
+		super(start, end);
+		addChild(object);
+		for (ExpressionNode n : arguments)
+			addChild(n);
+		
+		_method = method;
+	}
 	
 	@Override
 	public String getShortDescription()

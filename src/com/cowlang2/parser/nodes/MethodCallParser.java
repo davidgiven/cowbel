@@ -1,5 +1,6 @@
 package com.cowlang2.parser.nodes;
 
+import java.util.LinkedList;
 import com.cowlang2.parser.core.Location;
 import com.cowlang2.parser.core.ParseResult;
 import com.cowlang2.parser.tokens.ExpressionNode;
@@ -29,11 +30,31 @@ public class MethodCallParser extends Parser
 		if (pr.failed())
 			return pr;
 		
+		LinkedList<ExpressionNode> args = new LinkedList<ExpressionNode>();
+		
 		pr = CloseParenthesisParser.Instance.parse(pr.end());
 		if (pr.failed())
-			return pr;
+		{
+			/* Argument list is not empty. */
+			
+			for (;;)
+			{
+				ParseResult arg = Expression1.Instance.parse(pr.end());
+				if (arg.failed())
+					return arg;
+				args.addLast((ExpressionNode)arg);
+				
+				pr = CloseParenthesisParser.Instance.parse(arg.end());
+				if (pr.success())
+					break;
+				
+				pr = CommaParser.Instance.parse(arg.end());
+				if (pr.failed())
+					return pr;
+			}
+		}
 		
 		return new MethodCallNode(location, pr.end(),
-				(ExpressionNode)object, (TextToken)method);
+				(ExpressionNode)object, (TextToken)method, args);
 	}
 }
