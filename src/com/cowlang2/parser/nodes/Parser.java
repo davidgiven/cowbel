@@ -32,15 +32,64 @@ public abstract class Parser
 		m.put(type, result);
 	}
 
+	private void linecomment(MutableLocation loc)
+	{
+		loc.advance(2); /* Skip the // */
+		
+		for (;;)
+		{
+			int c = loc.codepointAtOffset(0);
+			if ((c == '\n') || (c == -1))
+				break;
+			
+			loc.advance();
+		}
+	}
+	
+	private void blockcomment(MutableLocation loc)
+	{
+		loc.advance(2); /* Skip the /* */
+		
+		for (;;)
+		{
+			int c1 = loc.codepointAtOffset(0);
+			int c2 = loc.codepointAtOffset(1);
+			
+			if ((c1 == '*') && (c2 == '/'))
+			{
+				loc.advance(2);
+				break;
+			}
+			
+			if (c1 == -1)
+				break;
+			
+			loc.advance();
+		}
+	}
+	
 	private void whitespace(MutableLocation loc)
 	{
 		for (;;)
 		{
 			int c = loc.codepointAtOffset(0);
-			if (!Character.isSpaceChar(c))
-				break;
-			
-			loc.advance();
+			if (!Character.isWhitespace(c))
+			{
+				if (c == '/')
+				{
+					c = loc.codepointAtOffset(1);
+					if (c == '*')
+						blockcomment(loc);
+					else if (c == '/')
+						linecomment(loc);
+					else
+						break;
+				}
+				else
+					break;
+			}
+			else
+				loc.advance();
 		}
 	}
 	
@@ -52,7 +101,8 @@ public abstract class Parser
 		if (pr != null)
 			return pr;
 
-		if (Character.isSpaceChar(location.codepointAtOffset(0)))
+		int c = location.codepointAtOffset(0);
+		if (Character.isWhitespace(c) || (c == '/'))
 		{
 			MutableLocation ml = new MutableLocation(location);
 			whitespace(ml);
