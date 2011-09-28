@@ -7,25 +7,23 @@ import com.cowlang2.parser.core.ParseResult;
 
 public abstract class Parser
 {
-	private static HashMap<Location, HashMap<Class<? extends Parser>, ParseResult>> _cache =
-		new HashMap<Location, HashMap<Class<? extends Parser>, ParseResult>>(); 
+	private static HashMap<Location, HashMap<Parser, ParseResult>> _cache =
+		new HashMap<Location, HashMap<Parser, ParseResult>>(); 
 		
-	private static ParseResult get(Location loc, Class<? extends Parser> type)
+	private static ParseResult get(Location loc, Parser type)
 	{
-		HashMap<Class<? extends Parser>, ParseResult> m =
-			_cache.get(loc);
+		HashMap<Parser, ParseResult> m = _cache.get(loc);
 		if (m == null)
 			return null;
 		return m.get(type);
 	}
 	
-	private static void put(Location loc, Class<? extends Parser> type, ParseResult result)
+	private static void put(Location loc, Parser type, ParseResult result)
 	{
-		HashMap<Class<? extends Parser>, ParseResult> m =
-			_cache.get(loc);
+		HashMap<Parser, ParseResult> m = _cache.get(loc);
 		if (m == null)
 		{
-			m = new HashMap<Class<? extends Parser>, ParseResult>();
+			m = new HashMap<Parser, ParseResult>();
 			_cache.put(loc, m);
 		}
 		
@@ -97,7 +95,7 @@ public abstract class Parser
 	
 	public ParseResult parse(Location location)
 	{
-		ParseResult pr = get(location, getClass());
+		ParseResult pr = get(location, this);
 		if (pr != null)
 			return pr;
 
@@ -111,7 +109,7 @@ public abstract class Parser
 		else
 			pr = parseImpl(location);
 		
-		put(location, getClass(), pr);
+		put(location, this, pr);
 		return pr;
 	}
 	
