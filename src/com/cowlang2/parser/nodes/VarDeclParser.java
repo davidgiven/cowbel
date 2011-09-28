@@ -6,8 +6,6 @@ import com.cowlang2.parser.errors.UnimplementedParse;
 
 public class VarDeclParser extends Parser
 {
-	public static VarDeclParser Instance = new VarDeclParser();
-	
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{

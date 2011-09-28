@@ -7,6 +7,45 @@ import com.cowlang2.parser.core.ParseResult;
 
 public abstract class Parser
 {
+	public static AtomParser AtomParser = new AtomParser();
+	public static Expression1Parser Expression1Parser = new Expression1Parser();
+	public static Expression2Parser Expression2Parser = new Expression2Parser();
+	public static Expression3Parser Expression3Parser = new Expression3Parser();
+	public static ExpressionStatementParser ExpressionStatementParser = new ExpressionStatementParser();
+	public static IdentifierParser IdentifierParser = new IdentifierParser();
+	public static InfixOperatorParser InfixOperatorParser = new InfixOperatorParser();
+	public static InterfaceDeclarationParser InterfaceDeclarationParser = new InterfaceDeclarationParser();
+	public static MethodCallParser MethodCallParser = new MethodCallParser();
+	public static MethodNameParser MethodNameParser = new MethodNameParser();
+	public static OperatorParser OperatorParser = new OperatorParser();
+	public static ParenthesisedExpressionParser ParenthesisedExpressionParser = new ParenthesisedExpressionParser();
+	public static PrefixOperatorParser PrefixOperatorParser = new PrefixOperatorParser();
+	public static ProgramParser ProgramParser = new ProgramParser();
+	public static StatementParser StatementParser = new StatementParser();
+	public static StatementsParser StatementsParser = new StatementsParser();
+	public static VarDeclParser VarDeclParser = new VarDeclParser();
+	
+	public static Parser DotParser = new TrivialParser(".");
+	public static Parser CommaParser = new TrivialParser(",");
+	public static Parser SemicolonParser = new TrivialParser(";");
+	public static Parser OpenParenthesisParser = new TrivialParser("(");
+	public static Parser CloseParenthesisParser = new TrivialParser(")");
+	public static Parser OpenAngleBracketParser = new TrivialParser("<");
+	public static Parser CloseAngleBracketParser = new TrivialParser(">");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	private static HashMap<Location, HashMap<Parser, ParseResult>> _cache =
 		new HashMap<Location, HashMap<Parser, ParseResult>>(); 
 		

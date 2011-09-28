@@ -8,8 +8,6 @@ import com.cowlang2.parser.tokens.SyntacticElementToken;
 
 public class AtomParser extends Parser
 {
-	public static AtomParser Instance = new AtomParser();
-	
 	private static char[] _singleCharOperators = new char[]
    	{
    		'.',

@@ -6,7 +6,7 @@ import org.apache.commons.io.FileUtils;
 import com.cowlang2.parser.core.FailedParse;
 import com.cowlang2.parser.core.Location;
 import com.cowlang2.parser.core.ParseResult;
-import com.cowlang2.parser.nodes.ProgramParser;
+import com.cowlang2.parser.nodes.Parser;
 import com.cowlang2.parser.tokens.Node;
 
 public class Main
@@ -21,7 +21,7 @@ public class Main
 			String data = FileUtils.readFileToString(new File(filename), "UTF-8");
 			Location loc = new Location(data, filename);
 			
-			ParseResult pr = ProgramParser.Instance.parse(loc);
+			ParseResult pr = Parser.ProgramParser.parse(loc);
 			
 			if (pr.failed())
 			{

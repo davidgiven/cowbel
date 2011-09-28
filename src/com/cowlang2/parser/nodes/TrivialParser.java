@@ -4,11 +4,11 @@ import com.cowlang2.parser.core.Location;
 import com.cowlang2.parser.core.ParseResult;
 import com.cowlang2.parser.errors.ExpectedSyntacticElement;
 
-public class TrivialParserTemplate extends Parser
+public class TrivialParser extends Parser
 {
 	private String _template;
 	
-	public TrivialParserTemplate(String c)
+	public TrivialParser(String c)
     {
 		_template = c;
     }
@@ -16,7 +16,7 @@ public class TrivialParserTemplate extends Parser
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
-		ParseResult pr = AtomParser.Instance.parse(location);
+		ParseResult pr = AtomParser.parse(location);
 		if (pr.success() && pr.getText().equals(_template))
 			return pr;
 		

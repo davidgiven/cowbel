@@ -6,15 +6,17 @@ import com.cowlang2.parser.errors.InvalidStatement;
 
 public class StatementParser extends Parser
 {
-	public static StatementParser Instance = new StatementParser();
-	
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
-		ParseResult pr = ExpressionStatementParser.Instance.parse(location);
-		if (pr.failed())
-			pr = new InvalidStatement(location);
+		ParseResult pr1 = ExpressionStatementParser.parse(location);
+		if (pr1.success())
+			return pr1;
 		
-		return pr;
+		ParseResult pr2 = InterfaceDeclarationParser.parse(location);
+		if (pr2.success())
+			return pr2;
+		
+		return combineParseErrors(pr1, pr2);
 	}
 }

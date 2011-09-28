@@ -8,22 +8,20 @@ import com.cowlang2.parser.tokens.TextToken;
 
 public class InfixOperatorParser extends Parser
 {
-	public static InfixOperatorParser Instance = new InfixOperatorParser();
-	
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
-		ParseResult left = Expression2.Instance.parse(location);
+		ParseResult left = Expression2Parser.parse(location);
 		if (left.failed())
 			return left;
 		
 		for (;;)
 		{
-			ParseResult operator = OperatorParser.Instance.parse(left.end());
+			ParseResult operator = OperatorParser.parse(left.end());
 			if (operator.failed())
 				return left;
 
-			ParseResult right = Expression2.Instance.parse(operator.end());
+			ParseResult right = Expression2Parser.parse(operator.end());
 			if (right.failed())
 				return right;
 		

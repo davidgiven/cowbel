@@ -8,8 +8,6 @@ import com.cowlang2.parser.tokens.TextToken;
 
 public class OperatorParser extends Parser
 {
-	public static OperatorParser Instance = new OperatorParser();
-	
 	private static boolean isOperatorChar(int c)
 	{
 		switch (c)

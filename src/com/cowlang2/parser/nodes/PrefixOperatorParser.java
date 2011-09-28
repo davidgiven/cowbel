@@ -8,16 +8,14 @@ import com.cowlang2.parser.tokens.TextToken;
 
 public class PrefixOperatorParser extends Parser
 {
-	public static PrefixOperatorParser Instance = new PrefixOperatorParser();
-	
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
-		ParseResult pr1 = OperatorParser.Instance.parse(location);
+		ParseResult pr1 = OperatorParser.parse(location);
 		if (pr1.failed())
 			return pr1;
 		
-		ParseResult pr2 = Expression3.Instance.parse(pr1.end());
+		ParseResult pr2 = Expression3Parser.parse(pr1.end());
 		if (pr2.failed())
 			return pr2;
 		

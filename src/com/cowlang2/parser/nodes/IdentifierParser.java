@@ -8,8 +8,6 @@ import com.cowlang2.parser.tokens.TextToken;
 
 public class IdentifierParser extends Parser
 {
-	public static IdentifierParser Instance = new IdentifierParser();
-	
 	private static boolean isWordFirstChar(int c)
 	{
 		if (Character.isLetter(c))
@@ -31,7 +29,7 @@ public class IdentifierParser extends Parser
 	{
 		/* This must not be a keyword. */
 		
-		ParseResult pr = AtomParser.Instance.parse(location);
+		ParseResult pr = AtomParser.parse(location);
 		if (pr.success())
 			return new ExpectedIdentifier(location);
 		
