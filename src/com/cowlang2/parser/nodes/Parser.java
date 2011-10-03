@@ -24,6 +24,7 @@ public abstract class Parser
 	public static StatementParser StatementParser = new StatementParser();
 	public static StatementsParser StatementsParser = new StatementsParser();
 	public static VarDeclParser VarDeclParser = new VarDeclParser();
+	public static TypexDeclarationParser TypexDeclarationParser = new TypexDeclarationParser();
 	
 	public static Parser DotParser = new TrivialParser(".");
 	public static Parser CommaParser = new TrivialParser(",");
@@ -32,8 +33,11 @@ public abstract class Parser
 	public static Parser CloseParenthesisParser = new TrivialParser(")");
 	public static Parser OpenAngleBracketParser = new TrivialParser("<");
 	public static Parser CloseAngleBracketParser = new TrivialParser(">");
+	public static Parser OpenBraceParser = new TrivialParser("{");
+	public static Parser CloseBraceParser = new TrivialParser("}");
 
-
+	public static Parser VarTokenParser = new TrivialParser("var");
+	public static Parser InterfaceTokenParser = new TrivialParser("interface");
 
 
 
@@ -154,6 +158,16 @@ public abstract class Parser
 	
 	protected static ParseResult combineParseErrors(ParseResult... results)
 	{
-		return results[0];
+		ParseResult max = null;
+		for (ParseResult pr : results)
+		{
+			if (pr.failed())
+			{
+				if ((max == null) || (max.end().compareTo(pr.end()) < 0))
+					max = pr;
+			}
+		}
+		
+		return max;
 	}
 }
