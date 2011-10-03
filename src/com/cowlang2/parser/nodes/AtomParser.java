@@ -8,28 +8,10 @@ import com.cowlang2.parser.tokens.SyntacticElementToken;
 
 public class AtomParser extends Parser
 {
-	private static char[] _singleCharOperators = new char[]
-   	{
-   		'.',
-   		',',
-   		':',
-   		';',
-   		'(',
-   		')',
-   		'{',
-   		'}',
-   		'=',
-   	};
-   	
-	private static String[] _keywords = new String[]
-	{
-		"var"
-	};
-	
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
-		for (char keyword : _singleCharOperators)
+		for (char keyword : S.SingleCharOperators)
 		{
 			if (location.codepointAtOffset(0) == keyword)
 			{
@@ -39,7 +21,7 @@ public class AtomParser extends Parser
 			}
 		}
 		
-		for (String keyword : _keywords)
+		for (String keyword : S.Keywords)
 		{
 			if (location.matches(keyword))
 			{
