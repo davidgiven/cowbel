@@ -1,11 +1,10 @@
 package com.cowlang2.parser.core;
 
-public class Location
+public class Location implements Comparable<Location>
 {
 	protected String _data;
 	protected String _filename;
 	protected int _offset;
-	protected int _lineStart;
 	protected int _lineNumber;
 	protected int _lineOffset;
 	
@@ -14,7 +13,7 @@ public class Location
 		_data = data;
 		_filename = filename;
 		_offset = 0;
-		_lineStart = 0;
+		_lineOffset = 0;
 		_lineNumber = 1;
 	}
 	
@@ -23,15 +22,26 @@ public class Location
 		_data = l._data;
 		_filename = l._filename;
 		_offset = l._offset;
-		_lineStart = l._lineStart;
-		_lineNumber = l._lineNumber;
 		_lineOffset = l._lineOffset;
+		_lineNumber = l._lineNumber;
 	}
 	
 	@Override
 	public int hashCode()
 	{
 		return _filename.hashCode() ^ (_offset << 16);
+	}
+	
+	@Override
+	public int compareTo(Location o)
+	{
+		// FIXME: need to compare more than just offsets
+		
+		if (_offset < o._offset)
+			return -1;
+		if (_offset > o._offset)
+			return 1;
+		return 0;
 	}
 	
 	public String locationAsString()
@@ -64,5 +74,11 @@ public class Location
 	{
 		assert(other._filename == _filename);
 		return other._offset - _offset;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return getClass().getName()+"=("+locationAsString()+"='"+getText(16)+"...')";
 	}
 }

@@ -21,7 +21,7 @@ public class MutableLocation extends Location
 		if (c == '\n')
 		{
 			_lineNumber++;
-			_lineStart = _offset;
+			_lineOffset = _offset;
 		}
 	}
 	

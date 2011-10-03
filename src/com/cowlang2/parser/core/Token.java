@@ -12,4 +12,10 @@ public class Token extends ParseResult
 	{
 	    return false;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return getClass().toString() + "='" + getText() + "'";
+	}
 }
