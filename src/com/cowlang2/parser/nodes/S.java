@@ -20,6 +20,7 @@ public class S
 	static String[] Keywords = new String[]
     {
     	"interface",
-    	"var"
+    	"var",
+    	"method"
     };
 }

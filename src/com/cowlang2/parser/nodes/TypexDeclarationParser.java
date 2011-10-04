@@ -3,7 +3,7 @@ package com.cowlang2.parser.nodes;
 import java.util.ArrayList;
 import com.cowlang2.parser.core.Location;
 import com.cowlang2.parser.core.ParseResult;
-import com.cowlang2.parser.tokens.TextToken;
+import com.cowlang2.parser.tokens.IdentifierNode;
 import com.cowlang2.parser.tokens.TypexDeclarationNode;
 
 public class TypexDeclarationParser extends Parser
@@ -15,7 +15,7 @@ public class TypexDeclarationParser extends Parser
 		if (pr1.failed())
 			return pr1;
 
-		ArrayList<TextToken> identifiers = new ArrayList<TextToken>();
+		ArrayList<IdentifierNode> identifiers = new ArrayList<IdentifierNode>();
 		
 		Location n = pr1.end();
 		ParseResult pr2 = CloseAngleBracketParser.parse(n);
@@ -26,7 +26,7 @@ public class TypexDeclarationParser extends Parser
 				ParseResult identifierpr = IdentifierParser.parse(pr2.end());
 				if (identifierpr.failed())
 					return identifierpr;
-				identifiers.add((TextToken) identifierpr);
+				identifiers.add((IdentifierNode) identifierpr);
 				n = identifierpr.end();
 				
 				ParseResult pr3 = CloseAngleBracketParser.parse(n);

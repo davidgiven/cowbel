@@ -4,7 +4,7 @@ import com.cowlang2.parser.core.Location;
 import com.cowlang2.parser.core.MutableLocation;
 import com.cowlang2.parser.core.ParseResult;
 import com.cowlang2.parser.errors.ExpectedIdentifier;
-import com.cowlang2.parser.tokens.TextToken;
+import com.cowlang2.parser.tokens.IdentifierNode;
 
 public class OperatorParser extends Parser
 {
@@ -52,7 +52,7 @@ public class OperatorParser extends Parser
 			}
 			while (isOperatorChar(c));
 			
-			return new TextToken(location, end);
+			return new IdentifierNode(location, end);
 		}
 		
 		return new ExpectedIdentifier(location);

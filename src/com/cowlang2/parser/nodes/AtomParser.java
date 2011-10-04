@@ -25,7 +25,8 @@ public class AtomParser extends Parser
 		{
 			if (location.matches(keyword))
 			{
-				if (!Character.isJavaIdentifierPart(keyword.length()))
+				int c = location.codepointAtOffset(keyword.length());
+				if (!Character.isJavaIdentifierPart(c))
 				{
 					MutableLocation end = new MutableLocation(location);
 					end.advance(keyword.length());

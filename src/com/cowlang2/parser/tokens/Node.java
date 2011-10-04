@@ -1,5 +1,6 @@
 package com.cowlang2.parser.tokens;
 
+import java.util.List;
 import java.util.Vector;
 import com.cowlang2.parser.core.Location;
 import com.cowlang2.parser.core.Token;
@@ -21,6 +22,17 @@ public class Node extends Token
 	public Node getChild(int i)
 	{
 		return _children.get(i);
+	}
+
+	public void addChildren(List<? extends Node> children)
+	{
+		for (Node n : children)
+			addChild(n);
+	}
+	
+	public Iterable getChildren()
+	{
+		return _children;
 	}
 	
 	public String getNodeName()

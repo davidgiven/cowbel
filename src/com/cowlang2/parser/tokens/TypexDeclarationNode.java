@@ -2,17 +2,14 @@ package com.cowlang2.parser.tokens;
 
 import java.util.List;
 import com.cowlang2.parser.core.Location;
-import com.cowlang2.parser.core.ParseResult;
 
 public class TypexDeclarationNode extends ExpressionNode
 {
-	private List<TextToken> _identifiers;
-	
 	public TypexDeclarationNode(Location start, Location end,
-			List<TextToken> identifiers)
+			List<IdentifierNode> identifiers)
     {
 		super(start, end);
-		_identifiers = identifiers;
+		addChildren(identifiers);
     }
 	
 	@Override
@@ -22,7 +19,7 @@ public class TypexDeclarationNode extends ExpressionNode
 		sb.append("<");
 		
 		boolean first = true;
-		for (TextToken t : _identifiers)
+		for (IdentifierNode t : (Iterable<? extends IdentifierNode>)getChildren())
 		{
 			if (!first)
 				sb.append(" ");

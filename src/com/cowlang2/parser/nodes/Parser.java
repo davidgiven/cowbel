@@ -25,10 +25,15 @@ public abstract class Parser
 	public static StatementsParser StatementsParser = new StatementsParser();
 	public static VarDeclParser VarDeclParser = new VarDeclParser();
 	public static TypexDeclarationParser TypexDeclarationParser = new TypexDeclarationParser();
+	public static TypeReferenceParser TypeReferenceParser = new TypeReferenceParser();
+	public static MethodDeclarationParser MethodDeclarationParser = new MethodDeclarationParser();
+	public static ParameterDeclarationListParser ParameterDeclarationListParser = new ParameterDeclarationListParser();
+	public static ParameterDeclarationParser ParameterDeclarationParser = new ParameterDeclarationParser();
 	
 	public static Parser DotParser = new TrivialParser(".");
 	public static Parser CommaParser = new TrivialParser(",");
 	public static Parser SemicolonParser = new TrivialParser(";");
+	public static Parser ColonParser = new TrivialParser(":");
 	public static Parser OpenParenthesisParser = new TrivialParser("(");
 	public static Parser CloseParenthesisParser = new TrivialParser(")");
 	public static Parser OpenAngleBracketParser = new TrivialParser("<");
@@ -38,17 +43,7 @@ public abstract class Parser
 
 	public static Parser VarTokenParser = new TrivialParser("var");
 	public static Parser InterfaceTokenParser = new TrivialParser("interface");
-
-
-
-
-
-
-
-
-
-
-
+	public static Parser MethodTokenParser = new TrivialParser("method");
 
 	private static HashMap<Location, HashMap<Parser, ParseResult>> _cache =
 		new HashMap<Location, HashMap<Parser, ParseResult>>(); 

@@ -1,9 +1,12 @@
 package com.cowlang2.parser.nodes;
 
+import java.util.ArrayList;
 import com.cowlang2.parser.core.Location;
 import com.cowlang2.parser.core.ParseResult;
-import com.cowlang2.parser.errors.InvalidStatement;
-import com.cowlang2.parser.errors.UnimplementedParse;
+import com.cowlang2.parser.tokens.IdentifierNode;
+import com.cowlang2.parser.tokens.InterfaceDeclarationNode;
+import com.cowlang2.parser.tokens.MethodDeclarationNode;
+import com.cowlang2.parser.tokens.TypexDeclarationNode;
 
 public class InterfaceDeclarationParser extends Parser
 {
@@ -27,16 +30,25 @@ public class InterfaceDeclarationParser extends Parser
 		if (pr2.failed())
 			return combineParseErrors(identifierpr, pr2);
 		
+		ArrayList<MethodDeclarationNode> methods = new ArrayList<MethodDeclarationNode>();
+		
 		n = pr2.end();
 		for (;;)
 		{
 			ParseResult pr3 = CloseBraceParser.parse(n);
 			if (pr3.success())
 				break;
+		
+			ParseResult pr4 = MethodDeclarationParser.parse(pr3.end());
+			if (pr4.failed())
+				return pr4;
 			
-			return new UnimplementedParse(n);
+			methods.add((MethodDeclarationNode) pr4);
+			n = pr4.end();
 		}
 		
-		return new InvalidStatement(location);
+		return new InterfaceDeclarationNode(location, n,
+				(IdentifierNode) identifierpr, (TypexDeclarationNode) typexpr,
+				methods);
 	}
 }
