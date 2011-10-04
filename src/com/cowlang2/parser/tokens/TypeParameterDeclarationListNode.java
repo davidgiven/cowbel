@@ -3,9 +3,9 @@ package com.cowlang2.parser.tokens;
 import java.util.List;
 import com.cowlang2.parser.core.Location;
 
-public class TypexDeclarationNode extends ExpressionNode
+public class TypeParameterDeclarationListNode extends ExpressionNode
 {
-	public TypexDeclarationNode(Location start, Location end,
+	public TypeParameterDeclarationListNode(Location start, Location end,
 			List<IdentifierNode> identifiers)
     {
 		super(start, end);

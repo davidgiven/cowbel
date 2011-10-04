@@ -6,7 +6,7 @@ import com.cowlang2.parser.core.Location;
 public class InterfaceDeclarationNode extends ExpressionNode
 {
 	public InterfaceDeclarationNode(Location start, Location end,
-			IdentifierNode name, TypexDeclarationNode typeparams,
+			IdentifierNode name, TypeParameterDeclarationListNode typeparams,
 			List<MethodDeclarationNode> methods)
     {
 		super(start, end);

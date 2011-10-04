@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import com.cowlang2.parser.core.Location;
 import com.cowlang2.parser.core.ParseResult;
 import com.cowlang2.parser.tokens.IdentifierNode;
-import com.cowlang2.parser.tokens.TypexDeclarationNode;
+import com.cowlang2.parser.tokens.TypeParameterDeclarationListNode;
 
 public class TypexDeclarationParser extends Parser
 {
@@ -46,6 +46,6 @@ public class TypexDeclarationParser extends Parser
 		else
 			n = pr2.end(); 
 				
-		return new TypexDeclarationNode(location, n, identifiers);
+		return new TypeParameterDeclarationListNode(location, n, identifiers);
 	}
 }

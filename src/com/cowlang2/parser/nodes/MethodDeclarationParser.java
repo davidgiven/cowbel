@@ -6,7 +6,7 @@ import com.cowlang2.parser.core.ParseResult;
 import com.cowlang2.parser.tokens.IdentifierNode;
 import com.cowlang2.parser.tokens.MethodDeclarationNode;
 import com.cowlang2.parser.tokens.ParameterDeclarationListNode;
-import com.cowlang2.parser.tokens.TypexDeclarationNode;
+import com.cowlang2.parser.tokens.TypeParameterDeclarationListNode;
 
 public class MethodDeclarationParser extends Parser
 {
@@ -26,7 +26,7 @@ public class MethodDeclarationParser extends Parser
 		if (typexpr.success())
 			n = typexpr.end();
 		else
-			typexpr = new TypexDeclarationNode(n, n,
+			typexpr = new TypeParameterDeclarationListNode(n, n,
 					new ArrayList<IdentifierNode>());
 		
 		ParseResult inputargspr = ParameterDeclarationListParser.parse(n);
@@ -46,7 +46,7 @@ public class MethodDeclarationParser extends Parser
 			return pr;
 		
 		return new MethodDeclarationNode(location, pr.end(),
-				(IdentifierNode) namepr, (TypexDeclarationNode) typexpr,
+				(IdentifierNode) namepr, (TypeParameterDeclarationListNode) typexpr,
 				(ParameterDeclarationListNode) inputargspr,
 				(ParameterDeclarationListNode) outputargspr);
 	}

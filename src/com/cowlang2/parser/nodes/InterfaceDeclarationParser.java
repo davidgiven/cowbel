@@ -6,7 +6,7 @@ import com.cowlang2.parser.core.ParseResult;
 import com.cowlang2.parser.tokens.IdentifierNode;
 import com.cowlang2.parser.tokens.InterfaceDeclarationNode;
 import com.cowlang2.parser.tokens.MethodDeclarationNode;
-import com.cowlang2.parser.tokens.TypexDeclarationNode;
+import com.cowlang2.parser.tokens.TypeParameterDeclarationListNode;
 
 public class InterfaceDeclarationParser extends Parser
 {
@@ -48,7 +48,7 @@ public class InterfaceDeclarationParser extends Parser
 		}
 		
 		return new InterfaceDeclarationNode(location, n,
-				(IdentifierNode) identifierpr, (TypexDeclarationNode) typexpr,
+				(IdentifierNode) identifierpr, (TypeParameterDeclarationListNode) typexpr,
 				methods);
 	}
 }
