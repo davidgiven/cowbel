@@ -37,7 +37,10 @@ public class InterfaceDeclarationParser extends Parser
 		{
 			ParseResult pr3 = CloseBraceParser.parse(n);
 			if (pr3.success())
+			{
+				n = pr3.end();
 				break;
+			}
 		
 			ParseResult pr4 = MethodDeclarationParser.parse(pr3.end());
 			if (pr4.failed())

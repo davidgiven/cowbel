@@ -21,6 +21,7 @@ public class S
     {
     	"interface",
     	"var",
-    	"method"
+    	"method",
+    	"new"
     };
 }

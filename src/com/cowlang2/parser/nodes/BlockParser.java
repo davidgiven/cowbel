@@ -6,19 +6,25 @@ import com.cowlang2.parser.core.ParseResult;
 import com.cowlang2.parser.tokens.StatementListNode;
 import com.cowlang2.parser.tokens.StatementNode;
 
-public class ProgramParser extends Parser
+public class BlockParser extends Parser
 {
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
-		ArrayList<StatementNode> statements = new ArrayList<StatementNode>();
+		ParseResult pr = OpenBraceParser.parse(location);
+		if (pr.failed())
+			return pr;
 		
+		ArrayList<StatementNode> statements = new ArrayList<StatementNode>();
 		Location n = location;
 		for (;;)
 		{
-			ParseResult pr = EOFParser.parse(n);
+			pr = CloseBraceParser.parse(n);
 			if (pr.success())
+			{
+				n = pr.end();
 				break;
+			}
 			
 			pr = StatementParser.parse(n);
 			if (pr.failed())

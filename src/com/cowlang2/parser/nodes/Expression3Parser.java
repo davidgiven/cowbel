@@ -17,6 +17,10 @@ public class Expression3Parser extends Parser
 		if (pr3.success())
 			return new VariableReadNode(pr3.start(), pr3.end());
 		
-		return combineParseErrors(pr1, pr3);
+		ParseResult pr4 = ObjectInstantiationParser.parse(location);
+		if (pr4.success())
+			return pr4;
+		
+		return combineParseErrors(pr1, pr3, pr4);
 	}
 }

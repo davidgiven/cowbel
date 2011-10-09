@@ -19,9 +19,10 @@ public class TypeReferenceParser extends Parser
 		ArrayList<TypeReferenceNode> typeparms = new ArrayList<TypeReferenceNode>();
 		Location n = identifierpr.end();
 
-		ParseResult pr = OpenAngleBracketParser.parse(location);
+		ParseResult pr = OpenAngleBracketParser.parse(n);
 		if (pr.success())
-		{		
+		{
+			n = pr.end();
 			pr = CloseAngleBracketParser.parse(n);
 			if (pr.success())
 				n = pr.end();
