@@ -8,6 +8,10 @@ public class StatementParser extends Parser
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
+		ParseResult pr0 = VarAssignmentParser.parse(location);
+		if (pr0.success())
+			return pr0;
+		
 		ParseResult pr1 = ExpressionStatementParser.parse(location);
 		if (pr1.success())
 			return pr1;
@@ -20,6 +24,6 @@ public class StatementParser extends Parser
 		if (pr3.success())
 			return pr3;
 		
-		return combineParseErrors(pr1, pr2, pr3);
+		return combineParseErrors(pr0, pr1, pr2, pr3);
 	}
 }

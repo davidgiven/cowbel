@@ -3,7 +3,7 @@ package com.cowlang2.parser.nodes;
 import java.util.ArrayList;
 import com.cowlang2.parser.core.Location;
 import com.cowlang2.parser.core.ParseResult;
-import com.cowlang2.parser.tokens.StatementListNode;
+import com.cowlang2.parser.tokens.BlockNode;
 import com.cowlang2.parser.tokens.StatementNode;
 
 public class BlockParser extends Parser
@@ -16,7 +16,7 @@ public class BlockParser extends Parser
 			return pr;
 		
 		ArrayList<StatementNode> statements = new ArrayList<StatementNode>();
-		Location n = location;
+		Location n = pr.end();
 		for (;;)
 		{
 			pr = CloseBraceParser.parse(n);
@@ -34,6 +34,6 @@ public class BlockParser extends Parser
 			n = pr.end();
 		}
 		
-		return new StatementListNode(location, n, statements); 
+		return new BlockNode(location, n, statements); 
 	}
 }

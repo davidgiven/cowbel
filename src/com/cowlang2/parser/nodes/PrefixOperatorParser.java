@@ -3,8 +3,8 @@ package com.cowlang2.parser.nodes;
 import com.cowlang2.parser.core.Location;
 import com.cowlang2.parser.core.ParseResult;
 import com.cowlang2.parser.tokens.ExpressionNode;
+import com.cowlang2.parser.tokens.IdentifierNode;
 import com.cowlang2.parser.tokens.MethodCallNode;
-import com.cowlang2.parser.tokens.TextToken;
 
 public class PrefixOperatorParser extends Parser
 {
@@ -20,6 +20,6 @@ public class PrefixOperatorParser extends Parser
 			return pr2;
 		
 		return new MethodCallNode(location, pr2.end(),
-				(ExpressionNode)pr2, (TextToken)pr1);
+				(ExpressionNode)pr2, (IdentifierNode)pr1);
 	}
 }

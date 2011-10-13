@@ -25,6 +25,8 @@ public class InterfaceDeclarationParser extends Parser
 		ParseResult typexpr = TypexDeclarationParser.parse(n);
 		if (typexpr.success())
 			n = typexpr.end();
+		else
+			typexpr = new TypeParameterDeclarationListNode(n, n);
 		
 		ParseResult pr2 = OpenBraceParser.parse(n);
 		if (pr2.failed())
@@ -51,7 +53,8 @@ public class InterfaceDeclarationParser extends Parser
 		}
 		
 		return new InterfaceDeclarationNode(location, n,
-				(IdentifierNode) identifierpr, (TypeParameterDeclarationListNode) typexpr,
+				(IdentifierNode) identifierpr,
+				(TypeParameterDeclarationListNode) typexpr,
 				methods);
 	}
 }

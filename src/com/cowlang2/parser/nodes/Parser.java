@@ -33,6 +33,7 @@ public abstract class Parser
 	public static ObjectInstantiationParser ObjectInstantiationParser = new ObjectInstantiationParser();
 	public static MethodDefinitionParser MethodDefinitionParser = new MethodDefinitionParser();
 	public static BlockParser BlockParser = new BlockParser();
+	public static VarAssignmentParser VarAssignmentParser = new VarAssignmentParser();
 	
 	public static Parser EOFParser = new EOFParser();
 	public static Parser DotParser = new TrivialParser(".");

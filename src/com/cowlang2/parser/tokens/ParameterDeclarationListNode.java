@@ -5,10 +5,15 @@ import com.cowlang2.parser.core.Location;
 
 public class ParameterDeclarationListNode extends ExpressionNode
 {
+	public ParameterDeclarationListNode(Location start, Location end)
+    {
+		super(start, end);
+    }
+	
 	public ParameterDeclarationListNode(Location start, Location end,
 			List<ParameterDeclarationNode> params)
     {
-		super(start, end);
+		this(start, end);
 		addChildren(params);
     }
 	

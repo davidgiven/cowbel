@@ -35,7 +35,15 @@ public class MethodHeaderParser extends Parser
 		
 		pr = ColonParser.parse(inputargspr.end());
 		if (pr.failed())
-			return pr;
+		{
+			/* No output arguments */
+			
+			n = inputargspr.end();
+			return new MethodHeaderNode(location, n,
+					(IdentifierNode) namepr, (TypeParameterDeclarationListNode) typexpr,
+					(ParameterDeclarationListNode) inputargspr,
+					new ParameterDeclarationListNode(n, n));
+		}
 		
 		ParseResult outputargspr = ParameterDeclarationListParser.parse(pr.end());
 		if (outputargspr.failed())

@@ -3,8 +3,8 @@ package com.cowlang2.parser.nodes;
 import com.cowlang2.parser.core.Location;
 import com.cowlang2.parser.core.ParseResult;
 import com.cowlang2.parser.tokens.ExpressionNode;
+import com.cowlang2.parser.tokens.IdentifierNode;
 import com.cowlang2.parser.tokens.MethodCallNode;
-import com.cowlang2.parser.tokens.TextToken;
 
 public class InfixOperatorParser extends Parser
 {
@@ -26,7 +26,8 @@ public class InfixOperatorParser extends Parser
 				return right;
 		
 			left = new MethodCallNode(location, right.end(),
-					(ExpressionNode)left, (TextToken)operator, (ExpressionNode)right);
+					(ExpressionNode)left, (IdentifierNode)operator,
+					(ExpressionNode)right);
 			location = right.end();
 		}
 	}

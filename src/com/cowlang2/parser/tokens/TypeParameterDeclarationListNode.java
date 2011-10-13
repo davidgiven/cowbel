@@ -5,10 +5,15 @@ import com.cowlang2.parser.core.Location;
 
 public class TypeParameterDeclarationListNode extends ExpressionNode
 {
+	public TypeParameterDeclarationListNode(Location start, Location end)
+    {
+		super(start, end);
+    }
+	
 	public TypeParameterDeclarationListNode(Location start, Location end,
 			List<IdentifierNode> identifiers)
     {
-		super(start, end);
+		this(start, end);
 		addChildren(identifiers);
     }
 	

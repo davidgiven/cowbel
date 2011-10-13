@@ -4,8 +4,8 @@ import java.util.LinkedList;
 import com.cowlang2.parser.core.Location;
 import com.cowlang2.parser.core.ParseResult;
 import com.cowlang2.parser.tokens.ExpressionNode;
+import com.cowlang2.parser.tokens.IdentifierNode;
 import com.cowlang2.parser.tokens.MethodCallNode;
-import com.cowlang2.parser.tokens.TextToken;
 
 public class MethodCallParser extends Parser
 {
@@ -53,6 +53,7 @@ public class MethodCallParser extends Parser
 		}
 		
 		return new MethodCallNode(location, pr.end(),
-				(ExpressionNode)object, (TextToken)method, args);
+				(ExpressionNode)object, (IdentifierNode)method,
+				args);
 	}
 }

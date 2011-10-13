@@ -5,33 +5,34 @@ import com.cowlang2.parser.core.Location;
 
 public class MethodCallNode extends ExpressionNode
 {
-	private TextToken _method;
-	
 	public MethodCallNode(Location start, Location end, ExpressionNode object,
-			TextToken method, ExpressionNode... arguments)
+			IdentifierNode method, ExpressionNode... arguments)
     {
 		super(start, end);
 		addChild(object);
+		addChild(method);
 		for (ExpressionNode n : arguments)
 			addChild(n);
-		
-		_method = method;
     }
 	
 	public MethodCallNode(Location start, Location end, ExpressionNode object,
-			TextToken method, List<ExpressionNode> arguments)
+			IdentifierNode method, List<ExpressionNode> arguments)
 	{
 		super(start, end);
 		addChild(object);
+		addChild(method);
 		for (ExpressionNode n : arguments)
 			addChild(n);
-		
-		_method = method;
+	}
+	
+	public IdentifierNode getMethodIdentifier()
+	{
+		return (IdentifierNode) getChild(1);
 	}
 	
 	@Override
 	public String getShortDescription()
 	{
-	    return _method.getText();
+	    return getMethodIdentifier().getText();
 	}
 }
