@@ -1,0 +1,3 @@
+#!/bin/sh
+exec java -classpath bin:/usr/share/java/commons-io.jar com.cowlark.sake.Main -- "$@"
+
