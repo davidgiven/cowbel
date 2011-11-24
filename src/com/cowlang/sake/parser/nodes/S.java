@@ -12,6 +12,8 @@ public class S
     	')',
     	'{',
     	'}',
+    	'[',
+    	']',
     	'<',
     	'>',
     	'=',
@@ -19,9 +21,10 @@ public class S
 	
 	static String[] Keywords = new String[]
     {
-    	"interface",
     	"var",
-    	"method",
-    	"new"
+    	"function",
+    	"string",
+    	"integer",
+    	"boolean",
     };
 }

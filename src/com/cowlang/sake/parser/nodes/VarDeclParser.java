@@ -2,7 +2,11 @@ package com.cowlang.sake.parser.nodes;
 
 import com.cowlang.sake.parser.core.Location;
 import com.cowlang.sake.parser.core.ParseResult;
-import com.cowlang.sake.parser.errors.UnimplementedParse;
+import com.cowlang.sake.parser.tokens.ExpressionNode;
+import com.cowlang.sake.parser.tokens.IdentifierNode;
+import com.cowlang.sake.parser.tokens.StatementListNode;
+import com.cowlang.sake.parser.tokens.VarAssignmentNode;
+import com.cowlang.sake.parser.tokens.VarDeclarationNode;
 
 public class VarDeclParser extends Parser
 {
@@ -16,24 +20,12 @@ public class VarDeclParser extends Parser
 		ParseResult identifierpr = IdentifierParser.parse(pr.end());
 		if (identifierpr.failed())
 			return identifierpr;
-	
-		ParseResult typepr = null;
-		Location n = identifierpr.end();
-		pr = ColonParser.parse(n);
-		if (pr.success())
-		{
-			typepr = TypeReferenceParser.parse(n);
-			if (typepr.failed())
-				return typepr;
 			
-			n = typepr.end();
-		}
-		
-		pr = EqualsParser.parse(n);
+		pr = EqualsParser.parse(identifierpr.end());
 		if (pr.failed())
 			return pr;
 		
-		ParseResult valuepr = Expression1Parser.parse(pr.end());
+		ParseResult valuepr = ExpressionLowParser.parse(pr.end());
 		if (valuepr.failed())
 			return valuepr;
 		
@@ -41,6 +33,12 @@ public class VarDeclParser extends Parser
 		if (pr.failed())
 			return pr;
 		
-		return new UnimplementedParse(location); 
+		
+		return new StatementListNode(location, pr.end(),
+				new VarDeclarationNode(location, identifierpr.end(),
+						(IdentifierNode) identifierpr),
+				new VarAssignmentNode(identifierpr.start(), valuepr.end(),
+						(IdentifierNode) identifierpr,
+						(ExpressionNode) valuepr));
 	}
 }

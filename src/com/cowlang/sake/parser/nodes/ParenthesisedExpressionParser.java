@@ -14,7 +14,7 @@ public class ParenthesisedExpressionParser extends Parser
 		if (pr1.failed())
 			return pr1;
 		
-		ParseResult pr2 = Expression1Parser.parse(pr1.end());
+		ParseResult pr2 = ExpressionLowParser.parse(pr1.end());
 		if (pr2.failed())
 			return pr2;
 		

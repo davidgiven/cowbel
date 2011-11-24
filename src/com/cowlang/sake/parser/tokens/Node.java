@@ -30,6 +30,12 @@ public class Node extends Token
 			addChild(n);
 	}
 	
+	public void addChildren(Node... children)
+	{
+		for (Node n : children)
+			addChild(n);
+	}
+	
 	public Iterable getChildren()
 	{
 		return _children;

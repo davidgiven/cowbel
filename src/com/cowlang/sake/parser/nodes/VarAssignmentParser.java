@@ -19,7 +19,7 @@ public class VarAssignmentParser extends Parser
 		if (pr.failed())
 			return pr;
 		
-		ParseResult valuepr = Expression1Parser.parse(pr.end());
+		ParseResult valuepr = ExpressionLowParser.parse(pr.end());
 		if (valuepr.failed())
 			return valuepr;
 		

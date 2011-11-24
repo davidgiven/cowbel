@@ -26,7 +26,7 @@ public class BlockParser extends Parser
 				break;
 			}
 			
-			pr = StatementParser.parse(n);
+			pr = FunctionStatementParser.parse(n);
 			if (pr.failed())
 				return pr;
 			

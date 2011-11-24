@@ -10,4 +10,10 @@ public class BlockNode extends StatementListNode
     {
         super(start, end, statements);
     }
+
+	public BlockNode(Location start, Location end,
+			StatementNode... statements)
+    {
+        super(start, end, statements);
+    }
 }

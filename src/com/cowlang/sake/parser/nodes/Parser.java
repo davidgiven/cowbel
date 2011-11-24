@@ -8,30 +8,25 @@ import com.cowlang.sake.parser.core.ParseResult;
 public abstract class Parser
 {
 	public static AtomParser AtomParser = new AtomParser();
-	public static Expression1Parser Expression1Parser = new Expression1Parser();
-	public static Expression2Parser Expression2Parser = new Expression2Parser();
-	public static Expression3Parser Expression3Parser = new Expression3Parser();
+	public static StringConstantParser StringConstantParser = new StringConstantParser();
+	public static ListConstantParser ListConstantParser = new ListConstantParser();
+	public static ExpressionLowParser ExpressionLowParser = new ExpressionLowParser();
+	public static ExpressionMediumParser ExpressionMediumParser = new ExpressionMediumParser();
+	public static ExpressionHighParser ExpressionHighParser = new ExpressionHighParser();
+	public static ExpressionLeafParser ExpressionLeafParser = new ExpressionLeafParser();
 	public static ExpressionStatementParser ExpressionStatementParser = new ExpressionStatementParser();
 	public static IdentifierParser IdentifierParser = new IdentifierParser();
-	public static InfixOperatorParser InfixOperatorParser = new InfixOperatorParser();
-	public static InterfaceDeclarationParser InterfaceDeclarationParser = new InterfaceDeclarationParser();
-	public static MethodCallParser MethodCallParser = new MethodCallParser();
-	public static MethodNameParser MethodNameParser = new MethodNameParser();
-	public static OperatorParser OperatorParser = new OperatorParser();
+	public static FunctionCallParser FunctionCallParser = new FunctionCallParser();
 	public static ParenthesisedExpressionParser ParenthesisedExpressionParser = new ParenthesisedExpressionParser();
-	public static PrefixOperatorParser PrefixOperatorParser = new PrefixOperatorParser();
 	public static ProgramParser ProgramParser = new ProgramParser();
-	public static StatementParser StatementParser = new StatementParser();
-	public static StatementsParser StatementsParser = new StatementsParser();
+	public static FunctionStatementParser FunctionStatementParser = new FunctionStatementParser();
+	public static TopLevelStatementParser TopLevelStatementParser = new TopLevelStatementParser();
 	public static VarDeclParser VarDeclParser = new VarDeclParser();
-	public static TypexDeclarationParser TypexDeclarationParser = new TypexDeclarationParser();
-	public static TypeReferenceParser TypeReferenceParser = new TypeReferenceParser();
-	public static MethodHeaderParser MethodHeaderParser = new MethodHeaderParser();
-	public static MethodDeclarationParser MethodDeclarationParser = new MethodDeclarationParser();
+	public static TypeParser TypeParser = new TypeParser();
+	public static FunctionHeaderParser FunctionHeaderParser = new FunctionHeaderParser();
 	public static ParameterDeclarationListParser ParameterDeclarationListParser = new ParameterDeclarationListParser();
 	public static ParameterDeclarationParser ParameterDeclarationParser = new ParameterDeclarationParser();
-	public static ObjectInstantiationParser ObjectInstantiationParser = new ObjectInstantiationParser();
-	public static MethodDefinitionParser MethodDefinitionParser = new MethodDefinitionParser();
+	public static FunctionDefinitionParser FunctionDefinitionParser = new FunctionDefinitionParser();
 	public static BlockParser BlockParser = new BlockParser();
 	public static VarAssignmentParser VarAssignmentParser = new VarAssignmentParser();
 	
@@ -46,13 +41,17 @@ public abstract class Parser
 	public static Parser CloseAngleBracketParser = new TrivialParser(">");
 	public static Parser OpenBraceParser = new TrivialParser("{");
 	public static Parser CloseBraceParser = new TrivialParser("}");
+	public static Parser OpenSquareParser = new TrivialParser("[");
+	public static Parser CloseSquareParser = new TrivialParser("]");
 	public static Parser EqualsParser = new TrivialParser("=");
 	public static Parser OpenCloseParenthesisParser = new TrivialParser("()");
+	public static Parser PlusParser = new TrivialParser("+");
 
 	public static Parser VarTokenParser = new TrivialParser("var");
-	public static Parser InterfaceTokenParser = new TrivialParser("interface");
-	public static Parser MethodTokenParser = new TrivialParser("method");
-	public static Parser NewTokenParser = new TrivialParser("new");
+	public static Parser FunctionTokenParser = new TrivialParser("function");
+	public static Parser StringTokenParser = new TrivialParser("string");
+	public static Parser IntegerTokenParser = new TrivialParser("integer");
+	public static Parser BooleanTokenParser = new TrivialParser("boolean");
 
 	private static HashMap<Location, HashMap<Parser, ParseResult>> _cache =
 		new HashMap<Location, HashMap<Parser, ParseResult>>(); 

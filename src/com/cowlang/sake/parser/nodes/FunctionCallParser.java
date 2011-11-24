@@ -5,26 +5,18 @@ import com.cowlang.sake.parser.core.Location;
 import com.cowlang.sake.parser.core.ParseResult;
 import com.cowlang.sake.parser.tokens.ExpressionNode;
 import com.cowlang.sake.parser.tokens.IdentifierNode;
-import com.cowlang.sake.parser.tokens.MethodCallNode;
+import com.cowlang.sake.parser.tokens.FunctionCallNode;
 
-public class MethodCallParser extends Parser
+public class FunctionCallParser extends Parser
 {
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
-		ParseResult object = Expression3Parser.parse(location);
-		if (object.failed())
-			return object;
+		ParseResult function = ExpressionLeafParser.parse(location);
+		if (function.failed())
+			return function;
 		
-		ParseResult pr = DotParser.parse(object.end());
-		if (pr.failed())
-			return pr;
-		
-		ParseResult method = MethodNameParser.parse(pr.end());
-		if (method.failed())
-			return method;
-		
-		pr = OpenParenthesisParser.parse(method.end());
+		ParseResult pr = OpenParenthesisParser.parse(function.end());
 		if (pr.failed())
 			return pr;
 		
@@ -37,7 +29,7 @@ public class MethodCallParser extends Parser
 			
 			for (;;)
 			{
-				ParseResult arg = Expression1Parser.parse(pr.end());
+				ParseResult arg = ExpressionLowParser.parse(pr.end());
 				if (arg.failed())
 					return arg;
 				args.addLast((ExpressionNode)arg);
@@ -52,8 +44,7 @@ public class MethodCallParser extends Parser
 			}
 		}
 		
-		return new MethodCallNode(location, pr.end(),
-				(ExpressionNode)object, (IdentifierNode)method,
-				args);
+		return new FunctionCallNode(location, pr.end(),
+				(ExpressionNode)function, args);
 	}
 }

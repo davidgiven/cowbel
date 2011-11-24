@@ -4,7 +4,7 @@ import com.cowlang.sake.parser.core.Location;
 import com.cowlang.sake.parser.core.ParseResult;
 import com.cowlang.sake.parser.tokens.IdentifierNode;
 import com.cowlang.sake.parser.tokens.ParameterDeclarationNode;
-import com.cowlang.sake.parser.tokens.TypeReferenceNode;
+import com.cowlang.sake.parser.tokens.TypeNode;
 
 public class ParameterDeclarationParser extends Parser
 {
@@ -19,12 +19,12 @@ public class ParameterDeclarationParser extends Parser
 		if (pr.failed())
 			return pr;
 		
-		ParseResult typepr = TypeReferenceParser.parse(pr.end());
+		ParseResult typepr = TypeParser.parse(pr.end());
 		if (typepr.failed())
 			return typepr;
 			
 		return new ParameterDeclarationNode(location, typepr.end(), 
 				(IdentifierNode) identifierpr, 
-				(TypeReferenceNode) typepr); 
+				(TypeNode) typepr); 
 	}
 }

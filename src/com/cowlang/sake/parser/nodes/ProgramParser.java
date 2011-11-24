@@ -16,16 +16,16 @@ public class ProgramParser extends Parser
 		Location n = location;
 		for (;;)
 		{
-			ParseResult pr = EOFParser.parse(n);
-			if (pr.success())
+			ParseResult pr1 = EOFParser.parse(n);
+			if (pr1.success())
 				break;
 			
-			pr = StatementParser.parse(n);
-			if (pr.failed())
-				return pr;
+			ParseResult pr2 = TopLevelStatementParser.parse(n);
+			if (pr2.failed())
+				return pr2;
 			
-			statements.add((StatementNode) pr);
-			n = pr.end();
+			statements.add((StatementNode) pr2);
+			n = pr2.end();
 		}
 		
 		return new StatementListNode(location, n, statements); 

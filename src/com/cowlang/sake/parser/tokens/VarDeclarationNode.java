@@ -2,14 +2,13 @@ package com.cowlang.sake.parser.tokens;
 
 import com.cowlang.sake.parser.core.Location;
 
-public class ParameterDeclarationNode extends ExpressionNode
+public class VarDeclarationNode extends StatementNode
 {
-	public ParameterDeclarationNode(Location start, Location end,
-			IdentifierNode name, TypeNode type)
+	public VarDeclarationNode(Location start, Location end,
+			IdentifierNode identifier)
     {
 		super(start, end);
-		addChild(name);
-		addChild(type);
+		addChild(identifier);
     }
 	
 	@Override

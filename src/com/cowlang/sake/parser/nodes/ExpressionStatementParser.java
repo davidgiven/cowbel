@@ -9,7 +9,7 @@ public class ExpressionStatementParser extends Parser
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
-		ParseResult pr1 = Expression1Parser.parse(location);
+		ParseResult pr1 = ExpressionLowParser.parse(location);
 		if (pr1.failed())
 			return pr1;
 		
