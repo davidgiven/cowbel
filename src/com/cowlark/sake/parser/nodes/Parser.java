@@ -29,6 +29,8 @@ public abstract class Parser
 	public static FunctionDefinitionParser FunctionDefinitionParser = new FunctionDefinitionParser();
 	public static BlockParser BlockParser = new BlockParser();
 	public static VarAssignmentParser VarAssignmentParser = new VarAssignmentParser();
+	public static PrefixOperatorParser PrefixOperatorParser = new PrefixOperatorParser();
+	public static OperatorParser OperatorParser = new OperatorParser();
 	
 	public static Parser EOFParser = new EOFParser();
 	public static Parser DotParser = new TrivialParser(".");

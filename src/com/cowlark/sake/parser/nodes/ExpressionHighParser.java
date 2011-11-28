@@ -8,6 +8,10 @@ public class ExpressionHighParser extends Parser
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
+		ParseResult pr1 = PrefixOperatorParser.parse(location);
+		if (pr1.success())
+			return pr1;
+		
 		ParseResult pr2 = FunctionCallParser.parse(location);
 		if (pr2.success())
 			return pr2;
