@@ -15,7 +15,7 @@ public class PrefixOperatorParser extends Parser
 		if (pr1.failed())
 			return pr1;
 		
-		ParseResult pr2 = ExpressionHighParser.parse(pr1.end());
+		ParseResult pr2 = ExpressionMediumParser.parse(pr1.end());
 		if (pr2.failed())
 			return pr2;
 		

@@ -1,25 +1,115 @@
 package com.cowlark.sake.parser.nodes;
 
+import java.util.LinkedList;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
+import com.cowlark.sake.parser.errors.UnimplementedParse;
+import com.cowlark.sake.parser.tokens.ExpressionNode;
+import com.cowlark.sake.parser.tokens.FunctionCallNode;
+import com.cowlark.sake.parser.tokens.IdentifierNode;
+import com.cowlark.sake.parser.tokens.MethodCallNode;
 
 public class ExpressionHighParser extends Parser
 {
+	private ParseResult parseMethodCall(ParseResult seed, Location location)
+	{
+		ParseResult method = MethodNameParser.parse(location);
+		if (method.failed())
+			return method;
+		
+		ParseResult pr = OpenParenthesisParser.parse(method.end());
+		if (pr.failed())
+			return pr;
+		
+		LinkedList<ExpressionNode> args = new LinkedList<ExpressionNode>();
+		
+		pr = CloseParenthesisParser.parse(pr.end());
+		if (pr.failed())
+		{
+			/* Argument list is not empty. */
+			
+			for (;;)
+			{
+				ParseResult arg = ExpressionLowParser.parse(pr.end());
+				if (arg.failed())
+					return arg;
+				args.addLast((ExpressionNode)arg);
+				
+				pr = CloseParenthesisParser.parse(arg.end());
+				if (pr.success())
+					break;
+				
+				pr = CommaParser.parse(arg.end());
+				if (pr.failed())
+					return pr;
+			}
+		}
+		
+		return new MethodCallNode(location, pr.end(),
+				(ExpressionNode)seed, (IdentifierNode)method,
+				args);
+	}
+	
+	private ParseResult parseFunctionCall(ParseResult seed, Location location)
+	{
+		LinkedList<ExpressionNode> args = new LinkedList<ExpressionNode>();
+		
+		ParseResult pr = CloseParenthesisParser.parse(location);
+		if (pr.failed())
+		{
+			/* Argument list is not empty. */
+			
+			for (;;)
+			{
+				ParseResult arg = ExpressionLowParser.parse(pr.end());
+				if (arg.failed())
+					return arg;
+				args.addLast((ExpressionNode)arg);
+				
+				pr = CloseParenthesisParser.parse(arg.end());
+				if (pr.success())
+					break;
+				
+				pr = CommaParser.parse(arg.end());
+				if (pr.failed())
+					return pr;
+			}
+		}
+		
+		return new FunctionCallNode(location, pr.end(),
+				(ExpressionNode)seed, args);
+	}
+	
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
-		ParseResult pr1 = PrefixOperatorParser.parse(location);
-		if (pr1.success())
-			return pr1;
+		ParseResult seed = ExpressionLeafParser.parse(location);
+		if (seed.failed())
+			return seed;
 		
-		ParseResult pr2 = FunctionCallParser.parse(location);
-		if (pr2.success())
-			return pr2;
+		for (;;)
+		{
+			ParseResult pr = DotParser.parse(seed.end());
+			if (pr.success())
+			{
+				seed = parseMethodCall(seed, pr.end());
+				if (seed.failed())
+					return seed;
+				continue;
+			}
+			
+			pr = OpenParenthesisParser.parse(seed.end());
+			if (pr.success())
+			{
+				seed = parseFunctionCall(seed, pr.end());
+				if (seed.failed())
+					return seed;
+				continue;
+			}
+			
+			break;
+		}
 		
-		ParseResult pr3 = ExpressionLeafParser.parse(location);
-		if (pr3.success())
-			return pr3;
-		
-		return combineParseErrors(pr2, pr3);
+		return seed;
 	}
 }

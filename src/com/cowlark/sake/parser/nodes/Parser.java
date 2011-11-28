@@ -16,7 +16,6 @@ public abstract class Parser
 	public static ExpressionLeafParser ExpressionLeafParser = new ExpressionLeafParser();
 	public static ExpressionStatementParser ExpressionStatementParser = new ExpressionStatementParser();
 	public static IdentifierParser IdentifierParser = new IdentifierParser();
-	public static FunctionCallParser FunctionCallParser = new FunctionCallParser();
 	public static ParenthesisedExpressionParser ParenthesisedExpressionParser = new ParenthesisedExpressionParser();
 	public static ProgramParser ProgramParser = new ProgramParser();
 	public static FunctionStatementParser FunctionStatementParser = new FunctionStatementParser();
@@ -31,6 +30,7 @@ public abstract class Parser
 	public static VarAssignmentParser VarAssignmentParser = new VarAssignmentParser();
 	public static PrefixOperatorParser PrefixOperatorParser = new PrefixOperatorParser();
 	public static OperatorParser OperatorParser = new OperatorParser();
+	public static MethodNameParser MethodNameParser = new MethodNameParser();
 	
 	public static Parser EOFParser = new EOFParser();
 	public static Parser DotParser = new TrivialParser(".");
