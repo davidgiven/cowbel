@@ -44,6 +44,12 @@ public class Location implements Comparable<Location>
 		return 0;
 	}
 	
+	@Override
+	public boolean equals(Object obj)
+	{
+		return (compareTo((Location)obj) == 0);
+	}
+	
 	public String locationAsString()
 	{
 		return _filename + ":" + _lineNumber + "." +
