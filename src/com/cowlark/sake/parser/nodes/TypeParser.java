@@ -1,9 +1,9 @@
 package com.cowlark.sake.parser.nodes;
 
+import com.cowlark.sake.ast.nodes.StringListTypeNode;
+import com.cowlark.sake.ast.nodes.StringTypeNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
-import com.cowlark.sake.parser.tokens.StringListTypeNode;
-import com.cowlark.sake.parser.tokens.StringTypeNode;
 
 public class TypeParser extends Parser
 {

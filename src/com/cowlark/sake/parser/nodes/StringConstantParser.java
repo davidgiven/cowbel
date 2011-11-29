@@ -1,11 +1,11 @@
 package com.cowlark.sake.parser.nodes;
 
+import com.cowlark.sake.ast.nodes.StringConstantNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.MutableLocation;
 import com.cowlark.sake.parser.core.ParseResult;
 import com.cowlark.sake.parser.errors.ExpectedStringConstant;
 import com.cowlark.sake.parser.errors.InvalidCharacterInStringConstant;
-import com.cowlark.sake.parser.tokens.StringConstantNode;
 
 public class StringConstantParser extends Parser
 {

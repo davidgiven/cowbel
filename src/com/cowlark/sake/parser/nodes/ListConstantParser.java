@@ -1,10 +1,10 @@
 package com.cowlark.sake.parser.nodes;
 
 import java.util.ArrayList;
+import com.cowlark.sake.ast.nodes.ListConstantNode;
+import com.cowlark.sake.ast.nodes.StringConstantNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
-import com.cowlark.sake.parser.tokens.ListConstantNode;
-import com.cowlark.sake.parser.tokens.StringConstantNode;
 
 public class ListConstantParser extends Parser
 {

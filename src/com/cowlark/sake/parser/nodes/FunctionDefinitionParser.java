@@ -1,10 +1,10 @@
 package com.cowlark.sake.parser.nodes;
 
+import com.cowlark.sake.ast.nodes.BlockNode;
+import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
+import com.cowlark.sake.ast.nodes.FunctionHeaderNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
-import com.cowlark.sake.parser.tokens.BlockNode;
-import com.cowlark.sake.parser.tokens.FunctionDefinitionNode;
-import com.cowlark.sake.parser.tokens.FunctionHeaderNode;
 
 public class FunctionDefinitionParser extends Parser
 {

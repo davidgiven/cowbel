@@ -1,7 +1,5 @@
-package com.cowlark.sake.parser.tokens;
+package com.cowlark.sake.parser.core;
 
-import com.cowlark.sake.parser.core.Location;
-import com.cowlark.sake.parser.core.Token;
 
 public class TextToken extends Token
 {

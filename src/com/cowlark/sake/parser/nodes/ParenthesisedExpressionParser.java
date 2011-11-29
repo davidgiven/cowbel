@@ -1,9 +1,9 @@
 package com.cowlark.sake.parser.nodes;
 
+import com.cowlark.sake.ast.nodes.DummyExpressionNode;
+import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
-import com.cowlark.sake.parser.tokens.DummyExpressionNode;
-import com.cowlark.sake.parser.tokens.ExpressionNode;
 
 public class ParenthesisedExpressionParser extends Parser
 {

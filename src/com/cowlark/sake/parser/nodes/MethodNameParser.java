@@ -1,9 +1,9 @@
 package com.cowlark.sake.parser.nodes;
 
+import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.MutableLocation;
 import com.cowlark.sake.parser.core.ParseResult;
-import com.cowlark.sake.parser.tokens.IdentifierNode;
 
 public class MethodNameParser extends Parser
 {

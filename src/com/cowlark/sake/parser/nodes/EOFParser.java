@@ -1,9 +1,9 @@
 package com.cowlark.sake.parser.nodes;
 
+import com.cowlark.sake.parser.core.EOFToken;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
 import com.cowlark.sake.parser.errors.ExpectedSyntacticElement;
-import com.cowlark.sake.parser.tokens.EOFToken;
 
 public class EOFParser extends Parser
 {

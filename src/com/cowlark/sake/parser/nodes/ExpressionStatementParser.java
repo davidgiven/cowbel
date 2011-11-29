@@ -1,8 +1,8 @@
 package com.cowlark.sake.parser.nodes;
 
+import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
-import com.cowlark.sake.parser.tokens.ExpressionStatementNode;
 
 public class ExpressionStatementParser extends Parser
 {

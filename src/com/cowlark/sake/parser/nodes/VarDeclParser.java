@@ -1,12 +1,12 @@
 package com.cowlark.sake.parser.nodes;
 
+import com.cowlark.sake.ast.nodes.ExpressionNode;
+import com.cowlark.sake.ast.nodes.IdentifierNode;
+import com.cowlark.sake.ast.nodes.StatementListNode;
+import com.cowlark.sake.ast.nodes.VarAssignmentNode;
+import com.cowlark.sake.ast.nodes.VarDeclarationNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
-import com.cowlark.sake.parser.tokens.ExpressionNode;
-import com.cowlark.sake.parser.tokens.IdentifierNode;
-import com.cowlark.sake.parser.tokens.StatementListNode;
-import com.cowlark.sake.parser.tokens.VarAssignmentNode;
-import com.cowlark.sake.parser.tokens.VarDeclarationNode;
 
 public class VarDeclParser extends Parser
 {

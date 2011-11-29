@@ -1,12 +1,12 @@
 package com.cowlark.sake.parser.nodes;
 
+import com.cowlark.sake.ast.nodes.FunctionHeaderNode;
+import com.cowlark.sake.ast.nodes.IdentifierNode;
+import com.cowlark.sake.ast.nodes.ParameterDeclarationListNode;
+import com.cowlark.sake.ast.nodes.TypeNode;
+import com.cowlark.sake.ast.nodes.VoidTypeNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
-import com.cowlark.sake.parser.tokens.FunctionHeaderNode;
-import com.cowlark.sake.parser.tokens.IdentifierNode;
-import com.cowlark.sake.parser.tokens.ParameterDeclarationListNode;
-import com.cowlark.sake.parser.tokens.TypeNode;
-import com.cowlark.sake.parser.tokens.VoidTypeNode;
 
 public class FunctionHeaderParser extends Parser
 {

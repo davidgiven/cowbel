@@ -1,10 +1,10 @@
 package com.cowlark.sake.parser.nodes;
 
+import com.cowlark.sake.ast.nodes.SyntacticElementToken;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.MutableLocation;
 import com.cowlark.sake.parser.core.ParseResult;
 import com.cowlark.sake.parser.errors.ExpectedAtom;
-import com.cowlark.sake.parser.tokens.SyntacticElementToken;
 
 public class AtomParser extends Parser
 {

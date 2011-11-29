@@ -1,10 +1,10 @@
 package com.cowlark.sake.parser.nodes;
 
 import java.util.ArrayList;
+import com.cowlark.sake.ast.nodes.BlockNode;
+import com.cowlark.sake.ast.nodes.StatementNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
-import com.cowlark.sake.parser.tokens.BlockNode;
-import com.cowlark.sake.parser.tokens.StatementNode;
 
 public class BlockParser extends Parser
 {

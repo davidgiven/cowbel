@@ -1,10 +1,10 @@
 package com.cowlark.sake.parser.nodes;
 
+import com.cowlark.sake.ast.nodes.IdentifierNode;
+import com.cowlark.sake.ast.nodes.ParameterDeclarationNode;
+import com.cowlark.sake.ast.nodes.TypeNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
-import com.cowlark.sake.parser.tokens.IdentifierNode;
-import com.cowlark.sake.parser.tokens.ParameterDeclarationNode;
-import com.cowlark.sake.parser.tokens.TypeNode;
 
 public class ParameterDeclarationParser extends Parser
 {

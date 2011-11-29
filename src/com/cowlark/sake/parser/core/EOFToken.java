@@ -1,6 +1,5 @@
-package com.cowlark.sake.parser.tokens;
+package com.cowlark.sake.parser.core;
 
-import com.cowlark.sake.parser.core.Location;
 
 public class EOFToken extends TextToken
 {

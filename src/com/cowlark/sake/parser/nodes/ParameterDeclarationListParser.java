@@ -1,10 +1,10 @@
 package com.cowlark.sake.parser.nodes;
 
 import java.util.ArrayList;
+import com.cowlark.sake.ast.nodes.ParameterDeclarationListNode;
+import com.cowlark.sake.ast.nodes.ParameterDeclarationNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
-import com.cowlark.sake.parser.tokens.ParameterDeclarationListNode;
-import com.cowlark.sake.parser.tokens.ParameterDeclarationNode;
 
 public class ParameterDeclarationListParser extends Parser
 {

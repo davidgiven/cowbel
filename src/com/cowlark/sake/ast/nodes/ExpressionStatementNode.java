@@ -1,4 +1,4 @@
-package com.cowlark.sake.parser.tokens;
+package com.cowlark.sake.ast.nodes;
 
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
