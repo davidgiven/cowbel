@@ -3,11 +3,7 @@ package com.cowlark.sake;
 import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
-import com.cowlark.sake.parser.core.FailedParse;
 import com.cowlark.sake.parser.core.Location;
-import com.cowlark.sake.parser.core.ParseResult;
-import com.cowlark.sake.parser.nodes.Parser;
-import com.cowlark.sake.parser.tokens.Node;
 
 public class Main
 {
@@ -21,18 +17,17 @@ public class Main
 			String data = FileUtils.readFileToString(new File(filename), "UTF-8");
 			Location loc = new Location(data, filename);
 			
-			ParseResult pr = Parser.ProgramParser.parse(loc);
+			Compiler c = new Compiler();
+			c.setInput(loc);
+			c.compile();
 			
-			if (pr.failed())
-			{
-				FailedParse fp = (FailedParse) pr;
-				System.out.println("Parse failed: "+fp.message()+" at "+fp.locationAsString());
-			}
-			else
-			{
-				System.out.println("Parse successful");
-				((Node)pr).dump();
-			}
+			System.out.println("Parse successful");
+			c.getAst().dump();
+		}
+		catch (CompilationException e)
+		{
+			System.out.println("Compilation failed:");
+			System.out.println(e.toString());
 		}
 		catch (IOException e)
 		{
