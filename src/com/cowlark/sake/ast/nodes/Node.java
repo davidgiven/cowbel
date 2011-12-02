@@ -2,12 +2,16 @@ package com.cowlark.sake.ast.nodes;
 
 import java.util.List;
 import java.util.Vector;
+import com.cowlark.sake.CompilationException;
+import com.cowlark.sake.ast.Visitor;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.Token;
 
-public class Node extends Token
+public abstract class Node extends Token
 {
 	private Vector<Node> _children = new Vector<Node>();
+	private Node _parent;
+	private ScopeNode _scope;
 	
 	public Node(Location start, Location end)
     {
@@ -17,6 +21,7 @@ public class Node extends Token
 	public void addChild(Node child)
 	{
 		_children.add(child);
+		child.setParent(this);
 	}
 	
 	public Node getChild(int i)
@@ -36,9 +41,19 @@ public class Node extends Token
 			addChild(n);
 	}
 	
-	public Iterable getChildren()
+	public Iterable<Node> getChildren()
 	{
 		return _children;
+	}
+	
+	public void setParent(Node parent)
+	{
+		_parent = parent;
+	}
+	
+	public Node getParent()
+	{
+		return _parent;
 	}
 	
 	public String getNodeName()
@@ -68,8 +83,41 @@ public class Node extends Token
 		System.out.print(getNodeName());
 		System.out.print(" ");
 		System.out.println(getShortDescription());
+
+		dumpDetails(indent+2);
 		
 		for (Node n : _children)
 			n.dump(indent+1);
 	}
+	
+	public void dumpDetails(int indent)
+	{
+	}
+	
+	public ScopeNode getScope()
+	{
+		if (_scope == null)
+		{
+			Node n = this;
+			
+			for (;;)
+			{
+				n = n.getParent();
+				if (n instanceof ScopeNode)
+				{
+					_scope = (ScopeNode) n;
+					break;
+				}
+			}
+		}
+			
+		return _scope;
+	}
+	
+	public void setScope(ScopeNode scope)
+	{
+		_scope = scope;
+	}
+	
+	public abstract void visit(Visitor visitor) throws CompilationException;
 }

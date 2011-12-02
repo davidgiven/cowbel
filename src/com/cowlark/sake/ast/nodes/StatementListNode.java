@@ -1,6 +1,8 @@
 package com.cowlark.sake.ast.nodes;
 
 import java.util.List;
+import com.cowlark.sake.CompilationException;
+import com.cowlark.sake.ast.Visitor;
 import com.cowlark.sake.parser.core.Location;
 
 public class StatementListNode extends StatementNode
@@ -17,5 +19,11 @@ public class StatementListNode extends StatementNode
 	{
 		super(start, end);
 		addChildren(statements);
+	}
+	
+	@Override
+	public void visit(Visitor visitor) throws CompilationException
+	{
+		visitor.visit(this);
 	}
 }

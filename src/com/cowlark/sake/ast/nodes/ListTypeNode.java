@@ -4,17 +4,23 @@ import com.cowlark.sake.CompilationException;
 import com.cowlark.sake.ast.Visitor;
 import com.cowlark.sake.parser.core.Location;
 
-public class StringTypeNode extends TypeNode
+public class ListTypeNode extends TypeNode
 {
-	public StringTypeNode(Location start, Location end)
+	public ListTypeNode(Location start, Location end, TypeNode childpr)
     {
         super(start, end);
+        addChild(childpr);
     }
+	
+	public TypeNode getChildTypeNode()
+	{
+		return (TypeNode) getChild(0);
+	}
 	
 	@Override
 	public String getCanonicalNameOfType()
 	{
-	    return "string";
+	    return "[" + getChildTypeNode().getCanonicalNameOfType() + "]";
 	}
 	
 	@Override

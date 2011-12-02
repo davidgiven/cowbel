@@ -1,8 +1,9 @@
 package com.cowlark.sake.parser.nodes;
 
-import com.cowlark.sake.ast.nodes.BlockNode;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.FunctionHeaderNode;
+import com.cowlark.sake.ast.nodes.ScopeNode;
+import com.cowlark.sake.ast.nodes.StatementNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
 
@@ -21,6 +22,7 @@ public class FunctionDefinitionParser extends Parser
 		
 		return new FunctionDefinitionNode(location, bodypr.end(),
 				(FunctionHeaderNode) headerpr,
-				(BlockNode) bodypr);
+				new ScopeNode(bodypr.start(), bodypr.end(),
+						(StatementNode) bodypr));
 	}
 }

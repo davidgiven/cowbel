@@ -4,17 +4,18 @@ import com.cowlark.sake.CompilationException;
 import com.cowlark.sake.ast.Visitor;
 import com.cowlark.sake.parser.core.Location;
 
-public class IdentifierNode extends ExpressionNode
+public class InferredTypeNode extends TypeNode
 {
-	public IdentifierNode(Location start, Location end)
+	public InferredTypeNode(Location start, Location end)
     {
-		super(start, end);
+        super(start, end);
     }
 	
 	@Override
-	public String getShortDescription()
+	public String getCanonicalNameOfType()
 	{
-	    return getText();
+	    assert(false);
+	    return null;
 	}
 	
 	@Override

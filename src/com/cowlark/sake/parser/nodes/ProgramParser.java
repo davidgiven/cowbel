@@ -1,6 +1,7 @@
 package com.cowlark.sake.parser.nodes;
 
 import java.util.ArrayList;
+import com.cowlark.sake.ast.nodes.ScopeNode;
 import com.cowlark.sake.ast.nodes.StatementListNode;
 import com.cowlark.sake.ast.nodes.StatementNode;
 import com.cowlark.sake.parser.core.Location;
@@ -28,6 +29,7 @@ public class ProgramParser extends Parser
 			n = pr2.end();
 		}
 		
-		return new StatementListNode(location, n, statements); 
+		return new ScopeNode(location, n,
+				new StatementListNode(location, n, statements)); 
 	}
 }
