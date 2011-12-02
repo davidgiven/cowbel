@@ -1,4 +1,4 @@
-package com.cowlark.sake;
+package com.cowlark.sake.errors;
 
 public class CompilationException extends Exception
 {

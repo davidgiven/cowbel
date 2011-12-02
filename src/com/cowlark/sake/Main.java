@@ -3,6 +3,7 @@ package com.cowlark.sake;
 import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
+import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.parser.core.Location;
 
 public class Main
