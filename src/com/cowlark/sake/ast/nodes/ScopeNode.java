@@ -2,10 +2,10 @@ package com.cowlark.sake.ast.nodes;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
-import com.cowlark.sake.CompilationException;
 import com.cowlark.sake.Symbol;
 import com.cowlark.sake.SymbolStorage;
 import com.cowlark.sake.ast.Visitor;
+import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.errors.MultipleDefinitionException;
 import com.cowlark.sake.parser.core.Location;
 

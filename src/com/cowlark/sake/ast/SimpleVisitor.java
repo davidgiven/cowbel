@@ -1,8 +1,8 @@
 package com.cowlark.sake.ast;
 
-import com.cowlark.sake.CompilationException;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.StatementListNode;
+import com.cowlark.sake.errors.CompilationException;
 
 public class SimpleVisitor extends Visitor
 {

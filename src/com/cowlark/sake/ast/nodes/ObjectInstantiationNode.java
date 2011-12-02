@@ -1,8 +1,8 @@
 package com.cowlark.sake.ast.nodes;
 
 import java.util.List;
-import com.cowlark.sake.CompilationException;
 import com.cowlark.sake.ast.Visitor;
+import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.parser.core.Location;
 
 public class ObjectInstantiationNode extends ExpressionNode

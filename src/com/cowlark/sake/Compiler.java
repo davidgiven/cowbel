@@ -4,6 +4,8 @@ import com.cowlark.sake.ast.RecursiveVisitor;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.ScopeNode;
+import com.cowlark.sake.errors.CompilationException;
+import com.cowlark.sake.errors.FailedParseException;
 import com.cowlark.sake.parser.core.FailedParse;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
