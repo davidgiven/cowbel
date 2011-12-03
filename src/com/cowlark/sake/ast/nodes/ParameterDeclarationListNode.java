@@ -19,6 +19,11 @@ public class ParameterDeclarationListNode extends ExpressionNode
 		addChildren(params);
     }
 	
+	public ParameterDeclarationNode getParameter(int i)
+	{
+		return (ParameterDeclarationNode) getChild(i);
+	}
+	
 	@Override
 	public String getShortDescription()
 	{

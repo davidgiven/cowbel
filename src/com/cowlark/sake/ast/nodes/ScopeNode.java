@@ -26,7 +26,7 @@ public class ScopeNode extends StatementNode
 		for (Entry<String, Symbol> e: _symbols.entrySet())
 		{
 			spaces(indent);
-			System.out.println(e.getKey());
+			System.out.println(e.getValue().toString());
 		}
 	}
 	

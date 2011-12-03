@@ -16,4 +16,8 @@ public class StatementNode extends Node
 	{
 		visitor.visit(this);
 	}
+	
+	public void typeCheck() throws CompilationException
+	{
+	}
 }

@@ -3,7 +3,11 @@ package com.cowlark.sake;
 import com.cowlark.sake.ast.RecursiveVisitor;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.IdentifierNode;
+import com.cowlark.sake.ast.nodes.Node;
+import com.cowlark.sake.ast.nodes.ParameterDeclarationListNode;
+import com.cowlark.sake.ast.nodes.ParameterDeclarationNode;
 import com.cowlark.sake.ast.nodes.ScopeNode;
+import com.cowlark.sake.ast.nodes.VarDeclarationNode;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.errors.FailedParseException;
 import com.cowlark.sake.parser.core.FailedParse;
@@ -36,7 +40,7 @@ public class Compiler
 			throw new FailedParseException(fp);
 		}
 
-		ScopeNode ast = getAst();
+		final ScopeNode ast = getAst();
 		ast.setSymbolStorage(_globals);
 		
 		RecursiveVisitor scopeVisitor = new RecursiveVisitor()
@@ -49,6 +53,7 @@ public class Compiler
 				
 				Function f = new Function(node);
 				node.getScope().addSymbol(f);
+				node.setSymbol(f);
 				
 				/* Set up the function definition's scope and storage. */
 				
@@ -56,7 +61,38 @@ public class Compiler
 				LocalSymbolStorage storage = new LocalSymbolStorage();
 				body.setSymbolStorage(storage);
 				
+				/* Add function parameters to its scope. */
+				
+				ParameterDeclarationListNode pdln = node.getFunctionHeader().getParametersNode();
+				for (Node n : pdln.getChildren())
+				{
+					ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
+
+					Variable v = new LocalVariable(pdn);
+					body.addSymbol(v);
+					pdn.setSymbol(v);
+				}
+
 				super.visit(node);
+			}
+			
+			@Override
+			public void visit(VarDeclarationNode node)
+			        throws CompilationException
+			{
+				/* Add this symbol to the current scope. */
+				
+				ScopeNode scope = node.getScope();
+				Variable v;
+				if (scope == ast)
+					v = new GlobalVariable(node);
+				else
+					v = new LocalVariable(node);
+				
+				scope.addSymbol(v);
+				node.setSymbol(v);
+				
+			    super.visit(node);
 			}
 		};
 		

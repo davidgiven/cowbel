@@ -48,7 +48,8 @@ public class VarDeclParser extends Parser
 			return pr;
 		
 		if (typepr == null)
-			typepr = new InferredTypeNode(identifierpr.start(), identifierpr.end());
+			typepr = new InferredTypeNode(identifierpr.start(), identifierpr.end(),
+					(ExpressionNode) valuepr);
 		
 		return new StatementListNode(location, pr.end(),
 				new VarDeclarationNode(location, identifierpr.end(),
