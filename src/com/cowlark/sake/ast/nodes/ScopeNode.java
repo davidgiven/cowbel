@@ -8,6 +8,7 @@ import com.cowlark.sake.ast.Visitor;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.errors.MultipleDefinitionException;
 import com.cowlark.sake.parser.core.Location;
+import com.cowlark.sake.parser.errors.IdentifierNotFound;
 
 public class ScopeNode extends StatementNode
 {
@@ -71,5 +72,22 @@ public class ScopeNode extends StatementNode
 		SymbolStorage storage = getSymbolStorage();
 		storage.addSymbol(symbol);
 		symbol.setScopeAndStorage(this, storage);
+	}
+	
+	public Symbol lookupSymbol(IdentifierNode name) throws CompilationException
+	{
+		String s = name.getText();
+		
+		ScopeNode scope = this;
+		while (scope != null)
+		{
+			Symbol symbol = scope._symbols.get(s);
+			if (symbol != null)
+				return symbol;
+			
+			scope = scope.getScope();
+		}
+		
+		throw new IdentifierNotFound(this, name);
 	}
 }

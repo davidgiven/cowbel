@@ -103,6 +103,8 @@ public abstract class Node extends Token
 			for (;;)
 			{
 				n = n.getParent();
+				if (n == null)
+					return null;
 				if (n instanceof ScopeNode)
 				{
 					_scope = (ScopeNode) n;

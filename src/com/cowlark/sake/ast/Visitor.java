@@ -3,7 +3,9 @@ package com.cowlark.sake.ast;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.StatementListNode;
+import com.cowlark.sake.ast.nodes.VarAssignmentNode;
 import com.cowlark.sake.ast.nodes.VarDeclarationNode;
+import com.cowlark.sake.ast.nodes.VarReferenceNode;
 import com.cowlark.sake.errors.CompilationException;
 
 public class Visitor
@@ -27,6 +29,16 @@ public class Visitor
 	}
 
 	public void visit(VarDeclarationNode node) throws CompilationException
+	{
+		defaultAction(node);
+	}
+
+	public void visit(VarAssignmentNode node) throws CompilationException
+	{
+		defaultAction(node);
+	}
+
+	public void visit(VarReferenceNode node) throws CompilationException
 	{
 		defaultAction(node);
 	}

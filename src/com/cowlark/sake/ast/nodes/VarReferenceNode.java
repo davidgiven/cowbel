@@ -6,27 +6,15 @@ import com.cowlark.sake.ast.Visitor;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.parser.core.Location;
 
-public class VarAssignmentNode extends StatementNode implements HasSymbol
+public class VarReferenceNode extends ExpressionNode implements HasSymbol
 {
 	private Symbol _symbol;
 	
-	public VarAssignmentNode(Location start, Location end,
-			IdentifierNode identifier, ExpressionNode value)
+	public VarReferenceNode(Location start, Location end, IdentifierNode name)
     {
 		super(start, end);
-		addChild(identifier);
-		addChild(value);
+		addChild(name);
     }
-	
-	public IdentifierNode getVariableName()
-	{
-		return (IdentifierNode) getChild(0);
-	}
-	
-	public ExpressionNode getExpression()
-	{
-		return (ExpressionNode) getChild(1);
-	}
 	
 	@Override
 	public String getShortDescription()
@@ -36,6 +24,11 @@ public class VarAssignmentNode extends StatementNode implements HasSymbol
 			return getText();
 		else
 			return s.toString();
+	}
+	
+	public IdentifierNode getVariableName()
+	{
+		return (IdentifierNode) getChild(0);
 	}
 	
 	@Override
@@ -53,6 +46,6 @@ public class VarAssignmentNode extends StatementNode implements HasSymbol
 	@Override
 	public void setSymbol(Symbol symbol)
 	{
-	    _symbol = symbol;
+	    _symbol = symbol;	    
 	}
 }

@@ -1,6 +1,7 @@
 package com.cowlark.sake.parser.nodes;
 
-import com.cowlark.sake.ast.nodes.VariableReadNode;
+import com.cowlark.sake.ast.nodes.IdentifierNode;
+import com.cowlark.sake.ast.nodes.VarReferenceNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
 
@@ -15,7 +16,8 @@ public class ExpressionLeafParser extends Parser
 		
 		ParseResult pr2 = IdentifierParser.parse(location);
 		if (pr2.success())
-			return new VariableReadNode(pr2.start(), pr2.end());
+			return new VarReferenceNode(pr2.start(), pr2.end(),
+					(IdentifierNode) pr2);
 		
 		ParseResult pr3 = StringConstantParser.parse(location);
 		if (pr3.success())

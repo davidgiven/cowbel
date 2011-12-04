@@ -7,7 +7,9 @@ import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.sake.ast.nodes.ParameterDeclarationNode;
 import com.cowlark.sake.ast.nodes.ScopeNode;
+import com.cowlark.sake.ast.nodes.VarAssignmentNode;
 import com.cowlark.sake.ast.nodes.VarDeclarationNode;
+import com.cowlark.sake.ast.nodes.VarReferenceNode;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.errors.FailedParseException;
 import com.cowlark.sake.parser.core.FailedParse;
@@ -40,8 +42,16 @@ public class Compiler
 			throw new FailedParseException(fp);
 		}
 
-		final ScopeNode ast = getAst();
+		ScopeNode ast = getAst();
 		ast.setSymbolStorage(_globals);
+		
+		record_variable_declarations();
+		resolve_variable_references();
+	}
+
+	private void record_variable_declarations() throws CompilationException
+	{
+		final ScopeNode ast = getAst();
 		
 		RecursiveVisitor scopeVisitor = new RecursiveVisitor()
 		{
@@ -98,7 +108,41 @@ public class Compiler
 		
 		ast.visit(scopeVisitor);
 	}
-
+	
+	private void resolve_variable_references() throws CompilationException
+	{
+		final ScopeNode ast = getAst();
+		
+		RecursiveVisitor scopeVisitor = new RecursiveVisitor()
+		{
+			@Override
+			public void visit(VarReferenceNode node)
+			        throws CompilationException
+			{
+				ScopeNode scope = node.getScope();
+				IdentifierNode in = node.getVariableName();
+				Symbol symbol = scope.lookupSymbol(in);
+				
+				node.setSymbol(symbol);
+			    super.visit(node);
+			}
+			
+			@Override
+			public void visit(VarAssignmentNode node)
+			        throws CompilationException
+			{
+				ScopeNode scope = node.getScope();
+				IdentifierNode in = node.getVariableName();
+				Symbol symbol = scope.lookupSymbol(in);
+				
+				node.setSymbol(symbol);
+			    super.visit(node);
+			}
+		};
+		
+		ast.visit(scopeVisitor);
+	}
+	
 	public ScopeNode getAst()
 	{
 		return (ScopeNode) _ast;
