@@ -57,7 +57,7 @@ public class FunctionHeaderNode extends Node
 				params.add(pdn.getVariableType());
 			}
 			
-			_type = new FunctionType(params, getReturnTypeNode().getType());
+			_type = FunctionType.create(params, getReturnTypeNode().getType());
 		}
 		
 		return _type;

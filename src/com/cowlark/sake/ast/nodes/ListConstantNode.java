@@ -5,7 +5,7 @@ import com.cowlark.sake.ast.Visitor;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.parser.core.Location;
 
-public class ListConstantNode extends ExpressionNode
+public class ListConstantNode extends ExpressionLiteralNode
 {
 	public ListConstantNode(Location start, Location end)
     {

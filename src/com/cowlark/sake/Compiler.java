@@ -1,15 +1,7 @@
 package com.cowlark.sake;
 
-import com.cowlark.sake.ast.RecursiveVisitor;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.sake.ast.nodes.IdentifierNode;
-import com.cowlark.sake.ast.nodes.Node;
-import com.cowlark.sake.ast.nodes.ParameterDeclarationListNode;
-import com.cowlark.sake.ast.nodes.ParameterDeclarationNode;
 import com.cowlark.sake.ast.nodes.ScopeNode;
-import com.cowlark.sake.ast.nodes.VarAssignmentNode;
-import com.cowlark.sake.ast.nodes.VarDeclarationNode;
-import com.cowlark.sake.ast.nodes.VarReferenceNode;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.errors.FailedParseException;
 import com.cowlark.sake.parser.core.FailedParse;
@@ -45,104 +37,17 @@ public class Compiler
 		ScopeNode ast = getAst();
 		ast.setSymbolStorage(_globals);
 		
-		record_variable_declarations();
-		resolve_variable_references();
-	}
+		ast.visit(new RecordVariableDeclarationsVisitor(ast));
+		ast.visit(new ResolveVariableReferencesVisitor());
 
-	private void record_variable_declarations() throws CompilationException
-	{
-		final ScopeNode ast = getAst();
-		
-		RecursiveVisitor scopeVisitor = new RecursiveVisitor()
+		ast.checkTypes();
+		for (Function f : _globals.getFunctions())
 		{
-			@Override
-			public void visit(FunctionDefinitionNode node)
-			        throws CompilationException
-			{
-				/* Add this function to the current scope. */
-				
-				Function f = new Function(node);
-				node.getScope().addSymbol(f);
-				node.setSymbol(f);
-				
-				/* Set up the function definition's scope and storage. */
-				
-				ScopeNode body = node.getFunctionBody();
-				LocalSymbolStorage storage = new LocalSymbolStorage();
-				body.setSymbolStorage(storage);
-				
-				/* Add function parameters to its scope. */
-				
-				ParameterDeclarationListNode pdln = node.getFunctionHeader().getParametersNode();
-				for (Node n : pdln.getChildren())
-				{
-					ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
-
-					Variable v = new LocalVariable(pdn);
-					body.addSymbol(v);
-					pdn.setSymbol(v);
-				}
-
-				super.visit(node);
-			}
-			
-			@Override
-			public void visit(VarDeclarationNode node)
-			        throws CompilationException
-			{
-				/* Add this symbol to the current scope. */
-				
-				ScopeNode scope = node.getScope();
-				Variable v;
-				if (scope == ast)
-					v = new GlobalVariable(node);
-				else
-					v = new LocalVariable(node);
-				
-				scope.addSymbol(v);
-				node.setSymbol(v);
-				
-			    super.visit(node);
-			}
-		};
-		
-		ast.visit(scopeVisitor);
+			FunctionDefinitionNode node = (FunctionDefinitionNode) f.getNode();
+			node.getFunctionBody().checkTypes();
+		}
 	}
-	
-	private void resolve_variable_references() throws CompilationException
-	{
-		final ScopeNode ast = getAst();
-		
-		RecursiveVisitor scopeVisitor = new RecursiveVisitor()
-		{
-			@Override
-			public void visit(VarReferenceNode node)
-			        throws CompilationException
-			{
-				ScopeNode scope = node.getScope();
-				IdentifierNode in = node.getVariableName();
-				Symbol symbol = scope.lookupSymbol(in);
-				
-				node.setSymbol(symbol);
-			    super.visit(node);
-			}
-			
-			@Override
-			public void visit(VarAssignmentNode node)
-			        throws CompilationException
-			{
-				ScopeNode scope = node.getScope();
-				IdentifierNode in = node.getVariableName();
-				Symbol symbol = scope.lookupSymbol(in);
-				
-				node.setSymbol(symbol);
-			    super.visit(node);
-			}
-		};
-		
-		ast.visit(scopeVisitor);
-	}
-	
+
 	public ScopeNode getAst()
 	{
 		return (ScopeNode) _ast;

@@ -4,7 +4,7 @@ import com.cowlark.sake.ast.Visitor;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.parser.core.Location;
 
-public class StringConstantNode extends ExpressionNode
+public class StringConstantNode extends ExpressionLiteralNode
 {
 	private String _value;
 	

@@ -2,7 +2,15 @@ package com.cowlark.sake.types;
 
 public class StringType extends Type
 {
-	public StringType()
+	private static StringType _instance =
+		TypeRegistry.canonicalise(new StringType());
+	
+	public static StringType create()
+	{
+		return _instance;
+	}
+	
+	private StringType()
     {
     }
 	

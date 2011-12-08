@@ -41,6 +41,11 @@ public abstract class Node extends Token
 			addChild(n);
 	}
 	
+	public int getNumberOfChildren()
+	{
+		return _children.size();
+	}
+	
 	public Iterable<Node> getChildren()
 	{
 		return _children;

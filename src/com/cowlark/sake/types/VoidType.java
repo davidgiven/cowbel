@@ -2,7 +2,15 @@ package com.cowlark.sake.types;
 
 public class VoidType extends Type
 {
-	public VoidType()
+	private static VoidType _instance =
+		TypeRegistry.canonicalise(new VoidType());
+	
+	public static VoidType create()
+	{
+		return _instance;
+	}
+	
+	private VoidType()
     {
     }
 	

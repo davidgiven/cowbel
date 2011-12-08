@@ -20,9 +20,9 @@ public class ListTypeNode extends TypeNode
 	}
 	
 	@Override
-	public Type constructTypeObject()
+    protected Type getTypeImpl()
 	{
-	    return new ListType(getChildTypeNode().getType());
+	    return ListType.create(getChildTypeNode().getType());
 	}
 	
 	@Override

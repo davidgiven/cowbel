@@ -8,17 +8,15 @@ import com.cowlark.sake.types.Type;
 
 public class StringTypeNode extends TypeNode
 {
-	private static Type _type = new StringType();
-	
 	public StringTypeNode(Location start, Location end)
     {
         super(start, end);
     }
 	
 	@Override
-	public Type constructTypeObject()
+    protected Type getTypeImpl()
 	{
-	    return _type;
+	    return StringType.create();
 	}
 	
 	@Override

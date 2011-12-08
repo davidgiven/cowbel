@@ -21,6 +21,11 @@ public class ScopeNode extends StatementNode
         addChild(child);
     }
 	
+	public StatementNode getChild()
+	{
+		return (StatementNode) getChild(0);
+	}
+	
 	@Override
 	public void dumpDetails(int indent)
 	{

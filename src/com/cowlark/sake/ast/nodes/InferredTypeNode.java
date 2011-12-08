@@ -9,7 +9,6 @@ import com.cowlark.sake.types.Type;
 public class InferredTypeNode extends TypeNode
 {
 	private ExpressionNode _initialiser;
-	private static Type _type = new InferredType();
 	
 	public InferredTypeNode(Location start, Location end,
 			ExpressionNode initialiser)
@@ -19,9 +18,9 @@ public class InferredTypeNode extends TypeNode
     }
 	
 	@Override
-	public Type constructTypeObject()
+    protected Type getTypeImpl()
 	{
-		return _type;
+		return InferredType.create(_initialiser);
 	}
 	
 	@Override

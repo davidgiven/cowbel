@@ -7,7 +7,6 @@ import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
-import com.cowlark.sake.parser.errors.UnimplementedParse;
 
 public class ExpressionHighParser extends Parser
 {
