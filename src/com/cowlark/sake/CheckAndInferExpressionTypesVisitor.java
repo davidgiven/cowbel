@@ -32,7 +32,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 	{
 		Symbol symbol = node.getSymbol();
 		Type type = symbol.getSymbolType();
-		type.checkType(node);
+		type.ensureConcrete(node);
 		node.setType(type);
 	}
 
