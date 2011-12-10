@@ -1,4 +1,4 @@
-package com.cowlark.sake.parser.nodes;
+package com.cowlark.sake.parser.parsers;
 
 public class S
 {

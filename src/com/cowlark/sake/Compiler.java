@@ -7,7 +7,7 @@ import com.cowlark.sake.errors.FailedParseException;
 import com.cowlark.sake.parser.core.FailedParse;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
-import com.cowlark.sake.parser.nodes.Parser;
+import com.cowlark.sake.parser.parsers.Parser;
 
 public class Compiler
 {

@@ -1,4 +1,4 @@
-package com.cowlark.sake.parser.nodes;
+package com.cowlark.sake.parser.parsers;
 
 import com.cowlark.sake.ast.nodes.ListTypeNode;
 import com.cowlark.sake.ast.nodes.StringTypeNode;

@@ -1,4 +1,4 @@
-package com.cowlark.sake.parser.nodes;
+package com.cowlark.sake.parser.parsers;
 
 import java.util.ArrayList;
 import com.cowlark.sake.ast.nodes.ExpressionNode;

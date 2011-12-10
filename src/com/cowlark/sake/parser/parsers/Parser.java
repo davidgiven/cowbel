@@ -1,4 +1,4 @@
-package com.cowlark.sake.parser.nodes;
+package com.cowlark.sake.parser.parsers;
 
 import java.util.HashMap;
 import com.cowlark.sake.parser.core.Location;
