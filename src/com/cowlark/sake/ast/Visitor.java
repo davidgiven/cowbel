@@ -4,6 +4,7 @@ import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.ListConstructorNode;
+import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ScopeNode;
 import com.cowlark.sake.ast.nodes.StatementListNode;
@@ -69,4 +70,8 @@ public class Visitor
 		visit((Node) node);
 	}
 	
+	public void visit(MethodCallNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
 }

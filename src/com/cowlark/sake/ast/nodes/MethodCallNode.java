@@ -1,5 +1,6 @@
 package com.cowlark.sake.ast.nodes;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.cowlark.sake.ast.Visitor;
 import com.cowlark.sake.errors.CompilationException;
@@ -27,9 +28,26 @@ public class MethodCallNode extends ExpressionNode
 			addChild(n);
 	}
 	
+	public ExpressionNode getMethodReceiver()
+	{
+		return (ExpressionNode) getChild(0);
+	}
+	
 	public IdentifierNode getMethodIdentifier()
 	{
 		return (IdentifierNode) getChild(1);
+	}
+	
+	private ArrayList<ExpressionNode> _arguments;
+	public List<ExpressionNode> getMethodArguments()
+	{
+		if (_arguments == null)
+		{
+			_arguments = new ArrayList<ExpressionNode>();
+			for (int i = 2; i < getNumberOfChildren(); i++)
+				_arguments.add((ExpressionNode) getChild(i));
+		}
+		return _arguments;
 	}
 	
 	@Override

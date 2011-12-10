@@ -1,8 +1,11 @@
 package com.cowlark.sake.types;
 
+import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.errors.CompilationException;
+import com.cowlark.sake.errors.NoSuchMethodException;
 import com.cowlark.sake.errors.TypesNotCompatibleException;
+import com.cowlark.sake.methods.Method;
 
 public class ListType extends Type
 {
@@ -50,5 +53,12 @@ public class ListType extends Type
 		
 		ListType t = (ListType) other;
 		_childType.unifyWith(node, t.getChildType());
+	}
+	
+	@Override
+	public Method lookupMethod(Node node, IdentifierNode id)
+	        throws CompilationException
+	{
+		throw new NoSuchMethodException(node, this, id);
 	}
 }

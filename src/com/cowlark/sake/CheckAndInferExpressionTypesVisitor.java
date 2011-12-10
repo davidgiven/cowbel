@@ -1,11 +1,14 @@
 package com.cowlark.sake;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import com.cowlark.sake.ast.SimpleVisitor;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
+import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.ListConstructorNode;
+import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.StringConstantNode;
 import com.cowlark.sake.ast.nodes.VarReferenceNode;
@@ -13,11 +16,12 @@ import com.cowlark.sake.errors.AttemptToCallNonFunctionTypeException;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.errors.FunctionParameterMismatch;
 import com.cowlark.sake.errors.TypesNotCompatibleException;
+import com.cowlark.sake.methods.Method;
 import com.cowlark.sake.types.FunctionType;
-import com.cowlark.sake.types.TypeVariable;
 import com.cowlark.sake.types.ListType;
 import com.cowlark.sake.types.StringType;
 import com.cowlark.sake.types.Type;
+import com.cowlark.sake.types.TypeVariable;
 
 public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 {
@@ -104,6 +108,27 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		}
 		
 		node.setType(ListType.create(type));
+	}
+	
+	@Override
+	public void visit(MethodCallNode node) throws CompilationException
+	{
+		ExpressionNode receiver = node.getMethodReceiver();
+		Type receivertype = receiver.calculateType();
+		receivertype.ensureConcrete(node);
+		
+		List<ExpressionNode> arguments = node.getMethodArguments();
+		ArrayList<Type> argumenttypes = new ArrayList<Type>();
+		for (ExpressionNode n : arguments)
+		{
+			Type type = n.calculateType();
+			argumenttypes.add(type);
+		}
+		
+		IdentifierNode name = node.getMethodIdentifier();
+		Method method = receivertype.lookupMethod(node, name);
+		method.typeCheck(node, argumenttypes);
+		node.setType(method.getReturnType());
 	}
 	
 	@Override
