@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import com.cowlark.sake.ast.SimpleVisitor;
+import com.cowlark.sake.ast.nodes.DummyExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
 import com.cowlark.sake.ast.nodes.IdentifierNode;
@@ -26,6 +27,13 @@ import com.cowlark.sake.types.TypeVariable;
 
 public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 {
+	@Override
+	public void visit(DummyExpressionNode node) throws CompilationException
+	{
+		Type type = node.getChild().calculateType();
+		node.setType(type);
+	}
+	
 	@Override
 	public void visit(StringConstantNode node) throws CompilationException
 	{

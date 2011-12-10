@@ -1,8 +1,11 @@
 package com.cowlark.sake.ast;
 
+import com.cowlark.sake.ast.nodes.DummyExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
+import com.cowlark.sake.ast.nodes.IfElseStatementNode;
+import com.cowlark.sake.ast.nodes.IfStatementNode;
 import com.cowlark.sake.ast.nodes.ListConstructorNode;
 import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.ast.nodes.Node;
@@ -57,11 +60,26 @@ public class Visitor
 		visit((Node) node);
 	}
 
+	public void visit(IfStatementNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+
+	public void visit(IfElseStatementNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+
 	public void visit(ExpressionStatementNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}
 
+	public void visit(DummyExpressionNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+	
 	public void visit(VarReferenceNode node) throws CompilationException
 	{
 		visit((Node) node);

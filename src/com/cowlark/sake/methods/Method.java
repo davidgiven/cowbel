@@ -16,6 +16,7 @@ public abstract class Method
 	static
 	{
 		_primitiveMethods = new HashMap<String, Method>();
+		registerPrimitiveMethod(new StringEqualsMethod());
 		registerPrimitiveMethod(new StringAddMethod());
 		registerPrimitiveMethod(new StringReplaceMethod());
 		registerPrimitiveMethod(new StringSizeMethod());

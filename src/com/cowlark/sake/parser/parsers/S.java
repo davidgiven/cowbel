@@ -24,6 +24,8 @@ public class S
     	"var",
     	"function",
     	"return",
+    	"if",
+    	"else",
     	"string",
     	"integer",
     	"boolean",

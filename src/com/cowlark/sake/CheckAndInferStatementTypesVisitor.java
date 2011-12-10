@@ -4,13 +4,17 @@ import com.cowlark.sake.ast.SimpleVisitor;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
+import com.cowlark.sake.ast.nodes.IfElseStatementNode;
+import com.cowlark.sake.ast.nodes.IfStatementNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ReturnStatementNode;
 import com.cowlark.sake.ast.nodes.ReturnVoidStatementNode;
 import com.cowlark.sake.ast.nodes.ScopeNode;
+import com.cowlark.sake.ast.nodes.StatementNode;
 import com.cowlark.sake.ast.nodes.VarAssignmentNode;
 import com.cowlark.sake.ast.nodes.VarDeclarationNode;
 import com.cowlark.sake.errors.CompilationException;
+import com.cowlark.sake.types.BooleanType;
 import com.cowlark.sake.types.FunctionType;
 import com.cowlark.sake.types.Type;
 import com.cowlark.sake.types.VoidType;
@@ -86,6 +90,31 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		Type returntype = functiontype.getReturnType();
 		
 		valuetype.unifyWith(node, returntype);
+	}
+
+	@Override
+	public void visit(IfStatementNode node) throws CompilationException
+	{
+		ExpressionNode conditional = node.getConditionalExpression();
+		Type conditionaltype = conditional.calculateType();
+		conditionaltype.unifyWith(node, BooleanType.create());
+		
+		StatementNode positive = node.getPositiveStatement();
+		positive.checkTypes();
+	}
+
+	@Override
+	public void visit(IfElseStatementNode node) throws CompilationException
+	{
+		ExpressionNode conditional = node.getConditionalExpression();
+		Type conditionaltype = conditional.calculateType();
+		conditionaltype.unifyWith(node, BooleanType.create());
+		
+		StatementNode positive = node.getPositiveStatement();
+		positive.checkTypes();
+		
+		StatementNode negative = node.getPositiveStatement();
+		negative.checkTypes();
 	}
 
 	@Override

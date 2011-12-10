@@ -12,6 +12,11 @@ public class DummyExpressionNode extends ExpressionNode
         addChild(child);
     }
 	
+	public ExpressionNode getChild()
+	{
+		return (ExpressionNode) getChild(0);
+	}
+	
 	@Override
 	public void visit(Visitor visitor) throws CompilationException
 	{
