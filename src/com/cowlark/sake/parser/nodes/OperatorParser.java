@@ -30,7 +30,6 @@ public class OperatorParser extends Parser
 			case '/':
 			case '|':
 			case '\\':
-			case ']':
 				return true;
 				
 			default:

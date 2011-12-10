@@ -1,12 +1,12 @@
 package com.cowlark.sake.parser.nodes;
 
 import java.util.ArrayList;
-import com.cowlark.sake.ast.nodes.ListConstantNode;
-import com.cowlark.sake.ast.nodes.StringConstantNode;
+import com.cowlark.sake.ast.nodes.ExpressionNode;
+import com.cowlark.sake.ast.nodes.ListConstructorNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
 
-public class ListConstantParser extends Parser
+public class ListConstructorParser extends Parser
 {
 	@Override
 	protected ParseResult parseImpl(Location location)
@@ -15,7 +15,7 @@ public class ListConstantParser extends Parser
 		if (pr.failed())
 			return pr;
 		
-		ArrayList<StringConstantNode> params = new ArrayList<StringConstantNode>();
+		ArrayList<ExpressionNode> params = new ArrayList<ExpressionNode>();
 		Location n = pr.end();
 		pr = CloseSquareParser.parse(n);
 		if (pr.success())
@@ -24,11 +24,11 @@ public class ListConstantParser extends Parser
 		{
 			for (;;)
 			{
-				pr = StringConstantParser.parse(n);
+				pr = ExpressionLowParser.parse(n);
 				if (pr.failed())
 					return pr;
 		
-				params.add((StringConstantNode) pr);
+				params.add((ExpressionNode) pr);
 				
 				n = pr.end();
 				pr = CloseSquareParser.parse(n);
@@ -38,7 +38,6 @@ public class ListConstantParser extends Parser
 					break;
 				}
 				
-				n = pr.end();
 				pr = CommaParser.parse(n);
 				if (pr.failed())
 					return pr;
@@ -53,6 +52,6 @@ public class ListConstantParser extends Parser
 			}
 		}
 			
-		return new ListConstantNode(location, n, params); 
+		return new ListConstructorNode(location, n, params); 
 	}
 }

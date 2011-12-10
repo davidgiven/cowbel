@@ -3,6 +3,7 @@ package com.cowlark.sake.ast;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
+import com.cowlark.sake.ast.nodes.ListConstructorNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ScopeNode;
 import com.cowlark.sake.ast.nodes.StatementListNode;
@@ -61,5 +62,11 @@ public class Visitor
 	public void visit(StringConstantNode node) throws CompilationException
 	{
 		visit((Node) node);
-	}	
+	}
+	
+	public void visit(ListConstructorNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+	
 }

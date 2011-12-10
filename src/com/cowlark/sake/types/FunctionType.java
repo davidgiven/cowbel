@@ -2,13 +2,16 @@ package com.cowlark.sake.types;
 
 import java.util.LinkedList;
 import java.util.List;
+import com.cowlark.sake.ast.nodes.Node;
+import com.cowlark.sake.errors.CompilationException;
+import com.cowlark.sake.errors.TypesNotCompatibleException;
 
-public class FunctionType extends Type
+public class FunctionType extends PrimitiveType
 {
 	public static FunctionType create(List<Type> arguments, Type returntype)
 	{
 		FunctionType type = new FunctionType(arguments, returntype);
-		return TypeRegistry.canonicalise(type);
+		return Type.canonicalise(type);
 	}
 	
 	public static FunctionType createVoidVoid()
@@ -62,5 +65,15 @@ public class FunctionType extends Type
 	public Type getReturnType()
 	{
 		return _returntype;
+	}
+	
+	@Override
+	protected void unifyWithImpl(Node node, Type other)
+	        throws CompilationException
+	{
+	    super.unifyWithImpl(node, other);
+	    
+	    if (!(getCanonicalTypeName().equals(other.getCanonicalTypeName())))
+	    	throw new TypesNotCompatibleException(node, this, other);
 	}
 }

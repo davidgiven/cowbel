@@ -1,9 +1,9 @@
 package com.cowlark.sake.types;
 
-public class BooleanType extends Type
+public class BooleanType extends PrimitiveType
 {
 	private static BooleanType _instance =
-		TypeRegistry.canonicalise(new BooleanType());
+		Type.canonicalise(new BooleanType());
 	
 	public static BooleanType create()
 	{

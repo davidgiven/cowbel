@@ -5,13 +5,17 @@ import java.util.Vector;
 import com.cowlark.sake.ast.SimpleVisitor;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
+import com.cowlark.sake.ast.nodes.ListConstructorNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.StringConstantNode;
 import com.cowlark.sake.ast.nodes.VarReferenceNode;
 import com.cowlark.sake.errors.AttemptToCallNonFunctionTypeException;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.errors.FunctionParameterMismatch;
+import com.cowlark.sake.errors.TypesNotCompatibleException;
 import com.cowlark.sake.types.FunctionType;
+import com.cowlark.sake.types.TypeVariable;
+import com.cowlark.sake.types.ListType;
 import com.cowlark.sake.types.StringType;
 import com.cowlark.sake.types.Type;
 
@@ -42,6 +46,30 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		throw new AttemptToCallNonFunctionTypeException(expression);
 	}
 	
+	private static boolean compareArgumentTypes(FunctionCallNode node,
+			List<Type> funclist, List<Type> calllist) throws CompilationException
+	{
+		if (funclist.size() != calllist.size())
+			return false;
+		
+		try
+		{
+			for (int i = 0; i < funclist.size(); i++)
+			{
+				Type t1 = funclist.get(i);
+				Type t2 = calllist.get(i);
+				t1.unifyWith(node, t2);
+				t2.ensureConcrete(node);
+			}
+		}
+		catch (TypesNotCompatibleException e)
+		{
+			return false;
+		}
+		
+		return true;	
+	}
+	
 	public void visit(FunctionCallNode node) throws CompilationException
 	{
 		ExpressionNode function = node.getFunction();
@@ -56,11 +84,26 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 			callArgumentTypes.add(t);
 		}
 		
-		if (!functionArgumentTypes.equals(callArgumentTypes))
+		if (!compareArgumentTypes(node, functionArgumentTypes, callArgumentTypes))
 			throw new FunctionParameterMismatch(node, functionArgumentTypes,
 					callArgumentTypes);
 		
 		node.setType(functionType.getReturnType());
+	}
+	
+	@Override
+	public void visit(ListConstructorNode node) throws CompilationException
+	{
+		List<ExpressionNode> members = node.getListMembers();
+		Type type = TypeVariable.create();
+		
+		for (ExpressionNode exp : members)
+		{
+			Type t = exp.calculateType();
+			type.unifyWith(node, t);
+		}
+		
+		node.setType(ListType.create(type));
 	}
 	
 	@Override

@@ -1,9 +1,9 @@
 package com.cowlark.sake.types;
 
-public class IntegerType extends Type
+public class IntegerType extends PrimitiveType
 {
 	private static IntegerType _instance =
-		TypeRegistry.canonicalise(new IntegerType());
+		Type.canonicalise(new IntegerType());
 	
 	public static IntegerType create()
 	{

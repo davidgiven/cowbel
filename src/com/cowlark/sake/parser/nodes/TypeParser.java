@@ -23,7 +23,7 @@ public class TypeParser extends Parser
 		if (childpr.failed())
 			return combineParseErrors(pr1, childpr);
 		
-		ParseResult pr4 = CloseSquareParser.parse(location);
+		ParseResult pr4 = CloseSquareParser.parse(childpr.end());
 		if (pr4.failed())
 			return combineParseErrors(pr1, pr4);
 		

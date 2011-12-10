@@ -1,9 +1,9 @@
 package com.cowlark.sake.types;
 
-public class StringType extends Type
+public class StringType extends PrimitiveType
 {
 	private static StringType _instance =
-		TypeRegistry.canonicalise(new StringType());
+		Type.canonicalise(new StringType());
 	
 	public static StringType create()
 	{

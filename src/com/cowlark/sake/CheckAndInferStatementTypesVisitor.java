@@ -28,23 +28,32 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 	public void visit(VarDeclarationNode node) throws CompilationException
 	{
 		Symbol symbol = node.getSymbol();
-		symbol.inferType();
+		Type symboltype = symbol.getSymbolType();
+		
+		ExpressionNode initialiser = node.getVariableInitialiser();
+		if (initialiser != null)
+			symboltype.unifyWith(node, initialiser.calculateType());
+		
+		symboltype.ensureConcrete(node);
 	}
 	
 	@Override
 	public void visit(VarAssignmentNode node) throws CompilationException
 	{
 		Symbol symbol = node.getSymbol();
+		Type symboltype = symbol.getSymbolType();
 		ExpressionNode expression = node.getExpression();
 		Type expressiontype = expression.calculateType();
 
-		symbol.getSymbolType().checkCompatibilityWith(node, expressiontype);
+		symboltype.unifyWith(node, expressiontype);
+		symboltype.ensureConcrete(node);
 	}
 	
 	@Override
 	public void visit(ExpressionStatementNode node) throws CompilationException
 	{
-		node.getExpression().calculateType();
+		Type type = node.getExpression().calculateType();
+		type.ensureConcrete(node);
 	}
 	
 	@Override

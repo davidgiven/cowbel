@@ -1,9 +1,9 @@
 package com.cowlark.sake.types;
 
-public class VoidType extends Type
+public class VoidType extends PrimitiveType
 {
 	private static VoidType _instance =
-		TypeRegistry.canonicalise(new VoidType());
+		Type.canonicalise(new VoidType());
 	
 	public static VoidType create()
 	{

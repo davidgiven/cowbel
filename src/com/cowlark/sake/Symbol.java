@@ -3,8 +3,6 @@ package com.cowlark.sake;
 import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ScopeNode;
-import com.cowlark.sake.errors.CompilationException;
-import com.cowlark.sake.types.InferredType;
 import com.cowlark.sake.types.Type;
 
 public abstract class Symbol
@@ -53,14 +51,5 @@ public abstract class Symbol
 	{
 		_scope = scope;
 		_storage = storage;
-	}
-	
-	public void inferType() throws CompilationException
-	{
-		if (_type instanceof InferredType)
-		{
-			InferredType itype = (InferredType) _type;
-			_type = itype.getInitialiser().calculateType();
-		}
 	}
 }

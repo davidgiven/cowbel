@@ -10,13 +10,16 @@ import com.cowlark.sake.types.Type;
 public class VarDeclarationNode extends StatementNode implements HasSymbol
 {
 	private Symbol _symbol;
+	private ExpressionNode _initialiser;
 	
 	public VarDeclarationNode(Location start, Location end,
-			IdentifierNode identifier, TypeNode type)
+			IdentifierNode identifier, TypeNode type,
+			ExpressionNode initialiser)
     {
 		super(start, end);
 		addChild(identifier);
 		addChild(type);
+		_initialiser = initialiser;
     }
 	
 	public IdentifierNode getVariableName()
@@ -32,6 +35,11 @@ public class VarDeclarationNode extends StatementNode implements HasSymbol
 	public Type getVariableType()
 	{
 		return getVariableTypeNode().getType();
+	}
+	
+	public ExpressionNode getVariableInitialiser()
+	{
+		return _initialiser;
 	}
 	
 	@Override

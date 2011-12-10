@@ -23,7 +23,7 @@ public class ExpressionLeafParser extends Parser
 		if (pr3.success())
 			return pr3;
 		
-		ParseResult pr4 = ListConstantParser.parse(location);
+		ParseResult pr4 = ListConstructorParser.parse(location);
 		if (pr4.success())
 			return pr4;
 		
