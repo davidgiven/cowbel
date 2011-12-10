@@ -31,7 +31,7 @@ public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
 		/* Set up the function definition's scope and storage. */
 		
 		ScopeNode body = node.getFunctionBody();
-		LocalSymbolStorage storage = new LocalSymbolStorage();
+		LocalSymbolStorage storage = new LocalSymbolStorage(f);
 		body.setSymbolStorage(storage);
 		
 		/* Add function parameters to its scope. */

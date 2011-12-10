@@ -5,11 +5,15 @@ import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.Node;
+import com.cowlark.sake.ast.nodes.ReturnStatementNode;
+import com.cowlark.sake.ast.nodes.ReturnVoidStatementNode;
 import com.cowlark.sake.ast.nodes.ScopeNode;
 import com.cowlark.sake.ast.nodes.VarAssignmentNode;
 import com.cowlark.sake.ast.nodes.VarDeclarationNode;
 import com.cowlark.sake.errors.CompilationException;
+import com.cowlark.sake.types.FunctionType;
 import com.cowlark.sake.types.Type;
+import com.cowlark.sake.types.VoidType;
 
 public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 {
@@ -56,6 +60,34 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		type.ensureConcrete(node);
 	}
 	
+	@Override
+	public void visit(ReturnStatementNode node) throws CompilationException
+	{
+		ExpressionNode value = node.getValue();
+		Type valuetype = value.calculateType();
+		
+		LocalSymbolStorage storage = (LocalSymbolStorage) node.getScope().getSymbolStorage();
+		Function function = storage.getDefiningFunction();
+		FunctionType functiontype = (FunctionType) function.getSymbolType();
+		Type returntype = functiontype.getReturnType();
+		
+		valuetype.unifyWith(node, returntype);
+		valuetype.ensureConcrete(node);
+	}
+
+	@Override
+	public void visit(ReturnVoidStatementNode node) throws CompilationException
+	{
+		Type valuetype = VoidType.create();
+		
+		LocalSymbolStorage storage = (LocalSymbolStorage) node.getScope().getSymbolStorage();
+		Function function = storage.getDefiningFunction();
+		FunctionType functiontype = (FunctionType) function.getSymbolType();
+		Type returntype = functiontype.getReturnType();
+		
+		valuetype.unifyWith(node, returntype);
+	}
+
 	@Override
 	public void visit(Node node) throws CompilationException
 	{

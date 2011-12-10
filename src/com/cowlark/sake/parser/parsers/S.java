@@ -23,6 +23,7 @@ public class S
     {
     	"var",
     	"function",
+    	"return",
     	"string",
     	"integer",
     	"boolean",

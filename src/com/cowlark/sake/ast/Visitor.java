@@ -6,6 +6,8 @@ import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.ListConstructorNode;
 import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.ast.nodes.Node;
+import com.cowlark.sake.ast.nodes.ReturnStatementNode;
+import com.cowlark.sake.ast.nodes.ReturnVoidStatementNode;
 import com.cowlark.sake.ast.nodes.ScopeNode;
 import com.cowlark.sake.ast.nodes.StatementListNode;
 import com.cowlark.sake.ast.nodes.StringConstantNode;
@@ -41,6 +43,16 @@ public class Visitor
 	}
 
 	public void visit(VarAssignmentNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+
+	public void visit(ReturnStatementNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+	
+	public void visit(ReturnVoidStatementNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}
