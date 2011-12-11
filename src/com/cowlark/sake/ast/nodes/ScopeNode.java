@@ -2,6 +2,7 @@ package com.cowlark.sake.ast.nodes;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
+import com.cowlark.sake.Label;
 import com.cowlark.sake.Symbol;
 import com.cowlark.sake.SymbolStorage;
 import com.cowlark.sake.ast.Visitor;
@@ -12,14 +13,26 @@ import com.cowlark.sake.parser.errors.IdentifierNotFound;
 
 public class ScopeNode extends StatementNode
 {
+	private boolean _isTopLevel;
 	private SymbolStorage _symbolStorage;
 	private HashMap<String, Symbol> _symbols = new HashMap<String, Symbol>();
+	private HashMap<String, Label> _labels = new HashMap<String, Label>();
 	
 	public ScopeNode(Location start, Location end, StatementNode child)
     {
         super(start, end);
         addChild(child);
     }
+	
+	public void setTopLevel()
+	{
+		_isTopLevel = true;
+	}
+	
+	public boolean isTopLevel()
+	{
+		return _isTopLevel;
+	}
 	
 	public StatementNode getChild()
 	{
@@ -89,6 +102,40 @@ public class ScopeNode extends StatementNode
 			Symbol symbol = scope._symbols.get(s);
 			if (symbol != null)
 				return symbol;
+			
+			scope = scope.getScope();
+		}
+		
+		throw new IdentifierNotFound(this, name);
+	}
+
+	public void addLabel(Label label) throws CompilationException
+	{
+		IdentifierNode name = label.getLabelName();
+		String s = name.getText();
+		
+		if (_labels.containsKey(s))
+		{
+			Label oldlabel = _labels.get(s);
+			throw new MultipleDefinitionException(oldlabel.getLabelName(), name);
+		}
+		
+		_labels.put(s, label);
+	}
+	
+	public Label lookupLabel(IdentifierNode name) throws CompilationException
+	{
+		String s = name.getText();
+		
+		ScopeNode scope = this;
+		while (scope != null)
+		{
+			Label label = scope._labels.get(s);
+			if (label != null)
+				return label;
+			
+			if (scope.isTopLevel())
+				break;
 			
 			scope = scope.getScope();
 		}

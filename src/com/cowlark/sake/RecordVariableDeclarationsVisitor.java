@@ -2,6 +2,7 @@ package com.cowlark.sake;
 
 import com.cowlark.sake.ast.RecursiveVisitor;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
+import com.cowlark.sake.ast.nodes.LabelStatementNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.sake.ast.nodes.ParameterDeclarationNode;
@@ -31,6 +32,7 @@ public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
 		/* Set up the function definition's scope and storage. */
 		
 		ScopeNode body = node.getFunctionBody();
+		body.setTopLevel();
 		LocalSymbolStorage storage = new LocalSymbolStorage(f);
 		body.setSymbolStorage(storage);
 		
@@ -64,6 +66,20 @@ public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
 		
 		scope.addSymbol(v);
 		node.setSymbol(v);
+		
+	    super.visit(node);
+	}
+	
+	@Override
+	public void visit(LabelStatementNode node) throws CompilationException
+	{
+		/* Add this label to the current scope. */
+		
+		ScopeNode scope = node.getScope();
+		Label label = new Label(node);
+		
+		scope.addLabel(label);
+		node.setLabel(label);
 		
 	    super.visit(node);
 	}

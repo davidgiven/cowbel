@@ -4,8 +4,10 @@ import com.cowlark.sake.ast.nodes.DummyExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
+import com.cowlark.sake.ast.nodes.GotoStatementNode;
 import com.cowlark.sake.ast.nodes.IfElseStatementNode;
 import com.cowlark.sake.ast.nodes.IfStatementNode;
+import com.cowlark.sake.ast.nodes.LabelStatementNode;
 import com.cowlark.sake.ast.nodes.ListConstructorNode;
 import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.ast.nodes.Node;
@@ -66,6 +68,16 @@ public class Visitor
 	}
 
 	public void visit(IfElseStatementNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+
+	public void visit(LabelStatementNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+
+	public void visit(GotoStatementNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}

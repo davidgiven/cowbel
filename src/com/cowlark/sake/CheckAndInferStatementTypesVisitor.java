@@ -4,8 +4,10 @@ import com.cowlark.sake.ast.SimpleVisitor;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
+import com.cowlark.sake.ast.nodes.GotoStatementNode;
 import com.cowlark.sake.ast.nodes.IfElseStatementNode;
 import com.cowlark.sake.ast.nodes.IfStatementNode;
+import com.cowlark.sake.ast.nodes.LabelStatementNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ReturnStatementNode;
 import com.cowlark.sake.ast.nodes.ReturnVoidStatementNode;
@@ -117,6 +119,16 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		negative.checkTypes();
 	}
 
+	@Override
+	public void visit(LabelStatementNode node) throws CompilationException
+	{
+	}
+	
+	@Override
+	public void visit(GotoStatementNode node) throws CompilationException
+	{
+	}
+	
 	@Override
 	public void visit(Node node) throws CompilationException
 	{

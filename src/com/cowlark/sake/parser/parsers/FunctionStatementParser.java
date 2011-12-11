@@ -24,10 +24,18 @@ public class FunctionStatementParser extends Parser
 		if (pr4.success())
 			return pr4;
 		
-		ParseResult pr5 = ExpressionStatementParser.parse(location);
+		ParseResult pr5 = LabelStatementParser.parse(location);
 		if (pr5.success())
 			return pr5;
 		
-		return combineParseErrors(pr1, pr2, pr3, pr4, pr5);
+		ParseResult pr6 = GotoStatementParser.parse(location);
+		if (pr6.success())
+			return pr6;
+		
+		ParseResult pr7 = ExpressionStatementParser.parse(location);
+		if (pr7.success())
+			return pr7;
+		
+		return combineParseErrors(pr1, pr2, pr3, pr4, pr5, pr6, pr7);
 	}
 }

@@ -33,6 +33,8 @@ public abstract class Parser
 	public static MethodNameParser MethodNameParser = new MethodNameParser();
 	public static ReturnStatementParser ReturnStatementParser = new ReturnStatementParser();
 	public static IfStatementParser IfStatementParser = new IfStatementParser();
+	public static LabelStatementParser LabelStatementParser = new LabelStatementParser();
+	public static GotoStatementParser GotoStatementParser = new GotoStatementParser();
 	
 	public static Parser EOFParser = new EOFParser();
 	public static Parser DotParser = new TrivialParser(".");
@@ -55,6 +57,7 @@ public abstract class Parser
 	public static Parser FunctionTokenParser = new TrivialParser("function");
 	public static Parser IfTokenParser = new TrivialParser("if");
 	public static Parser ElseTokenParser = new TrivialParser("else");
+	public static Parser GotoTokenParser = new TrivialParser("goto");
 	public static Parser ReturnTokenParser = new TrivialParser("return");
 	public static Parser StringTokenParser = new TrivialParser("string");
 	public static Parser IntegerTokenParser = new TrivialParser("integer");
