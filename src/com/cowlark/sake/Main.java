@@ -24,6 +24,7 @@ public class Main
 			
 			System.out.println("Parse successful");
 			c.getAst().dump();
+			c.dumpBasicBlocks();
 		}
 		catch (CompilationException e)
 		{
