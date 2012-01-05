@@ -37,4 +37,9 @@ public abstract class Instruction implements HasNode
 	    return getInstructionName() + " (" + _operands + ") " +
 	    	getShortDescription();
 	}
+	
+	public void visit(InstructionVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }

@@ -14,4 +14,9 @@ public class DiscardInstruction extends Instruction
 	{
 	    return "Discard";
 	}
+	
+	public void visit(InstructionVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }

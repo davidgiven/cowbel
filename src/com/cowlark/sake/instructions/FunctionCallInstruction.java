@@ -17,4 +17,9 @@ public class FunctionCallInstruction extends Instruction
 	{
 		return "FunctionCall";
 	}
+	
+	public void visit(InstructionVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }

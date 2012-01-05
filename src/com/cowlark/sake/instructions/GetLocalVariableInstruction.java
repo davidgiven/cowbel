@@ -13,6 +13,11 @@ public class GetLocalVariableInstruction extends Instruction
 		_var = var;
 	}	
 	
+	public LocalVariable getVariable()
+	{
+		return _var;
+	}
+	
 	@Override
 	protected String getInstructionName()
 	{
@@ -23,5 +28,10 @@ public class GetLocalVariableInstruction extends Instruction
 	protected String getShortDescription()
 	{
 		return _var.getSymbolName().getText();
+	}
+	
+	public void visit(InstructionVisitor visitor)
+	{
+		visitor.visit(this);
 	}
 }

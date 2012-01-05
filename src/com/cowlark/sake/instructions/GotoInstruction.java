@@ -24,4 +24,9 @@ public class GotoInstruction extends Instruction
 	{
 	    return _target.toString();
 	}	
+	
+	public void visit(InstructionVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }

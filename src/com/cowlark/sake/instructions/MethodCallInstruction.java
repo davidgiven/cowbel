@@ -26,4 +26,9 @@ public class MethodCallInstruction extends Instruction
 	{
 	    return _method.getText();
 	}
+	
+	public void visit(InstructionVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }

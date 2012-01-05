@@ -24,4 +24,9 @@ public class GetGlobalVariableInstruction extends Instruction
 	{
 		return _var.getSymbolName().getText();
 	}
+	
+	public void visit(InstructionVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }

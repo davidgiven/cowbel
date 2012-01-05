@@ -26,4 +26,9 @@ public class IfInstruction extends Instruction
 	{
 	    return "+"+_positive + " -"+_negative;
 	}
+	
+	public void visit(InstructionVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }

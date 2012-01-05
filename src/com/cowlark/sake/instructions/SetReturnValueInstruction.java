@@ -14,4 +14,9 @@ public class SetReturnValueInstruction extends Instruction
 	{
 		return "SetReturnValue";
 	}
+	
+	public void visit(InstructionVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }

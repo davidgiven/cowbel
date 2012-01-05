@@ -3,6 +3,8 @@ package com.cowlark.sake;
 import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
+import com.cowlark.sake.backend.Backend;
+import com.cowlark.sake.backend.make.MakeBackend;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.parser.core.Location;
 
@@ -23,8 +25,10 @@ public class Main
 			c.compile();
 			
 			System.out.println("Parse successful");
-			c.getAst().dump();
 			c.dumpBasicBlocks();
+			
+			Backend backend = new MakeBackend(System.out);
+			c.emitCode(backend);
 		}
 		catch (CompilationException e)
 		{

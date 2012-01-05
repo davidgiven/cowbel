@@ -14,4 +14,9 @@ public class ListConstructorInstruction extends Instruction
 	{
 	    return "ListConstructor";
 	}
+	
+	public void visit(InstructionVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }

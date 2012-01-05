@@ -16,6 +16,11 @@ public class SetLocalVariableInInstruction extends Instruction
 		_next = next;
     }
 	
+	public LocalVariable getVariable()
+	{
+		return _var;
+	}
+	
 	@Override
 	protected String getInstructionName()
 	{
@@ -32,5 +37,10 @@ public class SetLocalVariableInInstruction extends Instruction
 	public String toString()
 	{
 		return "SetLocalVariableIn " + _var.getSymbolName().getText() + " " + _next;
+	}
+	
+	public void visit(InstructionVisitor visitor)
+	{
+		visitor.visit(this);
 	}
 }

@@ -23,4 +23,9 @@ public class StringConstantInstruction extends Instruction
 	{
 	    return "<" + _value + ">";
 	}
+	
+	public void visit(InstructionVisitor visitor)
+	{
+		visitor.visit(this);
+	}
 }

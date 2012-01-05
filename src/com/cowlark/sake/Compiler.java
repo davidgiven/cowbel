@@ -8,6 +8,7 @@ import com.cowlark.sake.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.sake.ast.nodes.ScopeNode;
 import com.cowlark.sake.ast.nodes.StatementNode;
 import com.cowlark.sake.ast.nodes.VoidTypeNode;
+import com.cowlark.sake.backend.Backend;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.errors.FailedParseException;
 import com.cowlark.sake.instructions.Instruction;
@@ -31,6 +32,11 @@ public class Compiler
 	public void setInput(Location input)
 	{
 		_input = input;
+	}
+	
+	public ScopeNode getAst()
+	{
+		return (ScopeNode) _ast;
 	}
 	
 	public void compile() throws CompilationException
@@ -82,9 +88,62 @@ public class Compiler
 			f.buildBasicBlocks();
 	}
 
-	public ScopeNode getAst()
+	public void emitCode(Backend backend)
 	{
-		return (ScopeNode) _ast;
+		HashSet<BasicBlock> pending = new HashSet<BasicBlock>();
+		HashSet<BasicBlock> seen = new HashSet<BasicBlock>();
+		
+		for (Function f : _globals.getFunctions())
+		{
+			pending.add(f.getEntryBB());
+			seen.add(f.getEntryBB());
+			
+			while (!pending.isEmpty())
+			{
+				BasicBlock bb = pending.iterator().next();
+				pending.remove(bb);
+		
+				for (BasicBlock b : bb.getDestinationBlocks())
+				{
+					if (!seen.contains(b))
+					{
+						seen.add(b);
+						pending.add(b);
+					}
+				}
+				
+				backend.compileBasicBlock(bb);
+			}
+		}
+	}
+
+	public void visit(BasicBlockVisitor visitor)
+	{
+		HashSet<BasicBlock> pending = new HashSet<BasicBlock>();
+		HashSet<BasicBlock> seen = new HashSet<BasicBlock>();
+		
+		for (Function f : _globals.getFunctions())
+		{
+			pending.add(f.getEntryBB());
+			seen.add(f.getEntryBB());
+			
+			while (!pending.isEmpty())
+			{
+				BasicBlock bb = pending.iterator().next();
+				pending.remove(bb);
+		
+				for (BasicBlock b : bb.getDestinationBlocks())
+				{
+					if (!seen.contains(b))
+					{
+						seen.add(b);
+						pending.add(b);
+					}
+				}
+				
+				visitor.visit(bb);
+			}
+		}
 	}
 	
 	public void dumpBasicBlocks()
@@ -104,7 +163,7 @@ public class Compiler
 				BasicBlock bb = pending.iterator().next();
 				pending.remove(bb);
 		
-				for (BasicBlock b : bb.getReferencedBlocks())
+				for (BasicBlock b : bb.getDestinationBlocks())
 				{
 					if (!seen.contains(b))
 					{
