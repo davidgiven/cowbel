@@ -12,6 +12,7 @@ import com.cowlark.sake.backend.Backend;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.errors.FailedParseException;
 import com.cowlark.sake.instructions.Instruction;
+import com.cowlark.sake.instructions.InstructionVisitor;
 import com.cowlark.sake.parser.core.FailedParse;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.MutableLocation;
@@ -75,6 +76,8 @@ public class Compiler
 		_globals.addSymbol(_mainFunction);
 		toplevelnode.setSymbol(_mainFunction);
 		
+		/* Type check everything. */
+		
 		ast.checkTypes();
 		for (Function f : _globals.getFunctions())
 		{
@@ -84,8 +87,25 @@ public class Compiler
 				body.checkTypes();
 		}
 		
+		/* Construct basic blocks and IR representation. */
+		
 		for (Function f : _globals.getFunctions())
 			f.buildBasicBlocks();
+		
+		/* Dataflow analysis. */
+		
+		{
+			for (Function f : _globals.getFunctions())
+				DataflowAnalyser.initialiseFunction(f);
+			
+			DataflowAnalyser da = new DataflowAnalyser();
+			do
+			{
+				da.reset();
+				visit(da);
+			}
+			while (!da.isFinished());
+		}
 	}
 
 	public void emitCode(Backend backend)
@@ -146,6 +166,28 @@ public class Compiler
 		}
 	}
 	
+	private class BasicBlockToInstructionAdapter extends BasicBlockVisitor
+	{
+		private InstructionVisitor _visitor;
+		
+		public BasicBlockToInstructionAdapter(InstructionVisitor visitor)
+        {
+			_visitor = visitor;
+        }
+		
+		@Override
+		public void visit(BasicBlock bb)
+		{
+			bb.visit(_visitor);
+		}
+	}
+	
+	public void visit(InstructionVisitor visitor)
+	{
+		BasicBlockToInstructionAdapter adapter = new BasicBlockToInstructionAdapter(visitor);
+		visit(adapter);
+	}
+	
 	public void dumpBasicBlocks()
 	{
 		HashSet<BasicBlock> pending = new HashSet<BasicBlock>();
@@ -173,7 +215,10 @@ public class Compiler
 				}
 				
 				System.out.print("  ");
-				System.out.println(bb.toString());
+				System.out.print(bb.toString());
+				System.out.print(" ");
+				System.out.println(bb.description());
+				
 				for (Instruction insn : bb.getInstructions())
 				{
 					System.out.print("    ");

@@ -1,7 +1,13 @@
 package com.cowlark.sake.instructions;
 
+import com.cowlark.sake.BasicBlock;
+
 public class InstructionVisitor
 {
+	public void visit(BasicBlock bb)
+	{
+	}
+	
 	public void visit(Instruction insn)
 	{
 	}

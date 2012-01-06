@@ -1,9 +1,9 @@
 package com.cowlark.sake;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.instructions.DiscardInstruction;
@@ -21,26 +21,62 @@ import com.cowlark.sake.instructions.SetLocalVariableInInstruction;
 import com.cowlark.sake.instructions.SetReturnValueInstruction;
 import com.cowlark.sake.instructions.StringConstantInstruction;
 
-public class BasicBlock
+public class BasicBlock implements Comparable<BasicBlock>
 {
 	private static int _globalId = 0;
 	
-	private int _id;
+	private int _id = _globalId++;
 	private ArrayList<Instruction> _instructions = new ArrayList<Instruction>();
-	private HashSet<BasicBlock> _sourceBlocks = new HashSet<BasicBlock>();
-	private HashSet<BasicBlock> _destinationBlocks = new HashSet<BasicBlock>();
-	private HashSet<LocalVariable> _inputVariables = new HashSet<LocalVariable>();
-	private HashSet<LocalVariable> _outputVariables = new HashSet<LocalVariable>();
+	private TreeSet<BasicBlock> _sourceBlocks = new TreeSet<BasicBlock>();
+	private TreeSet<BasicBlock> _destinationBlocks = new TreeSet<BasicBlock>();
+	private TreeSet<LocalVariable> _definedVariables = new TreeSet<LocalVariable>();
+	private TreeSet<LocalVariable> _inputVariables = new TreeSet<LocalVariable>();
+	private TreeSet<LocalVariable> _outputVariables = new TreeSet<LocalVariable>();
 	
 	public BasicBlock()
     {
-		_id = _globalId++;
     }
 	
 	@Override
 	public String toString()
 	{
 		return "BasicBlock_" + _id;
+	}
+	
+	@Override
+	public int compareTo(BasicBlock other)
+	{
+		return Integer.compare(_id, other._id);
+	}
+	
+	private static void append_set(StringBuilder sb, Set<LocalVariable> set)
+	{
+		sb.append("{");
+		
+		boolean first = true;
+		for (LocalVariable v : set)
+		{
+			if (!first)
+				sb.append(", ");
+			first = false;
+			
+			sb.append(v);
+		}
+		
+		sb.append("}");
+	}
+	
+	public String description()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("d=");
+		append_set(sb, _definedVariables);
+		sb.append(" i=");
+		append_set(sb, _inputVariables);
+		sb.append(" o=");
+		append_set(sb, _outputVariables);
+		
+		return sb.toString();
 	}
 	
 	public List<Instruction> getInstructions()
@@ -56,6 +92,11 @@ public class BasicBlock
 	public Set<BasicBlock> getDestinationBlocks()
 	{
 		return _destinationBlocks;
+	}
+	
+	public Set<LocalVariable> getDefinedVariables()
+	{
+		return _definedVariables;
 	}
 	
 	public Set<LocalVariable> getInputVariables()
@@ -81,6 +122,7 @@ public class BasicBlock
 	
 	public void visit(InstructionVisitor visitor)
 	{
+		visitor.visit(this);
 		for (Instruction insn : _instructions)
 			insn.visit(visitor);
 	}
@@ -93,6 +135,7 @@ public class BasicBlock
 	public void insnSetLocalVariableIn(Node node, LocalVariable var, BasicBlock next)
 	{
 		addInstruction(new SetLocalVariableInInstruction(node, var, next));
+		_definedVariables.add(var);
 		jumpsTo(next);
 	}
 	

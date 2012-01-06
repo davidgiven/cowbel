@@ -190,7 +190,10 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		if (symbol instanceof GlobalVariable)
 			_currentBB.insnGetGlobalVariable(node, (GlobalVariable) symbol);
 		else
+		{
 			_currentBB.insnGetLocalVariable(node, (LocalVariable) symbol);
+			_currentBB.getInputVariables().add((LocalVariable) symbol);
+		}
 	}
 	
 	@Override

@@ -21,6 +21,11 @@ public class SetLocalVariableInInstruction extends Instruction
 		return _var;
 	}
 	
+	public BasicBlock getTarget()
+	{
+		return _next;
+	}
+	
 	@Override
 	protected String getInstructionName()
 	{
