@@ -21,6 +21,7 @@ public abstract class Method
 		registerPrimitiveMethod(new StringReplaceMethod());
 		registerPrimitiveMethod(new StringSizeMethod());
 		registerPrimitiveMethod(new StringPrintMethod());
+		registerPrimitiveMethod(new BooleanToStringMethod());
 		registerPrimitiveMethod(new BooleanNotMethod());
 		registerPrimitiveMethod(new BooleanAndMethod());
 		registerPrimitiveMethod(new BooleanOrMethod());

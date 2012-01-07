@@ -27,6 +27,7 @@ sake.method.boolean._not = $(if $1,$(sake.boolean.false),$(sake.boolean.true))
 sake.method.boolean._and = $(and $1,$2)
 sake.method.boolean._or = $(or $1,$2)
 sake.method.boolean._xor = $(if $1,$(if $2,$(sake.boolean.false),$(sake.boolean.true)),$(if $2,$(sake.boolean.true),$(sake.boolean.false)))
+sake.method.boolean.toString = $(if $1,true,false)
 
 sake.method.integer._equals = $(call sake.maths.equals,$1,$2)
 sake.method.integer._notequals = $(call sake.maths.notequals,$1,$2)
