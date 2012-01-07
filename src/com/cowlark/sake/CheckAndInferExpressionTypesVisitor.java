@@ -19,6 +19,7 @@ import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.errors.FunctionParameterMismatch;
 import com.cowlark.sake.errors.TypesNotCompatibleException;
 import com.cowlark.sake.methods.Method;
+import com.cowlark.sake.symbols.Symbol;
 import com.cowlark.sake.types.BooleanType;
 import com.cowlark.sake.types.FunctionType;
 import com.cowlark.sake.types.ListType;

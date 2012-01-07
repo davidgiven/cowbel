@@ -8,9 +8,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import org.apache.commons.io.IOUtils;
 import com.cowlark.sake.BasicBlock;
-import com.cowlark.sake.Function;
 import com.cowlark.sake.instructions.Instruction;
 import com.cowlark.sake.instructions.InstructionVisitor;
+import com.cowlark.sake.symbols.Function;
 
 public abstract class Backend extends InstructionVisitor
 {

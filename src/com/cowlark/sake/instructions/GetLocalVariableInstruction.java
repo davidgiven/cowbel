@@ -1,7 +1,7 @@
 package com.cowlark.sake.instructions;
 
-import com.cowlark.sake.LocalVariable;
 import com.cowlark.sake.ast.nodes.Node;
+import com.cowlark.sake.symbols.LocalVariable;
 
 public class GetLocalVariableInstruction extends Instruction
 {

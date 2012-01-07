@@ -9,6 +9,11 @@ import com.cowlark.sake.ast.nodes.ParameterDeclarationNode;
 import com.cowlark.sake.ast.nodes.ScopeNode;
 import com.cowlark.sake.ast.nodes.VarDeclarationNode;
 import com.cowlark.sake.errors.CompilationException;
+import com.cowlark.sake.symbols.Function;
+import com.cowlark.sake.symbols.GlobalVariable;
+import com.cowlark.sake.symbols.LocalSymbolStorage;
+import com.cowlark.sake.symbols.LocalVariable;
+import com.cowlark.sake.symbols.Variable;
 
 public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
 {

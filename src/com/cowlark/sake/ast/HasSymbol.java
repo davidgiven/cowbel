@@ -1,6 +1,6 @@
 package com.cowlark.sake.ast;
 
-import com.cowlark.sake.Symbol;
+import com.cowlark.sake.symbols.Symbol;
 
 public interface HasSymbol
 {

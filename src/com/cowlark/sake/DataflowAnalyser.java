@@ -5,6 +5,8 @@ import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.sake.ast.nodes.ParameterDeclarationNode;
+import com.cowlark.sake.symbols.Function;
+import com.cowlark.sake.symbols.LocalVariable;
 
 public class DataflowAnalyser extends BasicBlockVisitor
 {

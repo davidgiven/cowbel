@@ -1,7 +1,7 @@
 package com.cowlark.sake.instructions;
 
-import com.cowlark.sake.GlobalVariable;
 import com.cowlark.sake.ast.nodes.Node;
+import com.cowlark.sake.symbols.GlobalVariable;
 
 public class GetGlobalVariableInstruction extends Instruction
 {

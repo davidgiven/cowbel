@@ -22,6 +22,9 @@ import com.cowlark.sake.instructions.SetGlobalVariableInstruction;
 import com.cowlark.sake.instructions.SetLocalVariableInInstruction;
 import com.cowlark.sake.instructions.SetReturnValueInstruction;
 import com.cowlark.sake.instructions.StringConstantInstruction;
+import com.cowlark.sake.symbols.Function;
+import com.cowlark.sake.symbols.GlobalVariable;
+import com.cowlark.sake.symbols.LocalVariable;
 
 public class BasicBlock implements Comparable<BasicBlock>
 {

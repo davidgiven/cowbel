@@ -7,6 +7,7 @@ import com.cowlark.sake.ast.nodes.ScopeNode;
 import com.cowlark.sake.ast.nodes.VarAssignmentNode;
 import com.cowlark.sake.ast.nodes.VarReferenceNode;
 import com.cowlark.sake.errors.CompilationException;
+import com.cowlark.sake.symbols.Symbol;
 
 public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 {

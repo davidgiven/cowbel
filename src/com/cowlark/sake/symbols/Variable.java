@@ -1,4 +1,4 @@
-package com.cowlark.sake;
+package com.cowlark.sake.symbols;
 
 import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.Node;

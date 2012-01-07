@@ -18,6 +18,8 @@ import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.MutableLocation;
 import com.cowlark.sake.parser.core.ParseResult;
 import com.cowlark.sake.parser.parsers.Parser;
+import com.cowlark.sake.symbols.Function;
+import com.cowlark.sake.symbols.GlobalSymbolStorage;
 
 public class Compiler
 {

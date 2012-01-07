@@ -5,8 +5,6 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Set;
 import com.cowlark.sake.BasicBlock;
-import com.cowlark.sake.Function;
-import com.cowlark.sake.LocalVariable;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.backend.Backend;
@@ -25,6 +23,8 @@ import com.cowlark.sake.instructions.SetGlobalVariableInstruction;
 import com.cowlark.sake.instructions.SetLocalVariableInInstruction;
 import com.cowlark.sake.instructions.SetReturnValueInstruction;
 import com.cowlark.sake.instructions.StringConstantInstruction;
+import com.cowlark.sake.symbols.Function;
+import com.cowlark.sake.symbols.LocalVariable;
 import com.cowlark.sake.types.Type;
 
 public class MakeBackend extends Backend

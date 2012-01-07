@@ -1,4 +1,4 @@
-package com.cowlark.sake;
+package com.cowlark.sake.symbols;
 
 import java.util.HashSet;
 import java.util.Set;

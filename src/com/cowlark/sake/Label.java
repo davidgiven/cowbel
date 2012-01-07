@@ -2,6 +2,7 @@ package com.cowlark.sake;
 
 import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.LabelStatementNode;
+import com.cowlark.sake.symbols.Function;
 
 public class Label
 {

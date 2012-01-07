@@ -1,6 +1,5 @@
-package com.cowlark.sake;
+package com.cowlark.sake.symbols;
 
-import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 
 public class LocalSymbolStorage extends SymbolStorage
 {

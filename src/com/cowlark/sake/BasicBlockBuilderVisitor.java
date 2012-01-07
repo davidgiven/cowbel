@@ -23,6 +23,10 @@ import com.cowlark.sake.ast.nodes.VarAssignmentNode;
 import com.cowlark.sake.ast.nodes.VarDeclarationNode;
 import com.cowlark.sake.ast.nodes.VarReferenceNode;
 import com.cowlark.sake.errors.CompilationException;
+import com.cowlark.sake.symbols.Function;
+import com.cowlark.sake.symbols.GlobalVariable;
+import com.cowlark.sake.symbols.LocalVariable;
+import com.cowlark.sake.symbols.Symbol;
 
 public class BasicBlockBuilderVisitor extends SimpleVisitor
 {
