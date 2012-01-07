@@ -7,7 +7,7 @@ public class StringEqualsMethod extends Method
 {
 	public StringEqualsMethod()
     {
-		setSignature("string.==", "string._equals");
+		setSignature("string.==.1", "string._equals");
 		setReturnType(BooleanType.create());
 		setArgumentTypes(StringType.create());
     }

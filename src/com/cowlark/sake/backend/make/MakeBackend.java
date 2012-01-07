@@ -17,6 +17,7 @@ import com.cowlark.sake.instructions.GetLocalVariableInstruction;
 import com.cowlark.sake.instructions.GotoInstruction;
 import com.cowlark.sake.instructions.IfInstruction;
 import com.cowlark.sake.instructions.Instruction;
+import com.cowlark.sake.instructions.IntegerConstantInstruction;
 import com.cowlark.sake.instructions.ListConstructorInstruction;
 import com.cowlark.sake.instructions.MethodCallInstruction;
 import com.cowlark.sake.instructions.SetGlobalVariableInstruction;
@@ -111,6 +112,24 @@ public class MakeBackend extends Backend
 			}
 			
 			o += Character.charCount(c);
+		}
+	}
+	
+	private void emit_int(long i)
+	{
+		if (i < 0)
+		{
+			print('N');
+			i = -i;
+		}
+		else
+			print('P');
+		
+		String s = Long.toString(i);
+		for (int n = s.length()-1; n >= 0; n--)
+		{
+			print(' ');
+			print(s.charAt(n));
 		}
 	}
 	
@@ -276,6 +295,12 @@ public class MakeBackend extends Backend
 	public void visit(StringConstantInstruction insn)
 	{
 		emit_string(insn.getValue());
+	}
+	
+	@Override
+	public void visit(IntegerConstantInstruction insn)
+	{
+		emit_int(insn.getValue());
 	}
 	
 	@Override

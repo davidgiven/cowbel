@@ -8,6 +8,8 @@ import org.apache.commons.io.FileUtils;
 import com.cowlark.sake.backend.Backend;
 import com.cowlark.sake.backend.make.MakeBackend;
 import com.cowlark.sake.errors.CompilationException;
+import com.cowlark.sake.errors.FailedParseException;
+import com.cowlark.sake.parser.core.FailedParse;
 import com.cowlark.sake.parser.core.Location;
 
 public class Main
@@ -36,6 +38,13 @@ public class Main
 			c.emitCode(backend);
 			backend.epilogue();
 			bos.close();
+		}
+		catch (FailedParseException e)
+		{
+			FailedParse fp = e.getFailedParse();
+			
+			System.out.println("Parse failed:");
+			System.out.println(fp.toString());
 		}
 		catch (CompilationException e)
 		{

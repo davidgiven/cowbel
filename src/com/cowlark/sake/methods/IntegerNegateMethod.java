@@ -2,11 +2,11 @@ package com.cowlark.sake.methods;
 
 import com.cowlark.sake.types.IntegerType;
 
-public class StringSizeMethod extends Method
+public class IntegerNegateMethod extends Method
 {
-	public StringSizeMethod()
+	public IntegerNegateMethod()
     {
-		setSignature("string.size.0", "string.size");
+		setSignature("integer.-.0", "integer._negate");
 		setReturnType(IntegerType.create());
 		setArgumentTypes();
     }

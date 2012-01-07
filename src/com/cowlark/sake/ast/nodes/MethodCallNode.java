@@ -63,6 +63,11 @@ public class MethodCallNode extends ExpressionNode
 		return _arguments;
 	}
 	
+	public int getMethodArgumentCount()
+	{
+		return getNumberOfChildren() - 2;
+	}
+	
 	@Override
 	public String getShortDescription()
 	{

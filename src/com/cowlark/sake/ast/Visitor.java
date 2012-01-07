@@ -8,6 +8,7 @@ import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.GotoStatementNode;
 import com.cowlark.sake.ast.nodes.IfElseStatementNode;
 import com.cowlark.sake.ast.nodes.IfStatementNode;
+import com.cowlark.sake.ast.nodes.IntegerConstantNode;
 import com.cowlark.sake.ast.nodes.LabelStatementNode;
 import com.cowlark.sake.ast.nodes.ListConstructorNode;
 import com.cowlark.sake.ast.nodes.MethodCallNode;
@@ -104,6 +105,11 @@ public class Visitor
 	}
 	
 	public void visit(BooleanConstantNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+	
+	public void visit(IntegerConstantNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}

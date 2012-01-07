@@ -12,4 +12,9 @@ public class FailedParseException extends CompilationException
     {
 		_fp = fp;
     }
+	
+	public FailedParse getFailedParse()
+	{
+		return _fp;
+	}
 }

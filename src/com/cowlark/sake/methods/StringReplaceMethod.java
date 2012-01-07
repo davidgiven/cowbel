@@ -6,7 +6,7 @@ public class StringReplaceMethod extends Method
 {
 	public StringReplaceMethod()
     {
-		setSignature("string.replace");
+		setSignature("string.replace.2", "string.replace");
 		setReturnType(StringType.create());
 		setArgumentTypes(StringType.create(), StringType.create());
     }

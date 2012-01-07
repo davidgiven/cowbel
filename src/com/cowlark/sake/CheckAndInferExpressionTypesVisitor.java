@@ -9,6 +9,7 @@ import com.cowlark.sake.ast.nodes.DummyExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
 import com.cowlark.sake.ast.nodes.IdentifierNode;
+import com.cowlark.sake.ast.nodes.IntegerConstantNode;
 import com.cowlark.sake.ast.nodes.ListConstructorNode;
 import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.ast.nodes.Node;
@@ -22,6 +23,7 @@ import com.cowlark.sake.methods.Method;
 import com.cowlark.sake.symbols.Symbol;
 import com.cowlark.sake.types.BooleanType;
 import com.cowlark.sake.types.FunctionType;
+import com.cowlark.sake.types.IntegerType;
 import com.cowlark.sake.types.ListType;
 import com.cowlark.sake.types.StringType;
 import com.cowlark.sake.types.Type;
@@ -46,6 +48,12 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 	public void visit(StringConstantNode node) throws CompilationException
 	{
 		node.setType(StringType.create());
+	}
+	
+	@Override
+	public void visit(IntegerConstantNode node) throws CompilationException
+	{
+		node.setType(IntegerType.create());
 	}
 	
 	@Override

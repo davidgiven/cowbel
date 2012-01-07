@@ -77,6 +77,11 @@ public class InstructionVisitor
 		visit((Instruction) insn);
 	}
 	
+	public void visit(IntegerConstantInstruction insn)
+	{
+		visit((Instruction) insn);
+	}
+	
 	public void visit(DiscardInstruction insn)
 	{
 		visit((Instruction) insn);

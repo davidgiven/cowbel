@@ -1,6 +1,7 @@
 package com.cowlark.sake.types;
 
 import com.cowlark.sake.ast.nodes.IdentifierNode;
+import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.errors.NoSuchMethodException;
@@ -21,7 +22,11 @@ public abstract class PrimitiveType extends Type
 	public Method lookupMethod(Node node, IdentifierNode id)
 	        throws CompilationException
 	{
-		String signature = getCanonicalTypeName() + "." + id.getText();
+		MethodCallNode n = (MethodCallNode) node;
+		
+		String signature = getCanonicalTypeName() + "." + id.getText() +
+			"." + n.getMethodArgumentCount();
+		
 		Method method = Method.lookupPrimitiveMethod(signature);
 		if (method == null)
 			throw new NoSuchMethodException(node, this, id);

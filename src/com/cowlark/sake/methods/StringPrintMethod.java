@@ -6,7 +6,7 @@ public class StringPrintMethod extends Method
 {
 	public StringPrintMethod()
     {
-		setSignature("string.print");
+		setSignature("string.print.0", "string.print");
 		setReturnType(VoidType.create());
 		setArgumentTypes();
     }

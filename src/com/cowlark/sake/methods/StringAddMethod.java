@@ -6,7 +6,7 @@ public class StringAddMethod extends Method
 {
 	public StringAddMethod()
     {
-		setSignature("string.+", "string._add");
+		setSignature("string.+.1", "string._add");
 		setReturnType(StringType.create());
 		setArgumentTypes(StringType.create());
     }

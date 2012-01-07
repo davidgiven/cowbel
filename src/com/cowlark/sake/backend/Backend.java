@@ -50,6 +50,11 @@ public abstract class Backend extends InstructionVisitor
 		}
 	}
 	
+	protected void print(char c)
+	{
+		_stream.print(c);
+	}
+	
 	protected <T> void print(T value)
 	{
 		_stream.print(value);

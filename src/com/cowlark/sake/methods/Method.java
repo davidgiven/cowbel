@@ -25,6 +25,16 @@ public abstract class Method
 		registerPrimitiveMethod(new BooleanAndMethod());
 		registerPrimitiveMethod(new BooleanOrMethod());
 		registerPrimitiveMethod(new BooleanXorMethod());
+		registerPrimitiveMethod(new IntegerEqualsMethod());
+		registerPrimitiveMethod(new IntegerNotEqualsMethod());
+		registerPrimitiveMethod(new IntegerGreaterThanMethod());
+		registerPrimitiveMethod(new IntegerLessThanMethod());
+		registerPrimitiveMethod(new IntegerGreaterThanOrEqualsMethod());
+		registerPrimitiveMethod(new IntegerLessThanOrEqualsMethod());
+		registerPrimitiveMethod(new IntegerNegateMethod());
+		registerPrimitiveMethod(new IntegerAddMethod());
+		registerPrimitiveMethod(new IntegerSubMethod());
+		registerPrimitiveMethod(new IntegerToStringMethod());
 	}
 	
 	public static Method lookupPrimitiveMethod(String signature)
@@ -50,11 +60,6 @@ public abstract class Method
 	{
 		_signature = signature;
 		_identifier = identifier;
-	}
-	
-	protected void setSignature(String signature)
-	{
-		setSignature(signature, signature);
 	}
 	
 	public String getSignature()

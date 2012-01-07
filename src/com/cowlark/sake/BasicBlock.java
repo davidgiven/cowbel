@@ -16,6 +16,7 @@ import com.cowlark.sake.instructions.GotoInstruction;
 import com.cowlark.sake.instructions.IfInstruction;
 import com.cowlark.sake.instructions.Instruction;
 import com.cowlark.sake.instructions.InstructionVisitor;
+import com.cowlark.sake.instructions.IntegerConstantInstruction;
 import com.cowlark.sake.instructions.ListConstructorInstruction;
 import com.cowlark.sake.instructions.MethodCallInstruction;
 import com.cowlark.sake.instructions.SetGlobalVariableInstruction;
@@ -212,5 +213,10 @@ public class BasicBlock implements Comparable<BasicBlock>
 	public void insnStringConstant(Node node, String value)
 	{
 		addInstruction(new StringConstantInstruction(node, value));
+	}
+
+	public void insnIntegerConstant(Node node, long value)
+	{
+		addInstruction(new IntegerConstantInstruction(node, value));
 	}
 }

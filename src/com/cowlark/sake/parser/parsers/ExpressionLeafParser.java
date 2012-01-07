@@ -36,6 +36,10 @@ public class ExpressionLeafParser extends Parser
 		if (pr6.success())
 			return new BooleanConstantNode(location, pr6.end(), false);
 		
-		return combineParseErrors(pr1, pr2, pr3, pr4, pr5, pr6);
+		ParseResult pr7 = IntegerConstantParser.parse(location);
+		if (pr7.success())
+			return pr7;
+		
+		return combineParseErrors(pr1, pr2, pr3, pr4, pr5, pr6, pr7);
 	}
 }

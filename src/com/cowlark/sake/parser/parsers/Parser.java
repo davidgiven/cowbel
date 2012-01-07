@@ -8,6 +8,7 @@ import com.cowlark.sake.parser.core.ParseResult;
 public abstract class Parser
 {
 	public static AtomParser AtomParser = new AtomParser();
+	public static IntegerConstantParser IntegerConstantParser = new IntegerConstantParser();
 	public static StringConstantParser StringConstantParser = new StringConstantParser();
 	public static ListConstructorParser ListConstructorParser = new ListConstructorParser();
 	public static ExpressionLowParser ExpressionLowParser = new ExpressionLowParser();
