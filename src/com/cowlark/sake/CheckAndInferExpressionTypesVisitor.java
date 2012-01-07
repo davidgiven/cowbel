@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import com.cowlark.sake.ast.SimpleVisitor;
+import com.cowlark.sake.ast.nodes.BooleanConstantNode;
 import com.cowlark.sake.ast.nodes.DummyExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
@@ -11,7 +12,6 @@ import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.ListConstructorNode;
 import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.ast.nodes.Node;
-import com.cowlark.sake.ast.nodes.ReturnStatementNode;
 import com.cowlark.sake.ast.nodes.StringConstantNode;
 import com.cowlark.sake.ast.nodes.VarReferenceNode;
 import com.cowlark.sake.errors.AttemptToCallNonFunctionTypeException;
@@ -19,6 +19,7 @@ import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.errors.FunctionParameterMismatch;
 import com.cowlark.sake.errors.TypesNotCompatibleException;
 import com.cowlark.sake.methods.Method;
+import com.cowlark.sake.types.BooleanType;
 import com.cowlark.sake.types.FunctionType;
 import com.cowlark.sake.types.ListType;
 import com.cowlark.sake.types.StringType;
@@ -32,6 +33,12 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 	{
 		Type type = node.getChild().calculateType();
 		node.setType(type);
+	}
+	
+	@Override
+	public void visit(BooleanConstantNode node) throws CompilationException
+	{
+		node.setType(BooleanType.create());
 	}
 	
 	@Override

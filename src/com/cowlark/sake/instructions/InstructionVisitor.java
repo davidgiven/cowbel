@@ -67,6 +67,11 @@ public class InstructionVisitor
 		visit((Instruction) insn);
 	}
 	
+	public void visit(BooleanConstantInstruction insn)
+	{
+		visit((Instruction) insn);
+	}
+	
 	public void visit(StringConstantInstruction insn)
 	{
 		visit((Instruction) insn);

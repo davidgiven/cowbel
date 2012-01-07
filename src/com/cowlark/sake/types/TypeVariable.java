@@ -19,6 +19,12 @@ public class TypeVariable extends Type
     }
 	
 	@Override
+	public boolean isVoidType()
+	{
+		return getRealType().isVoidType();
+	}
+	
+	@Override
 	protected Type getRealType()
 	{
 		if (_realType == null)

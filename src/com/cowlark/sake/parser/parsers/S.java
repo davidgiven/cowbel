@@ -21,6 +21,8 @@ public class S
 	
 	static String[] Keywords = new String[]
     {
+		"true",
+		"false",
     	"var",
     	"function",
     	"return",

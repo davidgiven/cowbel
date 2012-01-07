@@ -2,6 +2,7 @@ package com.cowlark.sake;
 
 import java.util.List;
 import com.cowlark.sake.ast.SimpleVisitor;
+import com.cowlark.sake.ast.nodes.BooleanConstantNode;
 import com.cowlark.sake.ast.nodes.DummyExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
@@ -204,6 +205,12 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		
 		for (ExpressionNode expr : members)
 			expr.visit(this);
+	}
+	
+	@Override
+	public void visit(BooleanConstantNode node) throws CompilationException
+	{
+		_currentBB.insnBooleanConstant(node, node.getValue());
 	}
 	
 	@Override

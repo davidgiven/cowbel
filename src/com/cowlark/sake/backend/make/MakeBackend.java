@@ -7,8 +7,10 @@ import java.util.Set;
 import com.cowlark.sake.BasicBlock;
 import com.cowlark.sake.Function;
 import com.cowlark.sake.LocalVariable;
+import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.backend.Backend;
+import com.cowlark.sake.instructions.BooleanConstantInstruction;
 import com.cowlark.sake.instructions.DiscardInstruction;
 import com.cowlark.sake.instructions.FunctionCallInstruction;
 import com.cowlark.sake.instructions.FunctionExitInstruction;
@@ -16,12 +18,14 @@ import com.cowlark.sake.instructions.GetGlobalVariableInstruction;
 import com.cowlark.sake.instructions.GetLocalVariableInstruction;
 import com.cowlark.sake.instructions.GotoInstruction;
 import com.cowlark.sake.instructions.IfInstruction;
+import com.cowlark.sake.instructions.Instruction;
 import com.cowlark.sake.instructions.ListConstructorInstruction;
 import com.cowlark.sake.instructions.MethodCallInstruction;
 import com.cowlark.sake.instructions.SetGlobalVariableInstruction;
 import com.cowlark.sake.instructions.SetLocalVariableInInstruction;
 import com.cowlark.sake.instructions.SetReturnValueInstruction;
 import com.cowlark.sake.instructions.StringConstantInstruction;
+import com.cowlark.sake.types.Type;
 
 public class MakeBackend extends Backend
 {
@@ -260,6 +264,15 @@ public class MakeBackend extends Backend
 	}
 	
 	@Override
+	public void visit(BooleanConstantInstruction insn)
+	{
+		if (insn.getValue())
+			print("$(sake.boolean.true)");
+		else
+			print("$(sake.boolean.false)");
+	}
+	
+	@Override
 	public void visit(StringConstantInstruction insn)
 	{
 		emit_string(insn.getValue());
@@ -268,8 +281,22 @@ public class MakeBackend extends Backend
 	@Override
 	public void visit(DiscardInstruction insn)
 	{
-		print("$(call sake.discard,");
-		compileFromIterator();
-		print(")");
+		ExpressionStatementNode node = (ExpressionStatementNode) insn.getNode();
+		Type type = node.getExpression().getType();
+		
+		if (type.isVoidType())
+			compileFromIterator();
+		else
+		{
+			print("$(call sake.discard,");
+			compileFromIterator();
+			print(")");
+		}
+	}
+	
+	@Override
+	public void visit(Instruction insn)
+	{
+		assert(false);
 	}
 }

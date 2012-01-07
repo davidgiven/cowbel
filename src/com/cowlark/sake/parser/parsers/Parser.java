@@ -53,6 +53,9 @@ public abstract class Parser
 	public static Parser OpenCloseParenthesisParser = new TrivialParser("()");
 	public static Parser PlusParser = new TrivialParser("+");
 
+	/* When adding new keywords, remember to adjust the table in S. */
+	public static Parser TrueTokenParser = new TrivialParser("true");
+	public static Parser FalseTokenParser = new TrivialParser("false");
 	public static Parser VarTokenParser = new TrivialParser("var");
 	public static Parser FunctionTokenParser = new TrivialParser("function");
 	public static Parser IfTokenParser = new TrivialParser("if");

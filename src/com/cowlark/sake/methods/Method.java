@@ -21,6 +21,10 @@ public abstract class Method
 		registerPrimitiveMethod(new StringReplaceMethod());
 		registerPrimitiveMethod(new StringSizeMethod());
 		registerPrimitiveMethod(new StringPrintMethod());
+		registerPrimitiveMethod(new BooleanNotMethod());
+		registerPrimitiveMethod(new BooleanAndMethod());
+		registerPrimitiveMethod(new BooleanOrMethod());
+		registerPrimitiveMethod(new BooleanXorMethod());
 	}
 	
 	public static Method lookupPrimitiveMethod(String signature)

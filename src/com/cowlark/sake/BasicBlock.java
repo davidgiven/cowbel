@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.Node;
+import com.cowlark.sake.instructions.BooleanConstantInstruction;
 import com.cowlark.sake.instructions.DiscardInstruction;
 import com.cowlark.sake.instructions.FunctionCallInstruction;
 import com.cowlark.sake.instructions.FunctionExitInstruction;
@@ -200,6 +201,11 @@ public class BasicBlock implements Comparable<BasicBlock>
 		addInstruction(new ListConstructorInstruction(node, length));
 	}
 	
+	public void insnBooleanConstant(Node node, boolean value)
+	{
+		addInstruction(new BooleanConstantInstruction(node, value));
+	}
+
 	public void insnStringConstant(Node node, String value)
 	{
 		addInstruction(new StringConstantInstruction(node, value));

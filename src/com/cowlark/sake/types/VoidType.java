@@ -15,6 +15,12 @@ public class VoidType extends PrimitiveType
     }
 	
 	@Override
+	public boolean isVoidType()
+	{
+		return true;
+	}
+	
+	@Override
 	public String getCanonicalTypeName()
 	{
 	    return "void";

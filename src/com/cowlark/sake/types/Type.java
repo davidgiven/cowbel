@@ -41,6 +41,11 @@ public abstract class Type
 		return true;
 	}
 	
+	public boolean isVoidType()
+	{
+		return false;
+	}
+	
 	@Override
 	public boolean equals(Object obj)
 	{

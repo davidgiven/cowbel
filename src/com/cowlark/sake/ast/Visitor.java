@@ -1,5 +1,6 @@
 package com.cowlark.sake.ast;
 
+import com.cowlark.sake.ast.nodes.BooleanConstantNode;
 import com.cowlark.sake.ast.nodes.DummyExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
@@ -98,6 +99,11 @@ public class Visitor
 	}
 	
 	public void visit(FunctionCallNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+	
+	public void visit(BooleanConstantNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}

@@ -1,5 +1,6 @@
 package com.cowlark.sake.parser.parsers;
 
+import com.cowlark.sake.ast.nodes.BooleanConstantNode;
 import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.VarReferenceNode;
 import com.cowlark.sake.parser.core.Location;
@@ -27,6 +28,14 @@ public class ExpressionLeafParser extends Parser
 		if (pr4.success())
 			return pr4;
 		
-		return combineParseErrors(pr1, pr2, pr3, pr4);
+		ParseResult pr5 = TrueTokenParser.parse(location);
+		if (pr5.success())
+			return new BooleanConstantNode(location, pr5.end(), true);
+		
+		ParseResult pr6 = FalseTokenParser.parse(location);
+		if (pr6.success())
+			return new BooleanConstantNode(location, pr6.end(), false);
+		
+		return combineParseErrors(pr1, pr2, pr3, pr4, pr5, pr6);
 	}
 }
