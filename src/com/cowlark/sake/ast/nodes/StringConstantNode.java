@@ -14,6 +14,11 @@ public class StringConstantNode extends ExpressionLiteralNode
         _value = value;
     }
 	
+	public String getValue()
+	{
+		return _value;
+	}
+	
 	@Override
 	public void visit(Visitor visitor) throws CompilationException
 	{

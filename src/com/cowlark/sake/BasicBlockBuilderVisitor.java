@@ -66,7 +66,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		}
 		else
 		{
-			BasicBlock nextbb = new BasicBlock();
+			BasicBlock nextbb = new BasicBlock(_function);
 			_currentBB.insnSetLocalVariableIn(node, (LocalVariable) symbol, nextbb);
 			node.getExpression().visit(this);
 			_currentBB = nextbb;
@@ -78,8 +78,8 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	public void visit(ReturnStatementNode node) throws CompilationException
 	{
 		_currentBB.insnSetReturnValue(node);
-		_currentBB.insnGoto(node, _function.getExitBB());
 		node.getValue().visit(this);
+		_currentBB.insnGoto(node, _function.getExitBB());
 	}
 	
 	@Override
@@ -92,8 +92,8 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	public void visit(IfStatementNode node) throws CompilationException
 	{
 		BasicBlock conditionalbb = _currentBB;
-		BasicBlock positivebb = new BasicBlock();
-		BasicBlock exitbb = new BasicBlock();
+		BasicBlock positivebb = new BasicBlock(_function);
+		BasicBlock exitbb = new BasicBlock(_function);
 		
 		_currentBB = conditionalbb;
 		_currentBB.insnIf(node, positivebb, exitbb);
@@ -110,9 +110,9 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	public void visit(IfElseStatementNode node) throws CompilationException
 	{
 		BasicBlock conditionalbb = _currentBB;
-		BasicBlock positivebb = new BasicBlock();
-		BasicBlock negativebb = new BasicBlock();
-		BasicBlock exitbb = new BasicBlock();
+		BasicBlock positivebb = new BasicBlock(_function);
+		BasicBlock negativebb = new BasicBlock(_function);
+		BasicBlock exitbb = new BasicBlock(_function);
 		
 		_currentBB = conditionalbb;
 		_currentBB.insnIf(node, positivebb, negativebb);
@@ -133,7 +133,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	public void visit(LabelStatementNode node) throws CompilationException
 	{
 		Label label = node.getLabel();
-		BasicBlock next = label.getBasicBlock();
+		BasicBlock next = label.getBasicBlock(_function);
 		
 		_currentBB.insnGoto(node, next);
 		_currentBB = next;
@@ -143,7 +143,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	public void visit(GotoStatementNode node) throws CompilationException
 	{
 		Label label = node.getLabel();
-		BasicBlock next = label.getBasicBlock();
+		BasicBlock next = label.getBasicBlock(_function);
 		
 		_currentBB.insnGoto(node, next);
 	}
@@ -209,7 +209,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	@Override
 	public void visit(StringConstantNode node) throws CompilationException
 	{
-		_currentBB.insnStringConstant(node, node.getText());
+		_currentBB.insnStringConstant(node, node.getValue());
 	}
 	
 	@Override

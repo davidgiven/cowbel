@@ -15,6 +15,16 @@ public class IfInstruction extends Instruction
 		_negative = negative;
     }
 	
+	public BasicBlock getPositiveTarget()
+	{
+		return _positive;
+	}
+	
+	public BasicBlock getNegativeTarget()
+	{
+		return _negative;
+	}
+
 	@Override
 	protected String getInstructionName()
 	{

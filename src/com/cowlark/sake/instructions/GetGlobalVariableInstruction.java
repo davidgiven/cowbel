@@ -13,6 +13,11 @@ public class GetGlobalVariableInstruction extends Instruction
 		_var = var;
 	}	
 	
+	public GlobalVariable getVariable()
+	{
+		return _var;
+	}
+	
 	@Override
 	protected String getInstructionName()
 	{

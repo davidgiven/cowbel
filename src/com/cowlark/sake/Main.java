@@ -1,6 +1,8 @@
 package com.cowlark.sake;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import com.cowlark.sake.backend.Backend;
@@ -24,11 +26,16 @@ public class Main
 			c.setInput(loc);
 			c.compile();
 			
-			System.out.println("Parse successful");
-			c.dumpBasicBlocks();
+			//System.out.println("Parse successful");
+			//c.dumpBasicBlocks();
 			
-			Backend backend = new MakeBackend(System.out);
+			FileOutputStream fos = new FileOutputStream("out.mk");
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+			Backend backend = new MakeBackend(bos);
+			backend.prologue();
 			c.emitCode(backend);
+			backend.epilogue();
+			bos.close();
 		}
 		catch (CompilationException e)
 		{

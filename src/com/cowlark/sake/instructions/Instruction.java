@@ -24,6 +24,11 @@ public abstract class Instruction implements HasNode
 	    _node = node;
     }
 	
+	public int getNumberOfOperands()
+	{
+		return _operands;
+	}
+	
 	protected abstract String getInstructionName();
 	
 	protected String getShortDescription()

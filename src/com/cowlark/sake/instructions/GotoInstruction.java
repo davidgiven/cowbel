@@ -13,6 +13,11 @@ public class GotoInstruction extends Instruction
 		_target = target;
 	}
 	
+	public BasicBlock getTarget()
+	{
+		return _target;
+	}
+	
 	@Override
 	protected String getInstructionName()
 	{

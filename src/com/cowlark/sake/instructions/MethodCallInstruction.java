@@ -15,6 +15,16 @@ public class MethodCallInstruction extends Instruction
 		_args = args;
     }
 	
+	public IdentifierNode getMethodName()
+	{
+		return _method;
+	}
+	
+	public int getNumberOfArguments()
+	{
+		return _args;
+	}
+	
 	@Override
 	protected String getInstructionName()
 	{

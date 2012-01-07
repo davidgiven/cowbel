@@ -20,6 +20,7 @@ public abstract class Method
 		registerPrimitiveMethod(new StringAddMethod());
 		registerPrimitiveMethod(new StringReplaceMethod());
 		registerPrimitiveMethod(new StringSizeMethod());
+		registerPrimitiveMethod(new StringPrintMethod());
 	}
 	
 	public static Method lookupPrimitiveMethod(String signature)
@@ -33,6 +34,7 @@ public abstract class Method
 	}
 	
 	private String _signature;
+	private String _identifier;
 	private Type _returnType;
 	private List<Type> _argumentTypes;
 	
@@ -40,14 +42,25 @@ public abstract class Method
     {
     }
 
-	protected void setSignature(String signature)
+	protected void setSignature(String signature, String identifier)
 	{
 		_signature = signature;
+		_identifier = identifier;
+	}
+	
+	protected void setSignature(String signature)
+	{
+		setSignature(signature, signature);
 	}
 	
 	public String getSignature()
 	{
 		return _signature;
+	}
+	
+	public String getIdentifier()
+	{
+		return _identifier;
 	}
 	
 	protected void setReturnType(Type type)

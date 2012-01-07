@@ -12,6 +12,11 @@ public class FunctionCallInstruction extends Instruction
 		_args = args;
     }
 	
+	public int getNumberOfArguments()
+	{
+		return _args;
+	}
+	
 	@Override
 	protected String getInstructionName()
 	{

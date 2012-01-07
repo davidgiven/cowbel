@@ -110,31 +110,8 @@ public class Compiler
 
 	public void emitCode(Backend backend)
 	{
-		HashSet<BasicBlock> pending = new HashSet<BasicBlock>();
-		HashSet<BasicBlock> seen = new HashSet<BasicBlock>();
-		
 		for (Function f : _globals.getFunctions())
-		{
-			pending.add(f.getEntryBB());
-			seen.add(f.getEntryBB());
-			
-			while (!pending.isEmpty())
-			{
-				BasicBlock bb = pending.iterator().next();
-				pending.remove(bb);
-		
-				for (BasicBlock b : bb.getDestinationBlocks())
-				{
-					if (!seen.contains(b))
-					{
-						seen.add(b);
-						pending.add(b);
-					}
-				}
-				
-				backend.compileBasicBlock(bb);
-			}
-		}
+			backend.compileFunction(f);
 	}
 
 	public void visit(BasicBlockVisitor visitor)

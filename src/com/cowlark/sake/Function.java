@@ -32,11 +32,13 @@ public class Function extends GlobalVariable
 	
 	public void buildBasicBlocks() throws CompilationException
 	{
-		_entryBB = new BasicBlock();
-		_exitBB = new BasicBlock();
+		_entryBB = new BasicBlock(this);
+		_exitBB = new BasicBlock(this);
 		
 		BasicBlockBuilderVisitor visitor = new BasicBlockBuilderVisitor(this);
 		FunctionDefinitionNode node = (FunctionDefinitionNode) getNode();
 		node.getFunctionBody().visit(visitor);
+		
+		visitor.getCurrentBasicBlock().insnFunctionExit(node);
 	}
 }

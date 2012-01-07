@@ -115,7 +115,7 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		StatementNode positive = node.getPositiveStatement();
 		positive.checkTypes();
 		
-		StatementNode negative = node.getPositiveStatement();
+		StatementNode negative = node.getNegativeStatement();
 		negative.checkTypes();
 	}
 

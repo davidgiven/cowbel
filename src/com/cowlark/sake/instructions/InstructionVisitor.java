@@ -12,12 +12,32 @@ public class InstructionVisitor
 	{
 	}
 	
+	public void visit(FunctionExitInstruction insn)
+	{
+		visit((Instruction) insn);
+	}
+	
+	public void visit(GotoInstruction insn)
+	{
+		visit((Instruction) insn);
+	}
+	
 	public void visit(IfInstruction insn)
 	{
 		visit((Instruction) insn);
 	}
 	
 	public void visit(SetReturnValueInstruction insn)
+	{
+		visit((Instruction) insn);
+	}
+	
+	public void visit(GetGlobalVariableInstruction insn)
+	{
+		visit((Instruction) insn);
+	}
+	
+	public void visit(SetGlobalVariableInstruction insn)
 	{
 		visit((Instruction) insn);
 	}
@@ -30,5 +50,31 @@ public class InstructionVisitor
 	public void visit(SetLocalVariableInInstruction insn)
 	{
 		visit((Instruction) insn);
-	}	
+	}
+	
+	public void visit(MethodCallInstruction insn)
+	{
+		visit((Instruction) insn);
+	}
+	
+	public void visit(FunctionCallInstruction insn)
+	{
+		visit((Instruction) insn);
+	}
+	
+	public void visit(ListConstructorInstruction insn)
+	{
+		visit((Instruction) insn);
+	}
+	
+	public void visit(StringConstantInstruction insn)
+	{
+		visit((Instruction) insn);
+	}
+	
+	public void visit(DiscardInstruction insn)
+	{
+		visit((Instruction) insn);
+	}
+	
 }

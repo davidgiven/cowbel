@@ -12,6 +12,11 @@ public class StringConstantInstruction extends Instruction
 		_value = value;
     }
 	
+	public String getValue()
+	{
+		return _value;
+	}
+	
 	@Override
 	protected String getInstructionName()
 	{

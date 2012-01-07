@@ -8,6 +8,7 @@ import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.instructions.DiscardInstruction;
 import com.cowlark.sake.instructions.FunctionCallInstruction;
+import com.cowlark.sake.instructions.FunctionExitInstruction;
 import com.cowlark.sake.instructions.GetGlobalVariableInstruction;
 import com.cowlark.sake.instructions.GetLocalVariableInstruction;
 import com.cowlark.sake.instructions.GotoInstruction;
@@ -24,7 +25,8 @@ import com.cowlark.sake.instructions.StringConstantInstruction;
 public class BasicBlock implements Comparable<BasicBlock>
 {
 	private static int _globalId = 0;
-	
+
+	private Function _function;
 	private int _id = _globalId++;
 	private ArrayList<Instruction> _instructions = new ArrayList<Instruction>();
 	private TreeSet<BasicBlock> _sourceBlocks = new TreeSet<BasicBlock>();
@@ -33,20 +35,26 @@ public class BasicBlock implements Comparable<BasicBlock>
 	private TreeSet<LocalVariable> _inputVariables = new TreeSet<LocalVariable>();
 	private TreeSet<LocalVariable> _outputVariables = new TreeSet<LocalVariable>();
 	
-	public BasicBlock()
+	public BasicBlock(Function function)
     {
+		_function = function;
     }
 	
 	@Override
 	public String toString()
 	{
-		return "BasicBlock_" + _id;
+		return getName();
 	}
 	
 	@Override
 	public int compareTo(BasicBlock other)
 	{
 		return Integer.compare(_id, other._id);
+	}
+	
+	public String getName()
+	{
+		return _function.getSymbolName().getText() + "." + _id;
 	}
 	
 	private static void append_set(StringBuilder sb, Set<LocalVariable> set)
@@ -125,6 +133,11 @@ public class BasicBlock implements Comparable<BasicBlock>
 		visitor.visit(this);
 		for (Instruction insn : _instructions)
 			insn.visit(visitor);
+	}
+	
+	public void insnFunctionExit(Node node)
+	{
+		addInstruction(new FunctionExitInstruction(node));
 	}
 	
 	public void insnSetReturnValue(Node node)

@@ -136,6 +136,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		
 		IdentifierNode name = node.getMethodIdentifier();
 		Method method = receivertype.lookupMethod(node, name);
+		node.setMethod(method);
 		method.typeCheck(node, argumenttypes);
 		node.setType(method.getReturnType());
 	}

@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import com.cowlark.sake.ast.Visitor;
 import com.cowlark.sake.errors.CompilationException;
+import com.cowlark.sake.methods.Method;
 import com.cowlark.sake.parser.core.Location;
 
 public class MethodCallNode extends ExpressionNode
 {
+	private Method _method;
+	
 	public MethodCallNode(Location start, Location end, ExpressionNode object,
 			IdentifierNode method, ExpressionNode... arguments)
     {
@@ -26,6 +29,16 @@ public class MethodCallNode extends ExpressionNode
 		addChild(method);
 		for (ExpressionNode n : arguments)
 			addChild(n);
+	}
+	
+	public Method getMethod()
+	{
+		return _method;
+	}
+	
+	public void setMethod(Method method)
+	{
+		_method = method;
 	}
 	
 	public ExpressionNode getMethodReceiver()

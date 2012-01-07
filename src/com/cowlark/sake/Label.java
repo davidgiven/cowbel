@@ -11,7 +11,6 @@ public class Label
 	public Label(LabelStatementNode node)
     {
 		_node = node;
-		_bb = new BasicBlock();
     }
 	
 	public IdentifierNode getLabelName()
@@ -25,8 +24,10 @@ public class Label
 		return super.toString() + ": " + getLabelName().getText();
 	}
 	
-	public BasicBlock getBasicBlock()
+	public BasicBlock getBasicBlock(Function function)
     {
+		if (_bb == null)
+			_bb = new BasicBlock(function);
 	    return _bb;
     }
 }
