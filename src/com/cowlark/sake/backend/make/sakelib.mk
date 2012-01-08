@@ -7,6 +7,15 @@ sake.comma = ,
 sake.discard =
 
 sake.tail = $(wordlist 2,$(words $1),$1)
+sake.buttail = $(wordlist 2,$(words $1),x $1)
+
+sake.reverse = \
+	$(if $(strip $1), \
+		$(call sake.reverse, \
+			$(wordlist 2,$(words $1),$1) \
+		) \
+		$(firstword $1) \
+	)
 
 sake.boolean.true = T
 sake.boolean.false =
@@ -224,6 +233,29 @@ sake.maths.sub_pint = \
 		) \
 	)
 
+# Clean up a sint (remove trailing zeros, ensure that 'N 0' -> 'P 0', etc).
+
+sake.maths.clean_sint = \
+	$(call sake.maths.__n0_to_p0,$(call sake.maths.__strip_zeros,$1))
+
+sake.maths.__n0_to_p0 = \
+	$(strip \
+		$(if \
+			$(findstring x1x,x$(words $1)x), \
+			P 0, \
+			$1 \
+		) \
+	)
+	
+sake.maths.__strip_zeros = \
+	$(if $(strip $1), \
+		$(if \
+			$(findstring x0x,x$(lastword $1)x), \
+			$(call sake.maths.__strip_zeros,$(call sake.buttail,$1)), \
+			$1 \
+		) \
+	)
+
 # Is digit $1 equal to digit $2?
 sake.maths.eq_digit = \
 	$(strip \
@@ -265,7 +297,10 @@ sake.maths.gt_digit = \
 sake.maths.gt_pint = \
 	$(strip \
 		$(if $(call sake.maths.eq_digit,$(words $1),$(words $2)), \
-			$(call sake.maths.__gt_pint_digits,$1,$2), \
+			$(call sake.maths.__gt_pint_digits, \
+				$(call sake.reverse,$1), \
+				$(call sake.reverse,$2) \
+			), \
 			$(if $(call sake.maths.gt_digit,$(words $1),$(words $2)), \
 				$(sake.boolean.true), \
 				$(sake.boolean.false) \
@@ -276,11 +311,15 @@ sake.maths.gt_pint = \
 sake.maths.__gt_pint_digits = \
 	$(if $(strip $1), \
 		$(if \
-			$(call sake.maths.gt_digit,$(word 1,$1),$(word 1,$2)), \
-			$(sake.boolean.true), \
+			$(call sake.maths.eq_digit,$(word 1,$1),$(word 1,$2)), \
 			$(call sake.maths.__gt_pint_digits, \
 				$(call sake.tail,$1), \
 				$(call sake.tail,$2) \
+			), \
+			$(if \
+				$(call sake.maths.gt_digit,$(word 1,$1),$(word 1,$2)), \
+				$(sake.boolean.true), \
+				$(sake.boolean.false) \
 			) \
 		), \
 		$(sake.boolean.false) \
@@ -358,9 +397,11 @@ sake.maths.decode_sint = \
 # Add two sints.
 
 sake.maths.add = \
-	$(call sake.maths.__add_$(word 1,$1)$(word 1,$2), \
-		$(call sake.tail,$1), \
-		$(call sake.tail,$2) \
+	$(call sake.maths.clean_sint, \
+		$(call sake.maths.__add_$(word 1,$1)$(word 1,$2), \
+			$(call sake.tail,$1), \
+			$(call sake.tail,$2) \
+		) \
 	)
 	
 sake.maths.__add_PP = \
@@ -378,9 +419,11 @@ sake.maths.__add_NP = \
 # Subtract two sints.
 
 sake.maths.sub = \
-	$(call sake.maths.__sub_$(word 1,$1)$(word 1,$2), \
-		$(call sake.tail,$1), \
-		$(call sake.tail,$2) \
+	$(call sake.maths.clean_sint, \
+		$(call sake.maths.__sub_$(word 1,$1)$(word 1,$2), \
+			$(call sake.tail,$1), \
+			$(call sake.tail,$2) \
+		) \
 	)
 
 sake.maths.__sub_PP = \
@@ -403,5 +446,8 @@ sake.maths.__sub_NP = \
 
 sake.maths.negate = \
 	$(sake.maths.__neg_$(word 1,$1)) $(call sake.tail,$1)
+
+sake.maths.__neg_P = N
+sake.maths.__neg_N = P
 
 endif
