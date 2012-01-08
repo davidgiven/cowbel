@@ -75,6 +75,8 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 			BasicBlock nextbb = new BasicBlock(_function);
 			_currentBB.insnSetLocalVariableIn(node, (LocalVariable) symbol, nextbb);
 			node.getExpression().visit(this);
+			_currentBB.terminate();
+			
 			_currentBB = nextbb;
 		}
 
@@ -86,12 +88,14 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		_currentBB.insnSetReturnValue(node);
 		node.getValue().visit(this);
 		_currentBB.insnGoto(node, _function.getExitBB());
+		_currentBB.terminate();
 	}
 	
 	@Override
 	public void visit(ReturnVoidStatementNode node) throws CompilationException
 	{
 		_currentBB.insnGoto(node, _function.getExitBB());
+		_currentBB.terminate();
 	}
 	
 	@Override
@@ -104,10 +108,12 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		_currentBB = conditionalbb;
 		_currentBB.insnIf(node, positivebb, exitbb);
 		node.getConditionalExpression().visit(this);
+		_currentBB.terminate();
 		
 		_currentBB = positivebb;
 		node.getPositiveStatement().visit(this);
 		_currentBB.insnGoto(node, exitbb);
+		_currentBB.terminate();
 		
 		_currentBB = exitbb;
 	}
@@ -123,14 +129,17 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		_currentBB = conditionalbb;
 		_currentBB.insnIf(node, positivebb, negativebb);
 		node.getConditionalExpression().visit(this);
+		_currentBB.terminate();
 		
 		_currentBB = positivebb;
 		node.getPositiveStatement().visit(this);
 		_currentBB.insnGoto(node, exitbb);
+		_currentBB.terminate();
 		
 		_currentBB = negativebb;
 		node.getNegativeStatement().visit(this);
 		_currentBB.insnGoto(node, exitbb);
+		_currentBB.terminate();
 		
 		_currentBB = exitbb;
 	}
@@ -152,6 +161,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		BasicBlock next = label.getBasicBlock(_function);
 		
 		_currentBB.insnGoto(node, next);
+		_currentBB.terminate();
 	}
 	
 	@Override

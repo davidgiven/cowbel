@@ -39,6 +39,7 @@ public class BasicBlock implements Comparable<BasicBlock>
 	private TreeSet<LocalVariable> _definedVariables = new TreeSet<LocalVariable>();
 	private TreeSet<LocalVariable> _inputVariables = new TreeSet<LocalVariable>();
 	private TreeSet<LocalVariable> _outputVariables = new TreeSet<LocalVariable>();
+	private boolean _terminated = false;
 	
 	public BasicBlock(Function function)
     {
@@ -128,9 +129,15 @@ public class BasicBlock implements Comparable<BasicBlock>
 		next._sourceBlocks.add(this);
 	}
 	
+	public void terminate()
+	{
+		_terminated = true;
+	}
+	
 	private void addInstruction(Instruction insn)
 	{
-		_instructions.add(insn);
+		if (!_terminated)
+			_instructions.add(insn);
 	}
 	
 	public void visit(InstructionVisitor visitor)
