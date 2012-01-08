@@ -280,8 +280,8 @@ sake.maths.ne_digit = \
 sake.maths.ge_digit = \
 	$(strip \
 		$(if \
-			$(findstring $(strip $(call sake.maths.encode_xs,$2)), \
-				$(strip $(call sake.maths.encode_xs,$1)) \
+			$(findstring $(strip x $(call sake.maths.encode_xs,$2)), \
+				x $(strip $(call sake.maths.encode_xs,$1)) \
 			), \
 			$(sake.boolean.true), \
 			$(sake.boolean.false) \
