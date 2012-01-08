@@ -36,6 +36,9 @@ public abstract class Parser
 	public static IfStatementParser IfStatementParser = new IfStatementParser();
 	public static LabelStatementParser LabelStatementParser = new LabelStatementParser();
 	public static GotoStatementParser GotoStatementParser = new GotoStatementParser();
+	public static WhileStatementParser WhileStatementParser = new WhileStatementParser();
+	public static BreakStatementParser BreakStatementParser = new BreakStatementParser();
+	public static ContinueStatementParser ContinueStatementParser = new ContinueStatementParser();
 	
 	public static Parser EOFParser = new EOFParser();
 	public static Parser DotParser = new TrivialParser(".");
@@ -66,6 +69,9 @@ public abstract class Parser
 	public static Parser StringTokenParser = new TrivialParser("string");
 	public static Parser IntegerTokenParser = new TrivialParser("integer");
 	public static Parser BooleanTokenParser = new TrivialParser("boolean");
+	public static Parser BreakTokenParser = new TrivialParser("break");
+	public static Parser ContinueTokenParser = new TrivialParser("continue");
+	public static Parser WhileTokenParser = new TrivialParser("while");
 
 	private static HashMap<Location, HashMap<Parser, ParseResult>> _cache =
 		new HashMap<Location, HashMap<Parser, ParseResult>>(); 

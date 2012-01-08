@@ -32,5 +32,8 @@ public class S
     	"string",
     	"integer",
     	"boolean",
+    	"break",
+    	"continue",
+    	"while"
     };
 }

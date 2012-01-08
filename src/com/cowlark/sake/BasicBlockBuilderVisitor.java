@@ -3,6 +3,8 @@ package com.cowlark.sake;
 import java.util.List;
 import com.cowlark.sake.ast.SimpleVisitor;
 import com.cowlark.sake.ast.nodes.BooleanConstantNode;
+import com.cowlark.sake.ast.nodes.BreakStatementNode;
+import com.cowlark.sake.ast.nodes.ContinueStatementNode;
 import com.cowlark.sake.ast.nodes.DummyExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
@@ -23,6 +25,8 @@ import com.cowlark.sake.ast.nodes.StringConstantNode;
 import com.cowlark.sake.ast.nodes.VarAssignmentNode;
 import com.cowlark.sake.ast.nodes.VarDeclarationNode;
 import com.cowlark.sake.ast.nodes.VarReferenceNode;
+import com.cowlark.sake.ast.nodes.WhileStatementNode;
+import com.cowlark.sake.errors.BreakOrContinueNotInLoopException;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.symbols.Function;
 import com.cowlark.sake.symbols.GlobalVariable;
@@ -33,11 +37,15 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 {
 	private Function _function;
 	private BasicBlock _currentBB;
+	private BasicBlock _continueBB;
+	private BasicBlock _breakBB;
 	
 	public BasicBlockBuilderVisitor(Function function)
     {
 		_function = function;
 		_currentBB = function.getEntryBB();
+		_continueBB = null;
+		_breakBB = null;
     }
 	
 	public BasicBlock getCurrentBasicBlock()
@@ -142,6 +150,55 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		_currentBB.terminate();
 		
 		_currentBB = exitbb;
+	}
+	
+	@Override
+	public void visit(WhileStatementNode node) throws CompilationException
+	{
+		BasicBlock oldcontinuebb = _continueBB;
+		BasicBlock oldbreakbb = _breakBB;
+		
+		_continueBB = new BasicBlock(_function);
+		_breakBB = new BasicBlock(_function);
+		BasicBlock body = new BasicBlock(_function);
+		
+		_currentBB.insnGoto(node, _continueBB);
+		_currentBB.terminate();
+		
+		_currentBB = _continueBB;
+		_currentBB.insnIf(node, body, _breakBB);
+		node.getConditionalExpression().visit(this);
+		_currentBB.terminate();
+		
+		_currentBB = body;
+		node.getBodyStatement().visit(this);
+		_currentBB.insnGoto(node, _continueBB);
+		_currentBB.terminate();
+		
+		_currentBB = _breakBB;
+		
+		_continueBB = oldcontinuebb;
+		_breakBB = oldbreakbb;
+	}
+	
+	@Override
+	public void visit(BreakStatementNode node) throws CompilationException
+	{
+		if (_breakBB == null)
+			throw new BreakOrContinueNotInLoopException(node);
+		
+		_currentBB.insnGoto(node, _breakBB);
+		_currentBB.terminate();
+	}
+	
+	@Override
+	public void visit(ContinueStatementNode node) throws CompilationException
+	{
+		if (_continueBB == null)
+			throw new BreakOrContinueNotInLoopException(node);
+		
+		_currentBB.insnGoto(node, _continueBB);
+		_currentBB.terminate();
 	}
 	
 	@Override

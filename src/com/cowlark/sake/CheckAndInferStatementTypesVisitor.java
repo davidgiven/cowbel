@@ -1,6 +1,8 @@
 package com.cowlark.sake;
 
 import com.cowlark.sake.ast.SimpleVisitor;
+import com.cowlark.sake.ast.nodes.BreakStatementNode;
+import com.cowlark.sake.ast.nodes.ContinueStatementNode;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
@@ -15,6 +17,7 @@ import com.cowlark.sake.ast.nodes.ScopeNode;
 import com.cowlark.sake.ast.nodes.StatementNode;
 import com.cowlark.sake.ast.nodes.VarAssignmentNode;
 import com.cowlark.sake.ast.nodes.VarDeclarationNode;
+import com.cowlark.sake.ast.nodes.WhileStatementNode;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.symbols.Function;
 import com.cowlark.sake.symbols.LocalSymbolStorage;
@@ -123,12 +126,33 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 	}
 
 	@Override
+	public void visit(WhileStatementNode node) throws CompilationException
+	{
+		ExpressionNode conditional = node.getConditionalExpression();
+		Type conditionaltype = conditional.calculateType();
+		conditionaltype.unifyWith(node, BooleanType.create());
+		
+		StatementNode body = node.getBodyStatement();
+		body.checkTypes();
+	}
+
+	@Override
 	public void visit(LabelStatementNode node) throws CompilationException
 	{
 	}
 	
 	@Override
 	public void visit(GotoStatementNode node) throws CompilationException
+	{
+	}
+	
+	@Override
+	public void visit(BreakStatementNode node) throws CompilationException
+	{
+	}
+	
+	@Override
+	public void visit(ContinueStatementNode node) throws CompilationException
 	{
 	}
 	

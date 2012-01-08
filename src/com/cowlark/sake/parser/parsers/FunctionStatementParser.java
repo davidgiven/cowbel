@@ -40,6 +40,19 @@ public class FunctionStatementParser extends Parser
 		if (pr8.success())
 			return pr8;
 		
-		return combineParseErrors(pr1, pr2, pr3, pr4, pr5, pr6, pr7);
+		ParseResult pr9 = WhileStatementParser.parse(location);
+		if (pr9.success())
+			return pr9;
+		
+		ParseResult pr10 = BreakStatementParser.parse(location);
+		if (pr10.success())
+			return pr10;
+		
+		ParseResult pr11 = ContinueStatementParser.parse(location);
+		if (pr11.success())
+			return pr11;
+		
+		return combineParseErrors(pr1, pr2, pr3, pr4, pr5, pr6, pr7, pr8, pr9,
+				pr10, pr11);
 	}
 }
