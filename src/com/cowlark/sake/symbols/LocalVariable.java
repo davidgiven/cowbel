@@ -22,6 +22,10 @@ public class LocalVariable extends Variable implements Comparable<LocalVariable>
 	@Override
 	public int compareTo(LocalVariable other)
 	{
-	    return Integer.compare(_id, other._id);
+		if (_id < other._id)
+			return -1;
+		if (_id > other._id)
+			return 1;
+		return 0;
 	}
 }

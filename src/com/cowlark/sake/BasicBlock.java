@@ -55,7 +55,11 @@ public class BasicBlock implements Comparable<BasicBlock>
 	@Override
 	public int compareTo(BasicBlock other)
 	{
-		return Integer.compare(_id, other._id);
+		if (_id < other._id)
+			return -1;
+		if (_id > other._id)
+			return 1;
+		return 0;
 	}
 	
 	public String getName()
