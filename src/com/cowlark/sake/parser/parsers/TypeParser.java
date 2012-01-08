@@ -2,7 +2,7 @@ package com.cowlark.sake.parser.parsers;
 
 import com.cowlark.sake.ast.nodes.BooleanTypeNode;
 import com.cowlark.sake.ast.nodes.IntegerTypeNode;
-import com.cowlark.sake.ast.nodes.ListTypeNode;
+import com.cowlark.sake.ast.nodes.ArrayTypeNode;
 import com.cowlark.sake.ast.nodes.StringTypeNode;
 import com.cowlark.sake.ast.nodes.TypeNode;
 import com.cowlark.sake.parser.core.Location;
@@ -37,6 +37,6 @@ public class TypeParser extends Parser
 		if (pr4.failed())
 			return combineParseErrors(pr1, pr4);
 		
-		return new ListTypeNode(location, pr4.end(), (TypeNode) childpr);
+		return new ArrayTypeNode(location, pr4.end(), (TypeNode) childpr);
 	}
 }

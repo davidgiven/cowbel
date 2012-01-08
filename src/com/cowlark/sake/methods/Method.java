@@ -1,5 +1,6 @@
 package com.cowlark.sake.methods;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,8 @@ import com.cowlark.sake.types.Type;
 public abstract class Method
 {
 	private static HashMap<String, Method> _primitiveMethods;
+	private static HashMap<String, TemplatedMethod.Factory> _typeFamilyTemplates;
+	private static HashMap<Type, HashMap<String, Method>> _typeFamilyMethods;
 	
 	static
 	{
@@ -19,7 +22,6 @@ public abstract class Method
 		registerPrimitiveMethod(new StringEqualsMethod());
 		registerPrimitiveMethod(new StringAddMethod());
 		registerPrimitiveMethod(new StringReplaceMethod());
-		registerPrimitiveMethod(new StringSizeMethod());
 		registerPrimitiveMethod(new StringPrintMethod());
 		registerPrimitiveMethod(new BooleanToStringMethod());
 		registerPrimitiveMethod(new BooleanNotMethod());
@@ -36,6 +38,13 @@ public abstract class Method
 		registerPrimitiveMethod(new IntegerAddMethod());
 		registerPrimitiveMethod(new IntegerSubMethod());
 		registerPrimitiveMethod(new IntegerToStringMethod());
+
+		_typeFamilyTemplates = new HashMap<String, TemplatedMethod.Factory>();
+		registerTemplatedMethodFactory(new ArraySizeMethod.Factory());
+		registerTemplatedMethodFactory(new ArrayGetMethod.Factory());
+		registerTemplatedMethodFactory(new ArraySetMethod.Factory());
+		
+		_typeFamilyMethods = new HashMap<Type, HashMap<String, Method>>();
 	}
 	
 	public static Method lookupPrimitiveMethod(String signature)
@@ -46,6 +55,34 @@ public abstract class Method
 	public static void registerPrimitiveMethod(Method method)
 	{
 		_primitiveMethods.put(method.getSignature(), method);
+	}
+	
+	public static Method lookupTypeFamilyMethod(Type type, String signature)
+	{
+		HashMap<String, Method> catalogue = _typeFamilyMethods.get(type);
+		if (catalogue == null)
+		{
+			catalogue = new HashMap<String, Method>();
+			_typeFamilyMethods.put(type, catalogue);
+		}
+		
+		Method method = catalogue.get(signature);
+		if (method == null)
+		{
+			TemplatedMethod.Factory f = _typeFamilyTemplates.get(signature);
+			if (f == null)
+				return null;
+			
+			method = f.create(type);
+			catalogue.put(signature, method);
+		}
+		
+		return method;
+	}
+	
+	public static void registerTemplatedMethodFactory(TemplatedMethod.Factory factory)
+	{
+		_typeFamilyTemplates.put(factory.getSignature(), factory);
 	}
 	
 	private String _signature;

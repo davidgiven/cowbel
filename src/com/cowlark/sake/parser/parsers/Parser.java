@@ -10,7 +10,7 @@ public abstract class Parser
 	public static AtomParser AtomParser = new AtomParser();
 	public static IntegerConstantParser IntegerConstantParser = new IntegerConstantParser();
 	public static StringConstantParser StringConstantParser = new StringConstantParser();
-	public static ListConstructorParser ListConstructorParser = new ListConstructorParser();
+	public static ArrayConstructorParser ArrayConstructorParser = new ArrayConstructorParser();
 	public static ExpressionLowParser ExpressionLowParser = new ExpressionLowParser();
 	public static ExpressionMediumParser ExpressionMediumParser = new ExpressionMediumParser();
 	public static ExpressionHighParser ExpressionHighParser = new ExpressionHighParser();

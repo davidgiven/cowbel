@@ -6,14 +6,14 @@ import com.cowlark.sake.ast.Visitor;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.parser.core.Location;
 
-public class ListConstructorNode extends ExpressionLiteralNode
+public class ArrayConstructorNode extends ExpressionLiteralNode
 {
-	public ListConstructorNode(Location start, Location end)
+	public ArrayConstructorNode(Location start, Location end)
     {
 		super(start, end);
     }
 	
-	public ListConstructorNode(Location start, Location end,
+	public ArrayConstructorNode(Location start, Location end,
 			List<ExpressionNode> params)
     {
 		this(start, end);

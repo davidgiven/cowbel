@@ -62,7 +62,7 @@ public class InstructionVisitor
 		visit((Instruction) insn);
 	}
 	
-	public void visit(ListConstructorInstruction insn)
+	public void visit(ArrayConstructorInstruction insn)
 	{
 		visit((Instruction) insn);
 	}

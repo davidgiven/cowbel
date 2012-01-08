@@ -12,7 +12,7 @@ import com.cowlark.sake.ast.nodes.IfElseStatementNode;
 import com.cowlark.sake.ast.nodes.IfStatementNode;
 import com.cowlark.sake.ast.nodes.IntegerConstantNode;
 import com.cowlark.sake.ast.nodes.LabelStatementNode;
-import com.cowlark.sake.ast.nodes.ListConstructorNode;
+import com.cowlark.sake.ast.nodes.ArrayConstructorNode;
 import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ReturnStatementNode;
@@ -137,7 +137,7 @@ public class Visitor
 		visit((Node) node);
 	}
 	
-	public void visit(ListConstructorNode node) throws CompilationException
+	public void visit(ArrayConstructorNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}

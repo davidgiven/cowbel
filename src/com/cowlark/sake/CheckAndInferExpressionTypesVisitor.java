@@ -10,7 +10,7 @@ import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
 import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.IntegerConstantNode;
-import com.cowlark.sake.ast.nodes.ListConstructorNode;
+import com.cowlark.sake.ast.nodes.ArrayConstructorNode;
 import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.StringConstantNode;
@@ -24,7 +24,7 @@ import com.cowlark.sake.symbols.Symbol;
 import com.cowlark.sake.types.BooleanType;
 import com.cowlark.sake.types.FunctionType;
 import com.cowlark.sake.types.IntegerType;
-import com.cowlark.sake.types.ListType;
+import com.cowlark.sake.types.ArrayType;
 import com.cowlark.sake.types.StringType;
 import com.cowlark.sake.types.Type;
 import com.cowlark.sake.types.TypeVariable;
@@ -121,7 +121,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 	}
 	
 	@Override
-	public void visit(ListConstructorNode node) throws CompilationException
+	public void visit(ArrayConstructorNode node) throws CompilationException
 	{
 		List<ExpressionNode> members = node.getListMembers();
 		Type type = TypeVariable.create();
@@ -132,7 +132,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 			type.unifyWith(node, t);
 		}
 		
-		node.setType(ListType.create(type));
+		node.setType(ArrayType.create(type));
 	}
 	
 	@Override

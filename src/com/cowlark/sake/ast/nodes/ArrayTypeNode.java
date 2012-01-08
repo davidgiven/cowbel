@@ -3,12 +3,12 @@ package com.cowlark.sake.ast.nodes;
 import com.cowlark.sake.ast.Visitor;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.parser.core.Location;
-import com.cowlark.sake.types.ListType;
+import com.cowlark.sake.types.ArrayType;
 import com.cowlark.sake.types.Type;
 
-public class ListTypeNode extends TypeNode
+public class ArrayTypeNode extends TypeNode
 {
-	public ListTypeNode(Location start, Location end, TypeNode childpr)
+	public ArrayTypeNode(Location start, Location end, TypeNode childpr)
     {
         super(start, end);
         addChild(childpr);
@@ -22,7 +22,7 @@ public class ListTypeNode extends TypeNode
 	@Override
     protected Type getTypeImpl()
 	{
-	    return ListType.create(getChildTypeNode().getType());
+	    return ArrayType.create(getChildTypeNode().getType());
 	}
 	
 	@Override

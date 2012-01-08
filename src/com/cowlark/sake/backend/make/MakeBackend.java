@@ -18,7 +18,7 @@ import com.cowlark.sake.instructions.GotoInstruction;
 import com.cowlark.sake.instructions.IfInstruction;
 import com.cowlark.sake.instructions.Instruction;
 import com.cowlark.sake.instructions.IntegerConstantInstruction;
-import com.cowlark.sake.instructions.ListConstructorInstruction;
+import com.cowlark.sake.instructions.ArrayConstructorInstruction;
 import com.cowlark.sake.instructions.MethodCallInstruction;
 import com.cowlark.sake.instructions.SetGlobalVariableInstruction;
 import com.cowlark.sake.instructions.SetLocalVariableInInstruction;
@@ -103,8 +103,8 @@ public class MakeBackend extends Backend
 			switch (c)
 			{
 				case '~': print("~T"); break;
-				case ' ': print("~S"); break;
 				case ',': print("~C"); break;
+				case ' ': print("~S"); break;
 				
 				default:
 					print(String.valueOf(Character.toChars(c)));
@@ -270,16 +270,20 @@ public class MakeBackend extends Backend
 	}
 	
 	@Override
-	public void visit(ListConstructorInstruction insn)
+	public void visit(ArrayConstructorInstruction insn)
 	{
-		for (int i=0; i<insn.getNumberOfOperands(); i++)
+		int length = insn.getNumberOfOperands();
+		
+		print("$(call sake.array.new,");
+		emit_int(length);
+		
+		for (int i=0; i<length; i++)
 		{
-			if (i > 0)
-				print(" ");
-			print("$(sake.list.wrap ");
+			print(",");
 			compileFromIterator();
-			print(")");
 		}
+		
+		print(")");
 	}
 	
 	@Override

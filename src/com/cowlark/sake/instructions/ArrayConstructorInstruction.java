@@ -2,9 +2,9 @@ package com.cowlark.sake.instructions;
 
 import com.cowlark.sake.ast.nodes.Node;
 
-public class ListConstructorInstruction extends Instruction
+public class ArrayConstructorInstruction extends Instruction
 {
-	public ListConstructorInstruction(Node node, int length)
+	public ArrayConstructorInstruction(Node node, int length)
     {
 		super(node, length);
     }
@@ -12,7 +12,7 @@ public class ListConstructorInstruction extends Instruction
 	@Override
 	protected String getInstructionName()
 	{
-	    return "ListConstructor";
+	    return "ArrayConstructor";
 	}
 	
 	public void visit(InstructionVisitor visitor)

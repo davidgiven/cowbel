@@ -16,4 +16,11 @@ public class NoSuchMethodException extends CompilationException
 		_type = type;
 		_id = id;
     }
+	
+	@Override
+	public String toString()
+	{
+		return "No such method '" + _id.getText() + "' on value of type " +
+			_type.getCanonicalTypeName() + " at " + _node.toString();
+	}
 }

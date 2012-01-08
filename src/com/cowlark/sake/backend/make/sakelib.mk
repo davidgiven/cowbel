@@ -7,6 +7,7 @@ sake.comma = ,
 sake.discard =
 
 sake.tail = $(wordlist 2,$(words $1),$1)
+sake.tail2 = $(wordlist 3,$(words $1),$1)
 sake.buttail = $(wordlist 2,$(words $1),x $1)
 
 sake.reverse = \
@@ -17,12 +18,54 @@ sake.reverse = \
 		$(firstword $1) \
 	)
 
+sake.heap.id := 0
+
+sake.heap.new = \
+	$(eval sake.heap.id := $(call sake.maths.inc_pint,$(sake.heap.id))) \
+	sake.heap._$(strip $(sake.heap.id))_
+	
+
+sake.array.new = \
+	$(if \
+		$(strip
+
+sake.array.lvalue = $(strip $1)$(subst $(sake.space),_,$(strip $2))
+sake.array.get = $($(call sake.array.lvalue,$1,$2))
+sake.array.set = $(eval $(call sake.array.lvalue,$1,$2) := $3)
+
+sake.array.new = \
+	$(strip \
+		$(eval sake.array._t := $(call sake.heap.new)) \
+		$(call sake.array.set, $(sake.array._t), length, $1) \
+		$(foreach v, \
+			$(call sake.array._clist, $(call sake.maths.inc,$1)), \
+			$(call sake.array.set, $(sake.array._t), \
+				$(call sake.maths.sub, \
+					$(call sake.maths.encode_sint, $v), \
+					P 2 \
+				), \
+				$($v) \
+			) \
+		) \
+		$(sake.array._t) \
+	)
+	
+# Produce a list of decimal numbers from 2 to $1.
+sake.array._clist = \
+	$(if \
+		$(call sake.maths.gt,$1,P 1), \
+		$(call sake.maths.decode_sint,$1) \
+			$(call sake.array._clist, \
+				$(call sake.maths.dec,$1) \
+		) \
+	)
+
 sake.boolean.true = T
 sake.boolean.false =
 
-sake.string.space = ~S
 sake.string.comma = ~C
 sake.string.tilde = ~T
+sake.string.space = ~S
 
 sake.string.unwrap = $(subst ~T,~,$(subst ~C,$(sake.comma),$(subst ~S,$(sake.space),$1)))
 sake.string.wrap = $(subst $(sake.space),~S,$(subst $(sake.comma),~C,$(subst ~,~T,$1)))
@@ -48,6 +91,10 @@ sake.method.integer._add = $(call sake.maths.add,$1,$2)
 sake.method.integer._sub = $(call sake.maths.sub,$1,$2)
 sake.method.integer._negate = $(call sake.maths.negate,$1)
 sake.method.integer.toString = $(call sake.maths.decode_sint,$1)
+	
+sake.method.array.length = $(call sake.array.get,$1,length)
+sake.method.array.get = $(call sake.array.get,$1,$2)
+sake.method.array.set = $(call sake.array.set,$1,$2,$3)
 
 sake.maths.split_number = \
 	$(subst 0,$(sake.space)0, \
@@ -118,6 +165,9 @@ sake.maths.add_pint_with_carry = \
 sake.maths.__accumulate_addition = \
 	$(word 1,$3)$(call sake.maths.add_pint_with_carry,$1,$2,$(word 2,$3))
 
+sake.maths.inc_pint = \
+	$(call sake.maths.add_pint_with_carry,$1,1,0)
+	
 # To subtract, we use the Paul Kuliniewicz's bizarre algorithm from here:
 # http://www.kuliniewicz.org/blog/archives/2007/05/24/crazy-subtraction-algorithm/
 # This has the advantage that we can do nearly all our subtraction with
@@ -415,6 +465,10 @@ sake.maths.__add_PN = \
 	
 sake.maths.__add_NP = \
 	$(call sake.maths.sub,P $2,P $1)
+
+# Increment a sint.
+
+sake.maths.inc = $(call sake.maths.add,$1,P 1)
 	
 # Subtract two sints.
 
@@ -442,6 +496,10 @@ sake.maths.__sub_PN = \
 sake.maths.__sub_NP = \
 	N $(call sake.maths.add_pint_with_carry,$1,$2,0)
 
+# Decrement a sint.
+
+sake.maths.dec = $(call sake.maths.sub,$1,P 1)
+	
 # Flip the sign of a sint.
 
 sake.maths.negate = \
