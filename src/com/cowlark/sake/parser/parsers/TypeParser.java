@@ -1,8 +1,8 @@
 package com.cowlark.sake.parser.parsers;
 
+import com.cowlark.sake.ast.nodes.ArrayTypeNode;
 import com.cowlark.sake.ast.nodes.BooleanTypeNode;
 import com.cowlark.sake.ast.nodes.IntegerTypeNode;
-import com.cowlark.sake.ast.nodes.ArrayTypeNode;
 import com.cowlark.sake.ast.nodes.StringTypeNode;
 import com.cowlark.sake.ast.nodes.TypeNode;
 import com.cowlark.sake.parser.core.Location;

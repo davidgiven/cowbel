@@ -1,8 +1,8 @@
 package com.cowlark.sake.parser.parsers;
 
 import java.util.ArrayList;
-import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.ArrayConstructorNode;
+import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
 
