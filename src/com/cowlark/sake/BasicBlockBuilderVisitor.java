@@ -2,9 +2,11 @@ package com.cowlark.sake;
 
 import java.util.List;
 import com.cowlark.sake.ast.SimpleVisitor;
+import com.cowlark.sake.ast.nodes.ArrayConstructorNode;
 import com.cowlark.sake.ast.nodes.BooleanConstantNode;
 import com.cowlark.sake.ast.nodes.BreakStatementNode;
 import com.cowlark.sake.ast.nodes.ContinueStatementNode;
+import com.cowlark.sake.ast.nodes.DoWhileStatementNode;
 import com.cowlark.sake.ast.nodes.DummyExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
@@ -15,7 +17,6 @@ import com.cowlark.sake.ast.nodes.IfElseStatementNode;
 import com.cowlark.sake.ast.nodes.IfStatementNode;
 import com.cowlark.sake.ast.nodes.IntegerConstantNode;
 import com.cowlark.sake.ast.nodes.LabelStatementNode;
-import com.cowlark.sake.ast.nodes.ArrayConstructorNode;
 import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ReturnStatementNode;
@@ -173,6 +174,30 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		_currentBB = body;
 		node.getBodyStatement().visit(this);
 		_currentBB.insnGoto(node, _continueBB);
+		_currentBB.terminate();
+		
+		_currentBB = _breakBB;
+		
+		_continueBB = oldcontinuebb;
+		_breakBB = oldbreakbb;
+	}
+	
+	@Override
+	public void visit(DoWhileStatementNode node) throws CompilationException
+	{
+		BasicBlock oldcontinuebb = _continueBB;
+		BasicBlock oldbreakbb = _breakBB;
+		
+		_continueBB = new BasicBlock(_function);
+		_breakBB = new BasicBlock(_function);
+		
+		_currentBB.insnGoto(node, _continueBB);
+		_currentBB.terminate();
+		
+		_currentBB = _continueBB;
+		node.getBodyStatement().visit(this);
+		_currentBB.insnIf(node, _continueBB, _breakBB);
+		node.getConditionalExpression().visit(this);
 		_currentBB.terminate();
 		
 		_currentBB = _breakBB;

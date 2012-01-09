@@ -34,6 +34,7 @@ public class S
     	"boolean",
     	"break",
     	"continue",
-    	"while"
+    	"while",
+    	"do"
     };
 }

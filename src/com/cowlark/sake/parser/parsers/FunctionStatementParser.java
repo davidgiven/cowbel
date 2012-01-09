@@ -52,7 +52,11 @@ public class FunctionStatementParser extends Parser
 		if (pr11.success())
 			return pr11;
 		
+		ParseResult pr12 = DoWhileStatementParser.parse(location);
+		if (pr12.success())
+			return pr12;
+		
 		return combineParseErrors(pr1, pr2, pr3, pr4, pr5, pr6, pr7, pr8, pr9,
-				pr10, pr11);
+				pr10, pr11, pr12);
 	}
 }

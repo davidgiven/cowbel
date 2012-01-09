@@ -37,6 +37,7 @@ public abstract class Parser
 	public static LabelStatementParser LabelStatementParser = new LabelStatementParser();
 	public static GotoStatementParser GotoStatementParser = new GotoStatementParser();
 	public static WhileStatementParser WhileStatementParser = new WhileStatementParser();
+	public static DoWhileStatementParser DoWhileStatementParser = new DoWhileStatementParser();
 	public static BreakStatementParser BreakStatementParser = new BreakStatementParser();
 	public static ContinueStatementParser ContinueStatementParser = new ContinueStatementParser();
 	
@@ -72,6 +73,7 @@ public abstract class Parser
 	public static Parser BreakTokenParser = new TrivialParser("break");
 	public static Parser ContinueTokenParser = new TrivialParser("continue");
 	public static Parser WhileTokenParser = new TrivialParser("while");
+	public static Parser DoTokenParser = new TrivialParser("do");
 
 	private static HashMap<Location, HashMap<Parser, ParseResult>> _cache =
 		new HashMap<Location, HashMap<Parser, ParseResult>>(); 

@@ -3,6 +3,7 @@ package com.cowlark.sake;
 import com.cowlark.sake.ast.SimpleVisitor;
 import com.cowlark.sake.ast.nodes.BreakStatementNode;
 import com.cowlark.sake.ast.nodes.ContinueStatementNode;
+import com.cowlark.sake.ast.nodes.DoWhileStatementNode;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
@@ -127,6 +128,17 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 
 	@Override
 	public void visit(WhileStatementNode node) throws CompilationException
+	{
+		ExpressionNode conditional = node.getConditionalExpression();
+		Type conditionaltype = conditional.calculateType();
+		conditionaltype.unifyWith(node, BooleanType.create());
+		
+		StatementNode body = node.getBodyStatement();
+		body.checkTypes();
+	}
+
+	@Override
+	public void visit(DoWhileStatementNode node) throws CompilationException
 	{
 		ExpressionNode conditional = node.getConditionalExpression();
 		Type conditionaltype = conditional.calculateType();

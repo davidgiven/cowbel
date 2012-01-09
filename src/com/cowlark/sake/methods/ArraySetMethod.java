@@ -1,7 +1,7 @@
 package com.cowlark.sake.methods;
 
-import com.cowlark.sake.types.IntegerType;
 import com.cowlark.sake.types.ArrayType;
+import com.cowlark.sake.types.IntegerType;
 import com.cowlark.sake.types.Type;
 import com.cowlark.sake.types.VoidType;
 

@@ -1,8 +1,10 @@
 package com.cowlark.sake.ast;
 
+import com.cowlark.sake.ast.nodes.ArrayConstructorNode;
 import com.cowlark.sake.ast.nodes.BooleanConstantNode;
 import com.cowlark.sake.ast.nodes.BreakStatementNode;
 import com.cowlark.sake.ast.nodes.ContinueStatementNode;
+import com.cowlark.sake.ast.nodes.DoWhileStatementNode;
 import com.cowlark.sake.ast.nodes.DummyExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
@@ -12,7 +14,6 @@ import com.cowlark.sake.ast.nodes.IfElseStatementNode;
 import com.cowlark.sake.ast.nodes.IfStatementNode;
 import com.cowlark.sake.ast.nodes.IntegerConstantNode;
 import com.cowlark.sake.ast.nodes.LabelStatementNode;
-import com.cowlark.sake.ast.nodes.ArrayConstructorNode;
 import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ReturnStatementNode;
@@ -88,6 +89,11 @@ public class Visitor
 	}
 
 	public void visit(WhileStatementNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+
+	public void visit(DoWhileStatementNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}
