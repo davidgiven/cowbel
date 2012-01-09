@@ -1,0 +1,144 @@
+var width = 10;
+var height = 10;
+
+/* This is actually kind of dodgy: accessing fields out of bounds in an array
+ * is supposed to be illegal. But right now it works. */
+var buffera = [[0]];
+var bufferb = [[0]];
+var front = buffera;
+var back = bufferb;
+
+function print(s: string)
+{
+	s.print();
+}
+
+function wipe_buffers()
+{
+	var y = 0;
+	while (y < height)
+	{
+		var rowa = [0];
+		buffera.set(y, rowa);
+		var rowb = [0];
+		bufferb.set(y, rowb);
+		
+		var x = 0;
+		while (x < width)
+		{
+			rowa.set(x, 0);
+			rowb.set(x, 0);
+			x = x + 1;
+		}
+		
+		y = y + 1;
+	}
+}
+
+function populate_front()
+{
+	front.get(2).set(4, 1);
+	front.get(3).set(4, 1);
+	front.get(4).set(4, 1);
+	front.get(4).set(3, 1);
+	front.get(3).set(2, 1);
+}
+
+function draw_front()
+{
+	var y = 0;
+	while (y < height)
+	{
+		var row = front.get(y);
+		var s = "";
+		
+		var x = 0;
+		while (x < width)
+		{
+			var cell = row.get(x);
+			if (cell == 0)
+				s = s + ".";
+			else
+				s = s + "*";
+				
+			x = x + 1;
+		}
+		print(s);
+		
+		y = y + 1;
+	}
+}
+
+function do_cell(x: integer, y: integer)
+{
+	var s = 
+		front.get(y-1).get(x-1) +
+		front.get(y-1).get(x  ) +
+		front.get(y-1).get(x+1) +
+		front.get(y  ).get(x-1) +
+		front.get(y  ).get(x+1) +
+		front.get(y+1).get(x-1) +
+		front.get(y+1).get(x  ) +
+		front.get(y+1).get(x+1);
+		
+	var old = front.get(y).get(x);
+	
+	if (s == 2)
+	{
+		var v = front.get(y).get(x);
+		back.get(y).set(x, v);
+	}
+	else if (s == 3)
+		back.get(y).set(x, 1);
+	else
+		back.get(y).set(x, 0);
+}
+
+function process()
+{
+	var maxw = width - 1;
+	var maxh = height - 1;
+	
+	var y = 1;
+	while (y < maxh)
+	{
+		var x = 1;
+		while (x < maxw)
+		{
+			do_cell(x, y);
+			x = x + 1;
+		}
+		
+		y = y + 1;
+	}
+}
+	 
+function run()
+{
+	print("Initialising. (Be patient...)");
+	wipe_buffers();
+	populate_front();
+
+	var b = true;	
+	while (true)
+	{
+		print("");
+		process();
+		
+		if (b)
+		{
+			front = bufferb;
+			back = buffera;
+		}
+		else
+		{
+			front = buffera;
+			back = bufferb;
+		}
+		b = !b;
+		
+		draw_front();
+	}
+}
+
+run();
