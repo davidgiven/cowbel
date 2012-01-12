@@ -444,16 +444,50 @@ sake.maths.encode_sint = \
 sake.maths.decode_sint = \
 	$(if $(findstring N,$(word 1,$1)),-)$(call sake.maths.decode_pint,$(call sake.tail,$1))
 				
+# Wrap a sint into a string.
+
+sake.maths.wrap_sint = \
+	$(strip \
+		$(subst $(sake.space),_,$(strip $1)) \
+	)
+
+# Return the name of a cache key.
+
+# $1=name of cache, $2=key1, $3=key2
+sake.maths.cache_key = \
+	sake.maths.__cache__$(strip $1)__$(call sake.maths.wrap_sint,$2)__$(call sake.maths.wrap_sint,$3)
+
+# Update a cache.
+
+# $1=key, $2=value
+# Returns $2.
+sake.maths.update_cache = \
+	$(eval $1 := $2) \
+	$2
+
 # Add two sints.
 
-sake.maths.add = \
-	$(call sake.maths.clean_sint, \
-		$(call sake.maths.__add_$(word 1,$1)$(word 1,$2), \
-			$(call sake.tail,$1), \
-			$(call sake.tail,$2) \
+sake.maths.__add = \
+	$(if $(strip $($(strip $3))), \
+		$($(strip $3)), \
+		$(call sake.maths.update_cache, $3, \
+			$(call sake.maths.clean_sint, \
+				$(call sake.maths.__add_$(word 1,$1)$(word 1,$2), \
+					$(call sake.tail,$1), \
+					$(call sake.tail,$2) \
+				) \
+			) \
 		) \
 	)
 	
+sake.maths.add = \
+	$(strip \
+		$(call sake.maths.__add, \
+			$1, $2, \
+			$(call sake.maths.cache_key, add, $1, $2) \
+		) \
+	)
+
 sake.maths.__add_PP = \
 	P $(call sake.maths.add_pint_with_carry,$1,$2,0)  
 
@@ -472,11 +506,24 @@ sake.maths.inc = $(call sake.maths.add,$1,P 1)
 	
 # Subtract two sints.
 
+sake.maths.__sub = \
+	$(if $(strip $($(strip $3))), \
+		$($(strip $3)), \
+		$(call sake.maths.update_cache, $3, \
+			$(call sake.maths.clean_sint, \
+				$(call sake.maths.__sub_$(word 1,$1)$(word 1,$2), \
+					$(call sake.tail,$1), \
+					$(call sake.tail,$2) \
+				) \
+			) \
+		) \
+	)
+	
 sake.maths.sub = \
-	$(call sake.maths.clean_sint, \
-		$(call sake.maths.__sub_$(word 1,$1)$(word 1,$2), \
-			$(call sake.tail,$1), \
-			$(call sake.tail,$2) \
+	$(strip \
+		$(call sake.maths.__sub, \
+			$1, $2, \
+			$(call sake.maths.cache_key, sub, $1, $2) \
 		) \
 	)
 
