@@ -159,11 +159,11 @@ public class MakeBackend extends Backend
 	@Override
 	public void visit(IfInstruction insn)
 	{
-		print("$(call $(if ");
+		print("$(call sake.bb.$(if ");
 		compileFromIterator();
-		print(",sake.bb.");
+		print(",");
 		print(insn.getPositiveTarget().getName());
-		print(",sake.bb.");
+		print(",");
 		print(insn.getNegativeTarget().getName());
 		print(")");
 		emit_output_map();
