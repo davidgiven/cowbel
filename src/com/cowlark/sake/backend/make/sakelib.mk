@@ -25,10 +25,6 @@ sake.heap.new = \
 	sake.heap._$(strip $(sake.heap.id))_
 	
 
-sake.array.new = \
-	$(if \
-		$(strip
-
 sake.array.lvalue = $(strip $1)$(subst $(sake.space),_,$(strip $2))
 sake.array.get = $($(call sake.array.lvalue,$1,$2))
 sake.array.set = $(eval $(call sake.array.lvalue,$1,$2) := $3)
@@ -145,7 +141,7 @@ $(foreach a,0 1 2 3 4 5 6 7 8 9, \
 
 # Add together up to three whitespace-separated digits.
 
-sake.maths.digit_or_zero = $(if $1,$1,0)
+sake.maths.digit_or_zero = $(or $1,0)
 
 sake.maths.add_digits = \
 	$(sake.maths._add_table_$(call sake.maths.digit_or_zero,$(word 1,$1))$(call sake.maths.digit_or_zero,$(word 2,$1))$(call sake.maths.digit_or_zero,$(word 3,$1)))
@@ -247,7 +243,7 @@ sake.maths.__sub_mangle_b = \
 sake.maths.digit_or_10 = $(if $1,$1,10)
 
 sake.maths.__sub_sum = \
-	$(if $(or $(strip $1),$(strip $2)), \
+	$(if $(strip $1)$(strip $2), \
 		$(words $(call sake.maths.encode_xs,$(word 1,$1)) $(call sake.maths.encode_xs,$(call sake.maths.digit_or_10,$(word 1,$2)))) \
 		$(call sake.maths.__sub_sum,$(call sake.tail,$1),$(call sake.tail,$2)) \
 	)  
@@ -468,8 +464,7 @@ sake.maths.update_cache = \
 # Add two sints.
 
 sake.maths.__add = \
-	$(if $(strip $($(strip $3))), \
-		$($(strip $3)), \
+	$(or $(strip $($(strip $3))), \
 		$(call sake.maths.update_cache, $3, \
 			$(call sake.maths.clean_sint, \
 				$(call sake.maths.__add_$(word 1,$1)$(word 1,$2), \
@@ -507,8 +502,7 @@ sake.maths.inc = $(call sake.maths.add,$1,P 1)
 # Subtract two sints.
 
 sake.maths.__sub = \
-	$(if $(strip $($(strip $3))), \
-		$($(strip $3)), \
+	$(or $(strip $($(strip $3))), \
 		$(call sake.maths.update_cache, $3, \
 			$(call sake.maths.clean_sint, \
 				$(call sake.maths.__sub_$(word 1,$1)$(word 1,$2), \
