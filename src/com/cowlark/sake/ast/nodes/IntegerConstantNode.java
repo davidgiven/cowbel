@@ -20,6 +20,12 @@ public class IntegerConstantNode extends ExpressionLiteralNode
 	}
 	
 	@Override
+	public String getShortDescription()
+	{
+		return Long.toString(_value);
+	}
+	
+	@Override
 	public void visit(Visitor visitor) throws CompilationException
 	{
 		visitor.visit(this);
