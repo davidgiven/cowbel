@@ -7,7 +7,7 @@ import java.util.Set;
 import com.cowlark.sake.BasicBlock;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.ast.nodes.MethodCallNode;
-import com.cowlark.sake.backend.Backend;
+import com.cowlark.sake.backend.FunctionalBackend;
 import com.cowlark.sake.instructions.ArrayConstructorInstruction;
 import com.cowlark.sake.instructions.BooleanConstantInstruction;
 import com.cowlark.sake.instructions.DiscardInstruction;
@@ -28,7 +28,7 @@ import com.cowlark.sake.symbols.Function;
 import com.cowlark.sake.symbols.LocalVariable;
 import com.cowlark.sake.types.Type;
 
-public class MakeBackend extends Backend
+public class MakeBackend extends FunctionalBackend
 {
 	private HashMap<LocalVariable, Integer> _variableAllocation =
 		new HashMap<LocalVariable, Integer>();
