@@ -119,8 +119,9 @@ function run()
 	wipe_buffers();
 	populate_front();
 
-	var b = true;	
-	while (true)
+	var b = true;
+	var generations = 0;
+	while (generations < 5)
 	{
 		print("");
 		process();
@@ -138,6 +139,7 @@ function run()
 		b = !b;
 		
 		draw_front();
+		generations = generations + 1;
 	}
 }
 
