@@ -23,6 +23,8 @@ import com.cowlark.sake.symbols.GlobalSymbolStorage;
 
 public class Compiler
 {
+	private CompilerListener _listener;
+	private Backend _backend;
 	private Location _input;
 	private ParseResult _ast;
 	private GlobalSymbolStorage _globals;
@@ -30,11 +32,22 @@ public class Compiler
 	
 	public Compiler()
     {
+		_listener = new CompilerListenerAdapter();
     }
+	
+	public void setListener(CompilerListener listener)
+	{
+		_listener = listener;
+	}
 	
 	public void setInput(Location input)
 	{
 		_input = input;
+	}
+	
+	public void setBackend(Backend backend)
+	{
+		_backend = backend;
 	}
 	
 	public ScopeNode getAst()
@@ -44,7 +57,9 @@ public class Compiler
 	
 	public void compile() throws CompilationException
 	{
+		_listener.onParseBegin();
 		_ast = Parser.ProgramParser.parse(_input);
+		_listener.onParseEnd();
 		
 		if (_ast.failed())
 		{
@@ -54,48 +69,63 @@ public class Compiler
 
 		ScopeNode ast = getAst();
 		
-		Location loc = new Location("", "<internal>");
-		Location mainname = new Location("<main>", "<internal>");
-		MutableLocation mainnameend = new MutableLocation(mainname);
-		mainnameend.advance(6);
+		/* Analyse symbol tables. */
 		
-		FunctionHeaderNode toplevelnodeheader = new FunctionHeaderNode(
-				loc, loc,
-				new IdentifierNode(mainname, mainnameend),
-				new ParameterDeclarationListNode(loc, loc),
-				new VoidTypeNode(loc, loc));
-		FunctionDefinitionNode toplevelnode = new FunctionDefinitionNode(
-				loc, loc, toplevelnodeheader, ast);
-		_mainFunction = new Function(toplevelnode);
+		_listener.onSymbolTableAnalysisBegin();
+		{
+			Location loc = new Location("", "<internal>");
+			Location mainname = new Location("<main>", "<internal>");
+			MutableLocation mainnameend = new MutableLocation(mainname);
+			mainnameend.advance(6);
+			
+			FunctionHeaderNode toplevelnodeheader = new FunctionHeaderNode(
+					loc, loc,
+					new IdentifierNode(mainname, mainnameend),
+					new ParameterDeclarationListNode(loc, loc),
+					new VoidTypeNode(loc, loc));
+			FunctionDefinitionNode toplevelnode = new FunctionDefinitionNode(
+					loc, loc, toplevelnodeheader, ast);
+			_mainFunction = new Function(toplevelnode);
 
-		/* Override the root scope's storage. */
-		_globals = new GlobalSymbolStorage();
-		ast.setSymbolStorage(_globals);
-		
-		ast.visit(new RecordVariableDeclarationsVisitor(ast));
-		ast.visit(new ResolveVariableReferencesVisitor());
-
-		_globals.addSymbol(_mainFunction);
-		toplevelnode.setSymbol(_mainFunction);
+			/* Override the root scope's storage. */
+			_globals = new GlobalSymbolStorage();
+			ast.setSymbolStorage(_globals);
+			
+			ast.visit(new RecordVariableDeclarationsVisitor(ast));
+			ast.visit(new ResolveVariableReferencesVisitor());
+	
+			_globals.addSymbol(_mainFunction);
+			toplevelnode.setSymbol(_mainFunction);
+		}
+		_listener.onSymbolTableAnalysisEnd();
 		
 		/* Type check everything. */
 		
-		ast.checkTypes();
-		for (Function f : _globals.getFunctions())
+		_listener.onTypeCheckBegin();
 		{
-			FunctionDefinitionNode node = (FunctionDefinitionNode) f.getNode();
-			StatementNode body = node.getFunctionBody();
-			if (body != ast)
-				body.checkTypes();
+			ast.checkTypes();
+			for (Function f : _globals.getFunctions())
+			{
+				FunctionDefinitionNode node = (FunctionDefinitionNode) f.getNode();
+				StatementNode body = node.getFunctionBody();
+				if (body != ast)
+					body.checkTypes();
+			}
 		}
+		_listener.onTypeCheckEnd();
 		
 		/* Construct basic blocks and IR representation. */
+		
+		_listener.onBasicBlockAnalysisBegin();
 		
 		for (Function f : _globals.getFunctions())
 			f.buildBasicBlocks();
 		
+		_listener.onBasicBlockAnalysisEnd();
+		
 		/* Dataflow analysis. */
 		
+		_listener.onDataflowAnalysisBegin();
 		{
 			for (Function f : _globals.getFunctions())
 				DataflowAnalyser.initialiseFunction(f);
@@ -108,12 +138,14 @@ public class Compiler
 			}
 			while (!da.isFinished());
 		}
-	}
-
-	public void emitCode(Backend backend)
-	{
+		_listener.onDataflowAnalysisEnd();
+		
+		/* Code generation. */
+		
+		_listener.onCodeGenerationBegin();
 		for (Function f : _globals.getFunctions())
-			backend.compileFunction(f);
+			_backend.compileFunction(f);
+		_listener.onCodeGenerationEnd();
 	}
 
 	public void visit(BasicBlockVisitor visitor)
