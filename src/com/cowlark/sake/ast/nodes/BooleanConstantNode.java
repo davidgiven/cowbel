@@ -20,6 +20,12 @@ public class BooleanConstantNode extends ExpressionLiteralNode
 	}
 	
 	@Override
+	public String getShortDescription()
+	{
+	    return Boolean.toString(_value);
+	}
+	
+	@Override
 	public void visit(Visitor visitor) throws CompilationException
 	{
 		visitor.visit(this);
