@@ -40,6 +40,7 @@ public abstract class Parser
 	public static DoWhileStatementParser DoWhileStatementParser = new DoWhileStatementParser();
 	public static BreakStatementParser BreakStatementParser = new BreakStatementParser();
 	public static ContinueStatementParser ContinueStatementParser = new ContinueStatementParser();
+	public static ForStatementParser ForStatementParser = new ForStatementParser();
 	
 	public static Parser EOFParser = new EOFParser();
 	public static Parser DotParser = new TrivialParser(".");
@@ -56,7 +57,6 @@ public abstract class Parser
 	public static Parser CloseSquareParser = new TrivialParser("]");
 	public static Parser EqualsParser = new TrivialParser("=");
 	public static Parser OpenCloseParenthesisParser = new TrivialParser("()");
-	public static Parser PlusParser = new TrivialParser("+");
 
 	/* When adding new keywords, remember to adjust the table in S. */
 	public static Parser TrueTokenParser = new TrivialParser("true");
@@ -74,6 +74,7 @@ public abstract class Parser
 	public static Parser ContinueTokenParser = new TrivialParser("continue");
 	public static Parser WhileTokenParser = new TrivialParser("while");
 	public static Parser DoTokenParser = new TrivialParser("do");
+	public static Parser ForTokenParser = new TrivialParser("for");
 
 	private static HashMap<Location, HashMap<Parser, ParseResult>> _cache =
 		new HashMap<Location, HashMap<Parser, ParseResult>>(); 

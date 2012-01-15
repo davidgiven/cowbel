@@ -56,7 +56,11 @@ public class FunctionStatementParser extends Parser
 		if (pr12.success())
 			return pr12;
 		
+		ParseResult pr13 = ForStatementParser.parse(location);
+		if (pr13.success())
+			return pr13;
+		
 		return combineParseErrors(pr1, pr2, pr3, pr4, pr5, pr6, pr7, pr8, pr9,
-				pr10, pr11, pr12);
+				pr10, pr11, pr12, pr13);
 	}
 }

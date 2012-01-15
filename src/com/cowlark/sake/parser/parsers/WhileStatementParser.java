@@ -15,7 +15,7 @@ public class WhileStatementParser extends Parser
 		if (pr.failed())
 			return pr;
 		
-		ParseResult conditionalpr = ExpressionHighParser.parse(pr.end());
+		ParseResult conditionalpr = ExpressionLowParser.parse(pr.end());
 		if (conditionalpr.failed())
 			return conditionalpr;
 		

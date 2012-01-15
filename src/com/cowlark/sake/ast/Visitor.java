@@ -7,6 +7,7 @@ import com.cowlark.sake.ast.nodes.ContinueStatementNode;
 import com.cowlark.sake.ast.nodes.DoWhileStatementNode;
 import com.cowlark.sake.ast.nodes.DummyExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
+import com.cowlark.sake.ast.nodes.ForStatementNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.GotoStatementNode;
@@ -94,6 +95,11 @@ public class Visitor
 	}
 
 	public void visit(DoWhileStatementNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+
+	public void visit(ForStatementNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}

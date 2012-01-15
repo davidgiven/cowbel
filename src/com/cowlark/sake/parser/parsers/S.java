@@ -35,6 +35,7 @@ public class S
     	"break",
     	"continue",
     	"while",
-    	"do"
+    	"do",
+    	"for"
     };
 }

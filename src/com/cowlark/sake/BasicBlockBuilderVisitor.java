@@ -10,6 +10,7 @@ import com.cowlark.sake.ast.nodes.DoWhileStatementNode;
 import com.cowlark.sake.ast.nodes.DummyExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
+import com.cowlark.sake.ast.nodes.ForStatementNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.GotoStatementNode;
@@ -198,6 +199,37 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		node.getBodyStatement().visit(this);
 		_currentBB.insnIf(node, _continueBB, _breakBB);
 		node.getConditionalExpression().visit(this);
+		_currentBB.terminate();
+		
+		_currentBB = _breakBB;
+		
+		_continueBB = oldcontinuebb;
+		_breakBB = oldbreakbb;
+	}
+	
+	@Override
+	public void visit(ForStatementNode node) throws CompilationException
+	{
+		BasicBlock oldcontinuebb = _continueBB;
+		BasicBlock oldbreakbb = _breakBB;
+
+		_continueBB = new BasicBlock(_function);
+		_breakBB = new BasicBlock(_function);
+		BasicBlock bodybb = new BasicBlock(_function);
+		
+		node.getInitialiserStatement().visit(this);
+		_currentBB.insnGoto(node, _continueBB);
+		_currentBB.terminate();
+		
+		_currentBB = _continueBB;
+		_currentBB.insnIf(node, bodybb, _breakBB);
+		node.getConditionalExpression().visit(this);
+		_currentBB.terminate();
+		
+		_currentBB = bodybb;
+		node.getBodyStatement().visit(this);
+		node.getIncrementerStatement().visit(this);
+		_currentBB.insnGoto(node, _continueBB);
 		_currentBB.terminate();
 		
 		_currentBB = _breakBB;
