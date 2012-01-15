@@ -15,23 +15,18 @@ function print(s: string)
 
 function wipe_buffers()
 {
-	var y = 0;
-	while (y < height)
+	for y = 0, height
 	{
 		var rowa = [0];
 		buffera.set(y, rowa);
 		var rowb = [0];
 		bufferb.set(y, rowb);
-		
-		var x = 0;
-		while (x < width)
+
+		for x = 0, width		
 		{
 			rowa.set(x, 0);
 			rowb.set(x, 0);
-			x = x + 1;
 		}
-		
-		y = y + 1;
 	}
 }
 
@@ -46,26 +41,20 @@ function populate_front()
 
 function draw_front()
 {
-	var y = 0;
-	while (y < height)
+	for y = 0, height
 	{
 		var row = front.get(y);
 		var s = "";
-		
-		var x = 0;
-		while (x < width)
+
+		for x = 0, width		
 		{
 			var cell = row.get(x);
 			if (cell == 0)
 				s = s + ".";
 			else
 				s = s + "*";
-				
-			x = x + 1;
 		}
 		print(s);
-		
-		y = y + 1;
 	}
 }
 
@@ -98,18 +87,11 @@ function process()
 {
 	var maxw = width - 1;
 	var maxh = height - 1;
-	
-	var y = 1;
-	while (y < maxh)
+
+	for y = 1, maxh	
 	{
-		var x = 1;
-		while (x < maxw)
-		{
+		for x = 1, maxw
 			do_cell(x, y);
-			x = x + 1;
-		}
-		
-		y = y + 1;
 	}
 }
 	 
@@ -120,8 +102,7 @@ function run()
 	populate_front();
 
 	var b = true;
-	var generations = 0;
-	while (generations < 5)
+	for generations = 0, 5
 	{
 		print("");
 		process();
@@ -139,7 +120,6 @@ function run()
 		b = !b;
 		
 		draw_front();
-		generations = generations + 1;
 	}
 }
 
