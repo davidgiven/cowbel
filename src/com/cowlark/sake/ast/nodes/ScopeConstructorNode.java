@@ -11,14 +11,14 @@ import com.cowlark.sake.parser.errors.IdentifierNotFound;
 import com.cowlark.sake.symbols.Symbol;
 import com.cowlark.sake.symbols.SymbolStorage;
 
-public class ScopeNode extends StatementNode
+public class ScopeConstructorNode extends StatementNode
 {
 	private boolean _isTopLevel;
 	private SymbolStorage _symbolStorage;
 	private HashMap<String, Symbol> _symbols = new HashMap<String, Symbol>();
 	private HashMap<String, Label> _labels = new HashMap<String, Label>();
 	
-	public ScopeNode(Location start, Location end, StatementNode child)
+	public ScopeConstructorNode(Location start, Location end, StatementNode child)
     {
         super(start, end);
         addChild(child);
@@ -96,7 +96,7 @@ public class ScopeNode extends StatementNode
 	{
 		String s = name.getText();
 		
-		ScopeNode scope = this;
+		ScopeConstructorNode scope = this;
 		while (scope != null)
 		{
 			Symbol symbol = scope._symbols.get(s);
@@ -127,7 +127,7 @@ public class ScopeNode extends StatementNode
 	{
 		String s = name.getText();
 		
-		ScopeNode scope = this;
+		ScopeConstructorNode scope = this;
 		while (scope != null)
 		{
 			Label label = scope._labels.get(s);

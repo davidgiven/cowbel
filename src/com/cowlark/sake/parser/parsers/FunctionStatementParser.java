@@ -1,5 +1,6 @@
 package com.cowlark.sake.parser.parsers;
 
+import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
 
@@ -32,9 +33,15 @@ public class FunctionStatementParser extends Parser
 		if (pr6.success())
 			return pr6;
 		
-		ParseResult pr7 = BlockParser.parse(location);
+		ParseResult pr7 = OpenBraceParser.parse(location);
 		if (pr7.success())
-			return pr7;
+		{
+			pr7 = ScopeConstructorParser.parse(location);
+			if (pr7.failed())
+				return pr7;
+			
+			return (ScopeConstructorNode) pr7;
+		}
 		
 		ParseResult pr8 = ExpressionStatementParser.parse(location);
 		if (pr8.success())

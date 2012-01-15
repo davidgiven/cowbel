@@ -3,7 +3,7 @@ package com.cowlark.sake;
 import com.cowlark.sake.ast.RecursiveVisitor;
 import com.cowlark.sake.ast.nodes.GotoStatementNode;
 import com.cowlark.sake.ast.nodes.IdentifierNode;
-import com.cowlark.sake.ast.nodes.ScopeNode;
+import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
 import com.cowlark.sake.ast.nodes.VarAssignmentNode;
 import com.cowlark.sake.ast.nodes.VarReferenceNode;
 import com.cowlark.sake.errors.CompilationException;
@@ -14,7 +14,7 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 	@Override
 	public void visit(GotoStatementNode node) throws CompilationException
 	{
-		ScopeNode scope = node.getScope();
+		ScopeConstructorNode scope = node.getScope();
 		IdentifierNode in = node.getLabelName();
 		Label label = scope.lookupLabel(in);
 		
@@ -26,7 +26,7 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 	public void visit(VarReferenceNode node)
 	        throws CompilationException
 	{
-		ScopeNode scope = node.getScope();
+		ScopeConstructorNode scope = node.getScope();
 		IdentifierNode in = node.getVariableName();
 		Symbol symbol = scope.lookupSymbol(in);
 		
@@ -38,7 +38,7 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 	public void visit(VarAssignmentNode node)
 	        throws CompilationException
 	{
-		ScopeNode scope = node.getScope();
+		ScopeConstructorNode scope = node.getScope();
 		IdentifierNode in = node.getVariableName();
 		Symbol symbol = scope.lookupSymbol(in);
 		

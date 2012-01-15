@@ -15,7 +15,7 @@ import com.cowlark.sake.ast.nodes.LabelStatementNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ReturnStatementNode;
 import com.cowlark.sake.ast.nodes.ReturnVoidStatementNode;
-import com.cowlark.sake.ast.nodes.ScopeNode;
+import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
 import com.cowlark.sake.ast.nodes.StatementNode;
 import com.cowlark.sake.ast.nodes.VarAssignmentNode;
 import com.cowlark.sake.ast.nodes.VarDeclarationNode;
@@ -37,7 +37,7 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 	}
 	
 	@Override
-	public void visit(ScopeNode node) throws CompilationException
+	public void visit(ScopeConstructorNode node) throws CompilationException
 	{
 		node.getChild().visit(this);
 	}

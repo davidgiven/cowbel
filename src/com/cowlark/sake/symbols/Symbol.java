@@ -2,7 +2,7 @@ package com.cowlark.sake.symbols;
 
 import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.Node;
-import com.cowlark.sake.ast.nodes.ScopeNode;
+import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
 import com.cowlark.sake.types.Type;
 
 public abstract class Symbol implements Comparable<Symbol>
@@ -14,7 +14,7 @@ public abstract class Symbol implements Comparable<Symbol>
 	private Node _node;
 	private IdentifierNode _name;
 	private Type _type;
-	private ScopeNode _scope;
+	private ScopeConstructorNode _scope;
 	private SymbolStorage _storage;
 	
 	public Symbol(Node node, IdentifierNode name, Type type)
@@ -61,7 +61,7 @@ public abstract class Symbol implements Comparable<Symbol>
 		return 0;
 	}
 
-	public void setScopeAndStorage(ScopeNode scope, SymbolStorage storage)
+	public void setScopeAndStorage(ScopeConstructorNode scope, SymbolStorage storage)
 	{
 		_scope = scope;
 		_storage = storage;

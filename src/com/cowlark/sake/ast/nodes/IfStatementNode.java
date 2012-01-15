@@ -8,7 +8,7 @@ public class IfStatementNode extends StatementNode
 {
 	public IfStatementNode(Location start, Location end,
 			ExpressionNode conditional,
-			StatementNode positive)
+			ScopeConstructorNode positive)
     {
 		super(start, end);
 		addChild(conditional);
@@ -20,9 +20,9 @@ public class IfStatementNode extends StatementNode
 		return (ExpressionNode) getChild(0);
 	}
 	
-	public StatementNode getPositiveStatement()
+	public ScopeConstructorNode getPositiveStatement()
 	{
-		return (StatementNode) getChild(1);
+		return (ScopeConstructorNode) getChild(1);
 	}
 	
 	@Override

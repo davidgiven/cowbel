@@ -27,11 +27,11 @@ public abstract class Parser
 	public static ParameterDeclarationListParser ParameterDeclarationListParser = new ParameterDeclarationListParser();
 	public static ParameterDeclarationParser ParameterDeclarationParser = new ParameterDeclarationParser();
 	public static FunctionDefinitionParser FunctionDefinitionParser = new FunctionDefinitionParser();
-	public static BlockParser BlockParser = new BlockParser();
 	public static VarAssignmentParser VarAssignmentParser = new VarAssignmentParser();
 	public static PrefixOperatorParser PrefixOperatorParser = new PrefixOperatorParser();
 	public static OperatorParser OperatorParser = new OperatorParser();
 	public static MethodNameParser MethodNameParser = new MethodNameParser();
+	public static ScopeConstructorParser ScopeConstructorParser = new ScopeConstructorParser();
 	public static ReturnStatementParser ReturnStatementParser = new ReturnStatementParser();
 	public static IfStatementParser IfStatementParser = new IfStatementParser();
 	public static LabelStatementParser LabelStatementParser = new LabelStatementParser();

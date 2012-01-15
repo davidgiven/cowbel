@@ -19,7 +19,7 @@ import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ReturnStatementNode;
 import com.cowlark.sake.ast.nodes.ReturnVoidStatementNode;
-import com.cowlark.sake.ast.nodes.ScopeNode;
+import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
 import com.cowlark.sake.ast.nodes.StatementListNode;
 import com.cowlark.sake.ast.nodes.StringConstantNode;
 import com.cowlark.sake.ast.nodes.VarAssignmentNode;
@@ -39,7 +39,7 @@ public class Visitor
 		visit((Node) node);
 	}
 	
-	public void visit(ScopeNode node) throws CompilationException
+	public void visit(ScopeConstructorNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}

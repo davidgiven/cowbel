@@ -3,7 +3,7 @@ package com.cowlark.sake.parser.parsers;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.IfElseStatementNode;
 import com.cowlark.sake.ast.nodes.IfStatementNode;
-import com.cowlark.sake.ast.nodes.StatementNode;
+import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
 
@@ -20,7 +20,7 @@ public class IfStatementParser extends Parser
 		if (conditionalpr.failed())
 			return conditionalpr;
 		
-		ParseResult positivepr = FunctionStatementParser.parse(conditionalpr.end());
+		ParseResult positivepr = ScopeConstructorParser.parse(conditionalpr.end());
 		if (positivepr.failed())
 			return positivepr;
 		
@@ -28,15 +28,15 @@ public class IfStatementParser extends Parser
 		if (pr.failed())
 			return new IfStatementNode(location, positivepr.end(),
 					(ExpressionNode) conditionalpr,
-					(StatementNode) positivepr);
+					(ScopeConstructorNode) positivepr);
 		
-		ParseResult negativepr = FunctionStatementParser.parse(pr.end());
+		ParseResult negativepr = ScopeConstructorParser.parse(pr.end());
 		if (negativepr.failed())
 			return negativepr;
 		
 		return new IfElseStatementNode(location, negativepr.end(),
 				(ExpressionNode) conditionalpr,
-				(StatementNode) positivepr,
-				(StatementNode) negativepr);
+				(ScopeConstructorNode) positivepr,
+				(ScopeConstructorNode) negativepr);
 	}
 }

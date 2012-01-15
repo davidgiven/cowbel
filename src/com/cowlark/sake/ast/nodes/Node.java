@@ -11,7 +11,7 @@ public abstract class Node extends Token
 {
 	private Vector<Node> _children = new Vector<Node>();
 	private Node _parent;
-	private ScopeNode _scope;
+	private ScopeConstructorNode _scope;
 	
 	public Node(Location start, Location end)
     {
@@ -99,7 +99,7 @@ public abstract class Node extends Token
 	{
 	}
 	
-	public ScopeNode getScope()
+	public ScopeConstructorNode getScope()
 	{
 		if (_scope == null)
 		{
@@ -110,9 +110,9 @@ public abstract class Node extends Token
 				n = n.getParent();
 				if (n == null)
 					return null;
-				if (n instanceof ScopeNode)
+				if (n instanceof ScopeConstructorNode)
 				{
-					_scope = (ScopeNode) n;
+					_scope = (ScopeConstructorNode) n;
 					break;
 				}
 			}
@@ -121,7 +121,7 @@ public abstract class Node extends Token
 		return _scope;
 	}
 	
-	public void setScope(ScopeNode scope)
+	public void setScope(ScopeConstructorNode scope)
 	{
 		_scope = scope;
 	}

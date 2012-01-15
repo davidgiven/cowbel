@@ -8,8 +8,8 @@ public class IfElseStatementNode extends StatementNode
 {
 	public IfElseStatementNode(Location start, Location end,
 			ExpressionNode conditional,
-			StatementNode positive,
-			StatementNode negative)
+			ScopeConstructorNode positive,
+			ScopeConstructorNode negative)
     {
 		super(start, end);
 		addChild(conditional);
@@ -22,14 +22,14 @@ public class IfElseStatementNode extends StatementNode
 		return (ExpressionNode) getChild(0);
 	}
 	
-	public StatementNode getPositiveStatement()
+	public ScopeConstructorNode getPositiveStatement()
 	{
-		return (StatementNode) getChild(1);
+		return (ScopeConstructorNode) getChild(1);
 	}
 	
-	public StatementNode getNegativeStatement()
+	public ScopeConstructorNode getNegativeStatement()
 	{
-		return (StatementNode) getChild(2);
+		return (ScopeConstructorNode) getChild(2);
 	}
 	
 	@Override

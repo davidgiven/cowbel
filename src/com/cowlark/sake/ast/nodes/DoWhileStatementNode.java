@@ -7,7 +7,7 @@ import com.cowlark.sake.parser.core.Location;
 public class DoWhileStatementNode extends StatementNode
 {
 	public DoWhileStatementNode(Location start, Location end,
-			StatementNode body,
+			ScopeConstructorNode body,
 			ExpressionNode conditional)
     {
 		super(start, end);
@@ -15,9 +15,9 @@ public class DoWhileStatementNode extends StatementNode
 		addChild(conditional);
     }
 	
-	public StatementNode getBodyStatement()
+	public ScopeConstructorNode getBodyStatement()
 	{
-		return (StatementNode) getChild(0);
+		return (ScopeConstructorNode) getChild(0);
 	}
 	
 	public ExpressionNode getConditionalExpression()

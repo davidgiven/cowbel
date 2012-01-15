@@ -5,7 +5,7 @@ import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.FunctionHeaderNode;
 import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.ParameterDeclarationListNode;
-import com.cowlark.sake.ast.nodes.ScopeNode;
+import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
 import com.cowlark.sake.ast.nodes.StatementNode;
 import com.cowlark.sake.ast.nodes.VoidTypeNode;
 import com.cowlark.sake.backend.Backend;
@@ -50,9 +50,9 @@ public class Compiler
 		_backend = backend;
 	}
 	
-	public ScopeNode getAst()
+	public ScopeConstructorNode getAst()
 	{
-		return (ScopeNode) _ast;
+		return (ScopeConstructorNode) _ast;
 	}
 	
 	public void compile() throws CompilationException
@@ -67,7 +67,7 @@ public class Compiler
 			throw new FailedParseException(fp);
 		}
 
-		ScopeNode ast = getAst();
+		ScopeConstructorNode ast = getAst();
 		
 		/* Analyse symbol tables. */
 		

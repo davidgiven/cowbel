@@ -10,7 +10,7 @@ public class ForStatementNode extends StatementNode
 			StatementNode initialiser,
 			ExpressionNode conditional,
 			StatementNode incrementer,
-			StatementNode body)
+			ScopeConstructorNode body)
     {
 		super(start, end);
 		addChild(initialiser);
@@ -34,9 +34,9 @@ public class ForStatementNode extends StatementNode
 		return (StatementNode) getChild(2);
 	}
 	
-	public StatementNode getBodyStatement()
+	public ScopeConstructorNode getBodyStatement()
 	{
-		return (StatementNode) getChild(3);
+		return (ScopeConstructorNode) getChild(3);
 	}
 	
 	@Override

@@ -8,7 +8,7 @@ public class WhileStatementNode extends StatementNode
 {
 	public WhileStatementNode(Location start, Location end,
 			ExpressionNode conditional,
-			StatementNode body)
+			ScopeConstructorNode body)
     {
 		super(start, end);
 		addChild(conditional);
@@ -20,9 +20,9 @@ public class WhileStatementNode extends StatementNode
 		return (ExpressionNode) getChild(0);
 	}
 	
-	public StatementNode getBodyStatement()
+	public ScopeConstructorNode getBodyStatement()
 	{
-		return (StatementNode) getChild(1);
+		return (ScopeConstructorNode) getChild(1);
 	}
 	
 	@Override

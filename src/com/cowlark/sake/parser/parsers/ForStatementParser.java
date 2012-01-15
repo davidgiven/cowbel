@@ -6,9 +6,8 @@ import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.InferredTypeNode;
 import com.cowlark.sake.ast.nodes.IntegerConstantNode;
 import com.cowlark.sake.ast.nodes.MethodCallNode;
-import com.cowlark.sake.ast.nodes.ScopeNode;
+import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
 import com.cowlark.sake.ast.nodes.StatementListNode;
-import com.cowlark.sake.ast.nodes.StatementNode;
 import com.cowlark.sake.ast.nodes.VarAssignmentNode;
 import com.cowlark.sake.ast.nodes.VarDeclarationNode;
 import com.cowlark.sake.ast.nodes.VarReferenceNode;
@@ -66,7 +65,7 @@ public class ForStatementParser extends Parser
 			steppr = new IntegerConstantNode(oneloc, oneend, 1);
 		}
 							
-		ParseResult bodypr = FunctionStatementParser.parse(n);
+		ParseResult bodypr = ScopeConstructorParser.parse(n);
 		if (bodypr.failed())
 			return bodypr;
 		
@@ -78,7 +77,7 @@ public class ForStatementParser extends Parser
 		MutableLocation incrementmethodend = new MutableLocation(incrementmethodloc);
 		incrementmethodend.advance(1);
 
-		return new ScopeNode(location, bodypr.end(),
+		return new ScopeConstructorNode(location, bodypr.end(),
 				new ForStatementNode(location, bodypr.end(),
 					new StatementListNode(location, pr.end(),
 							new VarDeclarationNode(location, variablepr.end(),
@@ -104,7 +103,7 @@ public class ForStatementParser extends Parser
 									(ExpressionNode) steppr
 							)
 					),
-					(StatementNode) bodypr
+					(ScopeConstructorNode) bodypr
 			)
 		);
 	}

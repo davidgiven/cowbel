@@ -1,20 +1,29 @@
 package com.cowlark.sake.parser.parsers;
 
 import java.util.ArrayList;
-import com.cowlark.sake.ast.nodes.ScopeNode;
+import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
 import com.cowlark.sake.ast.nodes.StatementListNode;
 import com.cowlark.sake.ast.nodes.StatementNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.ParseResult;
 
-public class BlockParser extends Parser
+public class ScopeConstructorParser extends Parser
 {
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
 		ParseResult pr = OpenBraceParser.parse(location);
 		if (pr.failed())
-			return pr;
+		{
+			/* This is a single-statement block. */
+			
+			pr = FunctionStatementParser.parse(location);
+			if (pr.failed())
+				return pr;
+			
+			return new ScopeConstructorNode(location, pr.end(),
+					(StatementNode) pr);
+		}
 		
 		ArrayList<StatementNode> statements = new ArrayList<StatementNode>();
 		Location n = pr.end();
@@ -35,7 +44,7 @@ public class BlockParser extends Parser
 			n = pr.end();
 		}
 		
-		return new ScopeNode(location, n,
+		return new ScopeConstructorNode(location, n,
 				new StatementListNode(location, n, statements));
 	}
 }
