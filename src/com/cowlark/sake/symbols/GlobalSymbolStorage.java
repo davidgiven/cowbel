@@ -1,11 +1,11 @@
 package com.cowlark.sake.symbols;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class GlobalSymbolStorage extends SymbolStorage
 {
-	private HashSet<Function> _functions = new HashSet<Function>();
+	private TreeSet<Function> _functions = new TreeSet<Function>();
 	
 	public GlobalSymbolStorage()
     {

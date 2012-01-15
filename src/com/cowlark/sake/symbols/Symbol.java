@@ -5,8 +5,12 @@ import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ScopeNode;
 import com.cowlark.sake.types.Type;
 
-public abstract class Symbol
+public abstract class Symbol implements Comparable<Symbol>
 {
+	private static int _globalId = 0;
+	
+	private int _id = _globalId++;
+	
 	private Node _node;
 	private IdentifierNode _name;
 	private Type _type;
@@ -46,7 +50,17 @@ public abstract class Symbol
 		return super.toString() + ": " + _name.getText() + ": " +
 			_type.getCanonicalTypeName();
 	}
-	
+		
+	@Override
+	public int compareTo(Symbol other)
+	{
+		if (_id < other._id)
+			return -1;
+		if (_id > other._id)
+			return 1;
+		return 0;
+	}
+
 	public void setScopeAndStorage(ScopeNode scope, SymbolStorage storage)
 	{
 		_scope = scope;

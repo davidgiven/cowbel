@@ -1,6 +1,6 @@
 package com.cowlark.sake;
 
-import java.util.HashSet;
+import java.util.TreeSet;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.FunctionHeaderNode;
 import com.cowlark.sake.ast.nodes.IdentifierNode;
@@ -118,8 +118,8 @@ public class Compiler
 
 	public void visit(BasicBlockVisitor visitor)
 	{
-		HashSet<BasicBlock> pending = new HashSet<BasicBlock>();
-		HashSet<BasicBlock> seen = new HashSet<BasicBlock>();
+		TreeSet<BasicBlock> pending = new TreeSet<BasicBlock>();
+		TreeSet<BasicBlock> seen = new TreeSet<BasicBlock>();
 		
 		for (Function f : _globals.getFunctions())
 		{
@@ -169,8 +169,8 @@ public class Compiler
 	
 	public void dumpBasicBlocks()
 	{
-		HashSet<BasicBlock> pending = new HashSet<BasicBlock>();
-		HashSet<BasicBlock> seen = new HashSet<BasicBlock>();
+		TreeSet<BasicBlock> pending = new TreeSet<BasicBlock>();
+		TreeSet<BasicBlock> seen = new TreeSet<BasicBlock>();
 		
 		for (Function f : _globals.getFunctions())
 		{

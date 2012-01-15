@@ -1,10 +1,10 @@
 package com.cowlark.sake.symbols;
 
-import java.util.HashSet;
+import java.util.TreeSet;
 
 public abstract class SymbolStorage
 {
-	private HashSet<Symbol> _symbols = new HashSet<Symbol>();
+	private TreeSet<Symbol> _symbols = new TreeSet<Symbol>();
 	
 	public SymbolStorage()
     {

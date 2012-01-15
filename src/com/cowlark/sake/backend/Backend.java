@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.TreeSet;
 import org.apache.commons.io.IOUtils;
 import com.cowlark.sake.BasicBlock;
 import com.cowlark.sake.instructions.Instruction;
@@ -14,8 +14,8 @@ import com.cowlark.sake.symbols.Function;
 
 public abstract class Backend extends InstructionVisitor
 {
-	private HashSet<BasicBlock> _pending = new HashSet<BasicBlock>();
-	private HashSet<BasicBlock> _seen = new HashSet<BasicBlock>();
+	private TreeSet<BasicBlock> _pending = new TreeSet<BasicBlock>();
+	private TreeSet<BasicBlock> _seen = new TreeSet<BasicBlock>();
 	
 	private Iterator<Instruction> _iterator;
 	private PrintStream _stream;
