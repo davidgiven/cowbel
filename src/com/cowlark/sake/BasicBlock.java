@@ -8,24 +8,23 @@ import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.instructions.ArrayConstructorInstruction;
 import com.cowlark.sake.instructions.BooleanConstantInstruction;
+import com.cowlark.sake.instructions.DirectFunctionCallInstruction;
 import com.cowlark.sake.instructions.DiscardInstruction;
-import com.cowlark.sake.instructions.FunctionCallInstruction;
 import com.cowlark.sake.instructions.FunctionExitInstruction;
-import com.cowlark.sake.instructions.GetGlobalVariableInstruction;
-import com.cowlark.sake.instructions.GetLocalVariableInstruction;
+import com.cowlark.sake.instructions.GetLocalInstruction;
+import com.cowlark.sake.instructions.GetUpvalueInstruction;
 import com.cowlark.sake.instructions.GotoInstruction;
 import com.cowlark.sake.instructions.IfInstruction;
 import com.cowlark.sake.instructions.Instruction;
 import com.cowlark.sake.instructions.InstructionVisitor;
 import com.cowlark.sake.instructions.IntegerConstantInstruction;
 import com.cowlark.sake.instructions.MethodCallInstruction;
-import com.cowlark.sake.instructions.SetGlobalVariableInstruction;
-import com.cowlark.sake.instructions.SetLocalVariableInInstruction;
+import com.cowlark.sake.instructions.SetLocalInstruction;
 import com.cowlark.sake.instructions.SetReturnValueInstruction;
+import com.cowlark.sake.instructions.SetUpvalueInstruction;
 import com.cowlark.sake.instructions.StringConstantInstruction;
 import com.cowlark.sake.symbols.Function;
-import com.cowlark.sake.symbols.GlobalVariable;
-import com.cowlark.sake.symbols.LocalVariable;
+import com.cowlark.sake.symbols.Variable;
 
 public class BasicBlock implements Comparable<BasicBlock>
 {
@@ -36,9 +35,6 @@ public class BasicBlock implements Comparable<BasicBlock>
 	private ArrayList<Instruction> _instructions = new ArrayList<Instruction>();
 	private TreeSet<BasicBlock> _sourceBlocks = new TreeSet<BasicBlock>();
 	private TreeSet<BasicBlock> _destinationBlocks = new TreeSet<BasicBlock>();
-	private TreeSet<LocalVariable> _definedVariables = new TreeSet<LocalVariable>();
-	private TreeSet<LocalVariable> _inputVariables = new TreeSet<LocalVariable>();
-	private TreeSet<LocalVariable> _outputVariables = new TreeSet<LocalVariable>();
 	private boolean _terminated = false;
 	
 	public BasicBlock(Function function)
@@ -67,34 +63,9 @@ public class BasicBlock implements Comparable<BasicBlock>
 		return _function.getSymbolName().getText() + "." + _id;
 	}
 	
-	private static void append_set(StringBuilder sb, Set<LocalVariable> set)
-	{
-		sb.append("{");
-		
-		boolean first = true;
-		for (LocalVariable v : set)
-		{
-			if (!first)
-				sb.append(", ");
-			first = false;
-			
-			sb.append(v);
-		}
-		
-		sb.append("}");
-	}
-	
 	public String description()
 	{
-		StringBuilder sb = new StringBuilder();
-		sb.append("d=");
-		append_set(sb, _definedVariables);
-		sb.append(" i=");
-		append_set(sb, _inputVariables);
-		sb.append(" o=");
-		append_set(sb, _outputVariables);
-		
-		return sb.toString();
+		return "";
 	}
 	
 	public List<Instruction> getInstructions()
@@ -110,21 +81,6 @@ public class BasicBlock implements Comparable<BasicBlock>
 	public Set<BasicBlock> getDestinationBlocks()
 	{
 		return _destinationBlocks;
-	}
-	
-	public Set<LocalVariable> getDefinedVariables()
-	{
-		return _definedVariables;
-	}
-	
-	public Set<LocalVariable> getInputVariables()
-	{
-		return _inputVariables;
-	}
-	
-	public Set<LocalVariable> getOutputVariables()
-	{
-		return _outputVariables;
 	}
 	
 	private void jumpsTo(BasicBlock next)
@@ -161,16 +117,14 @@ public class BasicBlock implements Comparable<BasicBlock>
 		addInstruction(new SetReturnValueInstruction(node));
 	}
 	
-	public void insnSetLocalVariableIn(Node node, LocalVariable var, BasicBlock next)
+	public void insnSetLocal(Node node, Variable var)
 	{
-		addInstruction(new SetLocalVariableInInstruction(node, var, next));
-		_definedVariables.add(var);
-		jumpsTo(next);
+		addInstruction(new SetLocalInstruction(node, var));
 	}
 	
-	public void insnSetGlobalVariable(Node node, GlobalVariable var)
+	public void insnSetUpvalue(Node node, Constructor c, Variable var)
 	{
-		addInstruction(new SetGlobalVariableInstruction(node, var));
+		addInstruction(new SetUpvalueInstruction(node, c, var));
 	}
 	
 	public void insnGoto(Node node, BasicBlock target)
@@ -191,9 +145,9 @@ public class BasicBlock implements Comparable<BasicBlock>
 		addInstruction(new DiscardInstruction(node));
 	}
 	
-	public void insnFunctionCall(Node node, int args)
+	public void insnDirectFunctionCall(Node node, Function function, int args)
 	{
-		addInstruction(new FunctionCallInstruction(node, args));
+		addInstruction(new DirectFunctionCallInstruction(node, function, args));
 	}
 
 	public void insnMethodCall(Node node, IdentifierNode method, int args)
@@ -201,14 +155,14 @@ public class BasicBlock implements Comparable<BasicBlock>
 		addInstruction(new MethodCallInstruction(node, method, args));
 	}
 
-	public void insnGetGlobalVariable(Node node, GlobalVariable var)
+	public void insnGetLocal(Node node, Variable var)
 	{
-		addInstruction(new GetGlobalVariableInstruction(node, var));
+		addInstruction(new GetLocalInstruction(node, var));
 	}
 	
-	public void insnGetLocalVariable(Node node, LocalVariable var)
+	public void insnGetUpvalue(Node node, Constructor c, Variable var)
 	{
-		addInstruction(new GetLocalVariableInstruction(node, var));
+		addInstruction(new GetUpvalueInstruction(node, c, var));
 	}
 	
 	public void insnListConstructor(Node node, int length)

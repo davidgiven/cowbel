@@ -22,7 +22,6 @@ import com.cowlark.sake.ast.nodes.VarDeclarationNode;
 import com.cowlark.sake.ast.nodes.WhileStatementNode;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.symbols.Function;
-import com.cowlark.sake.symbols.LocalSymbolStorage;
 import com.cowlark.sake.symbols.Symbol;
 import com.cowlark.sake.types.BooleanType;
 import com.cowlark.sake.types.FunctionType;
@@ -80,8 +79,7 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		ExpressionNode value = node.getValue();
 		Type valuetype = value.calculateType();
 		
-		LocalSymbolStorage storage = (LocalSymbolStorage) node.getScope().getSymbolStorage();
-		Function function = storage.getDefiningFunction();
+		Function function = node.getScope().getFunctionScope().getFunction();
 		FunctionType functiontype = (FunctionType) function.getSymbolType();
 		Type returntype = functiontype.getReturnType();
 		
@@ -94,8 +92,7 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 	{
 		Type valuetype = VoidType.create();
 		
-		LocalSymbolStorage storage = (LocalSymbolStorage) node.getScope().getSymbolStorage();
-		Function function = storage.getDefiningFunction();
+		Function function = node.getScope().getFunctionScope().getFunction();
 		FunctionType functiontype = (FunctionType) function.getSymbolType();
 		Type returntype = functiontype.getReturnType();
 		

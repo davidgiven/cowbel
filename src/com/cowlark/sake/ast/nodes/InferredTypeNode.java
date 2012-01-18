@@ -20,6 +20,12 @@ public class InferredTypeNode extends TypeNode
 	}
 	
 	@Override
+	public String getShortDescription()
+	{
+		return getType().toString();
+	}
+	
+	@Override
 	public void visit(Visitor visitor) throws CompilationException
 	{
 		visitor.visit(this);

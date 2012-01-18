@@ -3,9 +3,11 @@ package com.cowlark.sake;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import com.cowlark.sake.ast.IsCallable;
 import com.cowlark.sake.ast.SimpleVisitor;
 import com.cowlark.sake.ast.nodes.ArrayConstructorNode;
 import com.cowlark.sake.ast.nodes.BooleanConstantNode;
+import com.cowlark.sake.ast.nodes.DirectFunctionCallNode;
 import com.cowlark.sake.ast.nodes.DummyExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
@@ -20,6 +22,7 @@ import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.errors.FunctionParameterMismatch;
 import com.cowlark.sake.errors.TypesNotCompatibleException;
 import com.cowlark.sake.methods.Method;
+import com.cowlark.sake.symbols.Function;
 import com.cowlark.sake.symbols.Symbol;
 import com.cowlark.sake.types.ArrayType;
 import com.cowlark.sake.types.BooleanType;
@@ -75,7 +78,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		throw new AttemptToCallNonFunctionTypeException(expression);
 	}
 	
-	private static boolean compareArgumentTypes(FunctionCallNode node,
+	private static boolean compare_argument_types(Node node,
 			List<Type> funclist, List<Type> calllist) throws CompilationException
 	{
 		if (funclist.size() != calllist.size())
@@ -99,10 +102,9 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		return true;	
 	}
 	
-	public void visit(FunctionCallNode node) throws CompilationException
+	private <T extends ExpressionNode & IsCallable> void validate_function_call(
+			T node, FunctionType functionType) throws CompilationException
 	{
-		ExpressionNode function = node.getFunction();
-		FunctionType functionType = get_function_type(function);
 		List<Type> functionArgumentTypes = functionType.getArgumentTypes();
 		List<ExpressionNode> callArguments = node.getArguments();
 		
@@ -113,11 +115,29 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 			callArgumentTypes.add(t);
 		}
 		
-		if (!compareArgumentTypes(node, functionArgumentTypes, callArgumentTypes))
+		if (!compare_argument_types(node, functionArgumentTypes, callArgumentTypes))
 			throw new FunctionParameterMismatch(node, functionArgumentTypes,
 					callArgumentTypes);
 		
 		node.setType(functionType.getReturnType());
+	}
+	
+	public void visit(FunctionCallNode node) throws CompilationException
+	{
+		assert(false);
+		/*
+		ExpressionNode function = node.getFunction();
+		FunctionType functionType = get_function_type(function);
+		validate_function_call(node, function);
+		*/
+	}
+	
+	public void visit(DirectFunctionCallNode node) throws CompilationException
+	{
+		Symbol symbol = node.getSymbol();
+		assert(symbol instanceof Function);
+		Function function = (Function) symbol;
+		validate_function_call(node, (FunctionType) function.getSymbolType());
 	}
 	
 	@Override

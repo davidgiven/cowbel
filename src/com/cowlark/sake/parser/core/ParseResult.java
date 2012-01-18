@@ -27,9 +27,14 @@ public abstract class ParseResult extends Location
 		return _end;
 	}
 	
+	private String _text;
 	public String getText()
 	{
-		int len = calculateLengthTo(end());
-		return getText(len);
+		if (_text == null)
+		{
+			int len = calculateLengthTo(end());
+			_text = getText(len);
+		}
+		return _text;
 	}
 }

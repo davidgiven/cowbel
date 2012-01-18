@@ -1,8 +1,7 @@
-package com.cowlark.sake.parser.errors;
+package com.cowlark.sake.errors;
 
 import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
-import com.cowlark.sake.errors.CompilationException;
 
 public class IdentifierNotFound extends CompilationException
 {

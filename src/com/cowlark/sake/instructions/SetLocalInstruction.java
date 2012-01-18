@@ -1,33 +1,39 @@
 package com.cowlark.sake.instructions;
 
 import com.cowlark.sake.ast.nodes.Node;
-import com.cowlark.sake.symbols.GlobalVariable;
+import com.cowlark.sake.symbols.Variable;
 
-public class SetGlobalVariableInstruction extends Instruction
+public class SetLocalInstruction extends Instruction
 {
-	private GlobalVariable _var;
+	private Variable _var;
 	
-	public SetGlobalVariableInstruction(Node node, GlobalVariable var)
-	{
+	public SetLocalInstruction(Node node, Variable var)
+    {
 		super(node, 1);
 		_var = var;
-	}	
+    }
 	
-	public GlobalVariable getVariable()
+	public Variable getVariable()
 	{
 		return _var;
 	}
-
+	
 	@Override
 	protected String getInstructionName()
 	{
-	    return "SetGlobalVariable";
+	    return "SetLocal";
 	}
 	
 	@Override
 	protected String getShortDescription()
 	{
 	    return _var.getSymbolName().getText();
+	}
+
+	@Override
+	public String toString()
+	{
+		return "SetLocal " + _var.getSymbolName().getText();
 	}
 	
 	public void visit(InstructionVisitor visitor)

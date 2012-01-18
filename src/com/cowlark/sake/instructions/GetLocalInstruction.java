@@ -1,19 +1,19 @@
 package com.cowlark.sake.instructions;
 
 import com.cowlark.sake.ast.nodes.Node;
-import com.cowlark.sake.symbols.LocalVariable;
+import com.cowlark.sake.symbols.Variable;
 
-public class GetLocalVariableInstruction extends Instruction
+public class GetLocalInstruction extends Instruction
 {
-	private LocalVariable _var;
+	private Variable _var;
 	
-	public GetLocalVariableInstruction(Node node, LocalVariable var)
+	public GetLocalInstruction(Node node, Variable var)
 	{
 		super(node, 0);
 		_var = var;
 	}	
 	
-	public LocalVariable getVariable()
+	public Variable getVariable()
 	{
 		return _var;
 	}
@@ -21,7 +21,7 @@ public class GetLocalVariableInstruction extends Instruction
 	@Override
 	protected String getInstructionName()
 	{
-	    return "GetLocalVariable";
+	    return "GetLocal";
 	}
 	
 	@Override

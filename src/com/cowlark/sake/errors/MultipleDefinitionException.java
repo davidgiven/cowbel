@@ -1,11 +1,10 @@
 package com.cowlark.sake.errors;
 
-import com.cowlark.sake.ast.nodes.IdentifierNode;
+import com.cowlark.sake.ast.HasNode;
 
 public class MultipleDefinitionException extends CompilationException
 {
-	public MultipleDefinitionException(IdentifierNode old,
-			IdentifierNode current)
+	public MultipleDefinitionException(HasNode old, HasNode current)
     {
     }
 }

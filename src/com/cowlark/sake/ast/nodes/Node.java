@@ -126,5 +126,10 @@ public abstract class Node extends Token
 		_scope = scope;
 	}
 	
+	public boolean isLoopingNode()
+	{
+		return false;
+	}
+	
 	public abstract void visit(Visitor visitor) throws CompilationException;
 }

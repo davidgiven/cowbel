@@ -1,6 +1,7 @@
 package com.cowlark.sake.parser.parsers;
 
 import java.util.LinkedList;
+import com.cowlark.sake.ast.nodes.DirectFunctionCallNode;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
 import com.cowlark.sake.ast.nodes.IdentifierNode;
@@ -79,10 +80,50 @@ public class ExpressionHighParser extends Parser
 				(ExpressionNode)seed, args);
 	}
 	
+	private ParseResult parseDirectFunctionCall(Location location)
+	{
+		LinkedList<ExpressionNode> args = new LinkedList<ExpressionNode>();
+		
+		ParseResult identifierpr = IdentifierParser.parse(location);
+		if (identifierpr.failed())
+			return identifierpr;
+		
+		ParseResult pr = OpenParenthesisParser.parse(identifierpr.end());
+		if (pr.failed())
+			return pr;
+		
+		pr = CloseParenthesisParser.parse(pr.end());
+		if (pr.failed())
+		{
+			/* Argument list is not empty. */
+			
+			for (;;)
+			{
+				ParseResult arg = ExpressionLowParser.parse(pr.end());
+				if (arg.failed())
+					return arg;
+				args.addLast((ExpressionNode)arg);
+				
+				pr = CloseParenthesisParser.parse(arg.end());
+				if (pr.success())
+					break;
+				
+				pr = CommaParser.parse(arg.end());
+				if (pr.failed())
+					return pr;
+			}
+		}
+		
+		return new DirectFunctionCallNode(location, pr.end(),
+				(IdentifierNode)identifierpr, args);
+	}
+	
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
-		ParseResult seed = ExpressionLeafParser.parse(location);
+		ParseResult seed = parseDirectFunctionCall(location);
+		if (seed.failed())
+			seed = ExpressionLeafParser.parse(location);
 		if (seed.failed())
 			return seed;
 		

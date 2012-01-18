@@ -82,9 +82,19 @@ public class Location implements Comparable<Location>
 		return other._offset - _offset;
 	}
 	
+	
+	private String shorten(int len)
+	{
+		int remaining = _data.length() - _offset;
+		if (remaining <= len)
+			return _data.substring(_offset, _offset+remaining);
+		else
+			return _data.substring(_offset, _offset+len) + "...";
+	}
+	
 	@Override
 	public String toString()
 	{
-		return getClass().getName()+"=("+locationAsString()+"='"+getText(16)+"...')";
+		return getClass().toString() + "=("+locationAsString()+"='" + shorten(16) + "')";
 	}
 }

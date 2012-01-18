@@ -1,7 +1,7 @@
 package com.cowlark.sake.parser.parsers;
 
 import java.util.ArrayList;
-import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
+import com.cowlark.sake.ast.nodes.FunctionScopeConstructorNode;
 import com.cowlark.sake.ast.nodes.StatementListNode;
 import com.cowlark.sake.ast.nodes.StatementNode;
 import com.cowlark.sake.parser.core.Location;
@@ -21,7 +21,7 @@ public class ProgramParser extends Parser
 			if (pr1.success())
 				break;
 			
-			ParseResult pr2 = TopLevelStatementParser.parse(n);
+			ParseResult pr2 = FunctionStatementParser.parse(n);
 			if (pr2.failed())
 				return pr2;
 			
@@ -29,7 +29,7 @@ public class ProgramParser extends Parser
 			n = pr2.end();
 		}
 		
-		return new ScopeConstructorNode(location, n,
+		return new FunctionScopeConstructorNode(location, n,
 				new StatementListNode(location, n, statements)); 
 	}
 }

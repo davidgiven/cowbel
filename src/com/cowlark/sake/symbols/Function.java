@@ -1,12 +1,16 @@
 package com.cowlark.sake.symbols;
 
+import java.util.List;
 import com.cowlark.sake.BasicBlock;
 import com.cowlark.sake.BasicBlockBuilderVisitor;
+import com.cowlark.sake.Constructor;
+import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
+import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.types.FunctionType;
 
-public class Function extends GlobalVariable
+public class Function extends Symbol
 {
 	private BasicBlock _entryBB;
 	private BasicBlock _exitBB;
@@ -42,5 +46,40 @@ public class Function extends GlobalVariable
 		node.getFunctionBody().visit(visitor);
 		
 		visitor.getCurrentBasicBlock().insnFunctionExit(node);
+	}
+	
+	public static String calculateMangledName(IdentifierNode name, int arguments)
+	{
+		return name.getText() + "." + arguments;
+	}
+	
+	private String _mangled_name;
+	@Override
+	public String getMangledName()
+	{
+		if (_mangled_name == null)
+		{
+			FunctionType type = (FunctionType) getSymbolType();
+			
+			_mangled_name = calculateMangledName(getSymbolName(),
+					type.getArgumentTypes().size());
+		}
+		
+		return _mangled_name;
+	}
+	
+	@Override
+	public boolean collidesWith(Symbol other)
+	{
+		if (other instanceof Variable)
+			return getName().equals(other.getName());
+		else
+			return getMangledName().equals(other.getMangledName());
+	}
+	
+	@Override
+	public void addToConstructor(Constructor constructor)
+	{
+		constructor.addFunction(this);
 	}
 }

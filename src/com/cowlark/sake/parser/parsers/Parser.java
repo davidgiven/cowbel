@@ -20,7 +20,6 @@ public abstract class Parser
 	public static ParenthesisedExpressionParser ParenthesisedExpressionParser = new ParenthesisedExpressionParser();
 	public static ProgramParser ProgramParser = new ProgramParser();
 	public static FunctionStatementParser FunctionStatementParser = new FunctionStatementParser();
-	public static TopLevelStatementParser TopLevelStatementParser = new TopLevelStatementParser();
 	public static VarDeclParser VarDeclParser = new VarDeclParser();
 	public static TypeParser TypeParser = new TypeParser();
 	public static FunctionHeaderParser FunctionHeaderParser = new FunctionHeaderParser();

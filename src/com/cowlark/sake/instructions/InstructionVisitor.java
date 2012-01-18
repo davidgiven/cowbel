@@ -32,22 +32,22 @@ public class InstructionVisitor
 		visit((Instruction) insn);
 	}
 	
-	public void visit(GetGlobalVariableInstruction insn)
+	public void visit(GetUpvalueInstruction insn)
 	{
 		visit((Instruction) insn);
 	}
 	
-	public void visit(SetGlobalVariableInstruction insn)
+	public void visit(SetUpvalueInstruction insn)
 	{
 		visit((Instruction) insn);
 	}
 	
-	public void visit(GetLocalVariableInstruction insn)
+	public void visit(GetLocalInstruction insn)
 	{
 		visit((Instruction) insn);
 	}
 	
-	public void visit(SetLocalVariableInInstruction insn)
+	public void visit(SetLocalInstruction insn)
 	{
 		visit((Instruction) insn);
 	}
@@ -57,7 +57,7 @@ public class InstructionVisitor
 		visit((Instruction) insn);
 	}
 	
-	public void visit(FunctionCallInstruction insn)
+	public void visit(DirectFunctionCallInstruction insn)
 	{
 		visit((Instruction) insn);
 	}

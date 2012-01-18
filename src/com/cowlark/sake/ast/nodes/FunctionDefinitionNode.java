@@ -11,7 +11,7 @@ public class FunctionDefinitionNode extends StatementNode implements HasSymbol
 	private Symbol _symbol;
 	
 	public FunctionDefinitionNode(Location start, Location end,
-			FunctionHeaderNode header, ScopeConstructorNode body)
+			FunctionHeaderNode header, FunctionScopeConstructorNode body)
     {
 		super(start, end);
 		addChild(header);
@@ -29,9 +29,9 @@ public class FunctionDefinitionNode extends StatementNode implements HasSymbol
 		return (FunctionHeaderNode) getChild(0);
 	}
 	
-	public ScopeConstructorNode getFunctionBody()
+	public FunctionScopeConstructorNode getFunctionBody()
 	{
-		return (ScopeConstructorNode) getChild(1);
+		return (FunctionScopeConstructorNode) getChild(1);
 	}
 	
 	@Override

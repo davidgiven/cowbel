@@ -36,4 +36,10 @@ public class DoWhileStatementNode extends StatementNode
 	{
 		visitor.visit(this);
 	}
+	
+	@Override
+	public boolean isLoopingNode()
+	{
+	    return true;
+	}
 }

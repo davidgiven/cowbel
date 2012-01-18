@@ -43,7 +43,7 @@ public class FunctionStatementParser extends Parser
 			return (ScopeConstructorNode) pr7;
 		}
 		
-		ParseResult pr8 = ExpressionStatementParser.parse(location);
+		ParseResult pr8 = FunctionDefinitionParser.parse(location);
 		if (pr8.success())
 			return pr8;
 		
@@ -67,7 +67,11 @@ public class FunctionStatementParser extends Parser
 		if (pr13.success())
 			return pr13;
 		
+		ParseResult pr14 = ExpressionStatementParser.parse(location);
+		if (pr14.success())
+			return pr14;
+		
 		return combineParseErrors(pr1, pr2, pr3, pr4, pr5, pr6, pr7, pr8, pr9,
-				pr10, pr11, pr12, pr13);
+				pr10, pr11, pr12, pr13, pr14);
 	}
 }

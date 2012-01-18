@@ -3,6 +3,7 @@ package com.cowlark.sake;
 import java.util.TreeSet;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.FunctionHeaderNode;
+import com.cowlark.sake.ast.nodes.FunctionScopeConstructorNode;
 import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
@@ -19,16 +20,16 @@ import com.cowlark.sake.parser.core.MutableLocation;
 import com.cowlark.sake.parser.core.ParseResult;
 import com.cowlark.sake.parser.parsers.Parser;
 import com.cowlark.sake.symbols.Function;
-import com.cowlark.sake.symbols.GlobalSymbolStorage;
 
 public class Compiler
 {
 	private CompilerListener _listener;
 	private Backend _backend;
 	private Location _input;
-	private ParseResult _ast;
-	private GlobalSymbolStorage _globals;
 	private Function _mainFunction;
+	private TreeSet<Function> _functions;
+	private TreeSet<Constructor> _constructors;
+	private FunctionScopeConstructorNode _ast;
 	
 	public Compiler()
     {
@@ -58,16 +59,16 @@ public class Compiler
 	public void compile() throws CompilationException
 	{
 		_listener.onParseBegin();
-		_ast = Parser.ProgramParser.parse(_input);
+		ParseResult pr = Parser.ProgramParser.parse(_input);
 		_listener.onParseEnd();
 		
-		if (_ast.failed())
+		if (pr.failed())
 		{
-			FailedParse fp = (FailedParse) _ast;
+			FailedParse fp = (FailedParse) pr;
 			throw new FailedParseException(fp);
 		}
 
-		ScopeConstructorNode ast = getAst();
+		_ast = (FunctionScopeConstructorNode) pr;
 		
 		/* Analyse symbol tables. */
 		
@@ -84,17 +85,22 @@ public class Compiler
 					new ParameterDeclarationListNode(loc, loc),
 					new VoidTypeNode(loc, loc));
 			FunctionDefinitionNode toplevelnode = new FunctionDefinitionNode(
-					loc, loc, toplevelnodeheader, ast);
+					loc, loc, toplevelnodeheader, _ast);
 			_mainFunction = new Function(toplevelnode);
+			_ast.setFunction(_mainFunction);
 
-			/* Override the root scope's storage. */
-			_globals = new GlobalSymbolStorage();
-			ast.setSymbolStorage(_globals);
+			_ast.visit(new RecordVariableDeclarationsVisitor(_ast));
+			_ast.visit(new ResolveVariableReferencesVisitor());
 			
-			ast.visit(new RecordVariableDeclarationsVisitor(ast));
-			ast.visit(new ResolveVariableReferencesVisitor());
+			_functions = new TreeSet<Function>();
+			_ast.visit(new AssignFunctionsToScopesVisitor(_functions));
+			
+			_constructors = new TreeSet<Constructor>();
+			_ast.visit(new AssignStackframesToScopesVisitor(_constructors));
+			
+			_ast.visit(new AssignVariablesToConstructorsVisitor());
 	
-			_globals.addSymbol(_mainFunction);
+			_ast.addSymbol(_mainFunction);
 			toplevelnode.setSymbol(_mainFunction);
 		}
 		_listener.onSymbolTableAnalysisEnd();
@@ -103,12 +109,12 @@ public class Compiler
 		
 		_listener.onTypeCheckBegin();
 		{
-			ast.checkTypes();
-			for (Function f : _globals.getFunctions())
+			_ast.checkTypes();
+			for (Function f : _functions)
 			{
 				FunctionDefinitionNode node = (FunctionDefinitionNode) f.getNode();
 				StatementNode body = node.getFunctionBody();
-				if (body != ast)
+				if (body != _ast)
 					body.checkTypes();
 			}
 		}
@@ -118,32 +124,17 @@ public class Compiler
 		
 		_listener.onBasicBlockAnalysisBegin();
 		
-		for (Function f : _globals.getFunctions())
+		for (Function f : _functions)
 			f.buildBasicBlocks();
 		
 		_listener.onBasicBlockAnalysisEnd();
 		
-		/* Dataflow analysis. */
-		
-		_listener.onDataflowAnalysisBegin();
-		{
-			for (Function f : _globals.getFunctions())
-				DataflowAnalyser.initialiseFunction(f);
-			
-			DataflowAnalyser da = new DataflowAnalyser();
-			do
-			{
-				da.reset();
-				visit(da);
-			}
-			while (!da.isFinished());
-		}
-		_listener.onDataflowAnalysisEnd();
-		
 		/* Code generation. */
 		
 		_listener.onCodeGenerationBegin();
-		for (Function f : _globals.getFunctions())
+		for (Constructor c : _constructors)
+			_backend.visit(c);
+		for (Function f : _functions)
 			_backend.compileFunction(f);
 		_listener.onCodeGenerationEnd();
 	}
@@ -153,7 +144,7 @@ public class Compiler
 		TreeSet<BasicBlock> pending = new TreeSet<BasicBlock>();
 		TreeSet<BasicBlock> seen = new TreeSet<BasicBlock>();
 		
-		for (Function f : _globals.getFunctions())
+		for (Function f : _functions)
 		{
 			pending.add(f.getEntryBB());
 			seen.add(f.getEntryBB());
@@ -204,7 +195,7 @@ public class Compiler
 		TreeSet<BasicBlock> pending = new TreeSet<BasicBlock>();
 		TreeSet<BasicBlock> seen = new TreeSet<BasicBlock>();
 		
-		for (Function f : _globals.getFunctions())
+		for (Function f : _functions)
 		{
 			System.out.println(f.toString());
 			
@@ -236,6 +227,16 @@ public class Compiler
 					System.out.println(insn.toString());
 				}
 			}
+		}
+	}
+	
+	public void dumpConstructors()
+	{
+		for (Constructor c : _constructors)
+		{
+			System.out.println(c.toString());
+			c.dumpDetails();
+			System.out.println("");
 		}
 	}
 }

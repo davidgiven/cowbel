@@ -6,12 +6,12 @@ import com.cowlark.sake.ast.nodes.ArrayConstructorNode;
 import com.cowlark.sake.ast.nodes.BooleanConstantNode;
 import com.cowlark.sake.ast.nodes.BreakStatementNode;
 import com.cowlark.sake.ast.nodes.ContinueStatementNode;
+import com.cowlark.sake.ast.nodes.DirectFunctionCallNode;
 import com.cowlark.sake.ast.nodes.DoWhileStatementNode;
 import com.cowlark.sake.ast.nodes.DummyExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.ast.nodes.ForStatementNode;
-import com.cowlark.sake.ast.nodes.FunctionCallNode;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.GotoStatementNode;
 import com.cowlark.sake.ast.nodes.IfElseStatementNode;
@@ -31,9 +31,8 @@ import com.cowlark.sake.ast.nodes.WhileStatementNode;
 import com.cowlark.sake.errors.BreakOrContinueNotInLoopException;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.symbols.Function;
-import com.cowlark.sake.symbols.GlobalVariable;
-import com.cowlark.sake.symbols.LocalVariable;
 import com.cowlark.sake.symbols.Symbol;
+import com.cowlark.sake.symbols.Variable;
 
 public class BasicBlockBuilderVisitor extends SimpleVisitor
 {
@@ -74,20 +73,18 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	@Override
 	public void visit(VarAssignmentNode node) throws CompilationException
 	{
-		Symbol symbol = node.getSymbol();
-		if (symbol instanceof GlobalVariable)
+		Variable var = (Variable) node.getSymbol();
+		Constructor constructor = var.getConstructor();
+		
+		if (constructor.isStackVariable(var))
 		{
-			_currentBB.insnSetGlobalVariable(node, (GlobalVariable) symbol);
+			_currentBB.insnSetUpvalue(node, constructor, var);
 			node.getExpression().visit(this);
 		}
 		else
 		{
-			BasicBlock nextbb = new BasicBlock(_function);
-			_currentBB.insnSetLocalVariableIn(node, (LocalVariable) symbol, nextbb);
+			_currentBB.insnSetLocal(node, var);
 			node.getExpression().visit(this);
-			_currentBB.terminate();
-			
-			_currentBB = nextbb;
 		}
 
 	}
@@ -286,12 +283,35 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	}
 	
 	@Override
-	public void visit(FunctionCallNode node) throws CompilationException
+	public void visit(DirectFunctionCallNode node) throws CompilationException
 	{
 		List<ExpressionNode> arguments = node.getArguments();
+		Symbol symbol = node.getSymbol();
 		
-		_currentBB.insnFunctionCall(node, arguments.size());
-		node.getFunction().visit(this);
+		if (symbol instanceof Function)
+		{
+			/* Direct function call. */
+			
+			_currentBB.insnDirectFunctionCall(node, (Function) symbol, arguments.size());
+		}
+		else
+		{
+			/* Indirect function call. */
+			
+			assert(false);
+			/*
+			_currentBB.insnIndirectFunctionCall(node, arguments.size());
+
+			Variable var = (Variable) smybol;
+			Constructor constructor = var.getConstructor();
+			
+			if (constructor.isStackVariable(var))
+				_currentBB.insnGetUpvalue(node, constructor, var);
+			else
+				_currentBB.insnGetLocal(node, var);
+				*/
+		}
+		
 		for (Node n : arguments)
 			n.visit(this);		
 	}
@@ -316,14 +336,13 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	@Override
 	public void visit(VarReferenceNode node) throws CompilationException
 	{
-		Symbol symbol = node.getSymbol();
-		if (symbol instanceof GlobalVariable)
-			_currentBB.insnGetGlobalVariable(node, (GlobalVariable) symbol);
+		Variable var = (Variable) node.getSymbol();
+		Constructor constructor = var.getConstructor();
+		
+		if (constructor.isStackVariable(var))
+			_currentBB.insnGetUpvalue(node, constructor, var);
 		else
-		{
-			_currentBB.insnGetLocalVariable(node, (LocalVariable) symbol);
-			_currentBB.getInputVariables().add((LocalVariable) symbol);
-		}
+			_currentBB.insnGetLocal(node, var);
 	}
 	
 	@Override

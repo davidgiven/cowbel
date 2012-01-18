@@ -13,7 +13,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import com.cowlark.sake.backend.Backend;
-import com.cowlark.sake.backend.make.MakeBackend;
+import com.cowlark.sake.backend.c.CBackend;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.errors.FailedParseException;
 import com.cowlark.sake.parser.core.FailedParse;
@@ -25,6 +25,7 @@ public class Main
 	public static String Backend;
 	public static boolean DumpAST;
 	public static boolean DumpIR;
+	public static boolean DumpConstructors;
 	
 	private static void abort(String message)
 	{
@@ -59,6 +60,9 @@ public class Main
 		options.addOption("di", "dump-ir", false,
 						"dump IR code to stdout");
 
+		options.addOption("dc", "dump-constructors", false,
+						"dump constructors to stdout");
+		
 		CommandLine cli = null;
 		try
 		{
@@ -80,6 +84,7 @@ public class Main
 			
 			DumpAST = cli.hasOption("da");
 			DumpIR = cli.hasOption("di");
+			DumpConstructors = cli.hasOption("dc");
 		}
 		catch (ParseException e)
 		{
@@ -91,8 +96,8 @@ public class Main
 	
 	private static Backend createBackend(OutputStream os)
 	{
-		if (Backend.equals("make"))
-			return new MakeBackend(os);
+		if (Backend.equals("c"))
+			return new CBackend(os);
 		
 		abort("The backend '"+Backend+"' is not recognised.");
 		return null;
@@ -119,7 +124,7 @@ public class Main
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
 			Backend backend = createBackend(bos);
 			
-			backend.prologue();
+			//backend.prologue();
 
 			Compiler c = new Compiler();
 			c.setListener(new CompilerTimer());
@@ -129,6 +134,8 @@ public class Main
 
 			if (DumpAST)
 				c.getAst().dump();
+			if (DumpConstructors)
+				c.dumpConstructors();
 			if (DumpIR)
 				c.dumpBasicBlocks();
 			

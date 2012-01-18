@@ -1,11 +1,13 @@
 package com.cowlark.sake.symbols;
 
+import com.cowlark.sake.Constructor;
+import com.cowlark.sake.ast.HasNode;
 import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
 import com.cowlark.sake.types.Type;
 
-public abstract class Symbol implements Comparable<Symbol>
+public abstract class Symbol implements Comparable<Symbol>, HasNode
 {
 	private static int _globalId = 0;
 	
@@ -15,7 +17,6 @@ public abstract class Symbol implements Comparable<Symbol>
 	private IdentifierNode _name;
 	private Type _type;
 	private ScopeConstructorNode _scope;
-	private SymbolStorage _storage;
 	
 	public Symbol(Node node, IdentifierNode name, Type type)
 	{
@@ -44,6 +45,11 @@ public abstract class Symbol implements Comparable<Symbol>
 		_type = type;
 	}
 	
+	public String getName()
+	{
+		return getSymbolName().getText();
+	}
+	
 	@Override
 	public String toString()
 	{
@@ -61,9 +67,22 @@ public abstract class Symbol implements Comparable<Symbol>
 		return 0;
 	}
 
-	public void setScopeAndStorage(ScopeConstructorNode scope, SymbolStorage storage)
+	public void setScope(ScopeConstructorNode scope)
 	{
 		_scope = scope;
-		_storage = storage;
 	}
+	
+	public ScopeConstructorNode getScope()
+	{
+		return _scope;
+	}
+	
+	public Constructor getConstructor()
+	{
+		return _scope.getConstructor();
+	}
+	
+	public abstract String getMangledName();
+	public abstract boolean collidesWith(Symbol other);
+	public abstract void addToConstructor(Constructor constructor);
 }

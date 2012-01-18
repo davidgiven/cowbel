@@ -4,6 +4,7 @@ import com.cowlark.sake.ast.nodes.ArrayConstructorNode;
 import com.cowlark.sake.ast.nodes.BooleanConstantNode;
 import com.cowlark.sake.ast.nodes.BreakStatementNode;
 import com.cowlark.sake.ast.nodes.ContinueStatementNode;
+import com.cowlark.sake.ast.nodes.DirectFunctionCallNode;
 import com.cowlark.sake.ast.nodes.DoWhileStatementNode;
 import com.cowlark.sake.ast.nodes.DummyExpressionNode;
 import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
@@ -125,6 +126,11 @@ public class Visitor
 	}
 	
 	public void visit(VarReferenceNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+	
+	public void visit(DirectFunctionCallNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}

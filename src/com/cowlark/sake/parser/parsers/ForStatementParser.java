@@ -11,6 +11,7 @@ import com.cowlark.sake.ast.nodes.StatementListNode;
 import com.cowlark.sake.ast.nodes.VarAssignmentNode;
 import com.cowlark.sake.ast.nodes.VarDeclarationNode;
 import com.cowlark.sake.ast.nodes.VarReferenceNode;
+import com.cowlark.sake.ast.nodes.WhileStatementNode;
 import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.parser.core.MutableLocation;
 import com.cowlark.sake.parser.core.ParseResult;
@@ -77,34 +78,49 @@ public class ForStatementParser extends Parser
 		MutableLocation incrementmethodend = new MutableLocation(incrementmethodloc);
 		incrementmethodend.advance(1);
 
+		IdentifierNode loopcounter = IdentifierNode.createInternalIdentifier(
+				"loop counter for " + variablepr.getText());
+		
 		return new ScopeConstructorNode(location, bodypr.end(),
-				new ForStatementNode(location, bodypr.end(),
-					new StatementListNode(location, pr.end(),
-							new VarDeclarationNode(location, variablepr.end(),
-									(IdentifierNode) variablepr,
-									new InferredTypeNode(initialiserpr.start(), initialiserpr.end()),
-									(ExpressionNode) initialiserpr),
-							new VarAssignmentNode(variablepr.start(), variablepr.end(),
-									(IdentifierNode) variablepr,
-									(ExpressionNode) initialiserpr)
-					),
-					new MethodCallNode(maximumpr, maximumpr.end(),
-							new VarReferenceNode(variablepr, variablepr.end(),
-									(IdentifierNode) variablepr),
-							new IdentifierNode(comparisonmethodloc, comparisonmethodend),
-							(ExpressionNode) maximumpr
-					),
-					new VarAssignmentNode(variablepr, variablepr.end(),
-							(IdentifierNode) variablepr,
-							new MethodCallNode(maximumpr, maximumpr.end(),
-									new VarReferenceNode(variablepr, variablepr.end(),
-											(IdentifierNode) variablepr),
-									new IdentifierNode(incrementmethodloc, incrementmethodend),
-									(ExpressionNode) steppr
-							)
-					),
-					(ScopeConstructorNode) bodypr
-			)
+				new StatementListNode(location, pr.end(),
+						new VarDeclarationNode(variablepr.start(), variablepr.end(),
+								loopcounter,
+								new InferredTypeNode(initialiserpr.start(), initialiserpr.end()),
+								(ExpressionNode) initialiserpr),
+						new VarAssignmentNode(variablepr.start(), variablepr.end(),
+								loopcounter,
+								(ExpressionNode) initialiserpr),
+						new WhileStatementNode(location, pr.end(),
+								new MethodCallNode(maximumpr, maximumpr.end(),
+										new VarReferenceNode(variablepr, variablepr.end(),
+												loopcounter),
+										new IdentifierNode(comparisonmethodloc, comparisonmethodend),
+										(ExpressionNode) maximumpr
+								),
+								new ScopeConstructorNode(bodypr, bodypr.end(),
+										new StatementListNode(bodypr, bodypr.end(),
+												new VarDeclarationNode(location, variablepr.end(),
+														(IdentifierNode) variablepr,
+														new InferredTypeNode(initialiserpr.start(), initialiserpr.end()),
+														(ExpressionNode) initialiserpr),
+												new VarAssignmentNode(variablepr.start(), variablepr.end(),
+														(IdentifierNode) variablepr,
+														new VarReferenceNode(variablepr.start(), variablepr.end(),
+																loopcounter)),
+												(ScopeConstructorNode) bodypr,
+												new VarAssignmentNode(variablepr, variablepr.end(),
+														(IdentifierNode) variablepr,
+														new MethodCallNode(maximumpr, maximumpr.end(),
+																new VarReferenceNode(variablepr, variablepr.end(),
+																		loopcounter),
+																new IdentifierNode(incrementmethodloc, incrementmethodend),
+																(ExpressionNode) steppr
+														)
+												)
+										)
+								)
+						)
+				)
 		);
 	}
 }

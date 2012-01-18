@@ -1,10 +1,12 @@
 package com.cowlark.sake;
 
+import com.cowlark.sake.ast.HasNode;
 import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.LabelStatementNode;
+import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.symbols.Function;
 
-public class Label
+public class Label implements HasNode
 {
 	private LabelStatementNode _node;
 	private BasicBlock _bb;
@@ -13,6 +15,12 @@ public class Label
     {
 		_node = node;
     }
+	
+	@Override
+	public Node getNode()
+	{
+	    return _node;
+	}
 	
 	public IdentifierNode getLabelName()
 	{
