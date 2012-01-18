@@ -24,7 +24,7 @@ public class SetUpvalueInstruction extends Instruction
 	@Override
 	protected String getInstructionName()
 	{
-	    return "SetUpvale";
+	    return "SetUpvalue";
 	}
 	
 	@Override
