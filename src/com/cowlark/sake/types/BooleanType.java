@@ -19,4 +19,10 @@ public class BooleanType extends PrimitiveType
 	{
 	    return "boolean";
 	}
+	
+	@Override
+	public void visit(TypeVisitor visitor)
+	{
+	    visitor.visit(this);	    
+	}
 }

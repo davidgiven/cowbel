@@ -12,6 +12,11 @@ public class InstructionVisitor
 	{
 	}
 	
+	public void visit(ConstructInstruction insn)
+	{
+		visit((Instruction) insn);
+	}
+		
 	public void visit(FunctionExitInstruction insn)
 	{
 		visit((Instruction) insn);

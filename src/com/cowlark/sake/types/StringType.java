@@ -19,4 +19,10 @@ public class StringType extends PrimitiveType
 	{
 	    return "string";
 	}
+	
+	@Override
+	public void visit(TypeVisitor visitor)
+	{
+	    visitor.visit(this);	    
+	}
 }

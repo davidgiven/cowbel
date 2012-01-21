@@ -11,6 +11,7 @@ import com.cowlark.sake.ast.nodes.ExpressionStatementNode;
 import com.cowlark.sake.ast.nodes.ForStatementNode;
 import com.cowlark.sake.ast.nodes.FunctionCallNode;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
+import com.cowlark.sake.ast.nodes.FunctionScopeConstructorNode;
 import com.cowlark.sake.ast.nodes.GotoStatementNode;
 import com.cowlark.sake.ast.nodes.IfElseStatementNode;
 import com.cowlark.sake.ast.nodes.IfStatementNode;

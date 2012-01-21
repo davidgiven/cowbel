@@ -64,4 +64,11 @@ public class TypeVariable extends Type
 		assert(_realType != null);
 		return _realType.lookupMethod(node, id);
 	}
+	
+	@Override
+	public void visit(TypeVisitor visitor)
+	{
+		assert(_realType != null);
+		_realType.visit(visitor);
+	}
 }

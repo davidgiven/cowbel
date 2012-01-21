@@ -1,5 +1,7 @@
 package com.cowlark.sake;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.TreeSet;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.FunctionHeaderNode;
@@ -56,6 +58,16 @@ public class Compiler
 		return (ScopeConstructorNode) _ast;
 	}
 	
+	public Set<Function> getFunctions()
+	{
+	    return Collections.unmodifiableSet(_functions);
+    }
+	
+	public Set<Constructor> getConstructors()
+	{
+	    return Collections.unmodifiableSet(_constructors);
+    }
+	
 	public void compile() throws CompilationException
 	{
 		_listener.onParseBegin();
@@ -96,7 +108,7 @@ public class Compiler
 			_ast.visit(new AssignFunctionsToScopesVisitor(_functions));
 			
 			_constructors = new TreeSet<Constructor>();
-			_ast.visit(new AssignStackframesToScopesVisitor(_constructors));
+			_ast.visit(new AssignConstructorsToScopesVisitor(_constructors));
 			
 			_ast.visit(new AssignVariablesToConstructorsVisitor());
 	
@@ -132,10 +144,12 @@ public class Compiler
 		/* Code generation. */
 		
 		_listener.onCodeGenerationBegin();
+		_backend.prologue();
 		for (Constructor c : _constructors)
 			_backend.visit(c);
 		for (Function f : _functions)
 			_backend.compileFunction(f);
+		_backend.epilogue();
 		_listener.onCodeGenerationEnd();
 	}
 

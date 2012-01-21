@@ -71,4 +71,10 @@ public class ArrayType extends Type
 			throw new NoSuchMethodException(node, this, id);
 		return method;
 	}
+	
+	@Override
+	public void visit(TypeVisitor visitor)
+	{
+	    visitor.visit(this);	    
+	}
 }

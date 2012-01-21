@@ -79,6 +79,8 @@ public abstract class Symbol implements Comparable<Symbol>, HasNode
 	
 	public Constructor getConstructor()
 	{
+		if (_scope == null)
+			return null;
 		return _scope.getConstructor();
 	}
 	

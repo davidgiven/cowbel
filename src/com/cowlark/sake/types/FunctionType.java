@@ -86,4 +86,10 @@ public class FunctionType extends PrimitiveType
 	{
 		throw new NoSuchMethodException(node, this, id);
 	}
+	
+	@Override
+	public void visit(TypeVisitor visitor)
+	{
+	    visitor.visit(this);	    
+	}
 }

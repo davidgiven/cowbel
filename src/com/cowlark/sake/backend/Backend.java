@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import org.apache.commons.io.IOUtils;
 import com.cowlark.sake.BasicBlock;
 import com.cowlark.sake.Constructor;
+import com.cowlark.sake.Compiler;
 import com.cowlark.sake.instructions.Instruction;
 import com.cowlark.sake.instructions.InstructionVisitor;
 import com.cowlark.sake.symbols.Function;
@@ -19,14 +20,21 @@ public abstract class Backend extends InstructionVisitor
 	private TreeSet<BasicBlock> _seen = new TreeSet<BasicBlock>();
 	
 	private Iterator<Instruction> _iterator;
+	private Compiler _compiler;
 	private PrintStream _stream;
 	private BasicBlock _currentbb;
 	private Throwable _error;
 	
-	public Backend(OutputStream stream)
+	public Backend(Compiler compiler, OutputStream stream)
     {
+		_compiler = compiler;
 		_stream = new PrintStream(stream);
     }
+	
+	protected Compiler getCompiler()
+	{
+		return _compiler;
+	}
 	
 	protected BasicBlock getCurrentBasicBlock()
 	{

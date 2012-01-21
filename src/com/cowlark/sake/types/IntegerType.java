@@ -19,4 +19,10 @@ public class IntegerType extends PrimitiveType
 	{
 	    return "integer";
 	}
+	
+	@Override
+	public void visit(TypeVisitor visitor)
+	{
+	    visitor.visit(this);	    
+	}
 }

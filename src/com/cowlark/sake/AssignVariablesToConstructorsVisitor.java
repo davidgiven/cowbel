@@ -1,6 +1,7 @@
 package com.cowlark.sake;
 
 import com.cowlark.sake.ast.RecursiveVisitor;
+import com.cowlark.sake.ast.nodes.FunctionScopeConstructorNode;
 import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.symbols.Symbol;

@@ -62,6 +62,10 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	@Override
 	public void visit(ScopeConstructorNode node) throws CompilationException
 	{
+		ScopeConstructorNode parent = node.getScope();
+		if ((parent == null) || (node.getConstructor() != parent.getConstructor())) 
+			_currentBB.insnConstruct(node, node.getConstructor());
+		
 		node.getChild().visit(this);
 	}
 	

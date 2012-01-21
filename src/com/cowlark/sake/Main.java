@@ -94,10 +94,10 @@ public class Main
 		return cli;
 	}
 	
-	private static Backend createBackend(OutputStream os)
+	private static Backend createBackend(Compiler compiler, OutputStream os)
 	{
 		if (Backend.equals("c"))
-			return new CBackend(os);
+			return new CBackend(compiler, os);
 		
 		abort("The backend '"+Backend+"' is not recognised.");
 		return null;
@@ -122,11 +122,11 @@ public class Main
 			
 			FileOutputStream fos = new FileOutputStream(OutputFile);
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
-			Backend backend = createBackend(bos);
 			
 			//backend.prologue();
 
 			Compiler c = new Compiler();
+			Backend backend = createBackend(c, bos);
 			c.setListener(new CompilerTimer());
 			c.setInput(loc);
 			c.setBackend(backend);

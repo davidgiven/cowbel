@@ -8,6 +8,7 @@ import com.cowlark.sake.ast.nodes.IdentifierNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.instructions.ArrayConstructorInstruction;
 import com.cowlark.sake.instructions.BooleanConstantInstruction;
+import com.cowlark.sake.instructions.ConstructInstruction;
 import com.cowlark.sake.instructions.DirectFunctionCallInstruction;
 import com.cowlark.sake.instructions.DiscardInstruction;
 import com.cowlark.sake.instructions.FunctionExitInstruction;
@@ -41,6 +42,11 @@ public class BasicBlock implements Comparable<BasicBlock>
     {
 		_function = function;
     }
+	
+	public Function getFunction()
+	{
+		return _function;
+	}
 	
 	@Override
 	public String toString()
@@ -117,6 +123,11 @@ public class BasicBlock implements Comparable<BasicBlock>
 		addInstruction(new SetReturnValueInstruction(node));
 	}
 	
+	public void insnConstruct(Node node, Constructor constructor)
+	{
+		addInstruction(new ConstructInstruction(node, constructor));
+	}
+		
 	public void insnSetLocal(Node node, Variable var)
 	{
 		addInstruction(new SetLocalInstruction(node, var));

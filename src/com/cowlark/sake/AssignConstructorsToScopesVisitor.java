@@ -9,11 +9,11 @@ import com.cowlark.sake.ast.nodes.WhileStatementNode;
 import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.symbols.Function;
 
-public class AssignStackframesToScopesVisitor extends RecursiveVisitor
+public class AssignConstructorsToScopesVisitor extends RecursiveVisitor
 {
 	private Set<Constructor> _constructors;
 	
-	public AssignStackframesToScopesVisitor(Set<Constructor> constructors)
+	public AssignConstructorsToScopesVisitor(Set<Constructor> constructors)
     {
 		_constructors = constructors;
     }

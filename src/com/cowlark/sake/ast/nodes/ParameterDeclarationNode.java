@@ -7,7 +7,7 @@ import com.cowlark.sake.parser.core.Location;
 import com.cowlark.sake.symbols.Symbol;
 import com.cowlark.sake.types.Type;
 
-public class ParameterDeclarationNode extends ExpressionNode
+public class ParameterDeclarationNode extends Node
 		implements HasSymbol
 {
 	private Symbol _symbol;

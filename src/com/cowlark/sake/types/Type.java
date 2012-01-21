@@ -95,4 +95,6 @@ public abstract class Type
 	
 	public abstract Method lookupMethod(Node node, IdentifierNode id)
 		throws CompilationException;
+	
+	public abstract void visit(TypeVisitor visitor);
 }

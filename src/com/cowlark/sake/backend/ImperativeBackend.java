@@ -1,11 +1,12 @@
 package com.cowlark.sake.backend;
 
 import java.io.OutputStream;
+import com.cowlark.sake.Compiler;
 
 public abstract class ImperativeBackend extends Backend
 {
-	public ImperativeBackend(OutputStream os)
+	public ImperativeBackend(Compiler compiler, OutputStream os)
     {
-	    super(os);
+	    super(compiler, os);
     }
 }

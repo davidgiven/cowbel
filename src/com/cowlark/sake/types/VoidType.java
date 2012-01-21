@@ -25,4 +25,10 @@ public class VoidType extends PrimitiveType
 	{
 	    return "void";
 	}
+	
+	@Override
+	public void visit(TypeVisitor visitor)
+	{
+	    visitor.visit(this);	    
+	}
 }

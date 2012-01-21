@@ -1,5 +1,7 @@
 package com.cowlark.sake;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.TreeSet;
 import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
 import com.cowlark.sake.symbols.Function;
@@ -92,9 +94,19 @@ public class Constructor implements Comparable<Constructor>
 		_directFunctions.add(function);
 	}
 	
+	public Set<Variable> getStackVariables()
+	{
+		return Collections.unmodifiableSet(_stackVariables);
+	}
+	
 	public boolean isStackVariable(Variable var)
 	{
 		return _stackVariables.contains(var);
+	}
+	
+	public Set<Constructor> getParentConstructors()
+	{
+		return Collections.unmodifiableSet(_parentConstructors);
 	}
 	
 	public void dumpDetails()

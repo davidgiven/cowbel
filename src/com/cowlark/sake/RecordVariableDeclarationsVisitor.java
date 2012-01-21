@@ -37,6 +37,7 @@ public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
 		ParameterDeclarationListNode pdln = node.getFunctionHeader().getParametersNode();
 		FunctionScopeConstructorNode body = node.getFunctionBody();
 		body.setFunction(f);
+		f.setScope(body);
 		
 		for (Node n : pdln.getChildren())
 		{
