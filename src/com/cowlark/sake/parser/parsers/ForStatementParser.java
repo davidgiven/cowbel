@@ -109,7 +109,7 @@ public class ForStatementParser extends Parser
 																loopcounter)),
 												(ScopeConstructorNode) bodypr,
 												new VarAssignmentNode(variablepr, variablepr.end(),
-														(IdentifierNode) variablepr,
+														(IdentifierNode) loopcounter,
 														new MethodCallNode(maximumpr, maximumpr.end(),
 																new VarReferenceNode(variablepr, variablepr.end(),
 																		loopcounter),
