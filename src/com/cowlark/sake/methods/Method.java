@@ -39,6 +39,7 @@ public abstract class Method
 		registerPrimitiveMethod(new IntegerToStringMethod());
 
 		_typeFamilyTemplates = new HashMap<String, TemplatedMethod.Factory>();
+		registerTemplatedMethodFactory(new ArrayResizeMethod.Factory());
 		registerTemplatedMethodFactory(new ArraySizeMethod.Factory());
 		registerTemplatedMethodFactory(new ArrayGetMethod.Factory());
 		registerTemplatedMethodFactory(new ArraySetMethod.Factory());
