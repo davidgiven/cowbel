@@ -44,6 +44,7 @@ public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
 			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
 
 			Variable v = new Variable(pdn);
+			v.setParameter(true);
 			v.setScope(body);
 			body.addSymbol(v);
 			pdn.setSymbol(v);

@@ -9,6 +9,8 @@ import com.cowlark.sake.types.Type;
 
 public class Variable extends Symbol
 {
+	private boolean _isParameter = false;
+	
 	public Variable(Node node, IdentifierNode name, Type type)
 	{
 		super(node, name, type);
@@ -35,6 +37,16 @@ public class Variable extends Symbol
 	{
 		return getName().equals(other.getName());
 	}
+
+	public boolean isParameter()
+    {
+	    return _isParameter;
+    }
+	
+	public void setParameter(boolean isParameter)
+    {
+	    _isParameter = isParameter;
+    }
 	
 	@Override
 	public void addToConstructor(Constructor constructor)
