@@ -1,10 +1,9 @@
 var width = 10;
 var height = 10;
 
-/* This is actually kind of dodgy: accessing fields out of bounds in an array
- * is supposed to be illegal. But right now it works. */
-var buffera = [[0]];
-var bufferb = [[0]];
+/* Nasty hack to set the size of an array. */
+var buffera = [[0]]; buffera.resize(height, [0]);
+var bufferb = [[0]]; bufferb.resize(height, [0]);
 var front = buffera;
 var back = bufferb;
 
@@ -17,9 +16,9 @@ function wipe_buffers()
 {
 	for y = 0, height
 	{
-		var rowa = [0];
+		var rowa = [0]; rowa.resize(width, 0);
 		buffera.set(y, rowa);
-		var rowb = [0];
+		var rowb = [0]; rowb.resize(width, 0);
 		bufferb.set(y, rowb);
 
 		for x = 0, width		
@@ -102,9 +101,10 @@ function run()
 	populate_front();
 
 	var b = true;
-	for generations = 0, 5
+	for generations = 0, 10
 	{
 		print("");
+		print("Frame " + generations.toString());
 		process();
 		
 		if (b)
