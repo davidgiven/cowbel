@@ -10,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import com.cowlark.sake.BasicBlock;
 import com.cowlark.sake.Constructor;
 import com.cowlark.sake.Compiler;
+import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.instructions.Instruction;
 import com.cowlark.sake.instructions.InstructionVisitor;
 import com.cowlark.sake.symbols.Function;
@@ -69,11 +70,11 @@ public abstract class Backend extends InstructionVisitor
 		_stream.print(value);
 	}
 	
-	public void prologue()
+	public void prologue() throws CompilationException
 	{
 	}
 	
-	public void epilogue()
+	public void epilogue() throws CompilationException
 	{
 	}
 	

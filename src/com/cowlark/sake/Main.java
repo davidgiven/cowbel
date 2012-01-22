@@ -131,16 +131,14 @@ public class Main
 			c.setInput(loc);
 			c.setBackend(backend);
 			c.compile();
-
+			bos.close();
+			
 			if (DumpAST)
 				c.getAst().dump();
 			if (DumpConstructors)
 				c.dumpConstructors();
 			if (DumpIR)
 				c.dumpBasicBlocks();
-			
-			backend.epilogue();
-			bos.close();
 			
 			System.exit(0);
 		}

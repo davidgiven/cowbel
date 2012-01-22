@@ -29,19 +29,19 @@ public class CTypeNameBuilder extends TypeVisitor
 	@Override
 	public void visit(BooleanType type)
 	{
-		_type = "int";
+		_type = "s_boolean_t";
 	}
 	
 	@Override
 	public void visit(IntegerType type)
 	{
-		_type = "int";
+		_type = "s_int_t";
 	}
 	
 	@Override
 	public void visit(StringType type)
 	{
-		_type = "sakestring*";
+		_type = "s_string_t*";
 	}
 	
 	@Override

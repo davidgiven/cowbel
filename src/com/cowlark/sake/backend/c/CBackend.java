@@ -7,6 +7,7 @@ import java.util.HashMap;
 import com.cowlark.sake.BasicBlock;
 import com.cowlark.sake.Compiler;
 import com.cowlark.sake.Constructor;
+import com.cowlark.sake.ast.RecursiveVisitor;
 import com.cowlark.sake.ast.nodes.ArrayConstructorNode;
 import com.cowlark.sake.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.sake.ast.nodes.MethodCallNode;
@@ -14,7 +15,9 @@ import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.sake.ast.nodes.ParameterDeclarationNode;
 import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
+import com.cowlark.sake.ast.nodes.StringConstantNode;
 import com.cowlark.sake.backend.ImperativeBackend;
+import com.cowlark.sake.errors.CompilationException;
 import com.cowlark.sake.instructions.ArrayConstructorInstruction;
 import com.cowlark.sake.instructions.BooleanConstantInstruction;
 import com.cowlark.sake.instructions.ConstructInstruction;
@@ -51,6 +54,8 @@ public class CBackend extends ImperativeBackend
 		new HashMap<Type, String>();
 	private HashMap<BasicBlock, String> _bbLabels =
 		new HashMap<BasicBlock, String>();
+	private HashMap<StringConstantNode, String> _stringLabels =
+		new HashMap<StringConstantNode, String>();
 	
 	private int _funcid;
 	private CTypeNameBuilder _typeNameBuilder = new CTypeNameBuilder();
@@ -62,26 +67,77 @@ public class CBackend extends ImperativeBackend
     }
 	
 	@Override
-	public void prologue()
+	public void prologue() throws CompilationException
 	{
+		Compiler compiler = getCompiler();
         InputStream is = getClass().getResourceAsStream("prologue.h");
         print(is);
 	    
-	    for (Constructor c : getCompiler().getConstructors())
+        /* Emit prototypes for constructors. */
+        
+	    for (Constructor c : compiler.getConstructors())
 	    {
 	    	print(ctype(c));
 	    	print(";\n");
 	    }
 	    print("\n");
 	    
-	    for (Function f : getCompiler().getFunctions())
+	    /* Emit prototypes for functions. */
+	    
+	    for (Function f : compiler.getFunctions())
 	    {
 	    	function_header(f);
 	    	print(";\n");
 	    }
 	    print("\n");
+	    
+	    /* Emit string constants. */
+	    
+	    compiler.getAst().visit(
+	    		new RecursiveVisitor()
+	    		{
+	    			public void visit(StringConstantNode node)
+	    				throws CompilationException
+	    			{
+	    				byte[] bytes = node.getValue().getBytes(UTF8);
+	    				
+	    				String id = "S" + clabel(node);
+	    				print("static const char ");
+	    				print(id);
+	    				print("[] = {");
+	    				boolean first = true;
+	    				for (byte b : bytes)
+	    				{
+	    					if (!first)
+	    						print(", ");
+	    					first = false;
+
+	    					print((int) b);
+	    				}
+	    				print("};\n");
+	    				
+	    				print("static s_string_t ");
+	    				print(clabel(node));
+	    				print(" = { NULL, NULL, ");
+	    				print(id);
+	    				print(", ");
+	    				print(bytes.length);
+	    				print(", ");
+	    				print(bytes.length);
+	    				print(", NULL};\n");
+	    			}
+	    		}
+	    	);
+	    print("\n");
 	}
 	
+	@Override
+	public void epilogue() throws CompilationException
+	{
+        InputStream is = getClass().getResourceAsStream("epilogue.h");
+        print(is);
+	}
+
 	private String escape(String s)
 	{
 		StringBuilder sb = new StringBuilder();
@@ -143,6 +199,19 @@ public class CBackend extends ImperativeBackend
 			"_" + escape(node.locationAsString());
 		
 		_symbolLabels.put(symbol, s);
+		return s;
+	}
+	
+	private String clabel(StringConstantNode node)
+	{
+		String s = _stringLabels.get(node);
+		if (s != null)
+			return s;
+		
+		s = "sc" + _stringLabels.size() +
+			"_" + escape(node.locationAsString());
+		
+		_stringLabels.put(node, s);
 		return s;
 	}
 	
@@ -334,7 +403,7 @@ public class CBackend extends ImperativeBackend
 			print(ctype(constructor));
 			print("* ");
 			print(clabel(constructor));
-			print(" = SAKE_ALLOC_CONSTRUCTOR(");
+			print(" = S_ALLOC_CONSTRUCTOR(");
 			print(ctype(constructor));
 			print(");\n");
 		}
@@ -381,6 +450,22 @@ public class CBackend extends ImperativeBackend
 				print(";\n");
 			}
 		}
+		
+		/* Declare register variables. (Unless they're function parameters,
+		 * which are declared elsewhere.)
+		 */
+		
+		for (Variable v : constructor.getRegisterVariables())
+		{
+			if (!v.isParameter())
+			{
+				print("\t");
+				print(ctype(v));
+				print(" ");
+				print(clabel(v));
+				print(";\n");
+			}
+		}
 	}
 	
 	@Override
@@ -414,7 +499,7 @@ public class CBackend extends ImperativeBackend
 	{
         MethodCallNode node = (MethodCallNode) insn.getNode();
         
-        print("SAKE_METHOD_");
+        print("S_METHOD_");
         String methodsig = node.getMethod().getIdentifier();
         print(methodsig.replace('.', '_').toUpperCase());
 
@@ -487,19 +572,28 @@ public class CBackend extends ImperativeBackend
 	{
 		ArrayConstructorNode node = (ArrayConstructorNode) insn.getNode();
 		ArrayType type = (ArrayType) node.getType();
+		int length = insn.getNumberOfOperands();
 		
-		print("((");
-		print(ctype(type));
-		print(") SAKE_CONSTRUCT_ARRAY(");
-		print(ctype(type.getChildType()));
-		
-		if (insn.getNumberOfOperands() > 0)
+		if (length > 0)
 		{
-			print(", ");
-			compileFromIterator();
+			print("S_INIT_ARRAY(");
 		}
 		
-		print("))");
+		print("S_CONSTRUCT_ARRAY(");
+		print(ctype(type.getChildType()));
+		print(", ");
+		print(length);
+		print(")");
+
+		if (length > 0)
+		{
+			for (int i = 0; i < length; i++)
+			{
+				print(", ");
+				compileFromIterator();
+			}
+			print(")");
+		}
 	}
 	
 	@Override
@@ -511,17 +605,8 @@ public class CBackend extends ImperativeBackend
 	@Override
 	public void visit(StringConstantInstruction insn)
 	{
-		byte[] bytes = insn.getValue().getBytes(UTF8);
-		
-		print("SAKE_MAKE_STRING(\"");
-		for (byte b : bytes)
-		{
-			print("\\x");
-			if (b < 0x10)
-				print('0');
-			print(Integer.toHexString(b));
-		}
-		print("\")");
+		print("&");
+		print(clabel((StringConstantNode) insn.getNode()));
 	}
 	
 	@Override

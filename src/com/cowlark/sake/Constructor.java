@@ -99,6 +99,11 @@ public class Constructor implements Comparable<Constructor>
 		return Collections.unmodifiableSet(_stackVariables);
 	}
 	
+	public Set<Variable> getRegisterVariables()
+	{
+		return Collections.unmodifiableSet(_registerVariables);
+	}
+	
 	public boolean isStackVariable(Variable var)
 	{
 		return _stackVariables.contains(var);
