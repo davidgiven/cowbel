@@ -1,6 +1,6 @@
 <project name="MyProject" default="dist" basedir=".">
 	<target name="compile">
-		<javac srcdir="src" destdir="bin" classpath="/usr/share/java/commons-io.jar"/>
+		<javac srcdir="src" destdir="bin" classpath="/usr/share/java/commons-io.jar:/usr/share/java/commons-cli.jar"/>
 		<copy todir="bin">
 			<fileset dir="src" excludes="**/*.java"/>
 		</copy>
