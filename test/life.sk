@@ -29,13 +29,23 @@ function wipe_buffers()
 	}
 }
 
+function getxy(x: integer, y: integer): integer
+{
+	return front.get(y).get(x);
+}
+
+function setxy(x: integer, y: integer, value: integer)
+{
+	front.get(y).set(x, value);
+}
+	
 function populate_front()
 {
-	front.get(2).set(4, 1);
-	front.get(3).set(4, 1);
-	front.get(4).set(4, 1);
-	front.get(4).set(3, 1);
-	front.get(3).set(2, 1);
+	setxy(2, 4, 1);
+	setxy(3, 4, 1);
+	setxy(4, 4, 1);
+	setxy(2, 3, 1);
+	setxy(3, 2, 1);
 }
 
 function draw_front()
@@ -60,20 +70,20 @@ function draw_front()
 function do_cell(x: integer, y: integer)
 {
 	var s = 
-		front.get(y-1).get(x-1) +
-		front.get(y-1).get(x  ) +
-		front.get(y-1).get(x+1) +
-		front.get(y  ).get(x-1) +
-		front.get(y  ).get(x+1) +
-		front.get(y+1).get(x-1) +
-		front.get(y+1).get(x  ) +
-		front.get(y+1).get(x+1);
+		getxy(x-1, y-1) +
+		getxy(x-1, y  ) +
+		getxy(x-1, y+1) +
+		getxy(x  , y-1) +
+		getxy(x  , y+1) +
+		getxy(x+1, y-1) +
+		getxy(x+1, y  ) +
+		getxy(x+1, y+1);
 		
-	var old = front.get(y).get(x);
+	var old = getxy(x, y);
 	
 	if (s == 2)
 	{
-		var v = front.get(y).get(x);
+		var v = getxy(x, y);
 		back.get(y).set(x, v);
 	}
 	else if (s == 3)
