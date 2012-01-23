@@ -14,6 +14,7 @@ import com.cowlark.sake.ast.nodes.MethodCallNode;
 import com.cowlark.sake.ast.nodes.Node;
 import com.cowlark.sake.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.sake.ast.nodes.ParameterDeclarationNode;
+import com.cowlark.sake.ast.nodes.ReturnStatementNode;
 import com.cowlark.sake.ast.nodes.ScopeConstructorNode;
 import com.cowlark.sake.ast.nodes.StringConstantNode;
 import com.cowlark.sake.backend.ImperativeBackend;
@@ -31,6 +32,7 @@ import com.cowlark.sake.instructions.IfInstruction;
 import com.cowlark.sake.instructions.IntegerConstantInstruction;
 import com.cowlark.sake.instructions.MethodCallInstruction;
 import com.cowlark.sake.instructions.SetLocalInstruction;
+import com.cowlark.sake.instructions.SetReturnValueInstruction;
 import com.cowlark.sake.instructions.SetUpvalueInstruction;
 import com.cowlark.sake.instructions.StringConstantInstruction;
 import com.cowlark.sake.symbols.Function;
@@ -368,6 +370,22 @@ public class CBackend extends ImperativeBackend
 		}
 		else
 			print("\treturn;\n");
+	}
+	
+	@Override
+	public void visit(SetReturnValueInstruction insn)
+	{
+		ReturnStatementNode node = (ReturnStatementNode) insn.getNode();
+		Function function = node.getScope().getFunction();
+		FunctionType type = (FunctionType) function.getSymbolType();
+		Type returntype = type.getReturnType();
+		
+		assert(!returntype.isVoidType());
+		print("\t");
+		print(_returnvalue);
+		print(" = ");
+		compileFromIterator();
+		print(";\n");
 	}
 	
 	@Override
