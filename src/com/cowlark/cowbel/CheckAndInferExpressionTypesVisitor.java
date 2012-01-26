@@ -22,7 +22,6 @@ import com.cowlark.cowbel.errors.AttemptToCallNonFunctionTypeException;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.FunctionParameterMismatch;
 import com.cowlark.cowbel.errors.InvalidFunctionCallInExpressionContext;
-import com.cowlark.cowbel.errors.TypesNotCompatibleException;
 import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.symbols.Function;
 import com.cowlark.cowbel.symbols.Symbol;

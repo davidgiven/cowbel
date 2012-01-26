@@ -2,7 +2,6 @@ package com.cowlark.cowbel.types;
 
 import com.cowlark.cowbel.ast.IsMethodNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.NoSuchMethodException;
