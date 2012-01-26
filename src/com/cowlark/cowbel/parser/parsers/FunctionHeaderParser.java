@@ -37,21 +37,29 @@ public class FunctionHeaderParser extends Parser
 					new ParameterDeclarationListNode(pr, pr));
 		}
 		
+		ParseResult outputargspr;
+		
 		ParseResult returntypepr = TypeParser.parse(pr.end());
-		if (returntypepr.failed())
-			return returntypepr;
-		
-		ParameterDeclarationListNode outputargspr =
-			new ParameterDeclarationListNode(
-				returntypepr.start(), returntypepr.end(),
-				new ParameterDeclarationNode(
-						returntypepr.start(), returntypepr.end(),
-						(IdentifierNode) namepr,
-						(TypeNode) returntypepr
-					)
-			);
-		
-		return new FunctionHeaderNode(location, returntypepr.end(),
+		if (returntypepr.success())
+		{
+			outputargspr =
+				new ParameterDeclarationListNode(
+					returntypepr.start(), returntypepr.end(),
+					new ParameterDeclarationNode(
+							returntypepr.start(), returntypepr.end(),
+							IdentifierNode.createInternalIdentifier("return"),
+							(TypeNode) returntypepr
+						)
+				);
+		}
+		else
+		{
+			outputargspr = ParameterDeclarationListParser.parse(pr.end());
+			if (outputargspr.failed())
+				return outputargspr;
+		}
+
+		return new FunctionHeaderNode(location, outputargspr.end(),
 				(IdentifierNode) namepr,
 				(ParameterDeclarationListNode) inputargspr,
 				(ParameterDeclarationListNode) outputargspr);
