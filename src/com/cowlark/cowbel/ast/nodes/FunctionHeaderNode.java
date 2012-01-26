@@ -1,5 +1,6 @@
 package com.cowlark.cowbel.ast.nodes;
 
+import java.util.List;
 import java.util.Vector;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
@@ -14,12 +15,12 @@ public class FunctionHeaderNode extends Node
 	public FunctionHeaderNode(Location start, Location end,
 			IdentifierNode name,
 			ParameterDeclarationListNode inputparams,
-			TypeNode returntype)
+			ParameterDeclarationListNode outputparams)
     {
 		super(start, end);
 		addChild(name);
 		addChild(inputparams);
-		addChild(returntype);
+		addChild(outputparams);
     }	
 	
 	@Override
@@ -38,26 +39,32 @@ public class FunctionHeaderNode extends Node
 		return (ParameterDeclarationListNode) getChild(1);
 	}
 	
-	public TypeNode getReturnTypeNode()
+	public ParameterDeclarationListNode getOutputParametersNode()
 	{
-		return (TypeNode) getChild(2);
+		return (ParameterDeclarationListNode) getChild(2);
+	}
+	
+	private static List<Type> parameters_to_type_list(
+			ParameterDeclarationListNode node)
+	{
+		Vector<Type> list = new Vector<Type>();
+		
+		for (Node n : node)
+		{
+			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
+			list.add(pdn.getVariableType());
+		}
+		
+		return list;
 	}
 	
 	public Type getFunctionType()
 	{
 		if (_type == null)
 		{
-			Vector<Type> params = new Vector<Type>();
-			
-			ParameterDeclarationListNode pdln = getParametersNode();
-			for (Node n : pdln.getChildren())
-			{
-				ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
-				
-				params.add(pdn.getVariableType());
-			}
-			
-			_type = FunctionType.create(params, getReturnTypeNode().getType());
+			_type = FunctionType.create(
+					parameters_to_type_list(getParametersNode()),
+					parameters_to_type_list(getOutputParametersNode()));
 		}
 		
 		return _type;

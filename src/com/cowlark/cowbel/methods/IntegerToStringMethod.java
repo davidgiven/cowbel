@@ -7,7 +7,7 @@ public class IntegerToStringMethod extends Method
 	public IntegerToStringMethod()
     {
 		setSignature("integer.toString.0", "integer.toString");
-		setReturnType(StringType.create());
-		setArgumentTypes();
+		setOutputTypes(StringType.create());
+		setInputTypes();
     }
 }

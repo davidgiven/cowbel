@@ -1,8 +1,9 @@
 package com.cowlark.cowbel.parser.parsers;
 
+import com.cowlark.cowbel.ast.nodes.ArgumentListNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.MethodCallNode;
+import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -15,9 +16,10 @@ public class ExpressionLowParser extends Parser
 		if (right.failed())
 			return right;
 		
-		return new MethodCallNode(seed.start(), right.end(),
+		return new MethodCallExpressionNode(seed.start(), right.end(),
 				(ExpressionNode) seed, (IdentifierNode) operator,
-				(ExpressionNode) right);
+				new ArgumentListNode(right, right.end(),
+						(ExpressionNode) right));
 	}
 	
 	@Override

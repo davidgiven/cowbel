@@ -11,63 +11,62 @@ import com.cowlark.cowbel.methods.Method;
 
 public class FunctionType extends PrimitiveType
 {
-	public static FunctionType create(List<Type> arguments, Type returntype)
+	public static FunctionType create(List<Type> inputarguments,
+			List<Type> outputarguments)
 	{
-		FunctionType type = new FunctionType(arguments, returntype);
+		FunctionType type = new FunctionType(inputarguments, outputarguments);
 		return Type.canonicalise(type);
 	}
 	
 	public static FunctionType createVoidVoid()
 	{
 		List<Type> emptylist = new LinkedList<Type>();
-		return create(emptylist, VoidType.create());
+		return create(emptylist, emptylist);
 	}
 	
-	private List<Type> _arguments;
-	private Type _returntype;
+	private List<Type> _inputarguments;
+	private List<Type> _outputarguments;
 	
-	private FunctionType(List<Type> arguments, Type returntype)
+	private FunctionType(List<Type> inputarguments, List<Type> outputarguments)
     {
-		_arguments = arguments;
-		_returntype = returntype;
+		_inputarguments = inputarguments;
+		_outputarguments = outputarguments;
     }
+	
+	private void emit_type_list(StringBuilder sb, List<Type> list)
+	{
+		boolean first = true;
+		for (Type t : list)
+		{
+			if (!first)
+				sb.append(", ");
+			sb.append(t.getCanonicalTypeName());
+			first = false;
+		}
+	}
 	
 	@Override
 	public String getCanonicalTypeName()
 	{
 		StringBuilder sb = new StringBuilder();
+		
 		sb.append('(');
-		
-		if (_arguments.isEmpty())
-		{
-			sb.append("void");
-		}
-		else
-		{
-			boolean first = true;
-			for (Type t : _arguments)
-			{
-				if (!first)
-					sb.append(", ");
-				sb.append(t.getCanonicalTypeName());
-				first = false;
-			}
-		}
-		
+		emit_type_list(sb, _inputarguments);
 		sb.append(" -> ");
-		sb.append(_returntype.getCanonicalTypeName());
-		sb.append(")");
+		emit_type_list(sb, _outputarguments);
+		sb.append(')');
+
 		return sb.toString();
 	}
 	
-	public List<Type> getArgumentTypes()
+	public List<Type> getInputArgumentTypes()
 	{
-		return _arguments;
+		return _inputarguments;
 	}
 	
-	public Type getReturnType()
+	public List<Type> getOutputArgumentTypes()
 	{
-		return _returntype;
+		return _outputarguments;
 	}
 	
 	@Override

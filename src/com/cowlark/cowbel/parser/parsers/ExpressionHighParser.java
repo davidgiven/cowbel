@@ -1,11 +1,12 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import java.util.LinkedList;
-import com.cowlark.cowbel.ast.nodes.DirectFunctionCallNode;
+import com.cowlark.cowbel.ast.nodes.ArgumentListNode;
+import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionNode;
-import com.cowlark.cowbel.ast.nodes.FunctionCallNode;
+import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.MethodCallNode;
+import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -17,67 +18,23 @@ public class ExpressionHighParser extends Parser
 		if (method.failed())
 			return method;
 		
-		ParseResult pr = OpenParenthesisParser.parse(method.end());
-		if (pr.failed())
-			return pr;
+		ParseResult arguments = ArgumentListParser.parse(method.end());
+		if (arguments.failed())
+			return arguments;
 		
-		LinkedList<ExpressionNode> args = new LinkedList<ExpressionNode>();
-		
-		pr = CloseParenthesisParser.parse(pr.end());
-		if (pr.failed())
-		{
-			/* Argument list is not empty. */
-			
-			for (;;)
-			{
-				ParseResult arg = ExpressionLowParser.parse(pr.end());
-				if (arg.failed())
-					return arg;
-				args.addLast((ExpressionNode)arg);
-				
-				pr = CloseParenthesisParser.parse(arg.end());
-				if (pr.success())
-					break;
-				
-				pr = CommaParser.parse(arg.end());
-				if (pr.failed())
-					return pr;
-			}
-		}
-		
-		return new MethodCallNode(location, pr.end(),
-				(ExpressionNode)seed, (IdentifierNode)method,
-				args);
+		return new MethodCallExpressionNode(location, arguments.end(),
+				(ExpressionNode) seed, (IdentifierNode) method,
+				(ArgumentListNode) arguments);
 	}
 	
 	private ParseResult parseFunctionCall(ParseResult seed, Location location)
 	{
-		LinkedList<ExpressionNode> args = new LinkedList<ExpressionNode>();
+		ParseResult arguments = ArgumentListParser.parse(location);
+		if (arguments.failed())
+			return arguments;
 		
-		ParseResult pr = CloseParenthesisParser.parse(location);
-		if (pr.failed())
-		{
-			/* Argument list is not empty. */
-			
-			for (;;)
-			{
-				ParseResult arg = ExpressionLowParser.parse(pr.end());
-				if (arg.failed())
-					return arg;
-				args.addLast((ExpressionNode)arg);
-				
-				pr = CloseParenthesisParser.parse(arg.end());
-				if (pr.success())
-					break;
-				
-				pr = CommaParser.parse(arg.end());
-				if (pr.failed())
-					return pr;
-			}
-		}
-		
-		return new FunctionCallNode(location, pr.end(),
-				(ExpressionNode)seed, args);
+		return new IndirectFunctionCallExpressionNode(location, arguments.end(),
+				(ExpressionNode)seed, (ArgumentListNode) arguments);
 	}
 	
 	private ParseResult parseDirectFunctionCall(Location location)
@@ -88,34 +45,13 @@ public class ExpressionHighParser extends Parser
 		if (identifierpr.failed())
 			return identifierpr;
 		
-		ParseResult pr = OpenParenthesisParser.parse(identifierpr.end());
-		if (pr.failed())
-			return pr;
+		ParseResult argumentspr = ArgumentListParser.parse(identifierpr.end());
+		if (argumentspr.failed())
+			return argumentspr;
 		
-		pr = CloseParenthesisParser.parse(pr.end());
-		if (pr.failed())
-		{
-			/* Argument list is not empty. */
-			
-			for (;;)
-			{
-				ParseResult arg = ExpressionLowParser.parse(pr.end());
-				if (arg.failed())
-					return arg;
-				args.addLast((ExpressionNode)arg);
-				
-				pr = CloseParenthesisParser.parse(arg.end());
-				if (pr.success())
-					break;
-				
-				pr = CommaParser.parse(arg.end());
-				if (pr.failed())
-					return pr;
-			}
-		}
-		
-		return new DirectFunctionCallNode(location, pr.end(),
-				(IdentifierNode)identifierpr, args);
+		return new DirectFunctionCallExpressionNode(location, argumentspr.end(),
+				(IdentifierNode) identifierpr,
+				(ArgumentListNode) argumentspr);
 	}
 	
 	@Override

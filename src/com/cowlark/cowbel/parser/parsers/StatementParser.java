@@ -4,7 +4,7 @@ import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
-public class FunctionStatementParser extends Parser
+public class StatementParser extends Parser
 {
 	@Override
 	protected ParseResult parseImpl(Location location)
@@ -67,11 +67,19 @@ public class FunctionStatementParser extends Parser
 		if (pr13.success())
 			return pr13;
 		
-		ParseResult pr14 = ExpressionStatementParser.parse(location);
+		ParseResult pr14 = DirectFunctionCallStatementParser.parse(location);
 		if (pr14.success())
 			return pr14;
 		
+		ParseResult pr15 = MethodCallStatementParser.parse(location);
+		if (pr15.success())
+			return pr15;
+		
+		ParseResult pr16 = ExpressionStatementParser.parse(location);
+		if (pr16.success())
+			return pr16;
+		
 		return combineParseErrors(pr1, pr2, pr3, pr4, pr5, pr6, pr7, pr8, pr9,
-				pr10, pr11, pr12, pr13, pr14);
+				pr10, pr11, pr12, pr13, pr14, pr15, pr16);
 	}
 }

@@ -19,6 +19,13 @@ public class ParameterDeclarationListNode extends ExpressionNode
 		addChildren(params);
     }
 	
+	public ParameterDeclarationListNode(Location start, Location end,
+			ParameterDeclarationNode... params)
+    {
+		this(start, end);
+		addChildren(params);
+    }
+	
 	public ParameterDeclarationNode getParameter(int i)
 	{
 		return (ParameterDeclarationNode) getChild(i);

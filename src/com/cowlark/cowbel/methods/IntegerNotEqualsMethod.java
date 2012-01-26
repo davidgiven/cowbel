@@ -8,7 +8,7 @@ public class IntegerNotEqualsMethod extends Method
 	public IntegerNotEqualsMethod()
     {
 		setSignature("integer.!=.1", "integer._notequals");
-		setReturnType(BooleanType.create());
-		setArgumentTypes(IntegerType.create());
+		setOutputTypes(BooleanType.create());
+		setInputTypes(IntegerType.create());
     }
 }

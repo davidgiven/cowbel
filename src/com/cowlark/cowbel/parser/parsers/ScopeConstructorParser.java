@@ -17,7 +17,7 @@ public class ScopeConstructorParser extends Parser
 		{
 			/* This is a single-statement block. */
 			
-			pr = FunctionStatementParser.parse(location);
+			pr = StatementParser.parse(location);
 			if (pr.failed())
 				return pr;
 			
@@ -36,7 +36,7 @@ public class ScopeConstructorParser extends Parser
 				break;
 			}
 			
-			pr = FunctionStatementParser.parse(n);
+			pr = StatementParser.parse(n);
 			if (pr.failed())
 				return pr;
 			

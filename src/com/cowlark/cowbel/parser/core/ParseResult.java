@@ -37,4 +37,12 @@ public abstract class ParseResult extends Location
 		}
 		return _text;
 	}
+	
+	
+	@Override
+	public String toString()
+	{
+		int len = calculateLengthTo(end());
+		return getClass().toString() + "=("+locationAsString()+"='" + shortened(len, 16) + "')";
+	}
 }

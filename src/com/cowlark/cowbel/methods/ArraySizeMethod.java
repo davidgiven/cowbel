@@ -27,7 +27,7 @@ public class ArraySizeMethod extends TemplatedMethod
 		super(receivertype);
 		
 		setSignature(SIGNATURE, IDENTIFIER);
-		setReturnType(IntegerType.create());
-		setArgumentTypes();
+		setOutputTypes(IntegerType.create());
+		setInputTypes();
     }
 }

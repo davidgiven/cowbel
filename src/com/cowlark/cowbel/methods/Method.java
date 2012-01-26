@@ -1,9 +1,9 @@
 package com.cowlark.cowbel.methods;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import com.cowlark.cowbel.ast.nodes.MethodCallNode;
+import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.MethodParameterMismatch;
 import com.cowlark.cowbel.errors.TypesNotCompatibleException;
@@ -87,8 +87,8 @@ public abstract class Method
 	
 	private String _signature;
 	private String _identifier;
-	private Type _returnType;
-	private List<Type> _argumentTypes;
+	private List<Type> _inputTypes;
+	private List<Type> _outputTypes;
 	
 	public Method()
     {
@@ -110,39 +110,38 @@ public abstract class Method
 		return _identifier;
 	}
 	
-	protected void setReturnType(Type type)
+	protected void setInputTypes(Type... types)
 	{
-		_returnType = type;
-	}
-	
-	public Type getReturnType()
-	{
-		return _returnType;
-	}
-	
-	protected void setArgumentTypes(Type... types)
-	{
-		_argumentTypes = new ArrayList<Type>();
-		for (Type t : types)
-			_argumentTypes.add(t);
+		_inputTypes = Arrays.asList(types);
 	}
 
-	public List<Type> getArgumentTypes()
+	public List<Type> getInputTypes()
 	{
-		return _argumentTypes;
+		return _inputTypes;
 	}
 	
-	private boolean typeCheckImpl(MethodCallNode node, List<Type> callertypes)
+	protected void setOutputTypes(Type... types)
+	{
+		_outputTypes = Arrays.asList(types);
+	}
+
+	public List<Type> getOutputTypes()
+	{
+		return _outputTypes;
+	}
+	
+	private boolean typeCheckImpl(Node node,
+				List<Type> methodtypes, List<Type> callertypes)
 			throws CompilationException
 	{
-		if (callertypes.size() != _argumentTypes.size())
+		if (callertypes.size() != methodtypes.size())
 			return false;
 		
 		try
 		{
 			for (int i = 0; i < callertypes.size(); i++)
 			{
-				Type methodtype = _argumentTypes.get(i);
+				Type methodtype = methodtypes.get(i);
 				Type callertype = callertypes.get(i);
 				
 				callertype.unifyWith(node, methodtype);
@@ -155,11 +154,16 @@ public abstract class Method
 		
 		return true;
 	}
-	
-	public void typeCheck(MethodCallNode node, List<Type> callertypes)
+
+	public void typeCheck(Node node,
+			List<Type> outputtypes, List<Type> inputtypes)
 		throws CompilationException
 	{
-		if (!typeCheckImpl(node, callertypes))
-			throw new MethodParameterMismatch(node, this, _argumentTypes, callertypes);
+		if (((outputtypes != null) && !typeCheckImpl(node, _outputTypes, outputtypes)) ||
+			((inputtypes != null) && !typeCheckImpl(node, _inputTypes, inputtypes)))
+		{
+			throw new MethodParameterMismatch(node, this,
+					_outputTypes, outputtypes, _inputTypes, inputtypes);
+		}
 	}
 }

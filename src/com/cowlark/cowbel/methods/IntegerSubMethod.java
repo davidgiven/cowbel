@@ -7,7 +7,7 @@ public class IntegerSubMethod extends Method
 	public IntegerSubMethod()
     {
 		setSignature("integer.-.1", "integer._sub");
-		setReturnType(IntegerType.create());
-		setArgumentTypes(IntegerType.create());
+		setOutputTypes(IntegerType.create());
+		setInputTypes(IntegerType.create());
     }
 }

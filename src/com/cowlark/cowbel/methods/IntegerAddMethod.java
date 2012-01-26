@@ -7,7 +7,7 @@ public class IntegerAddMethod extends Method
 	public IntegerAddMethod()
     {
 		setSignature("integer.+.1", "integer._add");
-		setReturnType(IntegerType.create());
-		setArgumentTypes(IntegerType.create());
+		setOutputTypes(IntegerType.create());
+		setInputTypes(IntegerType.create());
     }
 }

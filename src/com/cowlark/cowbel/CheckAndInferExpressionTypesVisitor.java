@@ -5,21 +5,23 @@ import java.util.List;
 import java.util.Vector;
 import com.cowlark.cowbel.ast.IsCallable;
 import com.cowlark.cowbel.ast.SimpleVisitor;
+import com.cowlark.cowbel.ast.nodes.ArgumentListNode;
 import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
-import com.cowlark.cowbel.ast.nodes.DirectFunctionCallNode;
+import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.DummyExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionNode;
-import com.cowlark.cowbel.ast.nodes.FunctionCallNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
+import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.IntegerConstantNode;
-import com.cowlark.cowbel.ast.nodes.MethodCallNode;
+import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.StringConstantNode;
 import com.cowlark.cowbel.ast.nodes.VarReferenceNode;
 import com.cowlark.cowbel.errors.AttemptToCallNonFunctionTypeException;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.FunctionParameterMismatch;
+import com.cowlark.cowbel.errors.InvalidFunctionCallInExpressionContext;
 import com.cowlark.cowbel.errors.TypesNotCompatibleException;
 import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.symbols.Function;
@@ -78,51 +80,35 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		throw new AttemptToCallNonFunctionTypeException(expression);
 	}
 	
-	private static boolean compare_argument_types(Node node,
-			List<Type> funclist, List<Type> calllist) throws CompilationException
-	{
-		if (funclist.size() != calllist.size())
-			return false;
-		
-		try
-		{
-			for (int i = 0; i < funclist.size(); i++)
-			{
-				Type t1 = funclist.get(i);
-				Type t2 = calllist.get(i);
-				t1.unifyWith(node, t2);
-				t2.ensureConcrete(node);
-			}
-		}
-		catch (TypesNotCompatibleException e)
-		{
-			return false;
-		}
-		
-		return true;	
-	}
-	
 	private <T extends ExpressionNode & IsCallable> void validate_function_call(
-			T node, FunctionType functionType) throws CompilationException
+			T node, Function function) throws CompilationException
 	{
-		List<Type> functionArgumentTypes = functionType.getArgumentTypes();
-		List<ExpressionNode> callArguments = node.getArguments();
+		FunctionType functionType = (FunctionType) function.getSymbolType();
+		List<Type> inputArgumentTypes = functionType.getInputArgumentTypes();
+		List<Type> outputArgumentTypes = functionType.getOutputArgumentTypes();
+		ArgumentListNode callArguments = node.getArguments();
 		
 		Vector<Type> callArgumentTypes = new Vector<Type>();
-		for (ExpressionNode n : callArguments)
+		for (Node n : callArguments)
 		{
-			Type t = n.calculateType();
+			ExpressionNode e = (ExpressionNode) n;
+			Type t = e.calculateType();
 			callArgumentTypes.add(t);
 		}
 		
-		if (!compare_argument_types(node, functionArgumentTypes, callArgumentTypes))
-			throw new FunctionParameterMismatch(node, functionArgumentTypes,
-					callArgumentTypes);
+		if (!Utils.unifyTypeLists(node, inputArgumentTypes, callArgumentTypes))
+			throw new FunctionParameterMismatch(node,function,
+					outputArgumentTypes, null,
+					inputArgumentTypes, callArgumentTypes);
 		
-		node.setType(functionType.getReturnType());
+		if (outputArgumentTypes.size() != 1)
+			throw new InvalidFunctionCallInExpressionContext(node,
+					inputArgumentTypes, outputArgumentTypes);
+		
+		node.setType(outputArgumentTypes.get(0));
 	}
 	
-	public void visit(FunctionCallNode node) throws CompilationException
+	public void visit(IndirectFunctionCallExpressionNode node) throws CompilationException
 	{
 		assert(false);
 		/*
@@ -132,12 +118,12 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		*/
 	}
 	
-	public void visit(DirectFunctionCallNode node) throws CompilationException
+	public void visit(DirectFunctionCallExpressionNode node) throws CompilationException
 	{
 		Symbol symbol = node.getSymbol();
 		assert(symbol instanceof Function);
 		Function function = (Function) symbol;
-		validate_function_call(node, (FunctionType) function.getSymbolType());
+		validate_function_call(node, function);
 	}
 	
 	@Override
@@ -156,25 +142,32 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 	}
 	
 	@Override
-	public void visit(MethodCallNode node) throws CompilationException
+	public void visit(MethodCallExpressionNode node) throws CompilationException
 	{
 		ExpressionNode receiver = node.getMethodReceiver();
 		Type receivertype = receiver.calculateType();
 		receivertype.ensureConcrete(node);
 		
-		List<ExpressionNode> arguments = node.getMethodArguments();
+		ArgumentListNode arguments = node.getArguments();
 		ArrayList<Type> argumenttypes = new ArrayList<Type>();
-		for (ExpressionNode n : arguments)
+		for (Node n : arguments)
 		{
-			Type type = n.calculateType();
+			ExpressionNode e = (ExpressionNode) n; 
+			Type type = e.calculateType();
 			argumenttypes.add(type);
 		}
 		
 		IdentifierNode name = node.getMethodIdentifier();
 		Method method = receivertype.lookupMethod(node, name);
 		node.setMethod(method);
-		method.typeCheck(node, argumenttypes);
-		node.setType(method.getReturnType());
+		method.typeCheck(node, null, argumenttypes);
+		
+		List<Type> outputArgumentTypes = method.getOutputTypes();
+		if (outputArgumentTypes.size() != 1)
+			throw new InvalidFunctionCallInExpressionContext(node,
+					method.getInputTypes(), outputArgumentTypes);
+		
+		node.setType(outputArgumentTypes.get(0));
 	}
 	
 	@Override

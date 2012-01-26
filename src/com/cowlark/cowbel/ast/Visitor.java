@@ -4,20 +4,21 @@ import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
 import com.cowlark.cowbel.ast.nodes.BreakStatementNode;
 import com.cowlark.cowbel.ast.nodes.ContinueStatementNode;
-import com.cowlark.cowbel.ast.nodes.DirectFunctionCallNode;
+import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
+import com.cowlark.cowbel.ast.nodes.DirectFunctionCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
 import com.cowlark.cowbel.ast.nodes.DummyExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionStatementNode;
 import com.cowlark.cowbel.ast.nodes.ForStatementNode;
-import com.cowlark.cowbel.ast.nodes.FunctionCallNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.GotoStatementNode;
 import com.cowlark.cowbel.ast.nodes.IfElseStatementNode;
 import com.cowlark.cowbel.ast.nodes.IfStatementNode;
+import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.IntegerConstantNode;
 import com.cowlark.cowbel.ast.nodes.LabelStatementNode;
-import com.cowlark.cowbel.ast.nodes.MethodCallNode;
+import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
+import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
 import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
@@ -131,12 +132,17 @@ public class Visitor
 		visit((Node) node);
 	}
 	
-	public void visit(DirectFunctionCallNode node) throws CompilationException
+	public void visit(DirectFunctionCallExpressionNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}
 	
-	public void visit(FunctionCallNode node) throws CompilationException
+	public void visit(DirectFunctionCallStatementNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+	
+	public void visit(IndirectFunctionCallExpressionNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}
@@ -161,7 +167,12 @@ public class Visitor
 		visit((Node) node);
 	}
 	
-	public void visit(MethodCallNode node) throws CompilationException
+	public void visit(MethodCallExpressionNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+	
+	public void visit(MethodCallStatementNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}

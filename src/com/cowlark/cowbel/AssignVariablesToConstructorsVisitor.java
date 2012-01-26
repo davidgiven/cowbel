@@ -1,7 +1,6 @@
 package com.cowlark.cowbel;
 
 import com.cowlark.cowbel.ast.RecursiveVisitor;
-import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.symbols.Symbol;

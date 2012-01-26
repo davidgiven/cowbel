@@ -32,7 +32,7 @@ public class ArrayConstructorNode extends ExpressionLiteralNode
 		if (_members == null)
 		{
 			_members = new ArrayList<ExpressionNode>();
-			for (Node node : getChildren())
+			for (Node node : this)
 				_members.add((ExpressionNode) node);
 		}
 		return _members;

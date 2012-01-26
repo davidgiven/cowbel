@@ -1,15 +1,21 @@
 package com.cowlark.cowbel;
 
+import com.cowlark.cowbel.ast.HasIdentifier;
+import com.cowlark.cowbel.ast.HasSymbol;
+import com.cowlark.cowbel.ast.IsCallable;
+import com.cowlark.cowbel.ast.IsCallableStatement;
 import com.cowlark.cowbel.ast.RecursiveVisitor;
-import com.cowlark.cowbel.ast.nodes.DirectFunctionCallNode;
+import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
+import com.cowlark.cowbel.ast.nodes.DirectFunctionCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.GotoStatementNode;
+import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
+import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
+import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
 import com.cowlark.cowbel.ast.nodes.VarReferenceNode;
 import com.cowlark.cowbel.errors.CompilationException;
-import com.cowlark.cowbel.errors.IdentifierNotFound;
-import com.cowlark.cowbel.symbols.Function;
 import com.cowlark.cowbel.symbols.Symbol;
 
 public class ResolveVariableReferencesVisitor extends RecursiveVisitor
@@ -25,15 +31,15 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 	    super.visit(node);
 	}
 	
-	@Override
-	public void visit(DirectFunctionCallNode node) throws CompilationException
+	private <T extends Node & IsCallable & HasIdentifier & HasSymbol>
+		void direct_function_call(T node) throws CompilationException
 	{
 		ScopeConstructorNode scope = node.getScope();
 		IdentifierNode in = node.getIdentifier();
 		
 		/* Try to look this up as a function first. */
 		
-		Symbol sym = scope.lookupFunction(in, node.getArguments().size());
+		Symbol sym = scope.lookupFunction(in, node.getArguments().getNumberOfChildren());
 		if (sym == null)
 		{
 			/* If that failed, treat it as a variable reference (doing an
@@ -43,8 +49,49 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 		}
 		
 		node.setSymbol(sym);
+	}
+	
+	private <T extends Node & IsCallableStatement>
+		void direct_call(T node) throws CompilationException
+	{
+		IdentifierListNode variables = node.getVariables();
+		
+		ScopeConstructorNode scope = node.getScope();
+		
+		for (int i = 0; i < variables.getNumberOfChildren(); i++)
+		{
+			IdentifierNode id = variables.getIdentifier(i);
+			Symbol symbol = scope.lookupVariable(id);
+			
+			if (scope != symbol.getScope())
+				scope.importSymbol(symbol);
+
+			variables.setSymbol(i, symbol);
+		}
+	}
+	
+	@Override
+	public void visit(DirectFunctionCallExpressionNode node) throws CompilationException
+	{
+		direct_function_call(node);
 	    super.visit(node);
 	}
+	
+	@Override
+	public void visit(DirectFunctionCallStatementNode node) throws CompilationException
+	{
+		direct_function_call(node);
+		direct_call(node);
+	    super.visit(node);
+	}
+	
+	@Override
+	public void visit(MethodCallStatementNode node) throws CompilationException
+	{
+		direct_call(node);
+	    super.visit(node);
+	}
+	
 	@Override
 	public void visit(VarReferenceNode node)
 	        throws CompilationException

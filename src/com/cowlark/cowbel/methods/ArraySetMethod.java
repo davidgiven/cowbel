@@ -3,7 +3,6 @@ package com.cowlark.cowbel.methods;
 import com.cowlark.cowbel.types.ArrayType;
 import com.cowlark.cowbel.types.IntegerType;
 import com.cowlark.cowbel.types.Type;
-import com.cowlark.cowbel.types.VoidType;
 
 public class ArraySetMethod extends TemplatedMethod
 {
@@ -31,7 +30,7 @@ public class ArraySetMethod extends TemplatedMethod
 		ArrayType t = (ArrayType) receivertype;
 		
 		setSignature(SIGNATURE, IDENTIFIER);
-		setReturnType(VoidType.create());
-		setArgumentTypes(IntegerType.create(), t.getChildType());
+		setOutputTypes();
+		setInputTypes(IntegerType.create(), t.getChildType());
     }
 }

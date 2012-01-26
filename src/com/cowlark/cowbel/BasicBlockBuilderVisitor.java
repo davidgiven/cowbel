@@ -6,7 +6,7 @@ import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
 import com.cowlark.cowbel.ast.nodes.BreakStatementNode;
 import com.cowlark.cowbel.ast.nodes.ContinueStatementNode;
-import com.cowlark.cowbel.ast.nodes.DirectFunctionCallNode;
+import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
 import com.cowlark.cowbel.ast.nodes.DummyExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionNode;
@@ -18,7 +18,7 @@ import com.cowlark.cowbel.ast.nodes.IfElseStatementNode;
 import com.cowlark.cowbel.ast.nodes.IfStatementNode;
 import com.cowlark.cowbel.ast.nodes.IntegerConstantNode;
 import com.cowlark.cowbel.ast.nodes.LabelStatementNode;
-import com.cowlark.cowbel.ast.nodes.MethodCallNode;
+import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
 import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
@@ -287,7 +287,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	}
 	
 	@Override
-	public void visit(DirectFunctionCallNode node) throws CompilationException
+	public void visit(DirectFunctionCallExpressionNode node) throws CompilationException
 	{
 		List<ExpressionNode> arguments = node.getArguments();
 		Symbol symbol = node.getSymbol();
@@ -321,7 +321,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	}
 	
 	@Override
-	public void visit(MethodCallNode node) throws CompilationException
+	public void visit(MethodCallExpressionNode node) throws CompilationException
 	{
 		List<ExpressionNode> arguments = node.getMethodArguments();
 

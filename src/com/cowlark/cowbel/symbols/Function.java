@@ -1,10 +1,8 @@
 package com.cowlark.cowbel.symbols;
 
-import java.util.List;
 import com.cowlark.cowbel.BasicBlock;
 import com.cowlark.cowbel.BasicBlockBuilderVisitor;
 import com.cowlark.cowbel.Constructor;
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.errors.CompilationException;
@@ -62,7 +60,7 @@ public class Function extends Symbol
 			FunctionType type = (FunctionType) getSymbolType();
 			
 			_mangled_name = calculateMangledName(getSymbolName(),
-					type.getArgumentTypes().size());
+					type.getInputArgumentTypes().size());
 		}
 		
 		return _mangled_name;

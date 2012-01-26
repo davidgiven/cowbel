@@ -8,7 +8,7 @@ public class RecursiveVisitor extends Visitor
 	@Override
 	public void visit(Node node) throws CompilationException
 	{
-		for (Node n : node.getChildren())
+		for (Node n : node)
 			n.visit(this);
 	}
 }

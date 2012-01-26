@@ -30,7 +30,7 @@ public class ArrayGetMethod extends TemplatedMethod
 		ArrayType t = (ArrayType) receivertype;
 		
 		setSignature(SIGNATURE, IDENTIFIER);
-		setReturnType(t.getChildType());
-		setArgumentTypes(IntegerType.create());
+		setOutputTypes(t.getChildType());
+		setInputTypes(IntegerType.create());
     }
 }

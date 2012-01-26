@@ -10,7 +10,6 @@ import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.StatementNode;
-import com.cowlark.cowbel.ast.nodes.VoidTypeNode;
 import com.cowlark.cowbel.backend.Backend;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.FailedParseException;
@@ -95,7 +94,7 @@ public class Compiler
 					loc, loc,
 					new IdentifierNode(mainname, mainnameend),
 					new ParameterDeclarationListNode(loc, loc),
-					new VoidTypeNode(loc, loc));
+					new ParameterDeclarationListNode(loc, loc));
 			FunctionDefinitionNode toplevelnode = new FunctionDefinitionNode(
 					loc, loc, toplevelnodeheader, _ast);
 			_mainFunction = new Function(toplevelnode);
@@ -132,25 +131,25 @@ public class Compiler
 		}
 		_listener.onTypeCheckEnd();
 		
-		/* Construct basic blocks and IR representation. */
-		
-		_listener.onBasicBlockAnalysisBegin();
-		
-		for (Function f : _functions)
-			f.buildBasicBlocks();
-		
-		_listener.onBasicBlockAnalysisEnd();
-		
-		/* Code generation. */
-		
-		_listener.onCodeGenerationBegin();
-		_backend.prologue();
-		for (Constructor c : _constructors)
-			_backend.visit(c);
-		for (Function f : _functions)
-			_backend.compileFunction(f);
-		_backend.epilogue();
-		_listener.onCodeGenerationEnd();
+//		/* Construct basic blocks and IR representation. */
+//		
+//		_listener.onBasicBlockAnalysisBegin();
+//		
+//		for (Function f : _functions)
+//			f.buildBasicBlocks();
+//		
+//		_listener.onBasicBlockAnalysisEnd();
+//		
+//		/* Code generation. */
+//		
+//		_listener.onCodeGenerationBegin();
+//		_backend.prologue();
+//		for (Constructor c : _constructors)
+//			_backend.visit(c);
+//		for (Function f : _functions)
+//			_backend.compileFunction(f);
+//		_backend.epilogue();
+//		_listener.onCodeGenerationEnd();
 	}
 
 	public void visit(BasicBlockVisitor visitor)

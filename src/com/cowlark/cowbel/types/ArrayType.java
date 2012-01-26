@@ -1,7 +1,7 @@
 package com.cowlark.cowbel.types;
 
+import com.cowlark.cowbel.ast.IsMethodNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.MethodCallNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.NoSuchMethodException;
@@ -60,10 +60,10 @@ public class ArrayType extends Type
 	public Method lookupMethod(Node node, IdentifierNode id)
 	        throws CompilationException
 	{
-		MethodCallNode n = (MethodCallNode) node;
+		IsMethodNode n = (IsMethodNode) node;
 		
 		String signature = "array." + id.getText() +
-			"." + n.getMethodArgumentCount();
+			"." + n.getArguments().getNumberOfChildren();
 		
 		Method method = Method.lookupTypeFamilyMethod(
 				n.getMethodReceiver().getType().getRealType(), signature);

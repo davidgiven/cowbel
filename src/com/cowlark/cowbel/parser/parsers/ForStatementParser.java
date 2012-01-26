@@ -1,11 +1,11 @@
 package com.cowlark.cowbel.parser.parsers;
 
+import com.cowlark.cowbel.ast.nodes.ArgumentListNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionNode;
-import com.cowlark.cowbel.ast.nodes.ForStatementNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.InferredTypeNode;
 import com.cowlark.cowbel.ast.nodes.IntegerConstantNode;
-import com.cowlark.cowbel.ast.nodes.MethodCallNode;
+import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.StatementListNode;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
@@ -91,11 +91,12 @@ public class ForStatementParser extends Parser
 								loopcounter,
 								(ExpressionNode) initialiserpr),
 						new WhileStatementNode(location, pr.end(),
-								new MethodCallNode(maximumpr, maximumpr.end(),
+								new MethodCallExpressionNode(maximumpr, maximumpr.end(),
 										new VarReferenceNode(variablepr, variablepr.end(),
 												loopcounter),
 										new IdentifierNode(comparisonmethodloc, comparisonmethodend),
-										(ExpressionNode) maximumpr
+										new ArgumentListNode(maximumpr, maximumpr.end(),
+												(ExpressionNode) maximumpr)
 								),
 								new ScopeConstructorNode(bodypr, bodypr.end(),
 										new StatementListNode(bodypr, bodypr.end(),
@@ -110,11 +111,12 @@ public class ForStatementParser extends Parser
 												(ScopeConstructorNode) bodypr,
 												new VarAssignmentNode(variablepr, variablepr.end(),
 														(IdentifierNode) loopcounter,
-														new MethodCallNode(maximumpr, maximumpr.end(),
+														new MethodCallExpressionNode(maximumpr, maximumpr.end(),
 																new VarReferenceNode(variablepr, variablepr.end(),
 																		loopcounter),
 																new IdentifierNode(incrementmethodloc, incrementmethodend),
-																(ExpressionNode) steppr
+																new ArgumentListNode(steppr, steppr.end(),
+																		(ExpressionNode) steppr)
 														)
 												)
 										)

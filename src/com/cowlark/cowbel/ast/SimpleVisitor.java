@@ -9,7 +9,7 @@ public class SimpleVisitor extends Visitor
 	@Override
 	public void visit(StatementListNode node) throws CompilationException
 	{
-		for (Node n : node.getChildren())
+		for (Node n : node)
 			n.visit(this);
 	}
 	

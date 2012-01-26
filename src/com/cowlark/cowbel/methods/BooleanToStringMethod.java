@@ -7,7 +7,7 @@ public class BooleanToStringMethod extends Method
 	public BooleanToStringMethod()
     {
 		setSignature("boolean.toString.0", "boolean.toString");
-		setReturnType(StringType.create());
-		setArgumentTypes();
+		setOutputTypes(StringType.create());
+		setInputTypes();
     }
 }

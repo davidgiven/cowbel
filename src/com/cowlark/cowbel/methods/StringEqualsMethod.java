@@ -8,7 +8,7 @@ public class StringEqualsMethod extends Method
 	public StringEqualsMethod()
     {
 		setSignature("string.==.1", "string._equals");
-		setReturnType(BooleanType.create());
-		setArgumentTypes(StringType.create());
+		setOutputTypes(BooleanType.create());
+		setInputTypes(StringType.create());
     }
 }

@@ -10,7 +10,7 @@ import com.cowlark.cowbel.Constructor;
 import com.cowlark.cowbel.ast.RecursiveVisitor;
 import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.cowbel.ast.nodes.MethodCallNode;
+import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
@@ -515,7 +515,7 @@ public class CBackend extends ImperativeBackend
 	@Override
 	public void visit(MethodCallInstruction insn)
 	{
-        MethodCallNode node = (MethodCallNode) insn.getNode();
+        MethodCallExpressionNode node = (MethodCallExpressionNode) insn.getNode();
         
         print("S_METHOD_");
         String methodsig = node.getMethod().getIdentifier();

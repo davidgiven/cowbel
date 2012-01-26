@@ -19,7 +19,7 @@ public abstract class Parser
 	public static IdentifierParser IdentifierParser = new IdentifierParser();
 	public static ParenthesisedExpressionParser ParenthesisedExpressionParser = new ParenthesisedExpressionParser();
 	public static ProgramParser ProgramParser = new ProgramParser();
-	public static FunctionStatementParser FunctionStatementParser = new FunctionStatementParser();
+	public static StatementParser StatementParser = new StatementParser();
 	public static VarDeclParser VarDeclParser = new VarDeclParser();
 	public static TypeParser TypeParser = new TypeParser();
 	public static FunctionHeaderParser FunctionHeaderParser = new FunctionHeaderParser();
@@ -40,6 +40,10 @@ public abstract class Parser
 	public static BreakStatementParser BreakStatementParser = new BreakStatementParser();
 	public static ContinueStatementParser ContinueStatementParser = new ContinueStatementParser();
 	public static ForStatementParser ForStatementParser = new ForStatementParser();
+	public static IdentifierListParser IdentifierListParser = new IdentifierListParser();
+	public static ArgumentListParser ArgumentListParser = new ArgumentListParser();
+	public static DirectFunctionCallStatementParser DirectFunctionCallStatementParser = new DirectFunctionCallStatementParser();
+	public static MethodCallStatementParser MethodCallStatementParser = new MethodCallStatementParser();
 	
 	public static Parser EOFParser = new EOFParser();
 	public static Parser DotParser = new TrivialParser(".");

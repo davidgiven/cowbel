@@ -21,7 +21,7 @@ public class ProgramParser extends Parser
 			if (pr1.success())
 				break;
 			
-			ParseResult pr2 = FunctionStatementParser.parse(n);
+			ParseResult pr2 = StatementParser.parse(n);
 			if (pr2.failed())
 				return pr2;
 			

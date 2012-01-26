@@ -7,7 +7,7 @@ public class BooleanOrMethod extends Method
 	public BooleanOrMethod()
     {
 		setSignature("boolean.|.1", "boolean._or");
-		setReturnType(BooleanType.create());
-		setArgumentTypes(BooleanType.create());
+		setOutputTypes(BooleanType.create());
+		setInputTypes(BooleanType.create());
     }
 }

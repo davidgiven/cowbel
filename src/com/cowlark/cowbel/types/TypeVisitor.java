@@ -7,5 +7,4 @@ public abstract class TypeVisitor
 	public abstract void visit(FunctionType type);
 	public abstract void visit(IntegerType type);
 	public abstract void visit(StringType type);
-	public abstract void visit(VoidType type);
 }

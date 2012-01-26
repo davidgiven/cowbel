@@ -39,7 +39,7 @@ public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
 		body.setFunction(f);
 		f.setScope(body);
 		
-		for (Node n : pdln.getChildren())
+		for (Node n : pdln)
 		{
 			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
 

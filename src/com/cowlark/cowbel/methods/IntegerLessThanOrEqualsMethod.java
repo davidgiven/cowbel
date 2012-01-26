@@ -8,7 +8,7 @@ public class IntegerLessThanOrEqualsMethod extends Method
 	public IntegerLessThanOrEqualsMethod()
     {
 		setSignature("integer.<=.1", "integer._le");
-		setReturnType(BooleanType.create());
-		setArgumentTypes(IntegerType.create());
+		setOutputTypes(BooleanType.create());
+		setInputTypes(IntegerType.create());
     }
 }
