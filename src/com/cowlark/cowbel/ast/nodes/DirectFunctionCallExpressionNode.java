@@ -1,7 +1,5 @@
 package com.cowlark.cowbel.ast.nodes;
 
-import java.util.List;
-import java.util.Vector;
 import com.cowlark.cowbel.ast.HasIdentifier;
 import com.cowlark.cowbel.ast.HasSymbol;
 import com.cowlark.cowbel.ast.IsCallable;

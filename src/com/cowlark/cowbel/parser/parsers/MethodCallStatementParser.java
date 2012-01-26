@@ -1,6 +1,5 @@
 package com.cowlark.cowbel.parser.parsers;
 
-import java.util.Collections;
 import com.cowlark.cowbel.ast.nodes.ArgumentListNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
