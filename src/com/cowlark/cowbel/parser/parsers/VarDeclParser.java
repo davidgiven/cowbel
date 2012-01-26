@@ -52,8 +52,7 @@ public class VarDeclParser extends Parser
 		
 		return new StatementListNode(location, pr.end(),
 				new VarDeclarationNode(location, identifierpr.end(),
-						(IdentifierNode) identifierpr, (TypeNode) typepr,
-						(ExpressionNode) valuepr),
+						(IdentifierNode) identifierpr, (TypeNode) typepr),
 				new VarAssignmentNode(identifierpr.start(), valuepr.end(),
 						(IdentifierNode) identifierpr,
 						(ExpressionNode) valuepr));

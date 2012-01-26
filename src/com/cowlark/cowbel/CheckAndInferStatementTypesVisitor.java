@@ -55,12 +55,6 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 	{
 		Symbol symbol = node.getSymbol();
 		Type symboltype = symbol.getSymbolType();
-		
-		ExpressionNode initialiser = node.getVariableInitialiser();
-		if (initialiser != null)
-			symboltype.unifyWith(node, initialiser.calculateType());
-		
-		symboltype.ensureConcrete(node);
 	}
 	
 	@Override
