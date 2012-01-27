@@ -1,0 +1,30 @@
+/* © 2012 David Given
+ * This file is made available under the terms of the two-clause BSD
+ * license. See the file COPYING in the distribution directory for the
+ * full license text.
+ */
+
+function zeroreturn()
+{
+}
+
+function onereturn(): integer
+{
+	return 1;
+}
+
+function multireturn(): (a: integer, b: integer, c: integer)
+{
+	a = 1;
+	b = 2;
+	c = 3;
+}
+
+zeroreturn();
+var r1 = onereturn();
+var r2, r3, r4 = multireturn();
+
+r1 = onereturn();
+r2, r3, r4 = multireturn();
+
+r1 = onereturn() + onereturn();
