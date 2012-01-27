@@ -16,17 +16,12 @@ import com.cowlark.cowbel.parser.core.ParseResult;
 
 public class DirectFunctionCallStatementParser extends Parser
 {
-	@Override
-	protected ParseResult parseImpl(Location location)
+	/* This is an evil abuse of the parser structure: VarDeclParser
+	 * needs to call in here to do initialiser parses. */
+	
+	ParseResult parseWithVariableList(IdentifierListNode variablespr,
+			Location location)
 	{
-		ParseResult variablespr = IdentifierListParser.parse(location);
-		if (variablespr.failed())
-		{
-			/* Assume an empty list. */
-			variablespr = new IdentifierListNode(location, location,
-					Collections.<IdentifierNode>emptyList());
-		}
-		
 		ParseResult identifierpr = IdentifierParser.parse(variablespr.end());
 		if (identifierpr.failed())
 			return identifierpr;
@@ -46,5 +41,20 @@ public class DirectFunctionCallStatementParser extends Parser
 				(IdentifierNode) identifierpr,
 				(IdentifierListNode) variablespr,
 				(ArgumentListNode) argumentspr);
+	}
+
+	@Override
+	protected ParseResult parseImpl(Location location)
+	{
+		ParseResult variablespr = IdentifierListParser.parse(location);
+		if (variablespr.failed())
+		{
+			/* Assume an empty list. */
+			variablespr = new IdentifierListNode(location, location,
+					Collections.<IdentifierNode>emptyList());
+		}
+		
+		return parseWithVariableList((IdentifierListNode) variablespr,
+				variablespr.end());
 	}
 }

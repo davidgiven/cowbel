@@ -10,7 +10,7 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class IndirectFunctionCallStatementNode extends ExpressionNode
+public class IndirectFunctionCallStatementNode extends StatementNode
 {
 	public IndirectFunctionCallStatementNode(Location start, Location end,
 			ExpressionNode object, IdentifierListNode variables,

@@ -6,27 +6,23 @@
 
 package com.cowlark.cowbel.ast.nodes;
 
-import com.cowlark.cowbel.ast.HasSymbol;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
-import com.cowlark.cowbel.symbols.Symbol;
 
-public class VarAssignmentNode extends StatementNode implements HasSymbol
+public class VarAssignmentNode extends StatementNode
 {
-	private Symbol _symbol;
-	
 	public VarAssignmentNode(Location start, Location end,
-			IdentifierNode identifier, ExpressionNode value)
+			IdentifierListNode identifier, ExpressionNode value)
     {
 		super(start, end);
 		addChild(identifier);
 		addChild(value);
     }
 	
-	public IdentifierNode getVariableName()
+	public IdentifierListNode getVariables()
 	{
-		return (IdentifierNode) getChild(0);
+		return (IdentifierListNode) getChild(0);
 	}
 	
 	public ExpressionNode getExpression()
@@ -35,30 +31,8 @@ public class VarAssignmentNode extends StatementNode implements HasSymbol
 	}
 	
 	@Override
-	public String getShortDescription()
-	{
-		Symbol s = getSymbol();
-		if (s == null)
-			return getText();
-		else
-			return s.toString();
-	}
-	
-	@Override
 	public void visit(Visitor visitor) throws CompilationException
 	{
 		visitor.visit(this);
-	}
-	
-	@Override
-	public Symbol getSymbol()
-	{
-	    return _symbol;
-	}
-	
-	@Override
-	public void setSymbol(Symbol symbol)
-	{
-	    _symbol = symbol;
 	}
 }

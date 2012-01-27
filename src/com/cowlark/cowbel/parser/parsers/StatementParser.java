@@ -15,10 +15,6 @@ public class StatementParser extends Parser
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
-		ParseResult pr1 = VarAssignmentParser.parse(location);
-		if (pr1.success())
-			return pr1;
-		
 		ParseResult pr2 = VarDeclParser.parse(location);
 		if (pr2.success())
 			return pr2;
@@ -73,6 +69,8 @@ public class StatementParser extends Parser
 		if (pr13.success())
 			return pr13;
 		
+		/* The order of these is important. */
+		
 		ParseResult pr14 = DirectFunctionCallStatementParser.parse(location);
 		if (pr14.success())
 			return pr14;
@@ -80,6 +78,10 @@ public class StatementParser extends Parser
 		ParseResult pr15 = MethodCallStatementParser.parse(location);
 		if (pr15.success())
 			return pr15;
+		
+		ParseResult pr1 = VarAssignmentParser.parse(location);
+		if (pr1.success())
+			return pr1;
 		
 		ParseResult pr16 = ExpressionStatementParser.parse(location);
 		if (pr16.success())

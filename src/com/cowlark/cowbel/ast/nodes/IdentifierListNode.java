@@ -27,9 +27,11 @@ public class IdentifierListNode extends Node
 		_symbols = new Symbol[getNumberOfChildren()];
     }
 	
-	public IdentifierListNode(Location start, Location end)
+	public IdentifierListNode(Location start, Location end,
+			IdentifierNode... ids)
     {
 		super(start, end);
+		addChildren(ids);
 		
 		_symbols = new Symbol[getNumberOfChildren()];
     }

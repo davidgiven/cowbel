@@ -19,17 +19,13 @@ import com.cowlark.cowbel.parser.core.ParseResult;
 
 public class MethodCallStatementParser extends Parser
 {
-	@Override
-	protected ParseResult parseImpl(Location location)
+	/* This is an evil abuse of the parser structure: VarDeclParser
+	 * needs to call in here to do initialiser parses. */
+	
+	ParseResult parseWithVariableList(IdentifierListNode variablespr,
+			Location location)
 	{
-		ParseResult variablespr = IdentifierListParser.parse(location);
-		if (variablespr.failed())
-		{
-			/* Assume an empty list. */
-			variablespr = new IdentifierListNode(location, location);
-		}
-		
-		ParseResult seed = ExpressionLeafParser.parse(variablespr.end());
+		ParseResult seed = ExpressionLeafParser.parse(location);
 		if (seed.failed())
 			return seed;
 		
@@ -94,5 +90,19 @@ public class MethodCallStatementParser extends Parser
 					(ExpressionNode) seed,
 					(ArgumentListNode) argumentspr);
 		}
+	}
+
+	@Override
+	protected ParseResult parseImpl(Location location)
+	{
+		ParseResult variablespr = IdentifierListParser.parse(location);
+		if (variablespr.failed())
+		{
+			/* Assume an empty list. */
+			variablespr = new IdentifierListNode(location, location);
+		}
+
+		return parseWithVariableList((IdentifierListNode) variablespr,
+				variablespr.end());
 	}
 }

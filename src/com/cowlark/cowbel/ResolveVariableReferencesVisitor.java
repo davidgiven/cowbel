@@ -21,6 +21,7 @@ import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
 import com.cowlark.cowbel.ast.nodes.VarReferenceNode;
+import com.cowlark.cowbel.errors.AssignmentOfExpressionToMultipleValues;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.symbols.Symbol;
 
@@ -118,13 +119,18 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 	        throws CompilationException
 	{
 		ScopeConstructorNode scope = node.getScope();
-		IdentifierNode in = node.getVariableName();
+		IdentifierListNode iln = node.getVariables();
+		
+		if (iln.getNumberOfChildren() != 1)
+			throw new AssignmentOfExpressionToMultipleValues(node);
+		
+		IdentifierNode in = iln.getIdentifier(0);
 		Symbol symbol = scope.lookupVariable(in);
 		
 		if (scope != symbol.getScope())
 			scope.importSymbol(symbol);
 		
-		node.setSymbol(symbol);
+		iln.setSymbol(0, symbol);
 	    super.visit(node);
 	}
 }

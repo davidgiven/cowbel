@@ -10,7 +10,6 @@ import com.cowlark.cowbel.Constructor;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
-import com.cowlark.cowbel.ast.nodes.VarDeclarationNode;
 import com.cowlark.cowbel.types.Type;
 
 public class Variable extends Symbol
@@ -22,11 +21,6 @@ public class Variable extends Symbol
 		super(node, name, type);
 	}
 
-	public Variable(VarDeclarationNode node)
-    {
-		super(node, node.getVariableName(), node.getVariableType());
-    }
-	
 	public Variable(ParameterDeclarationNode node)
 	{
 		super(node, node.getVariableName(), node.getVariableType());
