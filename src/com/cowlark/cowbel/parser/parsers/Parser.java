@@ -50,6 +50,7 @@ public abstract class Parser
 	public static ArgumentListParser ArgumentListParser = new ArgumentListParser();
 	public static DirectFunctionCallStatementParser DirectFunctionCallStatementParser = new DirectFunctionCallStatementParser();
 	public static MethodCallStatementParser MethodCallStatementParser = new MethodCallStatementParser();
+	public static VariableDeclarationListParser VariableDeclarationListParser = new VariableDeclarationListParser();
 	
 	public static Parser EOFParser = new EOFParser();
 	public static Parser DotParser = new TrivialParser(".");

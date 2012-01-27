@@ -60,7 +60,10 @@ public class TypeVariable extends Type
 		if (_realType != null)
 			_realType.unifyWith(node, other);
 		else
+		{
+			assert(other != this);
 			_realType = other;
+		}
 	}
 	
 	@Override

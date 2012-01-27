@@ -33,9 +33,7 @@ public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
 			throws CompilationException
 	{
 		FunctionScopeConstructorNode body = node.getFunctionBody();
-		body.setFunction(function);
-		function.setScope(body);
-		
+
 		for (Node n : pdln)
 		{
 			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
@@ -57,6 +55,10 @@ public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
 		Function f = new Function(node);
 		node.getScope().addSymbol(f);
 		node.setSymbol(f);
+
+		FunctionScopeConstructorNode body = node.getFunctionBody();
+		body.setFunction(f);
+		f.setScope(body);
 		
 		/* Add function parameters to its scope. */
 		
@@ -75,13 +77,18 @@ public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
 	public void visit(VarDeclarationNode node)
 	        throws CompilationException
 	{
-		/* Add this symbol to the current scope. */
+		/* Add these symbols to the current scope. */
 		
 		ScopeConstructorNode scope = node.getScope();
-		Variable v = new Variable(node);
-		v.setScope(scope);
-		scope.addSymbol(v);
-		node.setSymbol(v);
+		ParameterDeclarationListNode pdln = node.getVariables();
+		for (Node n : pdln)
+		{
+			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
+			Variable v = new Variable(pdn);
+			v.setScope(scope);
+			scope.addSymbol(v);
+			pdn.setSymbol(v);
+		}
 		
 	    super.visit(node);
 	}

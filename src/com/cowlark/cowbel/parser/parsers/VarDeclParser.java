@@ -6,18 +6,41 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
+import java.util.ArrayList;
+import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.InferredTypeNode;
+import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
+import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
 import com.cowlark.cowbel.ast.nodes.StatementListNode;
-import com.cowlark.cowbel.ast.nodes.TypeNode;
-import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
+import com.cowlark.cowbel.ast.nodes.StatementNode;
 import com.cowlark.cowbel.ast.nodes.VarDeclarationNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
 public class VarDeclParser extends Parser
 {
+	private ParseResult parse_initialiser(IdentifierListNode identifierspr,
+			Location location)
+	{
+		ParseResult pr2 = DirectFunctionCallStatementParser.parseWithVariableList(
+				identifierspr, location);
+		if (pr2.success())
+			return pr2;
+		
+		ParseResult pr1 = MethodCallStatementParser.parseWithVariableList(
+				identifierspr, location);
+		if (pr1.success())
+			return pr1;
+		
+		ParseResult pr3 = VarAssignmentParser.parseWithVariableList(
+				identifierspr, location);
+		if (pr3.success())
+			return pr3;
+		
+		return combineParseErrors(pr1, pr2, pr3);
+	}
+	
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
@@ -25,42 +48,31 @@ public class VarDeclParser extends Parser
 		if (pr.failed())
 			return pr;
 		
-		ParseResult identifierpr = IdentifierParser.parse(pr.end());
-		if (identifierpr.failed())
-			return identifierpr;
-			
-		Location n = identifierpr.end();
-		ParseResult colonpr = ColonParser.parse(n);
-		ParseResult typepr = null;
-		if (colonpr.success())
+		ParseResult variablespr = VariableDeclarationListParser.parse(pr.end());
+		if (variablespr.failed())
+			return variablespr;
+		
+		/* Fake up an IdentifierListNode based on the contents of the
+		 * ParameterDeclarationListNode we got above. */
+		
+		ParameterDeclarationListNode pdln = (ParameterDeclarationListNode) variablespr;
+		ArrayList<IdentifierNode> identifiers = new ArrayList<IdentifierNode>();
+		for (Node n : pdln)
 		{
-			typepr = TypeParser.parse(colonpr.end());
-			if (typepr.failed())
-				return typepr;
-			
-			n = typepr.end();
+			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
+			identifiers.add(pdn.getVariableName());
 		}
 		
-		pr = EqualsParser.parse(n);
-		if (pr.failed())
-			return pr;
+		IdentifierListNode identifierspr = new IdentifierListNode(
+				variablespr, variablespr.end(), identifiers);
 		
-		ParseResult valuepr = ExpressionLowParser.parse(pr.end());
-		if (valuepr.failed())
-			return valuepr;
-		
-		pr = SemicolonParser.parse(valuepr.end());
-		if (pr.failed())
-			return pr;
-		
-		if (typepr == null)
-			typepr = new InferredTypeNode(identifierpr.start(), identifierpr.end());
+		ParseResult initialiserpr = parse_initialiser(identifierspr, variablespr.end());
+		if (initialiserpr.failed())
+			return initialiserpr;
 		
 		return new StatementListNode(location, pr.end(),
-				new VarDeclarationNode(location, identifierpr.end(),
-						(IdentifierNode) identifierpr, (TypeNode) typepr),
-				new VarAssignmentNode(identifierpr.start(), valuepr.end(),
-						(IdentifierNode) identifierpr,
-						(ExpressionNode) valuepr));
+				new VarDeclarationNode(pdln, pdln.end(),
+						pdln),
+				(StatementNode) initialiserpr);
 	}
 }

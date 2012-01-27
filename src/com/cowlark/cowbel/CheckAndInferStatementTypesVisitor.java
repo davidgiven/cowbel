@@ -59,14 +59,12 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 	@Override
 	public void visit(VarDeclarationNode node) throws CompilationException
 	{
-		Symbol symbol = node.getSymbol();
-		Type symboltype = symbol.getSymbolType();
 	}
 	
 	@Override
 	public void visit(VarAssignmentNode node) throws CompilationException
 	{
-		Symbol symbol = node.getSymbol();
+		Symbol symbol = node.getVariables().getSymbol(0);
 		Type symboltype = symbol.getSymbolType();
 		ExpressionNode expression = node.getExpression();
 		Type expressiontype = expression.calculateType();
@@ -217,8 +215,8 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		List<Type> inputCallTypes = node.getArguments().calculateTypes();
 		List<Type> outputCallTypes = node.getVariables().calculateTypes();
 		
-		if (!Utils.unifyTypeLists(node, inputCallTypes, inputCallTypes) ||
-			!Utils.unifyTypeLists(node, outputCallTypes, outputCallTypes))
+		if (!Utils.unifyTypeLists(node, inputFunctionTypes, inputCallTypes) ||
+			!Utils.unifyTypeLists(node, outputFunctionTypes, outputCallTypes))
 		{
 			throw new FunctionParameterMismatch(node, function,
 					outputFunctionTypes, outputCallTypes,

@@ -6,50 +6,22 @@
 
 package com.cowlark.cowbel.ast.nodes;
 
-import com.cowlark.cowbel.ast.HasSymbol;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
-import com.cowlark.cowbel.symbols.Symbol;
-import com.cowlark.cowbel.types.Type;
 
-public class VarDeclarationNode extends StatementNode implements HasSymbol
+public class VarDeclarationNode extends StatementNode
 {
-	private Symbol _symbol;
-	
 	public VarDeclarationNode(Location start, Location end,
-			IdentifierNode identifier, TypeNode type)
+			ParameterDeclarationListNode variables)
     {
 		super(start, end);
-		addChild(identifier);
-		addChild(type);
+		addChild(variables);
     }
 	
-	public IdentifierNode getVariableName()
+	public ParameterDeclarationListNode getVariables()
 	{
-		return (IdentifierNode) getChild(0);
-	}
-	
-	public TypeNode getVariableTypeNode()
-	{
-		return (TypeNode) getChild(1);
-	}
-	
-	public Type getVariableType()
-	{
-		return getVariableTypeNode().getType();
-	}
-	
-	@Override
-	public Symbol getSymbol()
-	{
-	    return _symbol;
-	}
-	
-	@Override
-	public void setSymbol(Symbol symbol)
-	{
-		_symbol = symbol;
+		return (ParameterDeclarationListNode) getChild(0);
 	}
 	
 	@Override
