@@ -16,7 +16,6 @@ import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionStatementNode;
-import com.cowlark.cowbel.ast.nodes.ForStatementNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.GotoStatementNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
@@ -158,19 +157,6 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		body.checkTypes();
 	}
 
-	@Override
-	public void visit(ForStatementNode node) throws CompilationException
-	{
-		node.getInitialiserStatement().checkTypes();
-		
-		ExpressionNode conditional = node.getConditionalExpression();
-		Type conditionaltype = conditional.calculateType();
-		conditionaltype.unifyWith(conditional, BooleanType.create());
-		
-		node.getIncrementerStatement().checkTypes();
-		node.getBodyStatement().checkTypes();
-	}
-	
 	@Override
 	public void visit(LabelStatementNode node) throws CompilationException
 	{

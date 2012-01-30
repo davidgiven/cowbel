@@ -15,7 +15,7 @@ public class GotoInstruction extends Instruction
 	
 	public GotoInstruction(Node node, BasicBlock target)
 	{
-		super(node, 0);
+		super(node);
 		_target = target;
 	}
 	

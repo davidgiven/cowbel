@@ -7,15 +7,18 @@
 package com.cowlark.cowbel.instructions;
 
 import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.symbols.Variable;
 
 public class IntegerConstantInstruction extends Instruction
 {
 	private long _value;
+	private Variable _outvar;
 	
-	public IntegerConstantInstruction(Node node, long value)
+	public IntegerConstantInstruction(Node node, long value, Variable outvar)
     {
-		super(node, 0);
+		super(node);
 		_value = value;
+		_outvar = outvar;
     }
 	
 	public long getValue()
@@ -32,7 +35,7 @@ public class IntegerConstantInstruction extends Instruction
 	@Override
 	protected String getShortDescription()
 	{
-	    return Long.toString(_value);
+	    return Long.toString(_value) + " outvar=" + _outvar.toString();
 	}
 	
 	public void visit(InstructionVisitor visitor)

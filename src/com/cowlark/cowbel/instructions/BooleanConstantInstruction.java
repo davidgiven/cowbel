@@ -7,15 +7,18 @@
 package com.cowlark.cowbel.instructions;
 
 import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.symbols.Variable;
 
 public class BooleanConstantInstruction extends Instruction
 {
 	private boolean _value;
+	private Variable _outvar;
 	
-	public BooleanConstantInstruction(Node node, boolean value)
+	public BooleanConstantInstruction(Node node, boolean value, Variable outvar)
     {
-		super(node, 0);
+		super(node);
 		_value = value;
+		_outvar = outvar;
     }
 	
 	public boolean getValue()
@@ -32,7 +35,7 @@ public class BooleanConstantInstruction extends Instruction
 	@Override
 	protected String getShortDescription()
 	{
-	    return Boolean.toString(_value);
+	    return Boolean.toString(_value) + " outvar=" + _outvar.toString();
 	}
 	
 	public void visit(InstructionVisitor visitor)

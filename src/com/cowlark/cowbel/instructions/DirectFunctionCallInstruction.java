@@ -6,17 +6,24 @@
 
 package com.cowlark.cowbel.instructions;
 
+import java.util.List;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.symbols.Function;
+import com.cowlark.cowbel.symbols.Variable;
 
 public class DirectFunctionCallInstruction extends Instruction
 {
 	private Function _function;
+	private List<Variable> _invars;
+	private List<Variable> _outvars;
 	
-	public DirectFunctionCallInstruction(Node node, Function function, int args)
+	public DirectFunctionCallInstruction(Node node, Function function,
+			List<Variable> invars, List<Variable> outvars)
     {
-		super(node, args);
+		super(node);
 		_function = function;
+		_invars = invars;
+		_outvars = outvars;
     }
 	
 	public Function getFunction()
@@ -33,7 +40,8 @@ public class DirectFunctionCallInstruction extends Instruction
 	@Override
 	protected String getShortDescription()
 	{
-	    return _function.toString();
+	    return _function.toString() + " inputs=" + varlist(_invars) +
+	    	" outputs="	+ varlist(_outvars);
 	}
 	
 	public void visit(InstructionVisitor visitor)

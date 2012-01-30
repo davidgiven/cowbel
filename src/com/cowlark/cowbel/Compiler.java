@@ -137,15 +137,15 @@ public class Compiler
 		}
 		_listener.onTypeCheckEnd();
 		
-//		/* Construct basic blocks and IR representation. */
-//		
-//		_listener.onBasicBlockAnalysisBegin();
-//		
-//		for (Function f : _functions)
-//			f.buildBasicBlocks();
-//		
-//		_listener.onBasicBlockAnalysisEnd();
-//		
+		/* Construct basic blocks and IR representation. */
+		
+		_listener.onBasicBlockAnalysisBegin();
+		
+		for (Function f : _functions)
+			f.buildBasicBlocks();
+		
+		_listener.onBasicBlockAnalysisEnd();
+		
 //		/* Code generation. */
 //		
 //		_listener.onCodeGenerationBegin();

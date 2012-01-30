@@ -9,7 +9,6 @@ package com.cowlark.cowbel;
 import java.util.Set;
 import com.cowlark.cowbel.ast.RecursiveVisitor;
 import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
-import com.cowlark.cowbel.ast.nodes.ForStatementNode;
 import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.WhileStatementNode;
 import com.cowlark.cowbel.errors.CompilationException;
@@ -63,16 +62,6 @@ public class AssignConstructorsToScopesVisitor extends RecursiveVisitor
 		return false;
 	}
 
-	@Override
-	public void visit(ForStatementNode node) throws CompilationException
-	{
-		ScopeConstructorNode body = node.getBodyStatement();
-		if (is_complex_scope(body))
-			assign_stackframe(body, true);
-		
-	    super.visit(node);
-	}
-	
 	@Override
 	public void visit(WhileStatementNode node) throws CompilationException
 	{

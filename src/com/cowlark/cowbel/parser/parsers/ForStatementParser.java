@@ -88,7 +88,7 @@ public class ForStatementParser extends Parser
 		incrementmethodend.advance(1);
 
 		IdentifierNode loopcounter = IdentifierNode.createInternalIdentifier(
-				"loop counter for " + variablepr.getText());
+				"loop_counter_for_" + variablepr.getText());
 		
 		return new ScopeConstructorNode(location, bodypr.end(),
 			new StatementListNode(location, pr.end(),

@@ -38,31 +38,6 @@ public class InstructionVisitor
 		visit((Instruction) insn);
 	}
 	
-	public void visit(SetReturnValueInstruction insn)
-	{
-		visit((Instruction) insn);
-	}
-	
-	public void visit(GetUpvalueInstruction insn)
-	{
-		visit((Instruction) insn);
-	}
-	
-	public void visit(SetUpvalueInstruction insn)
-	{
-		visit((Instruction) insn);
-	}
-	
-	public void visit(GetLocalInstruction insn)
-	{
-		visit((Instruction) insn);
-	}
-	
-	public void visit(SetLocalInstruction insn)
-	{
-		visit((Instruction) insn);
-	}
-	
 	public void visit(MethodCallInstruction insn)
 	{
 		visit((Instruction) insn);
@@ -92,10 +67,4 @@ public class InstructionVisitor
 	{
 		visit((Instruction) insn);
 	}
-	
-	public void visit(DiscardInstruction insn)
-	{
-		visit((Instruction) insn);
-	}
-	
 }

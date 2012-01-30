@@ -15,7 +15,6 @@ import com.cowlark.cowbel.ast.nodes.DirectFunctionCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
 import com.cowlark.cowbel.ast.nodes.DummyExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionStatementNode;
-import com.cowlark.cowbel.ast.nodes.ForStatementNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.GotoStatementNode;
 import com.cowlark.cowbel.ast.nodes.IfElseStatementNode;
@@ -104,11 +103,6 @@ public class Visitor
 	}
 
 	public void visit(DoWhileStatementNode node) throws CompilationException
-	{
-		visit((Node) node);
-	}
-
-	public void visit(ForStatementNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}
