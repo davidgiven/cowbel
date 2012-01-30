@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Vector;
 import com.cowlark.cowbel.ast.IsCallable;
 import com.cowlark.cowbel.ast.SimpleVisitor;
-import com.cowlark.cowbel.ast.nodes.ArgumentListNode;
 import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
 import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.DummyExpressionNode;
+import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
@@ -91,7 +91,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		FunctionType functionType = (FunctionType) function.getSymbolType();
 		List<Type> inputArgumentTypes = functionType.getInputArgumentTypes();
 		List<Type> outputArgumentTypes = functionType.getOutputArgumentTypes();
-		ArgumentListNode callArguments = node.getArguments();
+		ExpressionListNode callArguments = node.getArguments();
 		
 		Vector<Type> callArgumentTypes = new Vector<Type>();
 		for (Node n : callArguments)
@@ -153,7 +153,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		Type receivertype = receiver.calculateType();
 		receivertype.ensureConcrete(node);
 		
-		ArgumentListNode arguments = node.getArguments();
+		ExpressionListNode arguments = node.getArguments();
 		ArrayList<Type> argumenttypes = new ArrayList<Type>();
 		for (Node n : arguments)
 		{

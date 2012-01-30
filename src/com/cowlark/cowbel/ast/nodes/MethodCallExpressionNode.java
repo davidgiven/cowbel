@@ -20,7 +20,7 @@ public class MethodCallExpressionNode extends ExpressionNode
 	public MethodCallExpressionNode(Location start, Location end,
 			ExpressionNode object,
 			IdentifierNode method,
-			ArgumentListNode arguments)
+			ExpressionListNode arguments)
     {
 		super(start, end);
 		addChild(object);
@@ -48,9 +48,9 @@ public class MethodCallExpressionNode extends ExpressionNode
 		return (IdentifierNode) getChild(1);
 	}
 	
-	public ArgumentListNode getArguments()
+	public ExpressionListNode getArguments()
 	{
-		return (ArgumentListNode) getChild(2);
+		return (ExpressionListNode) getChild(2);
 	}
 	
 	@Override

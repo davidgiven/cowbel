@@ -13,7 +13,7 @@ import com.cowlark.cowbel.parser.core.Location;
 public class IndirectFunctionCallExpressionNode extends ExpressionNode
 {
 	public IndirectFunctionCallExpressionNode(Location start, Location end,
-			ExpressionNode object, ArgumentListNode arguments)
+			ExpressionNode object, ExpressionListNode arguments)
     {
 		super(start, end);
 		addChild(object);
@@ -25,9 +25,9 @@ public class IndirectFunctionCallExpressionNode extends ExpressionNode
 		return (ExpressionNode) getChild(0);
 	}
 
-	public ArgumentListNode getArguments()
+	public ExpressionListNode getArguments()
 	{
-		return (ArgumentListNode) getChild(1);
+		return (ExpressionListNode) getChild(1);
 	}
 	
 	@Override

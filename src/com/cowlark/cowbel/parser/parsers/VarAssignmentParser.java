@@ -6,7 +6,7 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
+import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
 import com.cowlark.cowbel.parser.core.Location;
@@ -17,17 +17,17 @@ public class VarAssignmentParser extends Parser
 	ParseResult parseWithVariableList(IdentifierListNode variablespr,
 			Location location)
 	{
-		ParseResult valuepr = ExpressionLowParser.parse(location);
-		if (valuepr.failed())
-			return valuepr;
+		ParseResult valuespr = ExpressionListParser.parse(location);
+		if (valuespr.failed())
+			return valuespr;
 		
-		ParseResult pr = SemicolonParser.parse(valuepr.end());
+		ParseResult pr = SemicolonParser.parse(valuespr.end());
 		if (pr.failed())
 			return pr;
 		
 		return new VarAssignmentNode(location, pr.end(),
 				(IdentifierListNode) variablespr,
-				(ExpressionNode) valuepr); 
+				(ExpressionListNode) valuespr); 
 	}
 	
 	@Override

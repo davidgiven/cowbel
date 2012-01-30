@@ -6,9 +6,9 @@
 
 package com.cowlark.cowbel.ast;
 
-import com.cowlark.cowbel.ast.nodes.ArgumentListNode;
+import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 
 public interface IsCallable
 {
-	public ArgumentListNode getArguments();
+	public ExpressionListNode getArguments();
 }

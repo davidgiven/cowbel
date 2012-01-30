@@ -14,7 +14,7 @@ public class IndirectFunctionCallStatementNode extends StatementNode
 {
 	public IndirectFunctionCallStatementNode(Location start, Location end,
 			ExpressionNode object, IdentifierListNode variables,
-			ArgumentListNode arguments)
+			ExpressionListNode arguments)
     {
 		super(start, end);
 		addChild(object);
@@ -32,9 +32,9 @@ public class IndirectFunctionCallStatementNode extends StatementNode
 		return (IdentifierListNode) getChild(1);
 	}
 	
-	public ArgumentListNode getArguments()
+	public ExpressionListNode getArguments()
 	{
-		return (ArgumentListNode) getChild(2);
+		return (ExpressionListNode) getChild(2);
 	}
 	
 	@Override

@@ -9,11 +9,11 @@ package com.cowlark.cowbel;
 import java.util.List;
 import com.cowlark.cowbel.ast.IsCallableStatement;
 import com.cowlark.cowbel.ast.SimpleVisitor;
-import com.cowlark.cowbel.ast.nodes.ArgumentListNode;
 import com.cowlark.cowbel.ast.nodes.BreakStatementNode;
 import com.cowlark.cowbel.ast.nodes.ContinueStatementNode;
 import com.cowlark.cowbel.ast.nodes.DirectFunctionCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
+import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionStatementNode;
 import com.cowlark.cowbel.ast.nodes.ForStatementNode;
@@ -64,13 +64,21 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 	@Override
 	public void visit(VarAssignmentNode node) throws CompilationException
 	{
-		Symbol symbol = node.getVariables().getSymbol(0);
-		Type symboltype = symbol.getSymbolType();
-		ExpressionNode expression = node.getExpression();
-		Type expressiontype = expression.calculateType();
+		IdentifierListNode ids = node.getVariables();
+		ExpressionListNode exprs = node.getExpressions();
+		assert(ids.getNumberOfChildren() == exprs.getNumberOfChildren());
+		
+		for (int i = 0; i < ids.getNumberOfChildren(); i++)
+		{
+			Symbol symbol = ids.getSymbol(i);
+			Type symboltype = symbol.getSymbolType();
+			
+			ExpressionNode expression = exprs.getExpression(i);
+			Type expressiontype = expression.calculateType();
 
-		symboltype.unifyWith(node, expressiontype);
-		symboltype.ensureConcrete(node);
+			symboltype.unifyWith(node, expressiontype);
+			symboltype.ensureConcrete(node);
+		}
 	}
 	
 	@Override
@@ -193,7 +201,7 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		IdentifierListNode variables = node.getVariables();
 		List<Type> variabletypes = variables.calculateTypes();
 		
-		ArgumentListNode arguments = node.getArguments();
+		ExpressionListNode arguments = node.getArguments();
 		List<Type> argumenttypes = arguments.calculateTypes();
 		
 		IdentifierNode name = node.getMethodIdentifier();
@@ -211,7 +219,7 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		List<Type> inputFunctionTypes = functionType.getInputArgumentTypes();
 		List<Type> outputFunctionTypes = functionType.getOutputArgumentTypes();
 		
-		ArgumentListNode callArguments = node.getArguments();
+		ExpressionListNode callArguments = node.getArguments();
 		List<Type> inputCallTypes = node.getArguments().calculateTypes();
 		List<Type> outputCallTypes = node.getVariables().calculateTypes();
 		

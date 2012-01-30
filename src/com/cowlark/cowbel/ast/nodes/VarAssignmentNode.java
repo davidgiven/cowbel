@@ -13,7 +13,7 @@ import com.cowlark.cowbel.parser.core.Location;
 public class VarAssignmentNode extends StatementNode
 {
 	public VarAssignmentNode(Location start, Location end,
-			IdentifierListNode identifier, ExpressionNode value)
+			IdentifierListNode identifier, ExpressionListNode value)
     {
 		super(start, end);
 		addChild(identifier);
@@ -25,9 +25,9 @@ public class VarAssignmentNode extends StatementNode
 		return (IdentifierListNode) getChild(0);
 	}
 	
-	public ExpressionNode getExpression()
+	public ExpressionListNode getExpressions()
 	{
-		return (ExpressionNode) getChild(1);
+		return (ExpressionListNode) getChild(1);
 	}
 	
 	@Override

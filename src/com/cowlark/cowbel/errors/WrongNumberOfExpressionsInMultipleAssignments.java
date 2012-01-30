@@ -6,16 +6,17 @@
 
 package com.cowlark.cowbel.errors;
 
+import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
 
-public class AssignmentOfExpressionToMultipleValues extends CompilationException
+public class WrongNumberOfExpressionsInMultipleAssignments extends CompilationException
 {
     private static final long serialVersionUID = 364494724060279571L;
     
 	private VarAssignmentNode _node;
     
-	public AssignmentOfExpressionToMultipleValues(VarAssignmentNode node)
+	public WrongNumberOfExpressionsInMultipleAssignments(VarAssignmentNode node)
     {
 		_node = node;
     }
@@ -24,10 +25,10 @@ public class AssignmentOfExpressionToMultipleValues extends CompilationException
 	public String getMessage()
 	{
 		IdentifierListNode iln = _node.getVariables();
+		ExpressionListNode eln = _node.getExpressions();
 		
-		return "When assigning from an expression you must use exactly one " +
-			"variable name on the left side of the assignment, but the " +
-			"assignment at "+iln.locationAsString()+" has "+
-			iln.getNumberOfChildren();
+		return "You have attempted to assign " + eln.getNumberOfChildren() +
+			" values to " + iln.getNumberOfChildren() + " variables at " +
+			iln.locationAsString();
 	}
 }

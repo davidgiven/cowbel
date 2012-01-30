@@ -13,6 +13,7 @@ import com.cowlark.cowbel.ast.IsCallableStatement;
 import com.cowlark.cowbel.ast.RecursiveVisitor;
 import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.DirectFunctionCallStatementNode;
+import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.GotoStatementNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
@@ -21,8 +22,8 @@ import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
 import com.cowlark.cowbel.ast.nodes.VarReferenceNode;
-import com.cowlark.cowbel.errors.AssignmentOfExpressionToMultipleValues;
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.errors.WrongNumberOfExpressionsInMultipleAssignments;
 import com.cowlark.cowbel.symbols.Symbol;
 
 public class ResolveVariableReferencesVisitor extends RecursiveVisitor
@@ -120,17 +121,22 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 	{
 		ScopeConstructorNode scope = node.getScope();
 		IdentifierListNode iln = node.getVariables();
+		ExpressionListNode eln = node.getExpressions();
 		
-		if (iln.getNumberOfChildren() != 1)
-			throw new AssignmentOfExpressionToMultipleValues(node);
+		if (iln.getNumberOfChildren() != eln.getNumberOfChildren())
+			throw new WrongNumberOfExpressionsInMultipleAssignments(node);
 		
-		IdentifierNode in = iln.getIdentifier(0);
-		Symbol symbol = scope.lookupVariable(in);
+		for (int i = 0; i < iln.getNumberOfChildren(); i++)
+		{
+			IdentifierNode in = iln.getIdentifier(i);
+			Symbol symbol = scope.lookupVariable(in);
+			
+			if (scope != symbol.getScope())
+				scope.importSymbol(symbol);
+			
+			iln.setSymbol(i, symbol);
+		}
 		
-		if (scope != symbol.getScope())
-			scope.importSymbol(symbol);
-		
-		iln.setSymbol(0, symbol);
 	    super.visit(node);
 	}
 }
