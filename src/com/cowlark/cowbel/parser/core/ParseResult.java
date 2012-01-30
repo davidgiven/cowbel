@@ -33,6 +33,11 @@ public abstract class ParseResult extends Location
 		return _end;
 	}
 	
+	public void setEnd(Location end)
+	{
+		_end = end;
+	}
+	
 	private String _text;
 	public String getText()
 	{

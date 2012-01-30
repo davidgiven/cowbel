@@ -7,8 +7,8 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import java.util.LinkedList;
-import com.cowlark.cowbel.ast.nodes.ArgumentListNode;
 import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
+import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
@@ -30,7 +30,7 @@ public class ExpressionHighParser extends Parser
 		
 		return new MethodCallExpressionNode(location, arguments.end(),
 				(ExpressionNode) seed, (IdentifierNode) method,
-				(ArgumentListNode) arguments);
+				(ExpressionListNode) arguments);
 	}
 	
 	private ParseResult parseFunctionCall(ParseResult seed, Location location)
@@ -40,7 +40,7 @@ public class ExpressionHighParser extends Parser
 			return arguments;
 		
 		return new IndirectFunctionCallExpressionNode(location, arguments.end(),
-				(ExpressionNode)seed, (ArgumentListNode) arguments);
+				(ExpressionNode)seed, (ExpressionListNode) arguments);
 	}
 	
 	private ParseResult parseDirectFunctionCall(Location location)
@@ -57,7 +57,7 @@ public class ExpressionHighParser extends Parser
 		
 		return new DirectFunctionCallExpressionNode(location, argumentspr.end(),
 				(IdentifierNode) identifierpr,
-				(ArgumentListNode) argumentspr);
+				(ExpressionListNode) argumentspr);
 	}
 	
 	@Override

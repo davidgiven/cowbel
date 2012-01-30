@@ -7,8 +7,8 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import java.util.Collections;
-import com.cowlark.cowbel.ast.nodes.ArgumentListNode;
 import com.cowlark.cowbel.ast.nodes.DirectFunctionCallStatementNode;
+import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.parser.core.Location;
@@ -40,7 +40,7 @@ public class DirectFunctionCallStatementParser extends Parser
 		return new DirectFunctionCallStatementNode(location, pr.end(),
 				(IdentifierNode) identifierpr,
 				(IdentifierListNode) variablespr,
-				(ArgumentListNode) argumentspr);
+				(ExpressionListNode) argumentspr);
 	}
 
 	@Override

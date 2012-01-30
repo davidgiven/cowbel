@@ -22,7 +22,7 @@ public class MethodCallStatementNode extends StatementNode
 			ExpressionNode object,
 			IdentifierNode method,
 			IdentifierListNode variables,
-			ArgumentListNode arguments)
+			ExpressionListNode arguments)
     {
 		super(start, end);
 		addChild(object);
@@ -56,9 +56,9 @@ public class MethodCallStatementNode extends StatementNode
 		return (IdentifierListNode) getChild(2);
 	}
 	
-	public ArgumentListNode getArguments()
+	public ExpressionListNode getArguments()
 	{
-		return (ArgumentListNode) getChild(3);
+		return (ExpressionListNode) getChild(3);
 	}
 	
 	@Override

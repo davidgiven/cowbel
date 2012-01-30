@@ -13,16 +13,16 @@ import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.types.Type;
 
-public class ArgumentListNode extends Node
+public class ExpressionListNode extends Node
 {
-	public ArgumentListNode(Location start, Location end,
+	public ExpressionListNode(Location start, Location end,
 			List<ExpressionNode> args)
     {
 		super(start, end);
 		addChildren(args);
     }
 	
-	public ArgumentListNode(Location start, Location end, ExpressionNode... args)
+	public ExpressionListNode(Location start, Location end, ExpressionNode... args)
     {
 		super(start, end);
 		addChildren(args);

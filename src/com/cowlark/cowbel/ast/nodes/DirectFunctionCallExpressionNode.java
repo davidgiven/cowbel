@@ -21,7 +21,7 @@ public class DirectFunctionCallExpressionNode extends ExpressionNode
 	
 	public DirectFunctionCallExpressionNode(Location start, Location end,
 			IdentifierNode object,
-			ArgumentListNode arguments)
+			ExpressionListNode arguments)
     {
 		super(start, end);
 		addChild(object);
@@ -33,9 +33,9 @@ public class DirectFunctionCallExpressionNode extends ExpressionNode
 		return (IdentifierNode) getChild(0);
 	}
 	
-	public ArgumentListNode getArguments()
+	public ExpressionListNode getArguments()
 	{
-		return (ArgumentListNode) getChild(1);
+		return (ExpressionListNode) getChild(1);
 	}
 	
 	@Override
