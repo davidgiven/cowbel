@@ -70,7 +70,7 @@ public class VarDeclParser extends Parser
 		if (initialiserpr.failed())
 			return initialiserpr;
 		
-		return new StatementListNode(location, pr.end(),
+		return new StatementListNode(location, initialiserpr.end(),
 				new VarDeclarationNode(pdln, pdln.end(),
 						pdln),
 				(StatementNode) initialiserpr);
