@@ -22,7 +22,7 @@ public class ArgumentListParser extends Parser
 		if (argumentspr.failed())
 			return argumentspr;
 		
-		pr = CloseParenthesisParser.parse(pr.end());
+		pr = CloseParenthesisParser.parse(argumentspr.end());
 		if (pr.failed())
 			return pr;
 		
