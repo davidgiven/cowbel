@@ -6,29 +6,31 @@
 
 package com.cowlark.cowbel.instructions;
 
+import java.util.List;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.symbols.Variable;
 
 public class MethodCallInstruction extends Instruction
 {
 	private IdentifierNode _method;
-	private int _args;
+	private Variable _receiver;
+	private List<Variable> _invars;
+	private List<Variable> _outvars;
 	
-	public MethodCallInstruction(Node node, IdentifierNode method, int args)
+	public MethodCallInstruction(Node node, IdentifierNode method, 
+			Variable receiver, List<Variable> invars, List<Variable> outvars)
     {
-		super(node, args+1);
+		super(node);
 		_method = method;
-		_args = args;
+		_receiver = receiver;
+		_invars = invars;
+		_outvars = outvars;
     }
 	
 	public IdentifierNode getMethodName()
 	{
 		return _method;
-	}
-	
-	public int getNumberOfArguments()
-	{
-		return _args;
 	}
 	
 	@Override
@@ -40,7 +42,8 @@ public class MethodCallInstruction extends Instruction
 	@Override
 	protected String getShortDescription()
 	{
-	    return _method.getText();
+	    return _method.getText() + " receiver=" + _receiver.toString() +
+	    	" inputs=" + varlist(_invars) + " outputs=" + varlist(_outvars);
 	}
 	
 	public void visit(InstructionVisitor visitor)

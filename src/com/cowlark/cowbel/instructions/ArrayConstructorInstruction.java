@@ -6,19 +6,33 @@
 
 package com.cowlark.cowbel.instructions;
 
+import java.util.List;
 import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.symbols.Variable;
 
 public class ArrayConstructorInstruction extends Instruction
 {
-	public ArrayConstructorInstruction(Node node, int length)
+	private List<Variable> _values;
+	private Variable _outvar;
+	
+	public ArrayConstructorInstruction(Node node, List<Variable> values,
+			Variable outvar)
     {
-		super(node, length);
+		super(node);
+		_values = values;
+		_outvar = outvar;
     }
 	
 	@Override
 	protected String getInstructionName()
 	{
 	    return "ArrayConstructor";
+	}
+	
+	@Override
+	protected String getShortDescription()
+	{
+		return "values=" + varlist(_values) + " outvar=" + _outvar.toString();
 	}
 	
 	public void visit(InstructionVisitor visitor)

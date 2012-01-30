@@ -49,7 +49,8 @@ public class Function extends Symbol
 		FunctionDefinitionNode node = (FunctionDefinitionNode) getNode();
 		node.getFunctionBody().visit(visitor);
 		
-		visitor.getCurrentBasicBlock().insnFunctionExit(node);
+		visitor.getCurrentBasicBlock().insnGoto(node, _exitBB);
+		_exitBB.insnFunctionExit(node);
 	}
 	
 	public static String calculateMangledName(IdentifierNode name, int arguments)

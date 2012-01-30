@@ -12,7 +12,7 @@ public class FunctionExitInstruction extends Instruction
 {
 	public FunctionExitInstruction(Node node)
     {
-		super(node, 0);
+		super(node);
     }
 	
 	@Override

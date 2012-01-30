@@ -8,15 +8,19 @@ package com.cowlark.cowbel.instructions;
 
 import com.cowlark.cowbel.BasicBlock;
 import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.symbols.Variable;
 
 public class IfInstruction extends Instruction
 {
+	private Variable _condition;
 	private BasicBlock _positive;
 	private BasicBlock _negative;
 	
-	public IfInstruction(Node node, BasicBlock positive, BasicBlock negative)
+	public IfInstruction(Node node, Variable condition,
+			BasicBlock positive, BasicBlock negative)
     {
-		super(node, 1);
+		super(node);
+		_condition = condition;
 		_positive = positive;
 		_negative = negative;
     }
@@ -40,7 +44,7 @@ public class IfInstruction extends Instruction
 	@Override
 	protected String getShortDescription()
 	{
-	    return "+"+_positive + " -"+_negative;
+	    return "condition=" + _condition.toString() + " +"+_positive + " -"+_negative;
 	}
 	
 	public void visit(InstructionVisitor visitor)

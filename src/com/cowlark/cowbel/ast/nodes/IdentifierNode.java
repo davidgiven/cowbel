@@ -18,7 +18,7 @@ public class IdentifierNode extends ExpressionNode
 	public static IdentifierNode createInternalIdentifier(String description)
 	{
 		int id = _globalid++;
-		String name = " " + description + ": " + id;
+		String name = "#" + description + "_" + id;
 		
 		Location loc = new Location(name, "<internal>");
 		MutableLocation end = new MutableLocation(loc);

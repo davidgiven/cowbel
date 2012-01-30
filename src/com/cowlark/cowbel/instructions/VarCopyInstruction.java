@@ -6,37 +6,31 @@
 
 package com.cowlark.cowbel.instructions;
 
-import com.cowlark.cowbel.Constructor;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.symbols.Variable;
 
-public class GetUpvalueInstruction extends Instruction
+public class VarCopyInstruction extends Instruction
 {
-	private Constructor _constructor;
-	private Variable _var;
+	private Variable _invar;
+	private Variable _outvar;
 	
-	public GetUpvalueInstruction(Node node, Constructor c, Variable var)
-	{
-		super(node, 0);
-		_constructor = c;
-		_var = var;
-	}	
-	
-	public Variable getVariable()
-	{
-		return _var;
-	}
+	public VarCopyInstruction(Node node, Variable invar, Variable outvar)
+    {
+		super(node);
+		_invar = invar;
+		_outvar = outvar;
+    }
 	
 	@Override
 	protected String getInstructionName()
 	{
-	    return "GetUpvalue";
+	    return "VarCopyInstruction";
 	}
 	
 	@Override
 	protected String getShortDescription()
 	{
-		return _constructor + ": " + _var.getSymbolName().getText();
+	    return _invar.toString() + " -> " + _outvar.toString();
 	}
 	
 	public void visit(InstructionVisitor visitor)

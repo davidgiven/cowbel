@@ -15,7 +15,7 @@ public class ConstructInstruction extends Instruction
 	
 	public ConstructInstruction(Node node, Constructor constructor)
     {
-		super(node, 0);
+		super(node);
 		_constructor = constructor;
     }
 	

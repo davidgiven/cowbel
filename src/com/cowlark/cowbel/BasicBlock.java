@@ -16,22 +16,18 @@ import com.cowlark.cowbel.instructions.ArrayConstructorInstruction;
 import com.cowlark.cowbel.instructions.BooleanConstantInstruction;
 import com.cowlark.cowbel.instructions.ConstructInstruction;
 import com.cowlark.cowbel.instructions.DirectFunctionCallInstruction;
-import com.cowlark.cowbel.instructions.DiscardInstruction;
 import com.cowlark.cowbel.instructions.FunctionExitInstruction;
-import com.cowlark.cowbel.instructions.GetLocalInstruction;
-import com.cowlark.cowbel.instructions.GetUpvalueInstruction;
 import com.cowlark.cowbel.instructions.GotoInstruction;
 import com.cowlark.cowbel.instructions.IfInstruction;
 import com.cowlark.cowbel.instructions.Instruction;
 import com.cowlark.cowbel.instructions.InstructionVisitor;
 import com.cowlark.cowbel.instructions.IntegerConstantInstruction;
 import com.cowlark.cowbel.instructions.MethodCallInstruction;
-import com.cowlark.cowbel.instructions.SetLocalInstruction;
-import com.cowlark.cowbel.instructions.SetReturnValueInstruction;
-import com.cowlark.cowbel.instructions.SetUpvalueInstruction;
 import com.cowlark.cowbel.instructions.StringConstantInstruction;
+import com.cowlark.cowbel.instructions.VarCopyInstruction;
 import com.cowlark.cowbel.symbols.Function;
 import com.cowlark.cowbel.symbols.Variable;
+import com.cowlark.cowbel.types.Type;
 
 public class BasicBlock implements Comparable<BasicBlock>
 {
@@ -101,6 +97,17 @@ public class BasicBlock implements Comparable<BasicBlock>
 		next._sourceBlocks.add(this);
 	}
 	
+	protected Variable createTemporary(Node node, Type type)
+	{
+		Constructor constructor = node.getScope().getConstructor();
+		Variable var = new Variable(node,
+				IdentifierNode.createInternalIdentifier("temp"),
+				type);
+		var.setScope(node.getScope());
+		constructor.addVariable(var);
+		return var;
+	}
+	
 	public void terminate()
 	{
 		_terminated = true;
@@ -124,81 +131,62 @@ public class BasicBlock implements Comparable<BasicBlock>
 		addInstruction(new FunctionExitInstruction(node));
 	}
 	
-	public void insnSetReturnValue(Node node)
-	{
-		addInstruction(new SetReturnValueInstruction(node));
-	}
-	
 	public void insnConstruct(Node node, Constructor constructor)
 	{
 		addInstruction(new ConstructInstruction(node, constructor));
 	}
 		
-	public void insnSetLocal(Node node, Variable var)
-	{
-		addInstruction(new SetLocalInstruction(node, var));
-	}
-	
-	public void insnSetUpvalue(Node node, Constructor c, Variable var)
-	{
-		addInstruction(new SetUpvalueInstruction(node, c, var));
-	}
-	
 	public void insnGoto(Node node, BasicBlock target)
 	{
 		addInstruction(new GotoInstruction(node, target));
 		jumpsTo(target);
 	}
 	
-	public void insnIf(Node node, BasicBlock positive, BasicBlock negative)
+	public void insnIf(Node node, Variable condition,
+			BasicBlock positive, BasicBlock negative)
 	{
-		addInstruction(new IfInstruction(node, positive, negative));
+		addInstruction(new IfInstruction(node, condition, positive, negative));
 		jumpsTo(positive);
 		jumpsTo(negative);
 	}
 	
-	public void insnDiscard(Node node)
+	public void insnDirectFunctionCall(Node node, Function function,
+			List<Variable> inargs, List<Variable> outargs)
 	{
-		addInstruction(new DiscardInstruction(node));
-	}
-	
-	public void insnDirectFunctionCall(Node node, Function function, int args)
-	{
-		addInstruction(new DirectFunctionCallInstruction(node, function, args));
+		addInstruction(new DirectFunctionCallInstruction(node, function,
+				inargs, outargs));
 	}
 
-	public void insnMethodCall(Node node, IdentifierNode method, int args)
+	public void insnMethodCall(Node node, IdentifierNode method,
+			Variable receiver, List<Variable> inargs, List<Variable> outargs)
 	{
-		addInstruction(new MethodCallInstruction(node, method, args));
+		addInstruction(new MethodCallInstruction(node, method, receiver,
+				inargs, outargs));
 	}
 
-	public void insnGetLocal(Node node, Variable var)
+	public void insnListConstructor(Node node, List<Variable> values,
+			Variable outvar)
 	{
-		addInstruction(new GetLocalInstruction(node, var));
+		addInstruction(new ArrayConstructorInstruction(node, values, outvar));
 	}
 	
-	public void insnGetUpvalue(Node node, Constructor c, Variable var)
+	public void insnBooleanConstant(Node node, boolean value, Variable var)
 	{
-		addInstruction(new GetUpvalueInstruction(node, c, var));
-	}
-	
-	public void insnListConstructor(Node node, int length)
-	{
-		addInstruction(new ArrayConstructorInstruction(node, length));
-	}
-	
-	public void insnBooleanConstant(Node node, boolean value)
-	{
-		addInstruction(new BooleanConstantInstruction(node, value));
+		addInstruction(new BooleanConstantInstruction(node, value, var));
 	}
 
-	public void insnStringConstant(Node node, String value)
+	public void insnStringConstant(Node node, String value, Variable var)
 	{
-		addInstruction(new StringConstantInstruction(node, value));
+		addInstruction(new StringConstantInstruction(node, value, var));
 	}
 
-	public void insnIntegerConstant(Node node, long value)
+	public void insnIntegerConstant(Node node, long value, Variable var)
 	{
-		addInstruction(new IntegerConstantInstruction(node, value));
+		addInstruction(new IntegerConstantInstruction(node, value, var));
+	}
+	
+	public void insnVarCopy(Node node, Variable invar, Variable outvar)
+	{
+		addInstruction(new VarCopyInstruction(node, invar, outvar));
 	}
 }

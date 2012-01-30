@@ -6,25 +6,30 @@
 
 package com.cowlark.cowbel;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Vector;
 import com.cowlark.cowbel.ast.SimpleVisitor;
 import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
 import com.cowlark.cowbel.ast.nodes.BreakStatementNode;
 import com.cowlark.cowbel.ast.nodes.ContinueStatementNode;
 import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
+import com.cowlark.cowbel.ast.nodes.DirectFunctionCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
 import com.cowlark.cowbel.ast.nodes.DummyExpressionNode;
+import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionStatementNode;
-import com.cowlark.cowbel.ast.nodes.ForStatementNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.GotoStatementNode;
+import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IfElseStatementNode;
 import com.cowlark.cowbel.ast.nodes.IfStatementNode;
 import com.cowlark.cowbel.ast.nodes.IntegerConstantNode;
 import com.cowlark.cowbel.ast.nodes.LabelStatementNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
+import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
 import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
@@ -46,6 +51,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	private BasicBlock _currentBB;
 	private BasicBlock _continueBB;
 	private BasicBlock _breakBB;
+	private Variable _result;
 	
 	public BasicBlockBuilderVisitor(Function function)
     {
@@ -83,27 +89,26 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	@Override
 	public void visit(VarAssignmentNode node) throws CompilationException
 	{
-		Variable var = (Variable) node.getSymbol();
-		Constructor constructor = var.getConstructor();
+		IdentifierListNode iln = node.getVariables();
+		ExpressionListNode eln = node.getExpressions();
+		int size = eln.getNumberOfChildren();
 		
-		if (constructor.isStackVariable(var))
+		for (int i = 0; i < size; i++)
 		{
-			_currentBB.insnSetUpvalue(node, constructor, var);
-			node.getExpression().visit(this);
+			eln.getExpression(i).visit(this);
+			_currentBB.insnVarCopy(node, _result, (Variable) iln.getSymbol(i));
 		}
-		else
-		{
-			_currentBB.insnSetLocal(node, var);
-			node.getExpression().visit(this);
-		}
-
 	}
 	
 	@Override
 	public void visit(ReturnStatementNode node) throws CompilationException
 	{
-		_currentBB.insnSetReturnValue(node);
+		FunctionDefinitionNode fdn = (FunctionDefinitionNode) _function.getNode();
 		node.getValue().visit(this);
+		
+		_currentBB.insnVarCopy(node, _result,
+				(Variable) fdn.getFunctionHeader().getOutputParametersNode()
+					.getParameter(0).getSymbol());
 		_currentBB.insnGoto(node, _function.getExitBB());
 		_currentBB.terminate();
 	}
@@ -123,8 +128,8 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		BasicBlock exitbb = new BasicBlock(_function);
 		
 		_currentBB = conditionalbb;
-		_currentBB.insnIf(node, positivebb, exitbb);
 		node.getConditionalExpression().visit(this);
+		_currentBB.insnIf(node, _result, positivebb, exitbb);
 		_currentBB.terminate();
 		
 		_currentBB = positivebb;
@@ -144,8 +149,8 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		BasicBlock exitbb = new BasicBlock(_function);
 		
 		_currentBB = conditionalbb;
-		_currentBB.insnIf(node, positivebb, negativebb);
 		node.getConditionalExpression().visit(this);
+		_currentBB.insnIf(node, _result, positivebb, negativebb);
 		_currentBB.terminate();
 		
 		_currentBB = positivebb;
@@ -175,8 +180,8 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		_currentBB.terminate();
 		
 		_currentBB = _continueBB;
-		_currentBB.insnIf(node, body, _breakBB);
 		node.getConditionalExpression().visit(this);
+		_currentBB.insnIf(node, _result, body, _breakBB);
 		_currentBB.terminate();
 		
 		_currentBB = body;
@@ -203,40 +208,9 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		_currentBB.terminate();
 		
 		_currentBB = _continueBB;
+		_currentBB.insnIf(node, _result, _continueBB, _breakBB);
 		node.getBodyStatement().visit(this);
-		_currentBB.insnIf(node, _continueBB, _breakBB);
 		node.getConditionalExpression().visit(this);
-		_currentBB.terminate();
-		
-		_currentBB = _breakBB;
-		
-		_continueBB = oldcontinuebb;
-		_breakBB = oldbreakbb;
-	}
-	
-	@Override
-	public void visit(ForStatementNode node) throws CompilationException
-	{
-		BasicBlock oldcontinuebb = _continueBB;
-		BasicBlock oldbreakbb = _breakBB;
-
-		_continueBB = new BasicBlock(_function);
-		_breakBB = new BasicBlock(_function);
-		BasicBlock bodybb = new BasicBlock(_function);
-		
-		node.getInitialiserStatement().visit(this);
-		_currentBB.insnGoto(node, _continueBB);
-		_currentBB.terminate();
-		
-		_currentBB = _continueBB;
-		_currentBB.insnIf(node, bodybb, _breakBB);
-		node.getConditionalExpression().visit(this);
-		_currentBB.terminate();
-		
-		_currentBB = bodybb;
-		node.getBodyStatement().visit(this);
-		node.getIncrementerStatement().visit(this);
-		_currentBB.insnGoto(node, _continueBB);
 		_currentBB.terminate();
 		
 		_currentBB = _breakBB;
@@ -288,21 +262,36 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	@Override
 	public void visit(ExpressionStatementNode node) throws CompilationException
 	{
-		_currentBB.insnDiscard(node);
 		node.getExpression().visit(this);
 	}
 	
 	@Override
-	public void visit(DirectFunctionCallExpressionNode node) throws CompilationException
+	public void visit(DirectFunctionCallStatementNode node)
+	        throws CompilationException
 	{
-		List<ExpressionNode> arguments = node.getArguments();
+		ExpressionListNode arguments = node.getArguments();
+		IdentifierListNode variables = node.getVariables();
 		Symbol symbol = node.getSymbol();
+		int numinvars = arguments.getNumberOfChildren();
+		int numoutvars = variables.getNumberOfChildren();
+		Vector<Variable> invars = new Vector<Variable>(numinvars);
+		Vector<Variable> outvars = new Vector<Variable>(numoutvars);
+		
+		for (int i = 0; i < numinvars; i++)
+		{
+			arguments.getExpression(i).visit(this);
+			invars.add(_result);
+		}
+
+		for (int i = 0; i < numoutvars; i++)
+			outvars.add((Variable) variables.getSymbol(i));
 		
 		if (symbol instanceof Function)
 		{
 			/* Direct function call. */
 			
-			_currentBB.insnDirectFunctionCall(node, (Function) symbol, arguments.size());
+			_currentBB.insnDirectFunctionCall(node, (Function) symbol,
+					invars, outvars);
 		}
 		else
 		{
@@ -321,20 +310,97 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 				_currentBB.insnGetLocal(node, var);
 				*/
 		}
+	}
+	
+	@Override
+	public void visit(MethodCallStatementNode node)
+	        throws CompilationException
+	{
+		ExpressionListNode arguments = node.getArguments();
+		IdentifierListNode variables = node.getVariables();
+		int numinvars = arguments.getNumberOfChildren();
+		int numoutvars = variables.getNumberOfChildren();
+		Vector<Variable> invars = new Vector<Variable>(numinvars);
+		Vector<Variable> outvars = new Vector<Variable>(numoutvars);
 		
-		for (Node n : arguments)
-			n.visit(this);		
+		for (int i = 0; i < numinvars; i++)
+		{
+			arguments.getExpression(i).visit(this);
+			invars.add(_result);
+		}
+
+		for (int i = 0; i < numoutvars; i++)
+			outvars.add((Variable) variables.getSymbol(i));
+		
+		node.getMethodReceiver().visit(this);
+		Variable receiver = _result;
+		
+		_currentBB.insnMethodCall(node,
+				node.getMethodIdentifier(), receiver,
+				invars, outvars);
+	}
+	
+	@Override
+	public void visit(DirectFunctionCallExpressionNode node) throws CompilationException
+	{
+		ExpressionListNode arguments = node.getArguments();
+		Symbol symbol = node.getSymbol();
+		int numinvars = arguments.getNumberOfChildren();
+		Vector<Variable> invars = new Vector<Variable>(numinvars);
+		
+		for (int i = 0; i < numinvars; i++)
+		{
+			arguments.getExpression(i).visit(this);
+			invars.add(_result);
+		}
+		
+		if (symbol instanceof Function)
+		{
+			/* Direct function call. */
+			
+			_result = _currentBB.createTemporary(node, node.getType());
+			_currentBB.insnDirectFunctionCall(node, (Function) symbol,
+					invars, Collections.singletonList(_result));
+		}
+		else
+		{
+			/* Indirect function call. */
+			
+			assert(false);
+			/*
+			_currentBB.insnIndirectFunctionCall(node, arguments.size());
+
+			Variable var = (Variable) smybol;
+			Constructor constructor = var.getConstructor();
+			
+			if (constructor.isStackVariable(var))
+				_currentBB.insnGetUpvalue(node, constructor, var);
+			else
+				_currentBB.insnGetLocal(node, var);
+				*/
+		}
 	}
 	
 	@Override
 	public void visit(MethodCallExpressionNode node) throws CompilationException
 	{
-		List<ExpressionNode> arguments = node.getMethodArguments();
-
-		_currentBB.insnMethodCall(node, node.getMethodIdentifier(), arguments.size());
+		ExpressionListNode arguments = node.getArguments();
+		int numinvars = arguments.getNumberOfChildren();
+		Vector<Variable> invars = new Vector<Variable>(numinvars);
+		
+		for (int i = 0; i < numinvars; i++)
+		{
+			arguments.getExpression(i).visit(this);
+			invars.add(_result);
+		}
+		
 		node.getMethodReceiver().visit(this);
-		for (Node n : arguments)
-			n.visit(this);
+		Variable receiver = _result;
+		
+		_result = _currentBB.createTemporary(node, node.getType());
+		_currentBB.insnMethodCall(node,
+				node.getMethodIdentifier(), receiver,
+				invars, Collections.singletonList(_result));
 	}
 	
 	@Override
@@ -346,41 +412,44 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	@Override
 	public void visit(VarReferenceNode node) throws CompilationException
 	{
-		Variable var = (Variable) node.getSymbol();
-		Constructor constructor = var.getConstructor();
-		
-		if (constructor.isStackVariable(var))
-			_currentBB.insnGetUpvalue(node, constructor, var);
-		else
-			_currentBB.insnGetLocal(node, var);
+		_result = (Variable) node.getSymbol();
 	}
 	
 	@Override
 	public void visit(ArrayConstructorNode node) throws CompilationException
 	{
 		List<ExpressionNode> members = node.getListMembers();
-		_currentBB.insnListConstructor(node, members.size());
+		Vector<Variable> values = new Vector<Variable>();
 		
-		for (ExpressionNode expr : members)
-			expr.visit(this);
+		for (ExpressionNode e : members)
+		{
+			e.visit(this);
+			values.add(_result);
+		}
+		
+		_result = _currentBB.createTemporary(node, node.getType());
+		_currentBB.insnListConstructor(node, values, _result);
 	}
 	
 	@Override
 	public void visit(BooleanConstantNode node) throws CompilationException
 	{
-		_currentBB.insnBooleanConstant(node, node.getValue());
+		_result = _currentBB.createTemporary(node, node.getType());
+		_currentBB.insnBooleanConstant(node, node.getValue(), _result);
 	}
 	
 	@Override
 	public void visit(StringConstantNode node) throws CompilationException
 	{
-		_currentBB.insnStringConstant(node, node.getValue());
+		_result = _currentBB.createTemporary(node, node.getType());
+		_currentBB.insnStringConstant(node, node.getValue(), _result);
 	}
 	
 	@Override
 	public void visit(IntegerConstantNode node) throws CompilationException
 	{
-		_currentBB.insnIntegerConstant(node, node.getValue());
+		_result = _currentBB.createTemporary(node, node.getType());
+		_currentBB.insnIntegerConstant(node, node.getValue(), _result);
 	}
 	
 	@Override

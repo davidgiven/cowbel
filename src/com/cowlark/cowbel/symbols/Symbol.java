@@ -59,8 +59,7 @@ public abstract class Symbol implements Comparable<Symbol>, HasNode
 	@Override
 	public String toString()
 	{
-		return super.toString() + ": " + _name.getText() + ": " +
-			_type.getCanonicalTypeName();
+		return _name.getText() + ": " + _type.getCanonicalTypeName();
 	}
 		
 	@Override
