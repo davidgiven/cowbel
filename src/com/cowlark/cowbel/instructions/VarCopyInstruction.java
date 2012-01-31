@@ -21,6 +21,16 @@ public class VarCopyInstruction extends Instruction
 		_outvar = outvar;
     }
 	
+	public Variable getInputVariable()
+    {
+	    return _invar;
+    }
+	
+	public Variable getOutputVariable()
+    {
+	    return _outvar;
+    }
+	
 	@Override
 	protected String getInstructionName()
 	{

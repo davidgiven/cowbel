@@ -209,8 +209,8 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		List<Type> inputCallTypes = node.getArguments().calculateTypes();
 		List<Type> outputCallTypes = node.getVariables().calculateTypes();
 		
-		if (!Utils.unifyTypeLists(node, inputFunctionTypes, inputCallTypes) ||
-			!Utils.unifyTypeLists(node, outputFunctionTypes, outputCallTypes))
+		if (!Utils.unifyTypeLists(node, inputFunctionTypes, inputCallTypes, false) ||
+			!Utils.unifyTypeLists(node, outputFunctionTypes, outputCallTypes, true))
 		{
 			throw new FunctionParameterMismatch(node, function,
 					outputFunctionTypes, outputCallTypes,

@@ -101,7 +101,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 			callArgumentTypes.add(t);
 		}
 		
-		if (!Utils.unifyTypeLists(node, inputArgumentTypes, callArgumentTypes))
+		if (!Utils.unifyTypeLists(node, inputArgumentTypes, callArgumentTypes, false))
 			throw new FunctionParameterMismatch(node,function,
 					outputArgumentTypes, null,
 					inputArgumentTypes, callArgumentTypes);

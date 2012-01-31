@@ -14,15 +14,20 @@ import com.cowlark.cowbel.types.Type;
 
 public class Utils
 {
+	/* permissive: allow there to be fewer values in the call list than in the
+	 * function list. */
+	
 	static boolean unifyTypeLists(Node node,
-			List<Type> funclist, List<Type> calllist) throws CompilationException
+			List<Type> funclist, List<Type> calllist, boolean permissive) throws CompilationException
 	{
-		if (funclist.size() != calllist.size())
+		if (!permissive && (funclist.size() != calllist.size()))
+			return false;
+		else if (funclist.size() < calllist.size())
 			return false;
 		
 		try
 		{
-			for (int i = 0; i < funclist.size(); i++)
+			for (int i = 0; i < calllist.size(); i++)
 			{
 				Type t1 = funclist.get(i);
 				Type t2 = calllist.get(i);

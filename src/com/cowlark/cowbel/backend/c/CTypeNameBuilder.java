@@ -27,12 +27,6 @@ public class CTypeNameBuilder extends TypeVisitor
 	}
 	
 	@Override
-	public void visit(VoidType type)
-	{
-		_type = "void";
-	}
-	
-	@Override
 	public void visit(BooleanType type)
 	{
 		_type = "s_boolean_t";

@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.List;
 import com.cowlark.cowbel.BasicBlock;
 import com.cowlark.cowbel.Compiler;
 import com.cowlark.cowbel.Constructor;
@@ -20,7 +21,6 @@ import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
-import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
 import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.StringConstantNode;
 import com.cowlark.cowbel.backend.ImperativeBackend;
@@ -35,6 +35,7 @@ import com.cowlark.cowbel.instructions.IfInstruction;
 import com.cowlark.cowbel.instructions.IntegerConstantInstruction;
 import com.cowlark.cowbel.instructions.MethodCallInstruction;
 import com.cowlark.cowbel.instructions.StringConstantInstruction;
+import com.cowlark.cowbel.instructions.VarCopyInstruction;
 import com.cowlark.cowbel.symbols.Function;
 import com.cowlark.cowbel.symbols.Symbol;
 import com.cowlark.cowbel.symbols.Variable;
@@ -249,6 +250,33 @@ public class CBackend extends ImperativeBackend
 	{
 		return "f" + _funcid++ + "_" + name;
 	}
+
+	/* Produces an lvalue to the variable's storage. */
+	
+	private void printvar(Node node, Variable var)
+	{
+		Constructor varcon = var.getConstructor();
+		
+		if (varcon.isStackVariable(var))
+		{
+			Constructor current = node.getScope().getConstructor();
+			
+			print(clabel(current));
+			if (current != varcon)
+			{
+				print("->");
+				print(clabel(varcon));
+			}
+			print("->");
+			print(clabel(var));
+		}
+		else
+		{
+			if (var.isOutputParameter())
+				print("*");
+			print(clabel(var));
+		}
+	}
 	
 	@Override
 	public void visit(Constructor constructor)
@@ -281,11 +309,10 @@ public class CBackend extends ImperativeBackend
 	{
 		FunctionType type = (FunctionType) f.getSymbolType();
 		FunctionDefinitionNode node = (FunctionDefinitionNode) f.getNode();
-		ParameterDeclarationListNode parameters = node.getFunctionHeader().getParametersNode();
+		ParameterDeclarationListNode inparams = node.getFunctionHeader().getParametersNode();
+		ParameterDeclarationListNode outparams = node.getFunctionHeader().getOutputParametersNode();
 		
-		print("static ");
-		print(ctype(type.getReturnType()));
-		print(" ");
+		print("static void ");
 		print(clabel(f));
 		print("(");
 
@@ -300,7 +327,7 @@ public class CBackend extends ImperativeBackend
 			first = false;
 		}
 		
-		for (Node n : parameters.getChildren())
+		for (Node n : inparams)
 		{
 			ParameterDeclarationNode p = (ParameterDeclarationNode) n;
 			Symbol symbol = p.getSymbol();
@@ -315,6 +342,21 @@ public class CBackend extends ImperativeBackend
 			print(clabel(symbol));
 		}
 		
+		for (Node n : outparams)
+		{
+			ParameterDeclarationNode p = (ParameterDeclarationNode) n;
+			Symbol symbol = p.getSymbol();
+			
+			if (!first)
+				print(", ");
+			else
+				first = false;
+			
+			print(ctype(symbol));
+			print("* ");
+			print(clabel(symbol));
+		}
+		
 		print(")\n");
 	}
 	
@@ -325,22 +367,6 @@ public class CBackend extends ImperativeBackend
 		print("{\n");
 		
 		_funcid = 0;
-		
-		FunctionType type = (FunctionType) f.getSymbolType();
-		Type returntype = type.getReturnType();
-		if (!returntype.isVoidType())
-		{
-			_returnvalue = cid("return");
-			
-			print("\t");
-			print(ctype(returntype));
-			print(" ");
-			print(_returnvalue);
-			print(";\n");
-		}
-		else
-			_returnvalue = null;
-		
 	    super.compileFunction(f);
 		
 		print("}\n\n");
@@ -360,32 +386,8 @@ public class CBackend extends ImperativeBackend
 		FunctionDefinitionNode node = (FunctionDefinitionNode) insn.getNode();
 		Function function = node.getFunctionBody().getFunction();
 		FunctionType type = (FunctionType) function.getSymbolType();
-		Type returntype = type.getReturnType();
-		
-		if (!returntype.isVoidType())
-		{
-			print("\treturn ");
-			print(_returnvalue);
-			print(";\n");
-		}
-		else
-			print("\treturn;\n");
-	}
-	
-	@Override
-	public void visit(SetReturnValueInstruction insn)
-	{
-		ReturnStatementNode node = (ReturnStatementNode) insn.getNode();
-		Function function = node.getScope().getFunction();
-		FunctionType type = (FunctionType) function.getSymbolType();
-		Type returntype = type.getReturnType();
-		
-		assert(!returntype.isVoidType());
-		print("\t");
-		print(_returnvalue);
-		print(" = ");
-		compileFromIterator();
-		print(";\n");
+
+		print("\treturn;\n");
 	}
 	
 	@Override
@@ -399,8 +401,10 @@ public class CBackend extends ImperativeBackend
 	@Override
 	public void visit(IfInstruction insn)
 	{
+		Node node = insn.getNode();
+		
 		print("\tif (");
-		compileFromIterator();
+		printvar(node, insn.getCondition());
 		print(") goto ");
 		print(clabel(insn.getPositiveTarget()));
 		print("; else goto ");
@@ -487,102 +491,57 @@ public class CBackend extends ImperativeBackend
 	}
 	
 	@Override
-	public void visit(DiscardInstruction insn)
-	{
-		print("\t(void) ");
-		compileFromIterator();
-		print(";\n");
-	}
-	
-	@Override
 	public void visit(DirectFunctionCallInstruction insn)
 	{
 		Function function = insn.getFunction();
+		Node node = insn.getNode();
 		
+		print("\t");
 		print(clabel(function));
 		print("(");
 		print(clabel(function.getConstructor().getParentConstructor()));
 		
-		for (int i = 0; i < insn.getNumberOfOperands(); i++)
+		for (Variable var : insn.getInputVariables())
 		{
 			print(", ");
-			compileFromIterator();
+			printvar(node, var);
 		}
 		
-		print(")");
+		for (Variable var : insn.getOutputVariables())
+		{
+			print(", &");
+			printvar(node, var);
+		}
+		
+		print(");\n");
 	}
 	
 	@Override
 	public void visit(MethodCallInstruction insn)
 	{
-        MethodCallExpressionNode node = (MethodCallExpressionNode) insn.getNode();
+		Node node = insn.getNode();
         
-        print("S_METHOD_");
-        String methodsig = node.getMethod().getIdentifier();
+        print("\tS_METHOD_");
+        String methodsig = insn.getMethod().getIdentifier();
         print(methodsig.replace('.', '_').toUpperCase());
 
         print("(");
-        compileFromIterator();
+        printvar(node, insn.getReceiver());
         
-        for (int i = 0; i < insn.getNumberOfArguments(); i++)
-        {
-                print(", ");
-                compileFromIterator();
-        }
-        
-        print(")");
-
-	}
-	
-	private void upvalue_lvalue(Node node, Variable var)
-	{
-		Constructor current = node.getScope().getConstructor();
-		Constructor varcon = var.getConstructor();
-		
-		print(clabel(current));
-		if (current != varcon)
+		for (Variable var : insn.getInputVariables())
 		{
-			print("->");
-			print(clabel(varcon));
+			print(", ");
+			printvar(node, var);
 		}
-		print("->");
-		print(clabel(var));
-	}
-	
-	@Override
-	public void visit(SetUpvalueInstruction insn)
-	{
-		print("\t");
-		upvalue_lvalue(insn.getNode(), insn.getVariable());
-		print(" = ");
-		compileFromIterator();
-		print(";\n");
-	}
-	
-	@Override
-	public void visit(GetUpvalueInstruction insn)
-	{
-		upvalue_lvalue(insn.getNode(), insn.getVariable());
-	}
-	
-	@Override
-	public void visit(SetLocalInstruction insn)
-	{
-		Variable var = insn.getVariable();
 		
-		print("\t");
-		print(clabel(var));
-		print(" = ");
-		compileFromIterator();
-		print(";\n");
-	}
+		for (Variable var : insn.getOutputVariables())
+		{
+			print(", &");
+			printvar(node, var);
+		}
+		        
+        print(");\n");
 
-	@Override
-	public void visit(GetLocalInstruction insn)
-	{
-		Variable var = insn.getVariable();
-		
-		print(clabel(var));
 	}
 	
 	@Override
@@ -590,49 +549,78 @@ public class CBackend extends ImperativeBackend
 	{
 		ArrayConstructorNode node = (ArrayConstructorNode) insn.getNode();
 		ArrayType type = (ArrayType) node.getType();
-		int length = insn.getNumberOfOperands();
+		List<Variable> values = insn.getValues();
 		
-		if (length > 0)
-		{
-			print("S_INIT_ARRAY(");
-		}
-		
-		print("S_CONSTRUCT_ARRAY(");
+		print("\t");
+		printvar(node, insn.getOutputVariable());
+		print(" = S_CONSTRUCT_ARRAY(");
 		print(ctype(type.getChildType()));
 		print(", ");
-		print(length);
-		print(")");
+		print(values.size());
+		print(");\n");
 
-		if (length > 0)
+		if (values.size() > 0)
 		{
-			for (int i = 0; i < length; i++)
+			print("\tS_INIT_ARRAY(");
+			printvar(node, insn.getOutputVariable());
+			
+			for (Variable v : values)
 			{
 				print(", ");
-				compileFromIterator();
+				printvar(node, v);
 			}
-			print(")");
+			print(");\n");
 		}
+	}
+	
+	@Override
+	public void visit(VarCopyInstruction insn)
+	{
+		Node node = insn.getNode();
+		
+		print("\t");
+		printvar(node, insn.getOutputVariable());
+		print(" = ");
+		printvar(node, insn.getInputVariable());
+		print(";\n");
 	}
 	
 	@Override
 	public void visit(IntegerConstantInstruction insn)
 	{
+		Node node = insn.getNode();
+		
+		print("\t");
+		printvar(node, insn.getOutputVariable());
+		print(" = ");
 		print(insn.getValue());
+		print(";\n");
 	}
 	
 	@Override
 	public void visit(StringConstantInstruction insn)
 	{
-		print("&");
+		Node node = insn.getNode();
+		
+		print("\t");
+		printvar(node, insn.getOutputVariable());
+		print(" = &");
 		print(clabel((StringConstantNode) insn.getNode()));
+		print(";\n");
 	}
 	
 	@Override
 	public void visit(BooleanConstantInstruction insn)
 	{
+		Node node = insn.getNode();
+		
+		print("\t");
+		printvar(node, insn.getOutputVariable());
+		print(" = ");
 		if (insn.getValue())
 			print("1");
 		else
 			print("0");
+		print(";\n");
 	}
 }

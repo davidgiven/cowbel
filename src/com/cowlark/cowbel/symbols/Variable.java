@@ -15,6 +15,7 @@ import com.cowlark.cowbel.types.Type;
 public class Variable extends Symbol
 {
 	private boolean _isParameter = false;
+	private boolean _isOutputParameter = false;
 	
 	public Variable(Node node, IdentifierNode name, Type type)
 	{
@@ -46,6 +47,16 @@ public class Variable extends Symbol
 	public void setParameter(boolean isParameter)
     {
 	    _isParameter = isParameter;
+    }
+	
+	public boolean isOutputParameter()
+    {
+	    return _isOutputParameter;
+    }
+	
+	public void setOutputParameter(boolean isOutputParameter)
+    {
+	    _isOutputParameter = isOutputParameter;
     }
 	
 	@Override
