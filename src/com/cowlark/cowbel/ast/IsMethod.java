@@ -6,9 +6,11 @@
 
 package com.cowlark.cowbel.ast;
 
-import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
+import com.cowlark.cowbel.ast.nodes.ExpressionNode;
+import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 
-public interface IsCallable
+public interface IsMethod
 {
-	public ExpressionListNode getArguments();
+	public IdentifierNode getMethodIdentifier();
+	public ExpressionNode getMethodReceiver();
 }

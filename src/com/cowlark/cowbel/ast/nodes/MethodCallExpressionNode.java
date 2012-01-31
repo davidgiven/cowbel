@@ -6,14 +6,15 @@
 
 package com.cowlark.cowbel.ast.nodes;
 
-import com.cowlark.cowbel.ast.IsMethodNode;
+import com.cowlark.cowbel.ast.HasInputs;
+import com.cowlark.cowbel.ast.IsMethod;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.parser.core.Location;
 
 public class MethodCallExpressionNode extends ExpressionNode
-	implements IsMethodNode
+	implements IsMethod, HasInputs
 {
 	private Method _method;
 	
@@ -48,7 +49,7 @@ public class MethodCallExpressionNode extends ExpressionNode
 		return (IdentifierNode) getChild(1);
 	}
 	
-	public ExpressionListNode getArguments()
+	public ExpressionListNode getInputs()
 	{
 		return (ExpressionListNode) getChild(2);
 	}

@@ -6,7 +6,8 @@
 
 package com.cowlark.cowbel.types;
 
-import com.cowlark.cowbel.ast.IsMethodNode;
+import com.cowlark.cowbel.ast.HasInputs;
+import com.cowlark.cowbel.ast.IsMethod;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.errors.CompilationException;
@@ -25,13 +26,11 @@ public abstract class PrimitiveType extends Type
 	}
 	
 	@Override
-	public Method lookupMethod(Node node, IdentifierNode id)
-	        throws CompilationException
+	public <T extends Node & IsMethod & HasInputs> Method lookupMethod(
+	        T node, IdentifierNode id) throws CompilationException
 	{
-		IsMethodNode n = (IsMethodNode) node;
-		
 		String signature = getCanonicalTypeName() + "." + id.getText() +
-			"." + n.getArguments().getNumberOfChildren();
+			"." + node.getInputs().getNumberOfChildren();
 		
 		Method method = Method.lookupPrimitiveMethod(signature);
 		if (method == null)

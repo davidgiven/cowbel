@@ -9,7 +9,7 @@ package com.cowlark.cowbel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import com.cowlark.cowbel.ast.IsCallable;
+import com.cowlark.cowbel.ast.HasInputs;
 import com.cowlark.cowbel.ast.SimpleVisitor;
 import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
@@ -85,13 +85,13 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		throw new AttemptToCallNonFunctionTypeException(expression);
 	}
 	
-	private <T extends ExpressionNode & IsCallable> void validate_function_call(
+	private <T extends ExpressionNode & HasInputs> void validate_function_call(
 			T node, Function function) throws CompilationException
 	{
 		FunctionType functionType = (FunctionType) function.getSymbolType();
 		List<Type> inputArgumentTypes = functionType.getInputArgumentTypes();
 		List<Type> outputArgumentTypes = functionType.getOutputArgumentTypes();
-		ExpressionListNode callArguments = node.getArguments();
+		ExpressionListNode callArguments = node.getInputs();
 		
 		Vector<Type> callArgumentTypes = new Vector<Type>();
 		for (Node n : callArguments)
@@ -153,7 +153,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		Type receivertype = receiver.calculateType();
 		receivertype.ensureConcrete(node);
 		
-		ExpressionListNode arguments = node.getArguments();
+		ExpressionListNode arguments = node.getInputs();
 		ArrayList<Type> argumenttypes = new ArrayList<Type>();
 		for (Node n : arguments)
 		{

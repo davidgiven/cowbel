@@ -6,6 +6,8 @@
 
 package com.cowlark.cowbel.types;
 
+import com.cowlark.cowbel.ast.HasInputs;
+import com.cowlark.cowbel.ast.IsMethod;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.errors.CompilationException;
@@ -67,8 +69,8 @@ public class TypeVariable extends Type
 	}
 	
 	@Override
-	public Method lookupMethod(Node node, IdentifierNode id)
-	        throws CompilationException
+	public <T extends Node & IsMethod & HasInputs> Method lookupMethod(
+	        T node, IdentifierNode id) throws CompilationException
 	{
 		assert(_realType != null);
 		return _realType.lookupMethod(node, id);

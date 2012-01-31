@@ -272,8 +272,8 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	public void visit(DirectFunctionCallStatementNode node)
 	        throws CompilationException
 	{
-		ExpressionListNode arguments = node.getArguments();
-		IdentifierListNode variables = node.getVariables();
+		ExpressionListNode arguments = node.getInputs();
+		IdentifierListNode variables = node.getOutputs();
 		int numinvars = arguments.getNumberOfChildren();
 		int numoutvars = variables.getNumberOfChildren();
 		Function function = (Function) node.getSymbol();
@@ -309,8 +309,8 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	        throws CompilationException
 	{
 		Method method = node.getMethod();
-		ExpressionListNode arguments = node.getArguments();
-		IdentifierListNode variables = node.getVariables();
+		ExpressionListNode arguments = node.getInputs();
+		IdentifierListNode variables = node.getOutputs();
 		int numinvars = arguments.getNumberOfChildren();
 		int numoutvars = variables.getNumberOfChildren();
 		List<Type> realouttypes = method.getOutputTypes();
@@ -345,7 +345,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	@Override
 	public void visit(DirectFunctionCallExpressionNode node) throws CompilationException
 	{
-		ExpressionListNode arguments = node.getArguments();
+		ExpressionListNode arguments = node.getInputs();
 		Symbol symbol = node.getSymbol();
 		int numinvars = arguments.getNumberOfChildren();
 		Vector<Variable> invars = new Vector<Variable>(numinvars);
@@ -386,7 +386,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	@Override
 	public void visit(MethodCallExpressionNode node) throws CompilationException
 	{
-		ExpressionListNode arguments = node.getArguments();
+		ExpressionListNode arguments = node.getInputs();
 		int numinvars = arguments.getNumberOfChildren();
 		Vector<Variable> invars = new Vector<Variable>(numinvars);
 		

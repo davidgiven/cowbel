@@ -64,7 +64,7 @@ public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
 		
 		/* Add function parameters to its scope. */
 		
-		ParameterDeclarationListNode pdln = node.getFunctionHeader().getParametersNode();
+		ParameterDeclarationListNode pdln = node.getFunctionHeader().getInputParametersNode();
 		add_parameters(f, node, pdln, false);
 
 		/* Add function return parameters to scope. */
