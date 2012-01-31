@@ -37,7 +37,7 @@ import com.cowlark.cowbel.types.FunctionType;
 import com.cowlark.cowbel.types.IntegerType;
 import com.cowlark.cowbel.types.StringType;
 import com.cowlark.cowbel.types.Type;
-import com.cowlark.cowbel.types.TypeVariable;
+import com.cowlark.cowbel.types.InferredType;
 
 public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 {
@@ -135,7 +135,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 	public void visit(ArrayConstructorNode node) throws CompilationException
 	{
 		List<ExpressionNode> members = node.getListMembers();
-		Type type = TypeVariable.create();
+		Type type = InferredType.create();
 		
 		for (ExpressionNode exp : members)
 		{

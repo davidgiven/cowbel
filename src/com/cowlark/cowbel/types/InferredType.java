@@ -13,16 +13,16 @@ import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.methods.Method;
 
-public class TypeVariable extends Type
+public class InferredType extends Type
 {
-	public static TypeVariable create()
+	public static InferredType create()
 	{
-		return new TypeVariable();
+		return new InferredType();
 	}
 	
 	private Type _realType;
 	
-	private TypeVariable()
+	private InferredType()
     {
     }
 	

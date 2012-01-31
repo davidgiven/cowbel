@@ -10,7 +10,7 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.types.Type;
-import com.cowlark.cowbel.types.TypeVariable;
+import com.cowlark.cowbel.types.InferredType;
 
 public class InferredTypeNode extends TypeNode
 {
@@ -22,7 +22,7 @@ public class InferredTypeNode extends TypeNode
 	@Override
     protected Type getTypeImpl()
 	{
-		return TypeVariable.create();
+		return InferredType.create();
 	}
 	
 	@Override
