@@ -14,6 +14,7 @@ import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
+import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -102,7 +103,15 @@ public class MethodCallStatementParser extends Parser
 			variablespr = new IdentifierListNode(location, location);
 		}
 
-		return parseWithVariableList((IdentifierListNode) variablespr,
-				variablespr.end());
+		Location n = variablespr.end();
+		if (((Node) variablespr).getNumberOfChildren() > 0)
+		{
+			ParseResult pr = EqualsParser.parse(variablespr.end());
+			if (pr.failed())
+				return pr;
+			n = pr.end();
+		}
+		
+		return parseWithVariableList((IdentifierListNode) variablespr, n);
 	}
 }
