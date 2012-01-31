@@ -25,7 +25,7 @@ public class ArrayType extends Type
 	
 	public static ArrayType create()
 	{
-		return create(TypeVariable.create());
+		return create(InferredType.create());
 	}
 	
 	private Type _childType;

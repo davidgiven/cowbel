@@ -86,10 +86,10 @@ public abstract class Type
 		Type t1 = getRealType();
 		Type t2 = other.getRealType();
 
-		/* Ensure that if one of the types is an TypeVariable, it is always
+		/* Ensure that if one of the types is an InferredType, it is always
 		 * the receiver. */
 		
-		if (t2 instanceof TypeVariable)
+		if (t2 instanceof InferredType)
 			t2.unifyWithImpl(node, t1);
 		else
 			t1.unifyWithImpl(node, t2);
