@@ -26,6 +26,11 @@ public class BooleanConstantInstruction extends Instruction
 		return _value;
 	}
 	
+	public Variable getOutputVariable()
+    {
+	    return _outvar;
+    }
+	
 	@Override
 	protected String getInstructionName()
 	{

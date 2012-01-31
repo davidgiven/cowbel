@@ -25,6 +25,11 @@ public class IfInstruction extends Instruction
 		_negative = negative;
     }
 	
+	public Variable getCondition()
+    {
+	    return _condition;
+    }
+	
 	public BasicBlock getPositiveTarget()
 	{
 		return _positive;

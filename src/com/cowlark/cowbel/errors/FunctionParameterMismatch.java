@@ -31,4 +31,11 @@ public class FunctionParameterMismatch extends CompilationException
 		_functioninput = functioninput;
 		_calledinput = calledinput;
     }
+	
+	@Override
+	public String getMessage()
+	{
+		return "Function parameter mismatch in call to "+_function.toString() +
+			" at " + _node.locationAsString();
+	}
 }

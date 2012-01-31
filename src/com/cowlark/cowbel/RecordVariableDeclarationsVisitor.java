@@ -29,7 +29,8 @@ public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
     }
 	
 	private void add_parameters(Function function,
-			FunctionDefinitionNode node, ParameterDeclarationListNode pdln)
+			FunctionDefinitionNode node, ParameterDeclarationListNode pdln,
+			boolean isOutputParameter)
 			throws CompilationException
 	{
 		FunctionScopeConstructorNode body = node.getFunctionBody();
@@ -40,6 +41,7 @@ public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
 
 			Variable v = new Variable(pdn);
 			v.setParameter(true);
+			v.setOutputParameter(isOutputParameter);
 			v.setScope(body);
 			body.addSymbol(v);
 			pdn.setSymbol(v);
@@ -63,12 +65,12 @@ public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
 		/* Add function parameters to its scope. */
 		
 		ParameterDeclarationListNode pdln = node.getFunctionHeader().getParametersNode();
-		add_parameters(f, node, pdln);
+		add_parameters(f, node, pdln, false);
 
 		/* Add function return parameters to scope. */
 		
 		pdln = node.getFunctionHeader().getOutputParametersNode();
-		add_parameters(f, node, pdln);
+		add_parameters(f, node, pdln, true);
 		
 		super.visit(node);
 	}

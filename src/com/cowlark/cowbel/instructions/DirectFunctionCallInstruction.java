@@ -31,6 +31,16 @@ public class DirectFunctionCallInstruction extends Instruction
 		return _function;
 	}
 	
+	public List<Variable> getInputVariables()
+	{
+		return _invars;
+	}
+	
+	public List<Variable> getOutputVariables()
+    {
+	    return _outvars;
+    }
+	
 	@Override
 	protected String getInstructionName()
 	{

@@ -25,6 +25,7 @@ import com.cowlark.cowbel.instructions.IntegerConstantInstruction;
 import com.cowlark.cowbel.instructions.MethodCallInstruction;
 import com.cowlark.cowbel.instructions.StringConstantInstruction;
 import com.cowlark.cowbel.instructions.VarCopyInstruction;
+import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.symbols.Function;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.Type;
@@ -157,7 +158,7 @@ public class BasicBlock implements Comparable<BasicBlock>
 				inargs, outargs));
 	}
 
-	public void insnMethodCall(Node node, IdentifierNode method,
+	public void insnMethodCall(Node node, Method method,
 			Variable receiver, List<Variable> inargs, List<Variable> outargs)
 	{
 		addInstruction(new MethodCallInstruction(node, method, receiver,

@@ -60,16 +60,19 @@ static void s_throw(const char* message)
 
 /* Boolean methods */
 
-#define S_METHOD_BOOLEAN__NOT(b) (!(b))
+#define S_METHOD_BOOLEAN__NOT(b, z) (*z) = !(b)
+#define S_METHOD_BOOLEAN__OR(a, b, z) (*z) = (a) | (b)
 
 /* Integer methods */
 
-#define S_METHOD_INTEGER__ADD(a, b) ((a) + (b))
-#define S_METHOD_INTEGER__SUB(a, b) ((a) - (b))
-#define S_METHOD_INTEGER__EQUALS(a, b) ((a) == (b))
-#define S_METHOD_INTEGER__NOTEQUALS(a, b) ((a) != (b))
+#define S_METHOD_INTEGER__ADD(a, b, z) (*z) = (a) + (b)
+#define S_METHOD_INTEGER__SUB(a, b, z) (*z) = (a) - (b)
+#define S_METHOD_INTEGER__EQUALS(a, b, z) (*z) = (a) == (b)
+#define S_METHOD_INTEGER__NOTEQUALS(a, b, z) (*z) = (a) != (b)
+#define S_METHOD_INTEGER__GT(a, b, z) (*z) = (a) > (b)
+#define S_METHOD_INTEGER__LT(a, b, z) (*z) = (a) < (b)
 
-static s_string_t* S_METHOD_INTEGER_TOSTRING(int value)
+static void S_METHOD_INTEGER_TOSTRING(int value, s_string_t** result)
 {
 	s_string_t* s = (s_string_t*) malloc(sizeof(s_string_t));
 	s->prev = s->next = NULL;
@@ -79,7 +82,7 @@ static s_string_t* S_METHOD_INTEGER_TOSTRING(int value)
 
     s->data = s->cdata = buffer;
     s->seglength = s->totallength = strlen(buffer);
-    return s;
+    *result = s;
 }
 
 /* String methods */
@@ -95,7 +98,8 @@ static void S_METHOD_STRING_PRINT(s_string_t* s)
 	putchar('\n');
 }
 
-static s_string_t* S_METHOD_STRING__ADD(s_string_t* left, s_string_t* right)
+static void S_METHOD_STRING__ADD(s_string_t* left, s_string_t* right,
+		s_string_t** result)
 {
 	s_string_t* newstring = (s_string_t*) malloc(sizeof(s_string_t));
 	newstring->prev = left;
@@ -103,7 +107,62 @@ static s_string_t* S_METHOD_STRING__ADD(s_string_t* left, s_string_t* right)
 	newstring->seglength = 0;
 	newstring->totallength = left->totallength + right->totallength;
 	newstring->data = newstring->cdata = NULL;
-	return newstring;
+	*result = newstring;
+}
+
+static void S_METHOD_STRING__EQUALS(s_string_t* left, s_string_t* right,
+		s_boolean_t* result)
+{
+	int count;
+	const char* pleft = NULL;
+	int lseg = 0;
+	const char* pright = NULL;
+	int rseg = 0;
+
+	if (left == right)
+		goto success;
+
+	if (left->totallength != right->totallength)
+		goto fail;
+
+	count = left->totallength;
+
+	lseg = left->seglength;
+	pleft = left->data;
+
+	rseg = right->seglength;
+	pright = right->data;
+
+	while (count--)
+	{
+		while (lseg == 0)
+		{
+			left = left->next;
+			lseg = left->seglength;
+			pleft = left->data;
+		}
+
+		while (rseg == 0)
+		{
+			right = right->next;
+			rseg = right->seglength;
+			pright = right->data;
+		}
+
+		if (*pleft++ != *pright++)
+			goto fail;
+
+		lseg--;
+		rseg--;
+	}
+
+success:
+	*result = 1;
+	return;
+
+fail:
+	*result = 0;
+	return;
 }
 
 /* Array methods */
@@ -145,9 +204,9 @@ static void* s_array_get_lvalue(s_array_t* array, unsigned index)
 	return (void*) (array->data + index*array->itemsize);
 }
 
-template <class T> T S_METHOD_ARRAY_GET(T* array, unsigned index)
+template <class T> void S_METHOD_ARRAY_GET(T* array, unsigned index, T* value)
 {
-	return *(T*) s_array_get_lvalue((s_array_t*) array, index);
+	*value = *(T*) s_array_get_lvalue((s_array_t*) array, index);
 }
 
 template <class T> void S_METHOD_ARRAY_SET(T* array, unsigned index, T value)

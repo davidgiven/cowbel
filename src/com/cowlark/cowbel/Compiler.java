@@ -146,16 +146,16 @@ public class Compiler
 		
 		_listener.onBasicBlockAnalysisEnd();
 		
-//		/* Code generation. */
-//		
-//		_listener.onCodeGenerationBegin();
-//		_backend.prologue();
-//		for (Constructor c : _constructors)
-//			_backend.visit(c);
-//		for (Function f : _functions)
-//			_backend.compileFunction(f);
-//		_backend.epilogue();
-//		_listener.onCodeGenerationEnd();
+		/* Code generation. */
+		
+		_listener.onCodeGenerationBegin();
+		_backend.prologue();
+		for (Constructor c : _constructors)
+			_backend.visit(c);
+		for (Function f : _functions)
+			_backend.compileFunction(f);
+		_backend.epilogue();
+		_listener.onCodeGenerationEnd();
 	}
 
 	public void visit(BasicBlockVisitor visitor)

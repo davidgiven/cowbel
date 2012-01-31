@@ -7,18 +7,18 @@
 package com.cowlark.cowbel.instructions;
 
 import java.util.List;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.symbols.Variable;
 
 public class MethodCallInstruction extends Instruction
 {
-	private IdentifierNode _method;
+	private Method _method;
 	private Variable _receiver;
 	private List<Variable> _invars;
 	private List<Variable> _outvars;
 	
-	public MethodCallInstruction(Node node, IdentifierNode method, 
+	public MethodCallInstruction(Node node, Method method, 
 			Variable receiver, List<Variable> invars, List<Variable> outvars)
     {
 		super(node);
@@ -28,10 +28,25 @@ public class MethodCallInstruction extends Instruction
 		_outvars = outvars;
     }
 	
-	public IdentifierNode getMethodName()
+	public Method getMethod()
 	{
 		return _method;
 	}
+	
+	public Variable getReceiver()
+    {
+	    return _receiver;
+    }
+	
+	public List<Variable> getInputVariables()
+    {
+	    return _invars;
+    }
+	
+	public List<Variable> getOutputVariables()
+    {
+	    return _outvars;
+    }
 	
 	@Override
 	protected String getInstructionName()
@@ -42,7 +57,7 @@ public class MethodCallInstruction extends Instruction
 	@Override
 	protected String getShortDescription()
 	{
-	    return _method.getText() + " receiver=" + _receiver.toString() +
+	    return _method.getSignature() + " receiver=" + _receiver.toString() +
 	    	" inputs=" + varlist(_invars) + " outputs=" + varlist(_outvars);
 	}
 	

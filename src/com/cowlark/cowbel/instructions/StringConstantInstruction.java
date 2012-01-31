@@ -26,6 +26,11 @@ public class StringConstantInstruction extends Instruction
 		return _value;
 	}
 	
+	public Variable getOutputVariable()
+    {
+	    return _outvar;
+    }
+	
 	@Override
 	protected String getInstructionName()
 	{

@@ -23,6 +23,16 @@ public class ArrayConstructorInstruction extends Instruction
 		_outvar = outvar;
     }
 	
+	public List<Variable> getValues()
+    {
+	    return _values;
+    }
+	
+	public Variable getOutputVariable()
+    {
+	    return _outvar;
+    }
+	
 	@Override
 	protected String getInstructionName()
 	{
