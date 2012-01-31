@@ -6,15 +6,16 @@
 
 package com.cowlark.cowbel.ast.nodes;
 
-import com.cowlark.cowbel.ast.IsCallableStatement;
-import com.cowlark.cowbel.ast.IsMethodNode;
+import com.cowlark.cowbel.ast.HasInputs;
+import com.cowlark.cowbel.ast.HasOutputs;
+import com.cowlark.cowbel.ast.IsMethod;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.parser.core.Location;
 
 public class MethodCallStatementNode extends StatementNode
-	implements IsCallableStatement, IsMethodNode
+	implements IsMethod, HasInputs, HasOutputs
 {
 	private Method _method;
 	
@@ -51,12 +52,12 @@ public class MethodCallStatementNode extends StatementNode
 		return (IdentifierNode) getChild(1);
 	}
 	
-	public IdentifierListNode getVariables()
+	public IdentifierListNode getOutputs()
 	{
 		return (IdentifierListNode) getChild(2);
 	}
 	
-	public ExpressionListNode getArguments()
+	public ExpressionListNode getInputs()
 	{
 		return (ExpressionListNode) getChild(3);
 	}

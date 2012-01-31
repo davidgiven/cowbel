@@ -6,9 +6,9 @@
 
 package com.cowlark.cowbel.ast;
 
-import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
+import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 
-public interface IsCallableStatement extends IsCallable
+public interface HasInputs
 {
-	public IdentifierListNode getVariables();
+	public ExpressionListNode getInputs();
 }

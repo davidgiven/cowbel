@@ -13,7 +13,6 @@ import com.cowlark.cowbel.types.IntegerType;
 import com.cowlark.cowbel.types.StringType;
 import com.cowlark.cowbel.types.Type;
 import com.cowlark.cowbel.types.TypeVisitor;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.VoidType;
 
 public class CTypeNameBuilder extends TypeVisitor
 {

@@ -7,15 +7,15 @@
 package com.cowlark.cowbel.ast.nodes;
 
 import com.cowlark.cowbel.ast.HasIdentifier;
+import com.cowlark.cowbel.ast.HasInputs;
 import com.cowlark.cowbel.ast.HasSymbol;
-import com.cowlark.cowbel.ast.IsCallable;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.symbols.Symbol;
 
 public class DirectFunctionCallExpressionNode extends ExpressionNode
-		implements HasSymbol, IsCallable, HasIdentifier
+		implements HasSymbol, HasIdentifier, HasInputs
 {
 	private Symbol _symbol;
 	
@@ -33,7 +33,7 @@ public class DirectFunctionCallExpressionNode extends ExpressionNode
 		return (IdentifierNode) getChild(0);
 	}
 	
-	public ExpressionListNode getArguments()
+	public ExpressionListNode getInputs()
 	{
 		return (ExpressionListNode) getChild(1);
 	}

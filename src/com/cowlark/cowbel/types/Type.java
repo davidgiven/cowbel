@@ -8,6 +8,8 @@ package com.cowlark.cowbel.types;
 
 import java.util.HashMap;
 import java.util.Map;
+import com.cowlark.cowbel.ast.HasInputs;
+import com.cowlark.cowbel.ast.IsMethod;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.errors.CompilationException;
@@ -99,8 +101,9 @@ public abstract class Type
 			throw new FailedToInferTypeException(node, this);
 	}
 	
-	public abstract Method lookupMethod(Node node, IdentifierNode id)
-		throws CompilationException;
+	public abstract <T extends Node & IsMethod & HasInputs>
+		Method lookupMethod(T node, IdentifierNode id)
+			throws CompilationException;
 	
 	public abstract void visit(TypeVisitor visitor);
 }

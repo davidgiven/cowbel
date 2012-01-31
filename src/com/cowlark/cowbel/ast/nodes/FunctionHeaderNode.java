@@ -40,7 +40,7 @@ public class FunctionHeaderNode extends Node
 		return (IdentifierNode) getChild(0);
 	}
 	
-	public ParameterDeclarationListNode getParametersNode()
+	public ParameterDeclarationListNode getInputParametersNode()
 	{
 		return (ParameterDeclarationListNode) getChild(1);
 	}
@@ -69,7 +69,7 @@ public class FunctionHeaderNode extends Node
 		if (_type == null)
 		{
 			_type = FunctionType.create(
-					parameters_to_type_list(getParametersNode()),
+					parameters_to_type_list(getInputParametersNode()),
 					parameters_to_type_list(getOutputParametersNode()));
 		}
 		

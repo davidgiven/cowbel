@@ -7,7 +7,8 @@
 package com.cowlark.cowbel;
 
 import java.util.List;
-import com.cowlark.cowbel.ast.IsCallableStatement;
+import com.cowlark.cowbel.ast.HasInputs;
+import com.cowlark.cowbel.ast.HasOutputs;
 import com.cowlark.cowbel.ast.SimpleVisitor;
 import com.cowlark.cowbel.ast.nodes.BreakStatementNode;
 import com.cowlark.cowbel.ast.nodes.ContinueStatementNode;
@@ -184,10 +185,10 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		Type receivertype = receiver.calculateType();
 		receivertype.ensureConcrete(node);
 		
-		IdentifierListNode variables = node.getVariables();
+		IdentifierListNode variables = node.getOutputs();
 		List<Type> variabletypes = variables.calculateTypes();
 		
-		ExpressionListNode arguments = node.getArguments();
+		ExpressionListNode arguments = node.getInputs();
 		List<Type> argumenttypes = arguments.calculateTypes();
 		
 		IdentifierNode name = node.getMethodIdentifier();
@@ -196,7 +197,7 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		method.typeCheck(node, variabletypes, argumenttypes);
 	}
 	
-	private <T extends StatementNode & IsCallableStatement>
+	private <T extends StatementNode & HasInputs & HasOutputs>
 		void validate_function_call(T node, Function function)
 			throws CompilationException
 	{
@@ -205,9 +206,9 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		List<Type> inputFunctionTypes = functionType.getInputArgumentTypes();
 		List<Type> outputFunctionTypes = functionType.getOutputArgumentTypes();
 		
-		ExpressionListNode callArguments = node.getArguments();
-		List<Type> inputCallTypes = node.getArguments().calculateTypes();
-		List<Type> outputCallTypes = node.getVariables().calculateTypes();
+		ExpressionListNode callArguments = node.getInputs();
+		List<Type> inputCallTypes = node.getInputs().calculateTypes();
+		List<Type> outputCallTypes = node.getOutputs().calculateTypes();
 		
 		if (!Utils.unifyTypeLists(node, inputFunctionTypes, inputCallTypes, false) ||
 			!Utils.unifyTypeLists(node, outputFunctionTypes, outputCallTypes, true))

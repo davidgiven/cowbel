@@ -7,9 +7,9 @@
 package com.cowlark.cowbel;
 
 import com.cowlark.cowbel.ast.HasIdentifier;
+import com.cowlark.cowbel.ast.HasInputs;
+import com.cowlark.cowbel.ast.HasOutputs;
 import com.cowlark.cowbel.ast.HasSymbol;
-import com.cowlark.cowbel.ast.IsCallable;
-import com.cowlark.cowbel.ast.IsCallableStatement;
 import com.cowlark.cowbel.ast.RecursiveVisitor;
 import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.DirectFunctionCallStatementNode;
@@ -39,7 +39,7 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 	    super.visit(node);
 	}
 	
-	private <T extends Node & IsCallable & HasIdentifier & HasSymbol>
+	private <T extends Node & HasInputs & HasIdentifier & HasSymbol>
 		void direct_function_call(T node) throws CompilationException
 	{
 		ScopeConstructorNode scope = node.getScope();
@@ -47,7 +47,7 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 		
 		/* Try to look this up as a function first. */
 		
-		Symbol sym = scope.lookupFunction(in, node.getArguments().getNumberOfChildren());
+		Symbol sym = scope.lookupFunction(in, node.getInputs().getNumberOfChildren());
 		if (sym == null)
 		{
 			/* If that failed, treat it as a variable reference (doing an
@@ -59,10 +59,10 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 		node.setSymbol(sym);
 	}
 	
-	private <T extends Node & IsCallableStatement>
+	private <T extends Node & HasOutputs>
 		void direct_call(T node) throws CompilationException
 	{
-		IdentifierListNode variables = node.getVariables();
+		IdentifierListNode variables = node.getOutputs();
 		
 		ScopeConstructorNode scope = node.getScope();
 		

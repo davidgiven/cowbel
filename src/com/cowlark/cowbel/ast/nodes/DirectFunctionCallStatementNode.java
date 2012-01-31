@@ -7,15 +7,16 @@
 package com.cowlark.cowbel.ast.nodes;
 
 import com.cowlark.cowbel.ast.HasIdentifier;
+import com.cowlark.cowbel.ast.HasInputs;
+import com.cowlark.cowbel.ast.HasOutputs;
 import com.cowlark.cowbel.ast.HasSymbol;
-import com.cowlark.cowbel.ast.IsCallableStatement;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.symbols.Symbol;
 
 public class DirectFunctionCallStatementNode extends StatementNode
-		implements HasSymbol, IsCallableStatement, HasIdentifier
+		implements HasSymbol, HasIdentifier, HasInputs, HasOutputs
 {
 	private Symbol _symbol;
 	
@@ -34,12 +35,12 @@ public class DirectFunctionCallStatementNode extends StatementNode
 		return (IdentifierNode) getChild(0);
 	}
 
-	public IdentifierListNode getVariables()
+	public IdentifierListNode getOutputs()
 	{
 		return (IdentifierListNode) getChild(1);
 	}
 	
-	public ExpressionListNode getArguments()
+	public ExpressionListNode getInputs()
 	{
 		return (ExpressionListNode) getChild(2);
 	}
