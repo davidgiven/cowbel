@@ -10,6 +10,7 @@ import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
+import com.cowlark.cowbel.ast.nodes.TypeListNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -24,6 +25,7 @@ public class ExpressionLowParser extends Parser
 		
 		return new MethodCallExpressionNode(seed.start(), right.end(),
 				(ExpressionNode) seed, (IdentifierNode) operator,
+				new TypeListNode(operator, operator.end()),
 				new ExpressionListNode(right, right.end(),
 						(ExpressionNode) right));
 	}

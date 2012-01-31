@@ -52,6 +52,8 @@ public abstract class Parser
 	public static MethodCallStatementParser MethodCallStatementParser = new MethodCallStatementParser();
 	public static VariableDeclarationListParser VariableDeclarationListParser = new VariableDeclarationListParser();
 	public static ExpressionListParser ExpressionListParser = new ExpressionListParser();
+	public static TypeVariableListParser TypeVariableListParser = new TypeVariableListParser();
+	public static TypeListParser TypeListParser = new TypeListParser();
 	
 	public static Parser EOFParser = new EOFParser();
 	public static Parser DotParser = new TrivialParser(".");

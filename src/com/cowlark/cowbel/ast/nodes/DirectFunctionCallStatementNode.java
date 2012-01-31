@@ -21,11 +21,12 @@ public class DirectFunctionCallStatementNode extends StatementNode
 	private Symbol _symbol;
 	
 	public DirectFunctionCallStatementNode(Location start, Location end,
-			IdentifierNode object,
+			IdentifierNode object, TypeListNode types,
 			IdentifierListNode variables, ExpressionListNode arguments)
     {
 		super(start, end);
 		addChild(object);
+		addChild(types);
 		addChild(variables);
 		addChild(arguments);
     }
@@ -35,14 +36,19 @@ public class DirectFunctionCallStatementNode extends StatementNode
 		return (IdentifierNode) getChild(0);
 	}
 
+	public TypeListNode getTypes()
+	{
+		return (TypeListNode) getChild(1);
+	}
+	
 	public IdentifierListNode getOutputs()
 	{
-		return (IdentifierListNode) getChild(1);
+		return (IdentifierListNode) getChild(2);
 	}
 	
 	public ExpressionListNode getInputs()
 	{
-		return (ExpressionListNode) getChild(2);
+		return (ExpressionListNode) getChild(3);
 	}
 
 	@Override

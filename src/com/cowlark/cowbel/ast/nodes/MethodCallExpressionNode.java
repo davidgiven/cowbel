@@ -21,11 +21,13 @@ public class MethodCallExpressionNode extends ExpressionNode
 	public MethodCallExpressionNode(Location start, Location end,
 			ExpressionNode object,
 			IdentifierNode method,
+			TypeListNode types,
 			ExpressionListNode arguments)
     {
 		super(start, end);
 		addChild(object);
 		addChild(method);
+		addChild(types);
 		addChild(arguments);
     }
 	
@@ -49,9 +51,14 @@ public class MethodCallExpressionNode extends ExpressionNode
 		return (IdentifierNode) getChild(1);
 	}
 	
+	public TypeListNode getTypes()
+	{
+		return (TypeListNode) getChild(2);
+	}
+	
 	public ExpressionListNode getInputs()
 	{
-		return (ExpressionListNode) getChild(2);
+		return (ExpressionListNode) getChild(3);
 	}
 	
 	@Override

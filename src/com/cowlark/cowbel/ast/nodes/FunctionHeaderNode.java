@@ -20,11 +20,13 @@ public class FunctionHeaderNode extends Node
 	
 	public FunctionHeaderNode(Location start, Location end,
 			IdentifierNode name,
+			IdentifierListNode typevariables,
 			ParameterDeclarationListNode inputparams,
 			ParameterDeclarationListNode outputparams)
     {
 		super(start, end);
 		addChild(name);
+		addChild(typevariables);
 		addChild(inputparams);
 		addChild(outputparams);
     }	
@@ -40,14 +42,19 @@ public class FunctionHeaderNode extends Node
 		return (IdentifierNode) getChild(0);
 	}
 	
+	public IdentifierListNode getTypeVariables()
+	{
+		return (IdentifierListNode) getChild(1);
+	}
+	
 	public ParameterDeclarationListNode getInputParametersNode()
 	{
-		return (ParameterDeclarationListNode) getChild(1);
+		return (ParameterDeclarationListNode) getChild(2);
 	}
 	
 	public ParameterDeclarationListNode getOutputParametersNode()
 	{
-		return (ParameterDeclarationListNode) getChild(2);
+		return (ParameterDeclarationListNode) getChild(3);
 	}
 	
 	private static List<Type> parameters_to_type_list(

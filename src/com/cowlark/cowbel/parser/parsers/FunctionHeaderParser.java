@@ -7,6 +7,7 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import com.cowlark.cowbel.ast.nodes.FunctionHeaderNode;
+import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
@@ -27,7 +28,11 @@ public class FunctionHeaderParser extends Parser
 		if (namepr.failed())
 			return namepr;
 		
-		ParseResult inputargspr = ParameterDeclarationListParser.parse(namepr.end());
+		ParseResult typevarspr = TypeVariableListParser.parse(namepr.end());
+		if (typevarspr.failed())
+			return typevarspr;
+		
+		ParseResult inputargspr = ParameterDeclarationListParser.parse(typevarspr.end());
 		if (inputargspr.failed())
 			return inputargspr;
 		
@@ -39,6 +44,7 @@ public class FunctionHeaderParser extends Parser
 			Location n = inputargspr.end();
 			return new FunctionHeaderNode(location, n,
 					(IdentifierNode) namepr,
+					(IdentifierListNode) typevarspr,
 					(ParameterDeclarationListNode) inputargspr,
 					new ParameterDeclarationListNode(pr, pr));
 		}
@@ -67,6 +73,7 @@ public class FunctionHeaderParser extends Parser
 
 		return new FunctionHeaderNode(location, outputargspr.end(),
 				(IdentifierNode) namepr,
+				(IdentifierListNode) typevarspr,
 				(ParameterDeclarationListNode) inputargspr,
 				(ParameterDeclarationListNode) outputargspr);
 	}

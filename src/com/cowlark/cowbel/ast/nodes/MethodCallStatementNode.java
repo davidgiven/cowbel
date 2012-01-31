@@ -22,12 +22,14 @@ public class MethodCallStatementNode extends StatementNode
 	public MethodCallStatementNode(Location start, Location end,
 			ExpressionNode object,
 			IdentifierNode method,
+			TypeListNode types,
 			IdentifierListNode variables,
 			ExpressionListNode arguments)
     {
 		super(start, end);
 		addChild(object);
 		addChild(method);
+		addChild(types);
 		addChild(variables);
 		addChild(arguments);
     }
@@ -52,14 +54,19 @@ public class MethodCallStatementNode extends StatementNode
 		return (IdentifierNode) getChild(1);
 	}
 	
+	public TypeListNode getTypes()
+	{
+		return (TypeListNode) getChild(2);
+	}
+	
 	public IdentifierListNode getOutputs()
 	{
-		return (IdentifierListNode) getChild(2);
+		return (IdentifierListNode) getChild(3);
 	}
 	
 	public ExpressionListNode getInputs()
 	{
-		return (ExpressionListNode) getChild(3);
+		return (ExpressionListNode) getChild(4);
 	}
 	
 	@Override
