@@ -17,6 +17,7 @@ import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
 import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.StatementListNode;
+import com.cowlark.cowbel.ast.nodes.TypeListNode;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
 import com.cowlark.cowbel.ast.nodes.VarDeclarationNode;
 import com.cowlark.cowbel.ast.nodes.VarReferenceNode;
@@ -111,6 +112,7 @@ public class ForStatementParser extends Parser
 						new VarReferenceNode(variablepr, variablepr.end(),
 							loopcounter),
 						new IdentifierNode(comparisonmethodloc, comparisonmethodend),
+						new TypeListNode(comparisonmethodloc, comparisonmethodend),
 						new ExpressionListNode(maximumpr, maximumpr.end(),
 							(ExpressionNode) maximumpr)
 					),
@@ -139,6 +141,7 @@ public class ForStatementParser extends Parser
 								new VarReferenceNode(variablepr, variablepr.end(),
 									loopcounter),
 								new IdentifierNode(incrementmethodloc, incrementmethodend),
+								new TypeListNode(incrementmethodloc, incrementmethodend),
 								new ExpressionListNode(steppr, steppr.end(),
 									(ExpressionNode) steppr)
 									)

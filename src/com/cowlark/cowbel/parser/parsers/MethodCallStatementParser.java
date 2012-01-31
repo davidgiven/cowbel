@@ -15,6 +15,7 @@ import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.nodes.TypeListNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -39,7 +40,11 @@ public class MethodCallStatementParser extends Parser
 				if (identifierpr.failed())
 					return identifierpr;
 				
-				ParseResult argumentspr = ArgumentListParser.parse(identifierpr.end());
+				ParseResult typeargspr = TypeListParser.parse(identifierpr.end());
+				if (typeargspr.failed())
+					return typeargspr;
+				
+				ParseResult argumentspr = ArgumentListParser.parse(typeargspr.end());
 				if (argumentspr.failed())
 					return argumentspr;
 				
@@ -52,6 +57,7 @@ public class MethodCallStatementParser extends Parser
 							identifierpr, pr.end(),
 							(ExpressionNode) seed,
 							(IdentifierNode) identifierpr,
+							(TypeListNode) typeargspr,
 							(IdentifierListNode) variablespr,
 							(ExpressionListNode) argumentspr);
 				}
@@ -62,13 +68,18 @@ public class MethodCallStatementParser extends Parser
 						identifierpr, argumentspr.end(),
 						(ExpressionNode) seed,
 						(IdentifierNode) identifierpr,
+						(TypeListNode) typeargspr,
 						(ExpressionListNode) argumentspr);
 				continue;
 			}
 			
 			/* Otherwise this could be a indirect function call statement. */
 			
-			ParseResult argumentspr = ArgumentListParser.parse(seed.end());
+			ParseResult typeargspr = TypeListParser.parse(seed.end());
+			if (typeargspr.failed())
+				return typeargspr;
+			
+			ParseResult argumentspr = ArgumentListParser.parse(typeargspr.end());
 			if (argumentspr.failed())
 				return argumentspr;
 			

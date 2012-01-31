@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.FunctionHeaderNode;
 import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
+import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
@@ -99,6 +100,7 @@ public class Compiler
 			FunctionHeaderNode toplevelnodeheader = new FunctionHeaderNode(
 					loc, loc,
 					new IdentifierNode(mainname, mainnameend),
+					new IdentifierListNode(mainname, mainnameend),
 					new ParameterDeclarationListNode(loc, loc),
 					new ParameterDeclarationListNode(loc, loc));
 			FunctionDefinitionNode toplevelnode = new FunctionDefinitionNode(

@@ -13,6 +13,7 @@ import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
+import com.cowlark.cowbel.ast.nodes.TypeListNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -20,27 +21,36 @@ public class ExpressionHighParser extends Parser
 {
 	private ParseResult parseMethodCall(ParseResult seed, Location location)
 	{
-		ParseResult method = MethodNameParser.parse(location);
-		if (method.failed())
-			return method;
+		ParseResult methodpr = MethodNameParser.parse(location);
+		if (methodpr.failed())
+			return methodpr;
 		
-		ParseResult arguments = ArgumentListParser.parse(method.end());
+		ParseResult typeargspr = TypeListParser.parse(methodpr.end());
+		if (typeargspr.failed())
+			return typeargspr;
+		
+		ParseResult arguments = ArgumentListParser.parse(typeargspr.end());
 		if (arguments.failed())
 			return arguments;
 		
 		return new MethodCallExpressionNode(location, arguments.end(),
-				(ExpressionNode) seed, (IdentifierNode) method,
+				(ExpressionNode) seed, (IdentifierNode) methodpr,
+				(TypeListNode) typeargspr,
 				(ExpressionListNode) arguments);
 	}
 	
 	private ParseResult parseFunctionCall(ParseResult seed, Location location)
 	{
-		ParseResult arguments = ArgumentListParser.parse(location);
-		if (arguments.failed())
-			return arguments;
+		ParseResult typeargspr = TypeListParser.parse(location);
+		if (typeargspr.failed())
+			return typeargspr;
 		
-		return new IndirectFunctionCallExpressionNode(location, arguments.end(),
-				(ExpressionNode)seed, (ExpressionListNode) arguments);
+		ParseResult argumentspr = ArgumentListParser.parse(typeargspr.end());
+		if (argumentspr.failed())
+			return argumentspr;
+		
+		return new IndirectFunctionCallExpressionNode(location, argumentspr.end(),
+				(ExpressionNode)seed, (ExpressionListNode) argumentspr);
 	}
 	
 	private ParseResult parseDirectFunctionCall(Location location)
@@ -51,12 +61,17 @@ public class ExpressionHighParser extends Parser
 		if (identifierpr.failed())
 			return identifierpr;
 		
-		ParseResult argumentspr = ArgumentListParser.parse(identifierpr.end());
+		ParseResult typeargspr = TypeListParser.parse(identifierpr.end());
+		if (typeargspr.failed())
+			return typeargspr;
+		
+		ParseResult argumentspr = ArgumentListParser.parse(typeargspr.end());
 		if (argumentspr.failed())
 			return argumentspr;
 		
 		return new DirectFunctionCallExpressionNode(location, argumentspr.end(),
 				(IdentifierNode) identifierpr,
+				(TypeListNode) typeargspr,
 				(ExpressionListNode) argumentspr);
 	}
 	
@@ -75,6 +90,15 @@ public class ExpressionHighParser extends Parser
 			if (pr.success())
 			{
 				seed = parseMethodCall(seed, pr.end());
+				if (seed.failed())
+					return seed;
+				continue;
+			}
+			
+			pr = OpenAngleBracketParser.parse(seed.end());
+			if (pr.success())
+			{
+				seed = parseFunctionCall(seed, pr.end());
 				if (seed.failed())
 					return seed;
 				continue;

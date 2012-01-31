@@ -12,6 +12,7 @@ import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.nodes.TypeListNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -27,7 +28,11 @@ public class DirectFunctionCallStatementParser extends Parser
 		if (identifierpr.failed())
 			return identifierpr;
 
-		ParseResult argumentspr = ArgumentListParser.parse(identifierpr.end());
+		ParseResult typeargspr = TypeListParser.parse(identifierpr.end());
+		if (typeargspr.failed())
+			return typeargspr;
+		
+		ParseResult argumentspr = ArgumentListParser.parse(typeargspr.end());
 		if (argumentspr.failed())
 			return argumentspr;
 
@@ -40,6 +45,7 @@ public class DirectFunctionCallStatementParser extends Parser
 		
 		return new DirectFunctionCallStatementNode(location, pr.end(),
 				(IdentifierNode) identifierpr,
+				(TypeListNode) typeargspr,
 				(IdentifierListNode) variablespr,
 				(ExpressionListNode) argumentspr);
 	}

@@ -1,0 +1,23 @@
+function notypeparams(): integer
+{
+}
+
+function onetypeparam<T>(): integer
+{
+}
+
+function twotypeparams<T1, T2>(): integer
+{
+}
+
+/* Direct calls */
+
+notypeparams();
+onetypeparam<integer>();
+twotypeparams<integer, integer>();
+
+/* Expression calls */
+
+(notypeparams());
+(onetypeparam<integer>());
+(twotypeparams<integer, integer>());
