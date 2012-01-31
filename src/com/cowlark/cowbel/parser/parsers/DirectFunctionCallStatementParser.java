@@ -11,6 +11,7 @@ import com.cowlark.cowbel.ast.nodes.DirectFunctionCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
+import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -54,7 +55,15 @@ public class DirectFunctionCallStatementParser extends Parser
 					Collections.<IdentifierNode>emptyList());
 		}
 		
-		return parseWithVariableList((IdentifierListNode) variablespr,
-				variablespr.end());
+		Location n = variablespr.end();
+		if (((Node) variablespr).getNumberOfChildren() > 0)
+		{
+			ParseResult pr = EqualsParser.parse(variablespr.end());
+			if (pr.failed())
+				return pr;
+			n = pr.end();
+		}
+		
+		return parseWithVariableList((IdentifierListNode) variablespr, n);
 	}
 }

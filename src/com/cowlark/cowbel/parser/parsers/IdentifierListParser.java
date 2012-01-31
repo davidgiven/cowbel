@@ -11,9 +11,23 @@ import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
+import com.cowlark.cowbel.parser.errors.ExpectedSyntacticElement;
 
 public class IdentifierListParser extends Parser
 {
+	private ParseResult parseTerminator(Location location)
+	{
+		ParseResult pr = EqualsParser.parse(location);
+		if (pr.success())
+			return pr;
+		
+		pr = CloseAngleBracketParser.parse(location);
+		if (pr.success())
+			return pr;
+		
+		return new ExpectedSyntacticElement(location, "identifier list terminator");
+	}
+	
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
@@ -28,12 +42,12 @@ public class IdentifierListParser extends Parser
 			
 			ids.add((IdentifierNode) identifierpr);
 			
-			/* An = means the end of the assignment list. */
+			/* An = or > means the end of the assignment list. */
 			
-			ParseResult pr = EqualsParser.parse(identifierpr.end());
+			ParseResult pr = parseTerminator(identifierpr.end());
 			if (pr.success())
 			{
-				n = pr.end();
+				n = identifierpr.end();
 				break;
 			}
 			

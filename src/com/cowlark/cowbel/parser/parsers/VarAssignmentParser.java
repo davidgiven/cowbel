@@ -8,6 +8,7 @@ package com.cowlark.cowbel.parser.parsers;
 
 import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
+import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
@@ -37,7 +38,15 @@ public class VarAssignmentParser extends Parser
 		if (variablespr.failed())
 			return variablespr;
 
-		return parseWithVariableList((IdentifierListNode) variablespr,
-				variablespr.end());
+		Location n = variablespr.end();
+		if (((Node) variablespr).getNumberOfChildren() > 0)
+		{
+			ParseResult pr = EqualsParser.parse(variablespr.end());
+			if (pr.failed())
+				return pr;
+			n = pr.end();
+		}
+		
+		return parseWithVariableList((IdentifierListNode) variablespr, n);
 	}
 }
