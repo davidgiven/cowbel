@@ -28,12 +28,16 @@ import com.cowlark.cowbel.parser.core.MutableLocation;
 import com.cowlark.cowbel.parser.core.ParseResult;
 import com.cowlark.cowbel.parser.parsers.Parser;
 import com.cowlark.cowbel.symbols.Function;
+import com.cowlark.cowbel.types.BooleanType;
+import com.cowlark.cowbel.types.IntegerType;
+import com.cowlark.cowbel.types.StringType;
 
 public class Compiler
 {
 	private CompilerListener _listener;
 	private Backend _backend;
 	private Location _input;
+	private TypeContext _rootTypeContext;
 	private Function _mainFunction;
 	private TreeSet<Function> _functions;
 	private TreeSet<Constructor> _constructors;
@@ -87,6 +91,14 @@ public class Compiler
 		}
 
 		_ast = (FunctionScopeConstructorNode) pr;
+		
+		_rootTypeContext = new TypeContext(_ast, null);
+		_rootTypeContext.addType(IdentifierNode.createIdentifier("integer"),
+				IntegerType.create());
+		_rootTypeContext.addType(IdentifierNode.createIdentifier("boolean"),
+				BooleanType.create());
+		_rootTypeContext.addType(IdentifierNode.createIdentifier("string"),
+				StringType.create());
 		
 		/* Analyse symbol tables. */
 		

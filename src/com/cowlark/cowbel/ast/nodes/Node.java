@@ -9,12 +9,13 @@ package com.cowlark.cowbel.ast.nodes;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import com.cowlark.cowbel.ast.HasNode;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.Token;
 
-public abstract class Node extends Token implements Iterable<Node>
+public abstract class Node extends Token implements Iterable<Node>, HasNode
 {
 	private Vector<Node> _children = new Vector<Node>();
 	private Node _parent;
@@ -24,6 +25,12 @@ public abstract class Node extends Token implements Iterable<Node>
     {
 	    super(start, end);
     }
+	
+	@Override
+	public Node getNode()
+	{
+	    return this;
+	}
 	
 	public void addChild(Node child)
 	{
