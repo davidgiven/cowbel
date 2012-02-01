@@ -47,7 +47,8 @@ public class TypeContext implements Comparable<TypeContext>
 		return "TypeContext" + _id;
 	}
 	
-	public int compareTo(TypeContext other)
+	@Override
+    public int compareTo(TypeContext other)
 	{
 		if (_id < other._id)
 			return -1;

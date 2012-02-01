@@ -44,12 +44,14 @@ public class MethodCallStatementNode extends StatementNode
 		_method = method;
 	}
 	
-	public ExpressionNode getMethodReceiver()
+	@Override
+    public ExpressionNode getMethodReceiver()
 	{
 		return (ExpressionNode) getChild(0);
 	}
 	
-	public IdentifierNode getMethodIdentifier()
+	@Override
+    public IdentifierNode getMethodIdentifier()
 	{
 		return (IdentifierNode) getChild(1);
 	}
@@ -59,12 +61,14 @@ public class MethodCallStatementNode extends StatementNode
 		return (TypeListNode) getChild(2);
 	}
 	
-	public IdentifierListNode getOutputs()
+	@Override
+    public IdentifierListNode getOutputs()
 	{
 		return (IdentifierListNode) getChild(3);
 	}
 	
-	public ExpressionListNode getInputs()
+	@Override
+    public ExpressionListNode getInputs()
 	{
 		return (ExpressionListNode) getChild(4);
 	}

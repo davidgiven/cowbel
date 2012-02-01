@@ -39,7 +39,6 @@ import com.cowlark.cowbel.symbols.Function;
 import com.cowlark.cowbel.symbols.Symbol;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.ArrayType;
-import com.cowlark.cowbel.types.FunctionType;
 import com.cowlark.cowbel.types.Type;
 
 public class CBackend extends ImperativeBackend
@@ -98,7 +97,8 @@ public class CBackend extends ImperativeBackend
 	    compiler.getAst().visit(
 	    		new RecursiveVisitor()
 	    		{
-	    			public void visit(StringConstantNode node)
+	    			@Override
+                    public void visit(StringConstantNode node)
 	    				throws CompilationException
 	    			{
 	    				byte[] bytes = node.getValue().getBytes(UTF8);
@@ -306,7 +306,6 @@ public class CBackend extends ImperativeBackend
 	
 	private void function_header(Function f)
 	{
-		FunctionType type = (FunctionType) f.getSymbolType();
 		FunctionDefinitionNode node = (FunctionDefinitionNode) f.getNode();
 		ParameterDeclarationListNode inparams = node.getFunctionHeader().getInputParametersNode();
 		ParameterDeclarationListNode outparams = node.getFunctionHeader().getOutputParametersNode();
@@ -382,10 +381,6 @@ public class CBackend extends ImperativeBackend
 	@Override
 	public void visit(FunctionExitInstruction insn)
 	{
-		FunctionDefinitionNode node = (FunctionDefinitionNode) insn.getNode();
-		Function function = node.getFunctionBody().getFunction();
-		FunctionType type = (FunctionType) function.getSymbolType();
-
 		print("\treturn;\n");
 	}
 	

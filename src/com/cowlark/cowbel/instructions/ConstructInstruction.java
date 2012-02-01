@@ -36,7 +36,8 @@ public class ConstructInstruction extends Instruction
 	    return _constructor.toString();
 	}
 	
-	public void visit(InstructionVisitor visitor)
+	@Override
+    public void visit(InstructionVisitor visitor)
 	{
 		visitor.visit(this);
 	}

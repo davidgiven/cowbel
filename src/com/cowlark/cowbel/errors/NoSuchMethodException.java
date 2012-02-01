@@ -12,6 +12,8 @@ import com.cowlark.cowbel.types.Type;
 
 public class NoSuchMethodException extends CompilationException
 {
+    private static final long serialVersionUID = -2280542063644019979L;
+    
 	private Node _node;
 	private Type _type;
 	private IdentifierNode _id;

@@ -13,7 +13,9 @@ import com.cowlark.cowbel.types.Type;
 
 public class MethodParameterMismatch extends CompilationException
 {
-    private Node _node;
+    private static final long serialVersionUID = 8952338567558812761L;
+    
+	private Node _node;
     private Method _method;
 	private List<Type> _methodoutput;
 	private List<Type> _calledoutput;

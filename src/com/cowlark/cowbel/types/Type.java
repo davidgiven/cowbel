@@ -21,7 +21,8 @@ public abstract class Type
 	private static Map<String, Type> _typeMap =
 		new HashMap<String, Type>();
 
-	protected static <T extends Type> T canonicalise(T candidate)
+	@SuppressWarnings("unchecked")
+    protected static <T extends Type> T canonicalise(T candidate)
     {
 		if (candidate.isConcreteType())
 		{

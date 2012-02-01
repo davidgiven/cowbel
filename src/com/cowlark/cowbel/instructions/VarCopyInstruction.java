@@ -43,7 +43,8 @@ public class VarCopyInstruction extends Instruction
 	    return _invar.toString() + " -> " + _outvar.toString();
 	}
 	
-	public void visit(InstructionVisitor visitor)
+	@Override
+    public void visit(InstructionVisitor visitor)
 	{
 		visitor.visit(this);
 	}

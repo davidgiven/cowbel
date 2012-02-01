@@ -52,7 +52,8 @@ public class Constructor implements Comparable<Constructor>
 			(_persistent ? "persistent" : "volatile");
 	}
 	
-	public int compareTo(Constructor other)
+	@Override
+    public int compareTo(Constructor other)
 	{
 		if (_id < other._id)
 			return -1;
@@ -96,7 +97,6 @@ public class Constructor implements Comparable<Constructor>
 	
 	public void addFunction(Function function)
 	{
-		ScopeConstructorNode scope = function.getScope();
 		_directFunctions.add(function);
 	}
 	

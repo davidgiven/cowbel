@@ -43,7 +43,8 @@ public class BooleanConstantInstruction extends Instruction
 	    return Boolean.toString(_value) + " outvar=" + _outvar.toString();
 	}
 	
-	public void visit(InstructionVisitor visitor)
+	@Override
+    public void visit(InstructionVisitor visitor)
 	{
 		visitor.visit(this);
 	}

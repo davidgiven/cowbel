@@ -9,8 +9,8 @@ package com.cowlark.cowbel.ast.nodes;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
-import com.cowlark.cowbel.types.Type;
 import com.cowlark.cowbel.types.InferredType;
+import com.cowlark.cowbel.types.Type;
 
 public class InferredTypeNode extends TypeNode
 {
