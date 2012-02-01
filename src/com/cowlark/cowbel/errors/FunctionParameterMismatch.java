@@ -13,7 +13,9 @@ import com.cowlark.cowbel.types.Type;
 
 public class FunctionParameterMismatch extends CompilationException
 {
-    private Node _node;
+    private static final long serialVersionUID = 2464239362015604667L;
+    
+	private Node _node;
     private Function _function; 
 	private List<Type> _functionoutput;
 	private List<Type> _calledoutput;

@@ -206,7 +206,6 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		List<Type> inputFunctionTypes = functionType.getInputArgumentTypes();
 		List<Type> outputFunctionTypes = functionType.getOutputArgumentTypes();
 		
-		ExpressionListNode callArguments = node.getInputs();
 		List<Type> inputCallTypes = node.getInputs().calculateTypes();
 		List<Type> outputCallTypes = node.getOutputs().calculateTypes();
 		
@@ -219,7 +218,8 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		}
 	}
 	
-	public void visit(DirectFunctionCallStatementNode node) throws CompilationException
+	@Override
+    public void visit(DirectFunctionCallStatementNode node) throws CompilationException
 	{
 		Symbol symbol = node.getSymbol();
 		assert(symbol instanceof Function);

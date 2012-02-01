@@ -20,7 +20,8 @@ public abstract class Instruction implements HasNode
 		_node = node;
     }
 	
-	public Node getNode()
+	@Override
+    public Node getNode()
     {
 	    return _node;
     }

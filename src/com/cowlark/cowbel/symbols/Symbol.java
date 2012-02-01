@@ -31,7 +31,8 @@ public abstract class Symbol implements Comparable<Symbol>, HasNode
 		_type = type;
 	}
 
-	public Node getNode()
+	@Override
+    public Node getNode()
 	{
 		return _node;
 	}

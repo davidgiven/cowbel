@@ -51,7 +51,8 @@ public class IdentifierNode extends ExpressionNode
 	public static Comparator<IdentifierNode> valueComparator =
 		new Comparator<IdentifierNode>()
 		{
-			public int compare(IdentifierNode o1, IdentifierNode o2)
+			@Override
+            public int compare(IdentifierNode o1, IdentifierNode o2)
 			{
 				return o1.getText().compareTo(o2.getText());
 			}

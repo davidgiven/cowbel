@@ -60,7 +60,8 @@ public abstract class Node extends Token implements Iterable<Node>, HasNode
 		return _children.size();
 	}
 	
-	public Iterator<Node> iterator()
+	@Override
+    public Iterator<Node> iterator()
 	{
 		return _children.iterator();
 	}

@@ -10,6 +10,8 @@ import com.cowlark.cowbel.ast.HasNode;
 
 public class MultipleDefinitionException extends CompilationException
 {
+    private static final long serialVersionUID = 5324462605948584281L;
+
 	public MultipleDefinitionException(HasNode old, HasNode current)
     {
     }

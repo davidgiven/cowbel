@@ -31,7 +31,8 @@ public class DirectFunctionCallStatementNode extends StatementNode
 		addChild(arguments);
     }
 	
-	public IdentifierNode getIdentifier()
+	@Override
+    public IdentifierNode getIdentifier()
 	{
 		return (IdentifierNode) getChild(0);
 	}
@@ -41,12 +42,14 @@ public class DirectFunctionCallStatementNode extends StatementNode
 		return (TypeListNode) getChild(1);
 	}
 	
-	public IdentifierListNode getOutputs()
+	@Override
+    public IdentifierListNode getOutputs()
 	{
 		return (IdentifierListNode) getChild(2);
 	}
 	
-	public ExpressionListNode getInputs()
+	@Override
+    public ExpressionListNode getInputs()
 	{
 		return (ExpressionListNode) getChild(3);
 	}

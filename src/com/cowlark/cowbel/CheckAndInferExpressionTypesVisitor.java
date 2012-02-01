@@ -34,10 +34,10 @@ import com.cowlark.cowbel.symbols.Symbol;
 import com.cowlark.cowbel.types.ArrayType;
 import com.cowlark.cowbel.types.BooleanType;
 import com.cowlark.cowbel.types.FunctionType;
+import com.cowlark.cowbel.types.InferredType;
 import com.cowlark.cowbel.types.IntegerType;
 import com.cowlark.cowbel.types.StringType;
 import com.cowlark.cowbel.types.Type;
-import com.cowlark.cowbel.types.InferredType;
 
 public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 {
@@ -113,7 +113,8 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		node.setType(outputArgumentTypes.get(0));
 	}
 	
-	public void visit(IndirectFunctionCallExpressionNode node) throws CompilationException
+	@Override
+    public void visit(IndirectFunctionCallExpressionNode node) throws CompilationException
 	{
 		assert(false);
 		/*
@@ -123,7 +124,8 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		*/
 	}
 	
-	public void visit(DirectFunctionCallExpressionNode node) throws CompilationException
+	@Override
+    public void visit(DirectFunctionCallExpressionNode node) throws CompilationException
 	{
 		Symbol symbol = node.getSymbol();
 		assert(symbol instanceof Function);

@@ -61,7 +61,8 @@ public class MethodCallInstruction extends Instruction
 	    	" inputs=" + varlist(_invars) + " outputs=" + varlist(_outvars);
 	}
 	
-	public void visit(InstructionVisitor visitor)
+	@Override
+    public void visit(InstructionVisitor visitor)
 	{
 		visitor.visit(this);
 	}

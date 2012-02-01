@@ -54,7 +54,8 @@ public class DirectFunctionCallInstruction extends Instruction
 	    	" outputs="	+ varlist(_outvars);
 	}
 	
-	public void visit(InstructionVisitor visitor)
+	@Override
+    public void visit(InstructionVisitor visitor)
 	{
 		visitor.visit(this);
 	}

@@ -6,7 +6,6 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import java.util.LinkedList;
 import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionNode;
@@ -55,8 +54,6 @@ public class ExpressionHighParser extends Parser
 	
 	private ParseResult parseDirectFunctionCall(Location location)
 	{
-		LinkedList<ExpressionNode> args = new LinkedList<ExpressionNode>();
-		
 		ParseResult identifierpr = IdentifierParser.parse(location);
 		if (identifierpr.failed())
 			return identifierpr;
