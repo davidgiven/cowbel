@@ -8,7 +8,7 @@ package com.cowlark.cowbel.methods;
 
 import com.cowlark.cowbel.types.StringType;
 
-public class StringReplaceMethod extends Method
+public class StringReplaceMethod extends PrimitiveMethod
 {
 	public StringReplaceMethod()
     {

@@ -12,6 +12,7 @@ import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.symbols.Variable;
 
 public class DirectFunctionCallInstruction extends Instruction
+		implements HasInputVariables, HasOutputVariables
 {
 	private Function _function;
 	private List<Variable> _invars;
@@ -31,11 +32,13 @@ public class DirectFunctionCallInstruction extends Instruction
 		return _function;
 	}
 	
+	@Override
 	public List<Variable> getInputVariables()
 	{
 		return _invars;
 	}
 	
+	@Override
 	public List<Variable> getOutputVariables()
     {
 	    return _outvars;

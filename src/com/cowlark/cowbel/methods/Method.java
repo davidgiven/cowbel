@@ -7,120 +7,36 @@
 package com.cowlark.cowbel.methods;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.MethodParameterMismatch;
 import com.cowlark.cowbel.errors.TypesNotCompatibleException;
+import com.cowlark.cowbel.instructions.MethodCallInstruction;
 import com.cowlark.cowbel.types.Type;
 
 public abstract class Method
 {
-	private static HashMap<String, Method> _primitiveMethods;
-	private static HashMap<String, TemplatedMethod.Factory> _typeFamilyTemplates;
-	private static HashMap<Type, HashMap<String, Method>> _typeFamilyMethods;
-	
-	static
-	{
-		_primitiveMethods = new HashMap<String, Method>();
-		registerPrimitiveMethod(new StringEqualsMethod());
-		registerPrimitiveMethod(new StringAddMethod());
-		registerPrimitiveMethod(new StringReplaceMethod());
-		registerPrimitiveMethod(new StringPrintMethod());
-		registerPrimitiveMethod(new BooleanToStringMethod());
-		registerPrimitiveMethod(new BooleanNotMethod());
-		registerPrimitiveMethod(new BooleanAndMethod());
-		registerPrimitiveMethod(new BooleanOrMethod());
-		registerPrimitiveMethod(new BooleanXorMethod());
-		registerPrimitiveMethod(new IntegerEqualsMethod());
-		registerPrimitiveMethod(new IntegerNotEqualsMethod());
-		registerPrimitiveMethod(new IntegerGreaterThanMethod());
-		registerPrimitiveMethod(new IntegerLessThanMethod());
-		registerPrimitiveMethod(new IntegerGreaterThanOrEqualsMethod());
-		registerPrimitiveMethod(new IntegerLessThanOrEqualsMethod());
-		registerPrimitiveMethod(new IntegerNegateMethod());
-		registerPrimitiveMethod(new IntegerAddMethod());
-		registerPrimitiveMethod(new IntegerSubMethod());
-		registerPrimitiveMethod(new IntegerToStringMethod());
-
-		_typeFamilyTemplates = new HashMap<String, TemplatedMethod.Factory>();
-		registerTemplatedMethodFactory(new ArrayResizeMethod.Factory());
-		registerTemplatedMethodFactory(new ArraySizeMethod.Factory());
-		registerTemplatedMethodFactory(new ArrayGetMethod.Factory());
-		registerTemplatedMethodFactory(new ArraySetMethod.Factory());
-		
-		_typeFamilyMethods = new HashMap<Type, HashMap<String, Method>>();
-	}
-	
-	public static Method lookupPrimitiveMethod(String signature)
-	{
-		return _primitiveMethods.get(signature);
-	}
-	
-	public static void registerPrimitiveMethod(Method method)
-	{
-		_primitiveMethods.put(method.getSignature(), method);
-	}
-	
-	public static Method lookupTypeFamilyMethod(Type type, String signature)
-	{
-		HashMap<String, Method> catalogue = _typeFamilyMethods.get(type);
-		if (catalogue == null)
-		{
-			catalogue = new HashMap<String, Method>();
-			_typeFamilyMethods.put(type, catalogue);
-		}
-		
-		Method method = catalogue.get(signature);
-		if (method == null)
-		{
-			TemplatedMethod.Factory f = _typeFamilyTemplates.get(signature);
-			if (f == null)
-				return null;
-			
-			method = f.create(type);
-			catalogue.put(signature, method);
-		}
-		
-		return method;
-	}
-	
-	public static void registerTemplatedMethodFactory(TemplatedMethod.Factory factory)
-	{
-		_typeFamilyTemplates.put(factory.getSignature(), factory);
-	}
-	
-	private String _signature;
-	private String _identifier;
 	private List<Type> _inputTypes;
 	private List<Type> _outputTypes;
+	private int _argumentTypeCount = 0;
 	
 	public Method()
     {
     }
 
-	protected void setSignature(String signature, String identifier)
-	{
-		_signature = signature;
-		_identifier = identifier;
-	}
-	
-	public String getSignature()
-	{
-		return _signature;
-	}
-	
-	public String getIdentifier()
-	{
-		return _identifier;
-	}
+	public abstract String getName();
 	
 	protected void setInputTypes(Type... types)
 	{
 		_inputTypes = Arrays.asList(types);
 	}
 
+	protected void setInputTypes(List<Type> types)
+	{
+		_inputTypes = types;
+	}
+	
 	public List<Type> getInputTypes()
 	{
 		return _inputTypes;
@@ -131,10 +47,25 @@ public abstract class Method
 		_outputTypes = Arrays.asList(types);
 	}
 
+	protected void setOutputTypes(List<Type> types)
+	{
+		_outputTypes = types;
+	}
+	
 	public List<Type> getOutputTypes()
 	{
 		return _outputTypes;
 	}
+	
+	protected void setArgumentTypeCount(int argumentTypeCount)
+    {
+	    _argumentTypeCount = argumentTypeCount;
+    }
+	
+	public int getArgumentTypeCount()
+    {
+	    return _argumentTypeCount;
+    }
 	
 	private boolean typeCheckImpl(Node node,
 				List<Type> methodtypes, List<Type> callertypes)
@@ -172,4 +103,6 @@ public abstract class Method
 					_outputTypes, outputtypes, _inputTypes, inputtypes);
 		}
 	}
+	
+	public abstract void visit(MethodCallInstruction insn, MethodVisitor visitor);
 }

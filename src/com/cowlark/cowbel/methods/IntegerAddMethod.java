@@ -8,7 +8,7 @@ package com.cowlark.cowbel.methods;
 
 import com.cowlark.cowbel.types.IntegerType;
 
-public class IntegerAddMethod extends Method
+public class IntegerAddMethod extends PrimitiveMethod
 {
 	public IntegerAddMethod()
     {

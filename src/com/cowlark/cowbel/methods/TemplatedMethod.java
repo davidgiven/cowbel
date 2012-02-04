@@ -8,7 +8,7 @@ package com.cowlark.cowbel.methods;
 
 import com.cowlark.cowbel.types.Type;
 
-public class TemplatedMethod extends Method
+public class TemplatedMethod extends PrimitiveMethod
 {
 	public abstract static class Factory
 	{

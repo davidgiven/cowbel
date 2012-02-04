@@ -9,7 +9,7 @@ package com.cowlark.cowbel.methods;
 import com.cowlark.cowbel.types.BooleanType;
 import com.cowlark.cowbel.types.IntegerType;
 
-public class IntegerLessThanMethod extends Method
+public class IntegerLessThanMethod extends PrimitiveMethod
 {
 	public IntegerLessThanMethod()
     {

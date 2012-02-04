@@ -12,6 +12,7 @@ import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.symbols.Variable;
 
 public class MethodCallInstruction extends Instruction
+		implements HasInputVariables, HasOutputVariables
 {
 	private Method _method;
 	private Variable _receiver;
@@ -38,11 +39,13 @@ public class MethodCallInstruction extends Instruction
 	    return _receiver;
     }
 	
+	@Override
 	public List<Variable> getInputVariables()
     {
 	    return _invars;
     }
 	
+	@Override
 	public List<Variable> getOutputVariables()
     {
 	    return _outvars;
@@ -57,7 +60,7 @@ public class MethodCallInstruction extends Instruction
 	@Override
 	protected String getShortDescription()
 	{
-	    return _method.getSignature() + " receiver=" + _receiver.toString() +
+	    return _method.getName() + " receiver=" + _receiver.toString() +
 	    	" inputs=" + varlist(_invars) + " outputs=" + varlist(_outvars);
 	}
 	
