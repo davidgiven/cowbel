@@ -8,6 +8,7 @@ package com.cowlark.cowbel;
 
 import com.cowlark.cowbel.ast.RecursiveVisitor;
 import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
+import com.cowlark.cowbel.ast.nodes.BlockExpressionNode;
 import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
 import com.cowlark.cowbel.ast.nodes.BreakStatementNode;
@@ -315,6 +316,13 @@ public class ASTCopyVisitor extends RecursiveVisitor
 	public void visit(ExpressionListNode node) throws CompilationException
 	{
 	    _result = new ExpressionListNode(node.start(), node.end());
+	    super.visit(node);
+	}
+	
+	@Override
+	public void visit(BlockExpressionNode node) throws CompilationException
+	{
+	    _result = new BlockExpressionNode(node.start(), node.end());
 	    super.visit(node);
 	}
 	

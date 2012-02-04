@@ -13,6 +13,8 @@ import com.cowlark.cowbel.ast.HasInputs;
 import com.cowlark.cowbel.ast.SimpleVisitor;
 import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
+import com.cowlark.cowbel.ast.nodes.BlockExpressionNode;
+import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
 import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.DummyExpressionNode;
@@ -33,6 +35,7 @@ import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.symbols.Symbol;
 import com.cowlark.cowbel.types.ArrayType;
 import com.cowlark.cowbel.types.BooleanType;
+import com.cowlark.cowbel.types.ClassType;
 import com.cowlark.cowbel.types.FunctionType;
 import com.cowlark.cowbel.types.InferredType;
 import com.cowlark.cowbel.types.IntegerType;
@@ -180,6 +183,16 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 					method.getInputTypes(), outputArgumentTypes);
 		
 		node.setType(outputArgumentTypes.get(0));
+	}
+	
+	@Override
+	public void visit(BlockExpressionNode node) throws CompilationException
+	{
+		BlockScopeConstructorNode block = node.getBlock();
+		block.checkTypes();
+		
+		Type type = ClassType.create(block);
+		node.setType(type);
 	}
 	
 	@Override

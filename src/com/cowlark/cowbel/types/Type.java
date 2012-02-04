@@ -18,6 +18,7 @@ import com.cowlark.cowbel.methods.Method;
 
 public abstract class Type
 {
+	private static int _globalid = 0;
 	private static Map<String, Type> _typeMap =
 		new HashMap<String, Type>();
 
@@ -37,12 +38,19 @@ public abstract class Type
     	return candidate;
     }
 	
+	private int _id = _globalid++;
+	
 	public abstract String getCanonicalTypeName();
+	
+	public int getId()
+    {
+	    return _id;
+    }
 	
 	@Override
 	public String toString()
 	{
-	    return super.toString() + "=" + getCanonicalTypeName(); 
+	    return getCanonicalTypeName(); 
 	}
 	
 	public boolean isConcreteType()

@@ -28,6 +28,7 @@ import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.instructions.ArrayConstructorInstruction;
 import com.cowlark.cowbel.instructions.BooleanConstantInstruction;
 import com.cowlark.cowbel.instructions.ConstructInstruction;
+import com.cowlark.cowbel.instructions.CreateObjectReferenceInstruction;
 import com.cowlark.cowbel.instructions.DirectFunctionCallInstruction;
 import com.cowlark.cowbel.instructions.FunctionExitInstruction;
 import com.cowlark.cowbel.instructions.GotoInstruction;
@@ -61,7 +62,7 @@ public class CBackend extends ImperativeBackend
 		new HashMap<StringConstantNode, String>();
 	
 	private int _funcid;
-	private CTypeNameBuilder _typeNameBuilder = new CTypeNameBuilder();
+	private CTypeNameBuilder _typeNameBuilder = new CTypeNameBuilder(this);
 	private String _returnvalue;
 	
 	public CBackend(Compiler compiler, OutputStream os)
@@ -162,7 +163,7 @@ public class CBackend extends ImperativeBackend
 		return sb.toString();
 	}
 
-	private String ctype(Constructor constructor)
+	String ctype(Constructor constructor)
 	{
 		String s = _constructorTypes.get(constructor);
 		if (s != null)
@@ -369,14 +370,14 @@ public class CBackend extends ImperativeBackend
 			print(clabel(symbol));
 		}
 		
-		print(")\n");
+		print(")");
 	}
 	
 	@Override
 	public void compileFunction(Function f)
 	{
 		function_header(f);
-		print("{\n");
+		print("\n{\n");
 		
 		_funcid = 0;
 	    super.compileFunction(f);
@@ -590,6 +591,18 @@ public class CBackend extends ImperativeBackend
 		printvar(node, insn.getOutputVariable());
 		print(" = ");
 		printvar(node, insn.getInputVariable());
+		print(";\n");
+	}
+	
+	@Override
+	public void visit(CreateObjectReferenceInstruction insn)
+	{
+		Node node = insn.getNode();
+		
+		print("\t");
+		printvar(node, insn.getOutputVariable());
+		print(" = ");
+		print(clabel(insn.getConstructor()));
 		print(";\n");
 	}
 	

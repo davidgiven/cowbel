@@ -7,6 +7,7 @@
 package com.cowlark.cowbel.ast;
 
 import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
+import com.cowlark.cowbel.ast.nodes.BlockExpressionNode;
 import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
 import com.cowlark.cowbel.ast.nodes.BreakStatementNode;
@@ -235,5 +236,10 @@ public class Visitor
 	public void visit(ExpressionListNode node) throws CompilationException
 	{
 		visit((Node) node);
-	}	
+	}
+	
+	public void visit(BlockExpressionNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
 }
