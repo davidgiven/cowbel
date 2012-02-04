@@ -99,7 +99,7 @@ public class TypeContext implements Comparable<TypeContext>
 		{
 			for (Map.Entry<IdentifierNode, Type> e : _types.entrySet())
 			{
-				if (e.getKey().equals(identifier))
+				if (IdentifierNode.valueComparator.compare(e.getKey(), identifier) == 0)
 					throw new MultipleDefinitionException(e.getKey(), identifier);
 			}
 		}

@@ -54,6 +54,7 @@ public abstract class Parser
 	public static ExpressionListParser ExpressionListParser = new ExpressionListParser();
 	public static TypeVariableListParser TypeVariableListParser = new TypeVariableListParser();
 	public static TypeListParser TypeListParser = new TypeListParser();
+	public static TypeAssignmentParser TypeAssignmentParser = new TypeAssignmentParser();
 	
 	public static Parser EOFParser = new EOFParser();
 	public static Parser DotParser = new TrivialParser(".");
@@ -88,6 +89,7 @@ public abstract class Parser
 	public static Parser WhileTokenParser = new TrivialParser("while");
 	public static Parser DoTokenParser = new TrivialParser("do");
 	public static Parser ForTokenParser = new TrivialParser("for");
+	public static Parser TypeTokenParser = new TrivialParser("type");
 
 	private static HashMap<Location, HashMap<Parser, ParseResult>> _cache =
 		new HashMap<Location, HashMap<Parser, ParseResult>>(); 

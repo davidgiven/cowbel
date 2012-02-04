@@ -38,6 +38,7 @@ import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
 import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
 import com.cowlark.cowbel.ast.nodes.StringConstantNode;
+import com.cowlark.cowbel.ast.nodes.TypeAssignmentNode;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
 import com.cowlark.cowbel.ast.nodes.VarDeclarationNode;
 import com.cowlark.cowbel.ast.nodes.VarReferenceNode;
@@ -107,6 +108,11 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		_result = _currentBB.createTemporary(node, node.getType());
 		_currentBB.insnCreateObjectReference(node, block.getConstructor(),
 				_result);
+	}
+	
+	@Override
+	public void visit(TypeAssignmentNode node) throws CompilationException
+	{
 	}
 	
 	@Override

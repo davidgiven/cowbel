@@ -32,6 +32,7 @@ import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
 import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
+import com.cowlark.cowbel.ast.nodes.TypeAssignmentNode;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
 import com.cowlark.cowbel.ast.nodes.VarDeclarationNode;
 import com.cowlark.cowbel.ast.nodes.WhileStatementNode;
@@ -67,6 +68,11 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 	public void visit(BlockScopeConstructorNode node) throws CompilationException
 	{
 		visit((AbstractScopeConstructorNode) node);
+	}
+	
+	@Override
+	public void visit(TypeAssignmentNode node) throws CompilationException
+	{
 	}
 	
 	@Override
