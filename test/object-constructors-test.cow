@@ -18,5 +18,12 @@ var o = {
 	
 	testfunc<integer>(1);
 	testfunc<string>("1");
+	
+	function fnord()
+	{
+	}
 };
+
+o.testfunc<integer>(2);
+o.testfunc<boolean>(true);
 

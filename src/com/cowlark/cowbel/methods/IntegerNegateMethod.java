@@ -8,7 +8,7 @@ package com.cowlark.cowbel.methods;
 
 import com.cowlark.cowbel.types.IntegerType;
 
-public class IntegerNegateMethod extends Method
+public class IntegerNegateMethod extends PrimitiveMethod
 {
 	public IntegerNegateMethod()
     {

@@ -9,6 +9,7 @@ package com.cowlark.cowbel.types;
 import java.util.LinkedList;
 import java.util.List;
 import com.cowlark.cowbel.ast.HasInputs;
+import com.cowlark.cowbel.ast.HasTypeArguments;
 import com.cowlark.cowbel.ast.IsMethod;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
@@ -88,7 +89,8 @@ public class FunctionType extends PrimitiveType
 	}
 	
 	@Override
-	public <T extends Node & IsMethod & HasInputs> Method lookupMethod(
+	public <T extends Node & IsMethod & HasInputs & HasTypeArguments>
+		Method lookupMethod(
 	        T node, IdentifierNode id) throws CompilationException
 	{
 		throw new NoSuchMethodException(node, this, id);

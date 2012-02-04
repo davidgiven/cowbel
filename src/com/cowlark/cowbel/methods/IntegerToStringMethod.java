@@ -8,7 +8,7 @@ package com.cowlark.cowbel.methods;
 
 import com.cowlark.cowbel.types.StringType;
 
-public class IntegerToStringMethod extends Method
+public class IntegerToStringMethod extends PrimitiveMethod
 {
 	public IntegerToStringMethod()
     {

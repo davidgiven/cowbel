@@ -8,7 +8,7 @@ package com.cowlark.cowbel.methods;
 
 import com.cowlark.cowbel.types.StringType;
 
-public class BooleanToStringMethod extends Method
+public class BooleanToStringMethod extends PrimitiveMethod
 {
 	public BooleanToStringMethod()
     {

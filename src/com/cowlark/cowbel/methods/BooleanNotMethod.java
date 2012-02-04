@@ -8,7 +8,7 @@ package com.cowlark.cowbel.methods;
 
 import com.cowlark.cowbel.types.BooleanType;
 
-public class BooleanNotMethod extends Method
+public class BooleanNotMethod extends PrimitiveMethod
 {
 	public BooleanNotMethod()
     {

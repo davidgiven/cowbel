@@ -8,7 +8,7 @@ package com.cowlark.cowbel.methods;
 
 import com.cowlark.cowbel.types.BooleanType;
 
-public class BooleanOrMethod extends Method
+public class BooleanOrMethod extends PrimitiveMethod
 {
 	public BooleanOrMethod()
     {

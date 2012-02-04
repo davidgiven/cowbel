@@ -7,12 +7,12 @@
 package com.cowlark.cowbel.types;
 
 import com.cowlark.cowbel.ast.HasInputs;
+import com.cowlark.cowbel.ast.HasTypeArguments;
 import com.cowlark.cowbel.ast.IsMethod;
 import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.errors.CompilationException;
-import com.cowlark.cowbel.errors.NoSuchMethodException;
 import com.cowlark.cowbel.errors.TypesNotCompatibleException;
 import com.cowlark.cowbel.methods.Method;
 
@@ -49,19 +49,13 @@ public class ClassType extends Type
 	}
 	
 	@Override
-	public <T extends Node & IsMethod & HasInputs> Method lookupMethod(
+	public <T extends Node & IsMethod & HasInputs & HasTypeArguments>
+		Method lookupMethod(
 	        T node, IdentifierNode id) throws CompilationException
 	{
-		String signature = "array." + id.getText() +
-			"." + node.getInputs().getNumberOfChildren();
-		
-//		Method method = Method.lookupTypeFamilyMethod(
-//				node.getMethodReceiver().getType().getRealType(), signature);
-//		if (method == null)
-//			throw new NoSuchMethodException(node, this, id);
-//		return method;
-		assert(false);
-		throw null;
+		ClassType type = (ClassType) node.getMethodReceiver().getType().getRealType();
+		BlockScopeConstructorNode block = type.getBlock();
+		return block.lookupMethod(node);
 	}
 	
 	@Override

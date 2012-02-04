@@ -9,7 +9,7 @@ package com.cowlark.cowbel.methods;
 import com.cowlark.cowbel.types.BooleanType;
 import com.cowlark.cowbel.types.StringType;
 
-public class StringEqualsMethod extends Method
+public class StringEqualsMethod extends PrimitiveMethod
 {
 	public StringEqualsMethod()
     {

@@ -20,8 +20,11 @@ import com.cowlark.cowbel.Function;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.instructions.Instruction;
 import com.cowlark.cowbel.instructions.InstructionVisitor;
+import com.cowlark.cowbel.instructions.MethodCallInstruction;
+import com.cowlark.cowbel.methods.MethodVisitor;
 
 public abstract class Backend extends InstructionVisitor
+		implements MethodVisitor
 {
 	private TreeSet<BasicBlock> _pending = new TreeSet<BasicBlock>();
 	private TreeSet<BasicBlock> _seen = new TreeSet<BasicBlock>();
@@ -127,5 +130,11 @@ public abstract class Backend extends InstructionVisitor
 	public void visit(Instruction insn)
 	{
 		assert(false);
+	}
+	
+	@Override
+	public void visit(MethodCallInstruction insn)
+	{
+		insn.getMethod().visit(insn, this);
 	}
 }

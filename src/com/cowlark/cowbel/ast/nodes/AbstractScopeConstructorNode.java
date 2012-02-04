@@ -17,10 +17,13 @@ import com.cowlark.cowbel.Label;
 import com.cowlark.cowbel.ast.HasIdentifier;
 import com.cowlark.cowbel.ast.HasInputs;
 import com.cowlark.cowbel.ast.HasTypeArguments;
+import com.cowlark.cowbel.ast.IsMethod;
 import com.cowlark.cowbel.errors.AmbiguousVariableReference;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.IdentifierNotFound;
 import com.cowlark.cowbel.errors.MultipleDefinitionException;
+import com.cowlark.cowbel.methods.FunctionMethod;
+import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.symbols.Symbol;
 
@@ -319,6 +322,33 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 		return null;
 	}
 
+	/* Just look here (for now). */
+	public <T extends Node & HasInputs & IsMethod & HasTypeArguments>
+		Method lookupMethod(T node)
+			throws CompilationException
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append(node.getMethodIdentifier().getText());
+		sb.append("<");
+		sb.append(node.getTypeArguments().getNumberOfChildren());
+		sb.append(">(");
+		sb.append(node.getInputs().getNumberOfChildren());
+		sb.append(")");
+		String signature = sb.toString();
+
+		for (FunctionTemplate ft : getFunctionTemplates())
+		{
+			if (ft.getSignature().equals(signature))
+			{
+				Function function = Compiler.Instance.getFunctionInstance(
+						node, node.getTypeArguments(), ft);
+				return new FunctionMethod(function);
+			}
+		}
+
+		return null;
+	}
+	
 	private void recursive_import(AbstractScopeConstructorNode root, AbstractScopeConstructorNode leaf)
 	{
 		if (root == leaf)

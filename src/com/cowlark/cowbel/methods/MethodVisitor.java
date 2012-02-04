@@ -6,13 +6,10 @@
 
 package com.cowlark.cowbel.methods;
 
+import com.cowlark.cowbel.instructions.MethodCallInstruction;
 
-public class StringPrintMethod extends PrimitiveMethod
+public interface MethodVisitor
 {
-	public StringPrintMethod()
-    {
-		setSignature("string.print.0", "string.print");
-		setOutputTypes();
-		setInputTypes();
-    }
+	public void visit(MethodCallInstruction insn, FunctionMethod method);
+	public void visit(MethodCallInstruction insn, PrimitiveMethod method);
 }

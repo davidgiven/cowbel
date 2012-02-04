@@ -7,6 +7,7 @@
 package com.cowlark.cowbel.types;
 
 import com.cowlark.cowbel.ast.HasInputs;
+import com.cowlark.cowbel.ast.HasTypeArguments;
 import com.cowlark.cowbel.ast.IsMethod;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
@@ -14,6 +15,7 @@ import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.NoSuchMethodException;
 import com.cowlark.cowbel.errors.TypesNotCompatibleException;
 import com.cowlark.cowbel.methods.Method;
+import com.cowlark.cowbel.methods.PrimitiveMethod;
 
 public class ArrayType extends Type
 {
@@ -64,13 +66,14 @@ public class ArrayType extends Type
 	}
 	
 	@Override
-	public <T extends Node & IsMethod & HasInputs> Method lookupMethod(
+	public <T extends Node & IsMethod & HasInputs & HasTypeArguments>
+		Method lookupMethod(
 	        T node, IdentifierNode id) throws CompilationException
 	{
 		String signature = "array." + id.getText() +
 			"." + node.getInputs().getNumberOfChildren();
 		
-		Method method = Method.lookupTypeFamilyMethod(
+		Method method = PrimitiveMethod.lookupTypeFamilyMethod(
 				node.getMethodReceiver().getType().getRealType(), signature);
 		if (method == null)
 			throw new NoSuchMethodException(node, this, id);

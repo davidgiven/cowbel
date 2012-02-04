@@ -38,6 +38,7 @@ import com.cowlark.cowbel.ast.nodes.WhileStatementNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.FunctionParameterMismatch;
 import com.cowlark.cowbel.errors.InvalidExpressionReturn;
+import com.cowlark.cowbel.errors.MethodParameterMismatch;
 import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.symbols.Symbol;
 import com.cowlark.cowbel.types.BooleanType;
@@ -190,6 +191,25 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 	{
 	}
 	
+	private <T extends AbstractStatementNode & HasInputs & HasOutputs>
+	void validate_method_call(T node, Method method)
+		throws CompilationException
+	{
+		List<Type> inputFunctionTypes = method.getInputTypes();
+		List<Type> outputFunctionTypes = method.getOutputTypes();
+		
+		List<Type> inputCallTypes = node.getInputs().calculateTypes();
+		List<Type> outputCallTypes = node.getOutputs().calculateTypes();
+		
+		if (!Utils.unifyTypeLists(node, inputFunctionTypes, inputCallTypes, false) ||
+			!Utils.unifyTypeLists(node, outputFunctionTypes, outputCallTypes, true))
+		{
+			throw new MethodParameterMismatch(node, method,
+					outputFunctionTypes, outputCallTypes,
+					inputFunctionTypes, inputCallTypes);
+		}
+	}
+
 	@Override
 	public void visit(MethodCallStatementNode node) throws CompilationException
 	{
@@ -197,16 +217,11 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		Type receivertype = receiver.calculateType();
 		receivertype.ensureConcrete(node);
 		
-		IdentifierListNode variables = node.getOutputs();
-		List<Type> variabletypes = variables.calculateTypes();
-		
-		ExpressionListNode arguments = node.getInputs();
-		List<Type> argumenttypes = arguments.calculateTypes();
-		
 		IdentifierNode name = node.getMethodIdentifier();
 		Method method = receivertype.lookupMethod(node, name);
 		node.setMethod(method);
-		method.typeCheck(node, variabletypes, argumenttypes);
+		
+		validate_method_call(node, method);
 	}
 	
 	private <T extends AbstractStatementNode & HasInputs & HasOutputs>

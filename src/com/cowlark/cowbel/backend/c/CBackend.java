@@ -32,11 +32,16 @@ import com.cowlark.cowbel.instructions.CreateObjectReferenceInstruction;
 import com.cowlark.cowbel.instructions.DirectFunctionCallInstruction;
 import com.cowlark.cowbel.instructions.FunctionExitInstruction;
 import com.cowlark.cowbel.instructions.GotoInstruction;
+import com.cowlark.cowbel.instructions.HasInputVariables;
+import com.cowlark.cowbel.instructions.HasOutputVariables;
 import com.cowlark.cowbel.instructions.IfInstruction;
+import com.cowlark.cowbel.instructions.Instruction;
 import com.cowlark.cowbel.instructions.IntegerConstantInstruction;
 import com.cowlark.cowbel.instructions.MethodCallInstruction;
 import com.cowlark.cowbel.instructions.StringConstantInstruction;
 import com.cowlark.cowbel.instructions.VarCopyInstruction;
+import com.cowlark.cowbel.methods.FunctionMethod;
+import com.cowlark.cowbel.methods.PrimitiveMethod;
 import com.cowlark.cowbel.symbols.Symbol;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.ArrayType;
@@ -499,10 +504,9 @@ public class CBackend extends ImperativeBackend
 		}
 	}
 	
-	@Override
-	public void visit(DirectFunctionCallInstruction insn)
+	private <T extends Instruction & HasInputVariables & HasOutputVariables>
+		void function_call(T insn, Function function)
 	{
-		Function function = insn.getFunction();
 		Node node = insn.getNode();
 		
 		print("\t");
@@ -526,12 +530,19 @@ public class CBackend extends ImperativeBackend
 	}
 	
 	@Override
-	public void visit(MethodCallInstruction insn)
+	public void visit(DirectFunctionCallInstruction insn)
+	{
+		Function function = insn.getFunction();
+		function_call(insn, function);
+	}
+	
+	@Override
+	public void visit(MethodCallInstruction insn, PrimitiveMethod method)
 	{
 		Node node = insn.getNode();
         
         print("\tS_METHOD_");
-        String methodsig = insn.getMethod().getIdentifier();
+        String methodsig = method.getIdentifier();
         print(methodsig.replace('.', '_').toUpperCase());
 
         print("(");
@@ -550,7 +561,13 @@ public class CBackend extends ImperativeBackend
 		}
 		        
         print(");\n");
-
+	}
+	
+	@Override
+	public void visit(MethodCallInstruction insn, FunctionMethod method)
+	{
+		Function function = method.getFunction();
+		function_call(insn, function);
 	}
 	
 	@Override
