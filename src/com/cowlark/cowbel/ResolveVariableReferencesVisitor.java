@@ -61,6 +61,7 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 		if (function != null)
 		{
 			node.setFunction(function);
+			scope.importFunction(function);
 			return;
 		}
 		
@@ -69,6 +70,7 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 		
 		Symbol symbol = scope.lookupVariable(in);
 		node.setSymbol(symbol);
+		scope.importSymbol(symbol);
 	}
 	
 	private <T extends Node & HasOutputs>
@@ -83,9 +85,7 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 			IdentifierNode id = variables.getIdentifier(i);
 			Symbol symbol = scope.lookupVariable(id);
 			
-			if (scope != symbol.getScope())
-				scope.importSymbol(symbol);
-
+			scope.importSymbol(symbol);
 			variables.setSymbol(i, symbol);
 		}
 	}

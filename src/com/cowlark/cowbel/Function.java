@@ -7,6 +7,7 @@
 package com.cowlark.cowbel;
 
 import com.cowlark.cowbel.ast.HasNode;
+import com.cowlark.cowbel.ast.HasScope;
 import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
@@ -14,7 +15,7 @@ import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.types.FunctionType;
 
-public class Function implements HasNode
+public class Function implements HasNode, HasScope
 {
 	private String _signature;
 	private FunctionDefinitionNode _node;
@@ -31,6 +32,12 @@ public class Function implements HasNode
     }
 	
 	@Override
+	public String toString()
+	{
+	    return getSignature() + " " + getName().getText();
+	}
+	
+	@Override
 	public FunctionDefinitionNode getNode()
     {
 	    return _node;
@@ -41,7 +48,8 @@ public class Function implements HasNode
 	    return _signature;
     }
 	
-	public AbstractScopeConstructorNode getScope()
+	@Override
+    public AbstractScopeConstructorNode getScope()
     {
 	    return _scope;
     }

@@ -8,12 +8,13 @@ package com.cowlark.cowbel.symbols;
 
 import com.cowlark.cowbel.Constructor;
 import com.cowlark.cowbel.ast.HasNode;
+import com.cowlark.cowbel.ast.HasScope;
 import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.types.Type;
 
-public abstract class Symbol implements Comparable<Symbol>, HasNode
+public abstract class Symbol implements Comparable<Symbol>, HasNode, HasScope
 {
 	private static int _globalId = 0;
 	
@@ -78,7 +79,8 @@ public abstract class Symbol implements Comparable<Symbol>, HasNode
 		_scope = scope;
 	}
 	
-	public AbstractScopeConstructorNode getScope()
+	@Override
+    public AbstractScopeConstructorNode getScope()
 	{
 		return _scope;
 	}

@@ -50,6 +50,8 @@ public class AssignConstructorsToScopesVisitor extends RecursiveVisitor
 	
 	private boolean is_complex_scope(AbstractScopeConstructorNode node)
 	{
+		/* If this scope exports *any* functions, it's complex. */
+		
 		/* If this scope is exporting to a scope that's part of a different
 		 * function, it's complex. */
 		
