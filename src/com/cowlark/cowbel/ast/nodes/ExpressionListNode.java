@@ -16,21 +16,21 @@ import com.cowlark.cowbel.types.Type;
 public class ExpressionListNode extends Node
 {
 	public ExpressionListNode(Location start, Location end,
-			List<ExpressionNode> args)
+			List<AbstractExpressionNode> args)
     {
 		super(start, end);
 		addChildren(args);
     }
 	
-	public ExpressionListNode(Location start, Location end, ExpressionNode... args)
+	public ExpressionListNode(Location start, Location end, AbstractExpressionNode... args)
     {
 		super(start, end);
 		addChildren(args);
     }
 	
-	public ExpressionNode getExpression(int i)
+	public AbstractExpressionNode getExpression(int i)
 	{
-	    return (ExpressionNode) getChild(i);
+	    return (AbstractExpressionNode) getChild(i);
 	}
 	
 	private List<Type> _types;
@@ -41,7 +41,7 @@ public class ExpressionListNode extends Node
 			_types = new ArrayList<Type>();
 			for (Node n : this)
 			{
-				ExpressionNode e = (ExpressionNode) n; 
+				AbstractExpressionNode e = (AbstractExpressionNode) n; 
 				Type type = e.calculateType();
 				_types.add(type);
 			}

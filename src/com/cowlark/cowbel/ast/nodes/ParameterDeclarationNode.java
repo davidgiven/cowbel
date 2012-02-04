@@ -11,15 +11,19 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.symbols.Symbol;
-import com.cowlark.cowbel.types.Type;
 
 public class ParameterDeclarationNode extends Node
 		implements HasSymbol
 {
 	private Symbol _symbol;
 	
+	public ParameterDeclarationNode(Location start, Location end)
+    {
+		super(start, end);
+    }
+
 	public ParameterDeclarationNode(Location start, Location end,
-			IdentifierNode name, TypeNode type)
+			IdentifierNode name, AbstractTypeNode type)
     {
 		super(start, end);
 		addChild(name);
@@ -31,14 +35,9 @@ public class ParameterDeclarationNode extends Node
 		return (IdentifierNode) getChild(0);
 	}
 	
-	public TypeNode getVariableTypeNode()
+	public AbstractTypeNode getVariableTypeNode()
 	{
-		return (TypeNode) getChild(1);
-	}
-	
-	public Type getVariableType()
-	{
-		return getVariableTypeNode().getType();
+		return (AbstractTypeNode) getChild(1);
 	}
 	
 	@Override

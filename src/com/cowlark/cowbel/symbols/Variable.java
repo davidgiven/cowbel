@@ -9,7 +9,6 @@ package com.cowlark.cowbel.symbols;
 import com.cowlark.cowbel.Constructor;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
 import com.cowlark.cowbel.types.Type;
 
 public class Variable extends Symbol
@@ -20,23 +19,6 @@ public class Variable extends Symbol
 	public Variable(Node node, IdentifierNode name, Type type)
 	{
 		super(node, name, type);
-	}
-
-	public Variable(ParameterDeclarationNode node)
-	{
-		super(node, node.getVariableName(), node.getVariableType());
-	}
-	
-	@Override
-	public String getMangledName()
-	{
-		return getName();
-	}
-	
-	@Override
-	public boolean collidesWith(Symbol other)
-	{
-		return getName().equals(other.getName());
 	}
 
 	public boolean isParameter()

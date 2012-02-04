@@ -6,20 +6,23 @@
 
 package com.cowlark.cowbel;
 
+import com.cowlark.cowbel.ast.HasFunction;
 import com.cowlark.cowbel.ast.HasIdentifier;
 import com.cowlark.cowbel.ast.HasInputs;
 import com.cowlark.cowbel.ast.HasOutputs;
 import com.cowlark.cowbel.ast.HasSymbol;
+import com.cowlark.cowbel.ast.HasTypeArguments;
 import com.cowlark.cowbel.ast.RecursiveVisitor;
+import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.DirectFunctionCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
+import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.GotoStatementNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
 import com.cowlark.cowbel.ast.nodes.VarReferenceNode;
 import com.cowlark.cowbel.errors.CompilationException;
@@ -29,9 +32,15 @@ import com.cowlark.cowbel.symbols.Symbol;
 public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 {
 	@Override
+	public void visit(FunctionDefinitionNode node) throws CompilationException
+	{
+		/* Don't recurse into nested functions (they'll be handled later). */
+	}
+	
+	@Override
 	public void visit(GotoStatementNode node) throws CompilationException
 	{
-		ScopeConstructorNode scope = node.getScope();
+		AbstractScopeConstructorNode scope = node.getScope();
 		IdentifierNode in = node.getLabelName();
 		Label label = scope.lookupLabel(in);
 		
@@ -39,24 +48,27 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 	    super.visit(node);
 	}
 	
-	private <T extends Node & HasInputs & HasIdentifier & HasSymbol>
+	private <T extends Node & HasInputs & HasTypeArguments & HasIdentifier
+			& HasSymbol & HasFunction>
 		void direct_function_call(T node) throws CompilationException
 	{
-		ScopeConstructorNode scope = node.getScope();
+		AbstractScopeConstructorNode scope = node.getScope();
 		IdentifierNode in = node.getIdentifier();
 		
 		/* Try to look this up as a function first. */
 		
-		Symbol sym = scope.lookupFunction(in, node.getInputs().getNumberOfChildren());
-		if (sym == null)
+		Function function = scope.lookupFunction(node);
+		if (function != null)
 		{
-			/* If that failed, treat it as a variable reference (doing an
-			 * indirect function call via a delegate). */
-			
-			sym = scope.lookupVariable(in);
+			node.setFunction(function);
+			return;
 		}
 		
-		node.setSymbol(sym);
+		/* If that failed, treat it as a variable reference (doing an
+		 * indirect function call via a delegate). */
+		
+		Symbol symbol = scope.lookupVariable(in);
+		node.setSymbol(symbol);
 	}
 	
 	private <T extends Node & HasOutputs>
@@ -64,7 +76,7 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 	{
 		IdentifierListNode variables = node.getOutputs();
 		
-		ScopeConstructorNode scope = node.getScope();
+		AbstractScopeConstructorNode scope = node.getScope();
 		
 		for (int i = 0; i < variables.getNumberOfChildren(); i++)
 		{
@@ -104,7 +116,7 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 	public void visit(VarReferenceNode node)
 	        throws CompilationException
 	{
-		ScopeConstructorNode scope = node.getScope();
+		AbstractScopeConstructorNode scope = node.getScope();
 		IdentifierNode in = node.getVariableName();
 		Symbol symbol = scope.lookupVariable(in);
 		
@@ -119,7 +131,7 @@ public class ResolveVariableReferencesVisitor extends RecursiveVisitor
 	public void visit(VarAssignmentNode node)
 	        throws CompilationException
 	{
-		ScopeConstructorNode scope = node.getScope();
+		AbstractScopeConstructorNode scope = node.getScope();
 		IdentifierListNode iln = node.getVariables();
 		ExpressionListNode eln = node.getExpressions();
 		

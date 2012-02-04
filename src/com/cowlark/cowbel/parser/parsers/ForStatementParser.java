@@ -6,8 +6,10 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
+import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
+import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.InferredTypeNode;
@@ -15,7 +17,6 @@ import com.cowlark.cowbel.ast.nodes.IntegerConstantNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
-import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.StatementListNode;
 import com.cowlark.cowbel.ast.nodes.TypeListNode;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
@@ -91,7 +92,7 @@ public class ForStatementParser extends Parser
 		IdentifierNode loopcounter = IdentifierNode.createInternalIdentifier(
 				"loop_counter_for_" + variablepr.getText());
 		
-		return new ScopeConstructorNode(location, bodypr.end(),
+		return new BlockScopeConstructorNode(location, bodypr.end(),
 			new StatementListNode(location, pr.end(),
 				new VarDeclarationNode(variablepr.start(), variablepr.end(),
 					new ParameterDeclarationListNode(variablepr.start(), variablepr.end(),
@@ -105,7 +106,7 @@ public class ForStatementParser extends Parser
 					new IdentifierListNode(variablepr.start(), variablepr.end(),
 						loopcounter),
 					new ExpressionListNode(initialiserpr, initialiserpr.end(),
-						(ExpressionNode) initialiserpr)
+						(AbstractExpressionNode) initialiserpr)
 					),
 				new WhileStatementNode(location, pr.end(),
 					new MethodCallExpressionNode(maximumpr, maximumpr.end(),
@@ -114,9 +115,9 @@ public class ForStatementParser extends Parser
 						new IdentifierNode(comparisonmethodloc, comparisonmethodend),
 						new TypeListNode(comparisonmethodloc, comparisonmethodend),
 						new ExpressionListNode(maximumpr, maximumpr.end(),
-							(ExpressionNode) maximumpr)
+							(AbstractExpressionNode) maximumpr)
 					),
-					new ScopeConstructorNode(bodypr, bodypr.end(),
+					new BlockScopeConstructorNode(bodypr, bodypr.end(),
 						new StatementListNode(bodypr, bodypr.end(),
 							new VarDeclarationNode(variablepr.start(), variablepr.end(),
 								new ParameterDeclarationListNode(variablepr.start(), variablepr.end(),
@@ -132,7 +133,7 @@ public class ForStatementParser extends Parser
 							new ExpressionListNode(variablepr.start(), variablepr.end(),
 								new VarReferenceNode(variablepr.start(), variablepr.end(),
 									loopcounter))),
-						(ScopeConstructorNode) bodypr,
+						(AbstractScopeConstructorNode) bodypr,
 						new VarAssignmentNode(variablepr, variablepr.end(),
 						new IdentifierListNode(variablepr.start(), variablepr.end(),
 							(IdentifierNode) loopcounter),
@@ -143,7 +144,7 @@ public class ForStatementParser extends Parser
 								new IdentifierNode(incrementmethodloc, incrementmethodend),
 								new TypeListNode(incrementmethodloc, incrementmethodend),
 								new ExpressionListNode(steppr, steppr.end(),
-									(ExpressionNode) steppr)
+									(AbstractExpressionNode) steppr)
 									)
 								)
 							)

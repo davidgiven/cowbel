@@ -6,10 +6,10 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.SyntacticElementToken;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.MutableLocation;
 import com.cowlark.cowbel.parser.core.ParseResult;
+import com.cowlark.cowbel.parser.core.SyntacticElementToken;
 import com.cowlark.cowbel.parser.errors.ExpectedAtom;
 
 public class AtomParser extends Parser

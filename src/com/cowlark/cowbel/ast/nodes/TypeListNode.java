@@ -14,22 +14,22 @@ import com.cowlark.cowbel.parser.core.Location;
 public class TypeListNode extends Node
 {
 	public TypeListNode(Location start, Location end,
-			List<TypeNode> ids)
+			List<TypeVariableNode> ids)
     {
 		super(start, end);
 		addChildren(ids);
     }
 	
 	public TypeListNode(Location start, Location end,
-			TypeNode... ids)
+			TypeVariableNode... ids)
     {
 		super(start, end);
 		addChildren(ids);
     }
 	
-	public TypeNode getType(int i)
+	public TypeVariableNode getType(int i)
 	{
-	    return (TypeNode) getChild(i);
+	    return (TypeVariableNode) getChild(i);
 	}
 	
 	@Override

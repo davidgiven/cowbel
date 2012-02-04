@@ -6,8 +6,8 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
+import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.TypeListNode;
@@ -28,7 +28,7 @@ public class PrefixOperatorParser extends Parser
 			return pr2;
 		
 		return new MethodCallExpressionNode(location, pr2.end(),
-				(ExpressionNode)pr2, (IdentifierNode)pr1,
+				(AbstractExpressionNode)pr2, (IdentifierNode)pr1,
 				new TypeListNode(pr1, pr1.end()),
 				new ExpressionListNode(pr1, pr1.end()));
 	}

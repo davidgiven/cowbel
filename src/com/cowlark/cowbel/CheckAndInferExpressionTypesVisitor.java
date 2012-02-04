@@ -11,12 +11,13 @@ import java.util.List;
 import java.util.Vector;
 import com.cowlark.cowbel.ast.HasInputs;
 import com.cowlark.cowbel.ast.SimpleVisitor;
+import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
 import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.DummyExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
+import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.IntegerConstantNode;
@@ -29,7 +30,6 @@ import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.FunctionParameterMismatch;
 import com.cowlark.cowbel.errors.InvalidFunctionCallInExpressionContext;
 import com.cowlark.cowbel.methods.Method;
-import com.cowlark.cowbel.symbols.Function;
 import com.cowlark.cowbel.symbols.Symbol;
 import com.cowlark.cowbel.types.ArrayType;
 import com.cowlark.cowbel.types.BooleanType;
@@ -41,6 +41,11 @@ import com.cowlark.cowbel.types.Type;
 
 public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 {
+	@Override
+	public void visit(FunctionDefinitionNode node) throws CompilationException
+	{
+	}
+	
 	@Override
 	public void visit(DummyExpressionNode node) throws CompilationException
 	{
@@ -75,7 +80,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		node.setType(type);
 	}
 
-	private static FunctionType get_function_type(ExpressionNode expression)
+	private static FunctionType get_function_type(AbstractExpressionNode expression)
 			throws CompilationException
 	{
 		Type type = expression.calculateType();
@@ -85,10 +90,10 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		throw new AttemptToCallNonFunctionTypeException(expression);
 	}
 	
-	private <T extends ExpressionNode & HasInputs> void validate_function_call(
+	private <T extends AbstractExpressionNode & HasInputs> void validate_function_call(
 			T node, Function function) throws CompilationException
 	{
-		FunctionType functionType = (FunctionType) function.getSymbolType();
+		FunctionType functionType = function.getType();
 		List<Type> inputArgumentTypes = functionType.getInputArgumentTypes();
 		List<Type> outputArgumentTypes = functionType.getOutputArgumentTypes();
 		ExpressionListNode callArguments = node.getInputs();
@@ -96,7 +101,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		Vector<Type> callArgumentTypes = new Vector<Type>();
 		for (Node n : callArguments)
 		{
-			ExpressionNode e = (ExpressionNode) n;
+			AbstractExpressionNode e = (AbstractExpressionNode) n;
 			Type t = e.calculateType();
 			callArgumentTypes.add(t);
 		}
@@ -118,7 +123,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 	{
 		assert(false);
 		/*
-		ExpressionNode function = node.getFunction();
+		AbstractExpressionNode function = node.getFunction();
 		FunctionType functionType = get_function_type(function);
 		validate_function_call(node, function);
 		*/
@@ -127,19 +132,19 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 	@Override
     public void visit(DirectFunctionCallExpressionNode node) throws CompilationException
 	{
-		Symbol symbol = node.getSymbol();
-		assert(symbol instanceof Function);
-		Function function = (Function) symbol;
+		Function function = node.getFunction();
+		assert(function != null);
+		
 		validate_function_call(node, function);
 	}
 	
 	@Override
 	public void visit(ArrayConstructorNode node) throws CompilationException
 	{
-		List<ExpressionNode> members = node.getListMembers();
+		List<AbstractExpressionNode> members = node.getListMembers();
 		Type type = InferredType.create();
 		
-		for (ExpressionNode exp : members)
+		for (AbstractExpressionNode exp : members)
 		{
 			Type t = exp.calculateType();
 			type.unifyWith(node, t);
@@ -151,7 +156,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 	@Override
 	public void visit(MethodCallExpressionNode node) throws CompilationException
 	{
-		ExpressionNode receiver = node.getMethodReceiver();
+		AbstractExpressionNode receiver = node.getMethodReceiver();
 		Type receivertype = receiver.calculateType();
 		receivertype.ensureConcrete(node);
 		
@@ -159,7 +164,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		ArrayList<Type> argumenttypes = new ArrayList<Type>();
 		for (Node n : arguments)
 		{
-			ExpressionNode e = (ExpressionNode) n; 
+			AbstractExpressionNode e = (AbstractExpressionNode) n; 
 			Type type = e.calculateType();
 			argumenttypes.add(type);
 		}

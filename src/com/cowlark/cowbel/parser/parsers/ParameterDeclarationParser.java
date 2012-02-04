@@ -8,7 +8,7 @@ package com.cowlark.cowbel.parser.parsers;
 
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
-import com.cowlark.cowbel.ast.nodes.TypeNode;
+import com.cowlark.cowbel.ast.nodes.TypeVariableNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -31,6 +31,6 @@ public class ParameterDeclarationParser extends Parser
 			
 		return new ParameterDeclarationNode(location, typepr.end(), 
 				(IdentifierNode) identifierpr, 
-				(TypeNode) typepr); 
+				(TypeVariableNode) typepr); 
 	}
 }

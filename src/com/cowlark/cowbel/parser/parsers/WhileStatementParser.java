@@ -6,8 +6,8 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
-import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
+import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
+import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.WhileStatementNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
@@ -30,7 +30,7 @@ public class WhileStatementParser extends Parser
 			return bodypr;
 		
 		return new WhileStatementNode(location, bodypr.end(),
-				(ExpressionNode) conditionalpr,
-				(ScopeConstructorNode) bodypr);
+				(AbstractExpressionNode) conditionalpr,
+				(AbstractScopeConstructorNode) bodypr);
 	}
 }

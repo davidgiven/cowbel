@@ -12,14 +12,14 @@ import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.types.Type;
 
-public abstract class ExpressionNode extends Node
+public abstract class AbstractExpressionNode extends Node
 {
 	private static Visitor _check_and_infer_expression_types_visitor =
 		new CheckAndInferExpressionTypesVisitor();
 
 	private Type _type = null;
 	
-	public ExpressionNode(Location start, Location end)
+	public AbstractExpressionNode(Location start, Location end)
     {
         super(start, end);
     }

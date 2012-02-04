@@ -57,6 +57,41 @@ public class TypeContext implements Comparable<TypeContext>
 		return 1;
 	}
 	
+	private void add_assignments_to_map(Map<String, Type> map)
+	{
+		if (_parent != null)
+			_parent.add_assignments_to_map(map);
+		
+		for (Map.Entry<IdentifierNode, Type> e : _types.entrySet())
+			map.put(e.getKey().getText(), e.getValue());
+	}
+	
+	public Map<String, Type> getTypeAssignments()
+	{
+		Map<String, Type> map = new TreeMap<String, Type>();
+		add_assignments_to_map(map);
+		return map;
+	}
+	
+	public String getSignature()
+	{
+		StringBuilder sb = new StringBuilder();
+		
+		boolean first = true;
+		for (Map.Entry<String, Type> e : getTypeAssignments().entrySet())
+		{
+			if (!first)
+				sb.append(' ');
+			first = false;
+			
+			sb.append(e.getKey());
+			sb.append("=");
+			sb.append(e.getValue().getCanonicalTypeName());
+		}
+		
+		return sb.toString();
+	}
+	
 	public void addType(IdentifierNode identifier, Type type)
 		throws CompilationException
 	{
@@ -78,12 +113,11 @@ public class TypeContext implements Comparable<TypeContext>
 		
 		do
 		{
-			Type t = _types.get(identifier);
+			Type t = tc._types.get(identifier);
 			if (t != null)
 				return t;
 
-			if (_parent != null)
-				tc = _parent;
+			tc = tc._parent;
 		}
 		while (tc != null);
 		

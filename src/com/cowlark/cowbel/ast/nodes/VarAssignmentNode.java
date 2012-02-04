@@ -10,8 +10,13 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class VarAssignmentNode extends StatementNode
+public class VarAssignmentNode extends AbstractStatementNode
 {
+	public VarAssignmentNode(Location start, Location end)
+    {
+		super(start, end);
+    }
+	
 	public VarAssignmentNode(Location start, Location end,
 			IdentifierListNode identifier, ExpressionListNode value)
     {

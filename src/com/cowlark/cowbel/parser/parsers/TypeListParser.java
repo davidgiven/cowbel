@@ -8,7 +8,7 @@ package com.cowlark.cowbel.parser.parsers;
 
 import java.util.LinkedList;
 import com.cowlark.cowbel.ast.nodes.TypeListNode;
-import com.cowlark.cowbel.ast.nodes.TypeNode;
+import com.cowlark.cowbel.ast.nodes.TypeVariableNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -24,14 +24,14 @@ public class TypeListParser extends Parser
 			return new TypeListNode(location, location);
 		}
 		
-		LinkedList<TypeNode> args = new LinkedList<TypeNode>();		
+		LinkedList<TypeVariableNode> args = new LinkedList<TypeVariableNode>();		
 		Location n = pr.end();
 		for (;;)
 		{
 			ParseResult arg = TypeParser.parse(n);
 			if (arg.failed())
 				return arg;
-			args.addLast((TypeNode) arg);
+			args.addLast((TypeVariableNode) arg);
 			
 			pr = CloseAngleBracketParser.parse(arg.end());
 			if (pr.success())

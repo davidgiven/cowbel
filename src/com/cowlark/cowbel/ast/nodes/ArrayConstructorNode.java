@@ -12,7 +12,7 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class ArrayConstructorNode extends ExpressionLiteralNode
+public class ArrayConstructorNode extends AbstractExpressionLiteralNode
 {
 	public ArrayConstructorNode(Location start, Location end)
     {
@@ -20,7 +20,7 @@ public class ArrayConstructorNode extends ExpressionLiteralNode
     }
 	
 	public ArrayConstructorNode(Location start, Location end,
-			List<ExpressionNode> params)
+			List<AbstractExpressionNode> params)
     {
 		this(start, end);
 		addChildren(params);
@@ -32,14 +32,14 @@ public class ArrayConstructorNode extends ExpressionLiteralNode
 	    return getText();
 	}
 	
-	private ArrayList<ExpressionNode> _members;
-	public List<ExpressionNode> getListMembers()
+	private ArrayList<AbstractExpressionNode> _members;
+	public List<AbstractExpressionNode> getListMembers()
 	{
 		if (_members == null)
 		{
-			_members = new ArrayList<ExpressionNode>();
+			_members = new ArrayList<AbstractExpressionNode>();
 			for (Node node : this)
-				_members.add((ExpressionNode) node);
+				_members.add((AbstractExpressionNode) node);
 		}
 		return _members;
 	}

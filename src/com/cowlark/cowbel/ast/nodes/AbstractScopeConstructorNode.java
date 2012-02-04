@@ -9,37 +9,47 @@ package com.cowlark.cowbel.ast.nodes;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import com.cowlark.cowbel.Compiler;
 import com.cowlark.cowbel.Constructor;
+import com.cowlark.cowbel.Function;
+import com.cowlark.cowbel.FunctionTemplate;
 import com.cowlark.cowbel.Label;
-import com.cowlark.cowbel.ast.Visitor;
+import com.cowlark.cowbel.ast.HasIdentifier;
+import com.cowlark.cowbel.ast.HasInputs;
+import com.cowlark.cowbel.ast.HasTypeArguments;
 import com.cowlark.cowbel.errors.AmbiguousVariableReference;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.IdentifierNotFound;
 import com.cowlark.cowbel.errors.MultipleDefinitionException;
 import com.cowlark.cowbel.parser.core.Location;
-import com.cowlark.cowbel.symbols.Function;
 import com.cowlark.cowbel.symbols.Symbol;
 
-public class ScopeConstructorNode extends StatementNode
+public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 {
 	private TreeSet<Symbol> _importedSymbols = new TreeSet<Symbol>();
-	private TreeMap<Symbol, ScopeConstructorNode> _exportedSymbols = new TreeMap<Symbol, ScopeConstructorNode>();
-	private TreeSet<ScopeConstructorNode> _importedScopes = new TreeSet<ScopeConstructorNode>();
-	private TreeSet<ScopeConstructorNode> _exportedScopes = new TreeSet<ScopeConstructorNode>();
+	private TreeMap<Symbol, AbstractScopeConstructorNode> _exportedSymbols = new TreeMap<Symbol, AbstractScopeConstructorNode>();
+	private TreeSet<AbstractScopeConstructorNode> _importedScopes = new TreeSet<AbstractScopeConstructorNode>();
+	private TreeSet<AbstractScopeConstructorNode> _exportedScopes = new TreeSet<AbstractScopeConstructorNode>();
 	private TreeSet<Symbol> _symbols = new TreeSet<Symbol>();
+	private TreeSet<FunctionTemplate> _functionTemplates = new TreeSet<FunctionTemplate>();
 	private TreeMap<String, Label> _labels = new TreeMap<String, Label>();
 	private Function _function;
 	private Constructor _constructor;
 	
-	public ScopeConstructorNode(Location start, Location end, StatementNode child)
+	public AbstractScopeConstructorNode(Location start, Location end)
+    {
+        super(start, end);
+    }
+
+	public AbstractScopeConstructorNode(Location start, Location end, AbstractStatementNode child)
     {
         super(start, end);
         addChild(child);
     }
 
-	public StatementNode getChild()
+	public AbstractStatementNode getChild()
 	{
-		return (StatementNode) getChild(0);
+		return (AbstractStatementNode) getChild(0);
 	}
 	
 	public boolean isFunctionScope()
@@ -72,17 +82,22 @@ public class ScopeConstructorNode extends StatementNode
 		return _symbols;
 	}
 	
+	public Set<FunctionTemplate> getFunctionTemplates()
+	{
+		return _functionTemplates;
+	}
+	
 	public Set<Label> getLabels()
 	{
 		return new TreeSet<Label>(_labels.values());
 	}
 	
-	public Set<ScopeConstructorNode> getImportedScopes()
+	public Set<AbstractScopeConstructorNode> getImportedScopes()
 	{
 		return _importedScopes;
 	}
 	
-	public Set<ScopeConstructorNode> getExportedScopes()
+	public Set<AbstractScopeConstructorNode> getExportedScopes()
 	{
 		return _exportedScopes;
 	}
@@ -136,7 +151,7 @@ public class ScopeConstructorNode extends StatementNode
 		{
 			spaces(indent);
 			System.out.println("exported scopes:");
-			for (ScopeConstructorNode e : _exportedScopes)
+			for (AbstractScopeConstructorNode e : _exportedScopes)
 			{
 				spaces(indent+1);
 				System.out.println(e.toString());
@@ -158,18 +173,12 @@ public class ScopeConstructorNode extends StatementNode
 		{
 			spaces(indent);
 			System.out.println("imported scopes:");
-			for (ScopeConstructorNode e: _importedScopes)
+			for (AbstractScopeConstructorNode e: _importedScopes)
 			{
 				spaces(indent+1);
 				System.out.println(e.toString());
 			}
 		}
-	}
-	
-	@Override
-	public void visit(Visitor visitor) throws CompilationException
-	{
-		visitor.visit(this);
 	}
 	
 	private FunctionScopeConstructorNode _functionScope;
@@ -182,10 +191,18 @@ public class ScopeConstructorNode extends StatementNode
 	
 	public void addSymbol(Symbol symbol) throws CompilationException
 	{
+		String symbolname = symbol.getName();
+		
 		for (Symbol s : _symbols)
 		{
-			if (s.collidesWith(symbol))
+			if (s.getName().equals(symbolname))
 				throw new MultipleDefinitionException(s, symbol);
+		}
+		
+		for (FunctionTemplate ft : _functionTemplates)
+		{
+			if (ft.getName().equals(symbolname))
+				throw new MultipleDefinitionException(ft, symbol);
 		}
 		
 		_symbols.add(symbol);
@@ -197,7 +214,7 @@ public class ScopeConstructorNode extends StatementNode
 		String s = name.getText();
 		TreeSet<Symbol> results = new TreeSet<Symbol>();
 		
-		ScopeConstructorNode scope = this;
+		AbstractScopeConstructorNode scope = this;
 		while (scope != null)
 		{
 			results.clear();
@@ -226,36 +243,64 @@ public class ScopeConstructorNode extends StatementNode
 		throw new IdentifierNotFound(this, name);
 	}
 
-	/* Recurse all the way to the top. */
-	public Function lookupFunction(IdentifierNode name, int arguments)
+	public void addFunctionTemplate(FunctionTemplate template)
 			throws CompilationException
 	{
-		String s = Function.calculateMangledName(name, arguments);
+		String name = template.getName();
+		for (Symbol s : _symbols)
+		{
+			if (s.getName().equals(name))
+				throw new MultipleDefinitionException(s, template);
+		}
 		
-		ScopeConstructorNode scope = this;
+		String signature = template.getSignature();
+		for (FunctionTemplate ft : _functionTemplates)
+		{
+			if (ft.getSignature().equals(signature))
+				throw new MultipleDefinitionException(ft, template);
+		}
+		
+		_functionTemplates.add(template);
+	}
+	
+	/* Recurse all the way to the top. */
+	public <T extends Node & HasInputs & HasIdentifier & HasTypeArguments>
+		Function lookupFunction(T node)
+			throws CompilationException
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append(node.getIdentifier().getText());
+		sb.append("<");
+		sb.append(node.getTypeArguments().getNumberOfChildren());
+		sb.append(">(");
+		sb.append(node.getInputs().getNumberOfChildren());
+		sb.append(")");
+		String signature = sb.toString();
+
+		AbstractScopeConstructorNode scope = this;
 		while (scope != null)
 		{
-			for (Symbol symbol : scope.getSymbols())
+			for (FunctionTemplate ft : scope.getFunctionTemplates())
 			{
-				if (symbol.getMangledName().equals(s))
+				if (ft.getSignature().equals(signature))
 				{
-					assert(symbol instanceof Function);
-					return (Function) symbol;
+					return Compiler.Instance.getFunctionInstance(
+							node, node.getTypeArguments(), ft);
 				}
 			}
 				
 			scope = scope.getScope();
 		}
 				
-		throw null;
+		return null;
 	}
 
-	private void recursive_import(ScopeConstructorNode root, ScopeConstructorNode leaf)
+	private void recursive_import(AbstractScopeConstructorNode root, AbstractScopeConstructorNode leaf)
 	{
 		if (root == leaf)
 			return;
 		
-		ScopeConstructorNode n = leaf;
+		AbstractScopeConstructorNode n = leaf;
 		for (;;)
 		{
 			n._importedScopes.add(root);
@@ -271,8 +316,8 @@ public class ScopeConstructorNode extends StatementNode
 	
 	public void importSymbol(Symbol symbol)
 	{
-		ScopeConstructorNode symscope = symbol.getScope();
-		ScopeConstructorNode thisscope = this;
+		AbstractScopeConstructorNode symscope = symbol.getScope();
+		AbstractScopeConstructorNode thisscope = this;
 		
 		_importedSymbols.add(symbol);
 		symscope._exportedSymbols.put(symbol, this);
@@ -299,7 +344,7 @@ public class ScopeConstructorNode extends StatementNode
 	{
 		String s = name.getText();
 		
-		ScopeConstructorNode scope = this;
+		AbstractScopeConstructorNode scope = this;
 		while (scope != null)
 		{
 			Label label = scope._labels.get(s);
@@ -323,7 +368,7 @@ public class ScopeConstructorNode extends StatementNode
 	
 	public boolean isSymbolExportedToDifferentFunction(Symbol sym)
 	{
-		ScopeConstructorNode s = _exportedSymbols.get(sym);
+		AbstractScopeConstructorNode s = _exportedSymbols.get(sym);
 		if (s == null)
 			return false;
 		

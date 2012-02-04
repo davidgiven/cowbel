@@ -10,7 +10,7 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class ContinueStatementNode extends StatementNode
+public class ContinueStatementNode extends AbstractStatementNode
 {
 	public ContinueStatementNode(Location start, Location end)
     {

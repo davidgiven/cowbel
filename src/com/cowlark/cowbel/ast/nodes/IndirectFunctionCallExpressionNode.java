@@ -10,19 +10,24 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class IndirectFunctionCallExpressionNode extends ExpressionNode
+public class IndirectFunctionCallExpressionNode extends AbstractExpressionNode
 {
+	public IndirectFunctionCallExpressionNode(Location start, Location end)
+    {
+		super(start, end);
+    }
+	
 	public IndirectFunctionCallExpressionNode(Location start, Location end,
-			ExpressionNode object, ExpressionListNode arguments)
+			AbstractExpressionNode object, ExpressionListNode arguments)
     {
 		super(start, end);
 		addChild(object);
 		addChild(arguments);
     }
 	
-	public ExpressionNode getFunction()
+	public AbstractExpressionNode getFunction()
 	{
-		return (ExpressionNode) getChild(0);
+		return (AbstractExpressionNode) getChild(0);
 	}
 
 	public ExpressionListNode getArguments()

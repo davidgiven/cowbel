@@ -140,7 +140,7 @@ public class Main
 			bos.close();
 			
 			if (DumpAST)
-				c.getAst().dump();
+				c.dumpAnnotatedAST();
 			if (DumpConstructors)
 				c.dumpConstructors();
 			if (DumpIR)

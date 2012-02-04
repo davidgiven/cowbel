@@ -7,19 +7,25 @@
 package com.cowlark.cowbel.ast.nodes;
 
 import com.cowlark.cowbel.ast.HasInputs;
+import com.cowlark.cowbel.ast.HasTypeArguments;
 import com.cowlark.cowbel.ast.IsMethod;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class MethodCallExpressionNode extends ExpressionNode
-	implements IsMethod, HasInputs
+public class MethodCallExpressionNode extends AbstractExpressionNode
+	implements IsMethod, HasInputs, HasTypeArguments
 {
 	private Method _method;
 	
+	public MethodCallExpressionNode(Location start, Location end)
+    {
+		super(start, end);
+    }
+	
 	public MethodCallExpressionNode(Location start, Location end,
-			ExpressionNode object,
+			AbstractExpressionNode object,
 			IdentifierNode method,
 			TypeListNode types,
 			ExpressionListNode arguments)
@@ -42,9 +48,9 @@ public class MethodCallExpressionNode extends ExpressionNode
 	}
 	
 	@Override
-    public ExpressionNode getMethodReceiver()
+    public AbstractExpressionNode getMethodReceiver()
 	{
-		return (ExpressionNode) getChild(0);
+		return (AbstractExpressionNode) getChild(0);
 	}
 	
 	@Override
@@ -53,7 +59,8 @@ public class MethodCallExpressionNode extends ExpressionNode
 		return (IdentifierNode) getChild(1);
 	}
 	
-	public TypeListNode getTypes()
+	@Override
+	public TypeListNode getTypeArguments()
 	{
 		return (TypeListNode) getChild(2);
 	}

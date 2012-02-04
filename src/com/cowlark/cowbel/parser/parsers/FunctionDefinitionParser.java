@@ -6,10 +6,10 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
+import com.cowlark.cowbel.ast.nodes.AbstractStatementNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.FunctionHeaderNode;
 import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.StatementNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -29,6 +29,6 @@ public class FunctionDefinitionParser extends Parser
 		return new FunctionDefinitionNode(location, bodypr.end(),
 				(FunctionHeaderNode) headerpr,
 				new FunctionScopeConstructorNode(bodypr.start(), bodypr.end(),
-						(StatementNode) bodypr));
+						(AbstractStatementNode) bodypr));
 	}
 }

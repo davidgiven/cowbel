@@ -10,12 +10,17 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class IfElseStatementNode extends StatementNode
+public class IfElseStatementNode extends AbstractStatementNode
 {
+	public IfElseStatementNode(Location start, Location end)
+    {
+		super(start, end);
+    }
+	
 	public IfElseStatementNode(Location start, Location end,
-			ExpressionNode conditional,
-			ScopeConstructorNode positive,
-			ScopeConstructorNode negative)
+			AbstractExpressionNode conditional,
+			AbstractScopeConstructorNode positive,
+			AbstractScopeConstructorNode negative)
     {
 		super(start, end);
 		addChild(conditional);
@@ -23,19 +28,19 @@ public class IfElseStatementNode extends StatementNode
 		addChild(negative);
     }
 	
-	public ExpressionNode getConditionalExpression()
+	public AbstractExpressionNode getConditionalExpression()
 	{
-		return (ExpressionNode) getChild(0);
+		return (AbstractExpressionNode) getChild(0);
 	}
 	
-	public ScopeConstructorNode getPositiveStatement()
+	public AbstractScopeConstructorNode getPositiveStatement()
 	{
-		return (ScopeConstructorNode) getChild(1);
+		return (AbstractScopeConstructorNode) getChild(1);
 	}
 	
-	public ScopeConstructorNode getNegativeStatement()
+	public AbstractScopeConstructorNode getNegativeStatement()
 	{
-		return (ScopeConstructorNode) getChild(2);
+		return (AbstractScopeConstructorNode) getChild(2);
 	}
 	
 	@Override

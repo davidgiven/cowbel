@@ -26,7 +26,6 @@ import com.cowlark.cowbel.instructions.MethodCallInstruction;
 import com.cowlark.cowbel.instructions.StringConstantInstruction;
 import com.cowlark.cowbel.instructions.VarCopyInstruction;
 import com.cowlark.cowbel.methods.Method;
-import com.cowlark.cowbel.symbols.Function;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.Type;
 
@@ -69,7 +68,8 @@ public class BasicBlock implements Comparable<BasicBlock>
 	
 	public String getName()
 	{
-		return _function.getSymbolName().getText() + "." + _id;
+		return _function.getNode().getFunctionHeader().getFunctionName().getText()
+			+ "." + _id;
 	}
 	
 	public String description()

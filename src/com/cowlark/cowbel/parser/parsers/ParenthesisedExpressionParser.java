@@ -6,8 +6,8 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
+import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
 import com.cowlark.cowbel.ast.nodes.DummyExpressionNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -28,6 +28,6 @@ public class ParenthesisedExpressionParser extends Parser
 		if (pr3.failed())
 			return pr3;
 
-		return new DummyExpressionNode(pr1.start(), pr3.end(), (ExpressionNode)pr2);
+		return new DummyExpressionNode(pr1.start(), pr3.end(), (AbstractExpressionNode)pr2);
 	}
 }

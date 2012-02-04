@@ -10,7 +10,6 @@ import com.cowlark.cowbel.ast.HasNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.LabelStatementNode;
 import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.symbols.Function;
 
 public class Label implements HasNode
 {

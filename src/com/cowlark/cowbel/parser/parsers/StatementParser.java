@@ -6,7 +6,7 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
+import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -42,7 +42,7 @@ public class StatementParser extends Parser
 			if (pr7.failed())
 				return pr7;
 			
-			return (ScopeConstructorNode) pr7;
+			return (AbstractScopeConstructorNode) pr7;
 		}
 		
 		ParseResult pr8 = FunctionDefinitionParser.parse(location);

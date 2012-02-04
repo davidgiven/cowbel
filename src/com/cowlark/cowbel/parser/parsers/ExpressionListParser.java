@@ -7,8 +7,8 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import java.util.LinkedList;
+import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 import com.cowlark.cowbel.parser.errors.ExpectedSyntacticElement;
@@ -31,7 +31,7 @@ public class ExpressionListParser extends Parser
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
-		LinkedList<ExpressionNode> args = new LinkedList<ExpressionNode>();
+		LinkedList<AbstractExpressionNode> args = new LinkedList<AbstractExpressionNode>();
 		
 		Location n = location;
 		ParseResult pr = parseTerminator(location);
@@ -45,7 +45,7 @@ public class ExpressionListParser extends Parser
 				ParseResult arg = ExpressionLowParser.parse(n);
 				if (arg.failed())
 					return arg;
-				args.addLast((ExpressionNode)arg);
+				args.addLast((AbstractExpressionNode)arg);
 				
 				pr = parseTerminator(arg.end());
 				if (pr.success())

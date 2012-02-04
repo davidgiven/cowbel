@@ -6,11 +6,11 @@
 
 package com.cowlark.cowbel.ast;
 
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
+import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 
 public interface IsMethod
 {
 	public IdentifierNode getMethodIdentifier();
-	public ExpressionNode getMethodReceiver();
+	public AbstractExpressionNode getMethodReceiver();
 }

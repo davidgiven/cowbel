@@ -8,11 +8,13 @@ package com.cowlark.cowbel;
 
 import java.util.Set;
 import com.cowlark.cowbel.ast.RecursiveVisitor;
+import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
-import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
+import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.WhileStatementNode;
 import com.cowlark.cowbel.errors.CompilationException;
-import com.cowlark.cowbel.symbols.Function;
 
 public class AssignConstructorsToScopesVisitor extends RecursiveVisitor
 {
@@ -23,7 +25,7 @@ public class AssignConstructorsToScopesVisitor extends RecursiveVisitor
 		_constructors = constructors;
     }
 	
-	private void assign_stackframe(ScopeConstructorNode node,
+	private void assign_stackframe(AbstractScopeConstructorNode node,
 			boolean persistent)
 	{
 		if (node.getConstructor() != null)
@@ -37,7 +39,7 @@ public class AssignConstructorsToScopesVisitor extends RecursiveVisitor
 			sf.setPersistent(true);
 	}
 	
-	private void inherit_stackframe(ScopeConstructorNode node)
+	private void inherit_stackframe(AbstractScopeConstructorNode node)
 	{
 		if (node.getConstructor() != null)
 			return;
@@ -46,13 +48,13 @@ public class AssignConstructorsToScopesVisitor extends RecursiveVisitor
 		node.setConstructor(sf);
 	}
 	
-	private boolean is_complex_scope(ScopeConstructorNode node)
+	private boolean is_complex_scope(AbstractScopeConstructorNode node)
 	{
 		/* If this scope is exporting to a scope that's part of a different
 		 * function, it's complex. */
 		
 		Function thisfunction = node.getFunction();
-		for (ScopeConstructorNode s : node.getExportedScopes())
+		for (AbstractScopeConstructorNode s : node.getExportedScopes())
 		{
 			Function f = s.getFunction();
 			if (f != thisfunction)
@@ -65,7 +67,7 @@ public class AssignConstructorsToScopesVisitor extends RecursiveVisitor
 	@Override
 	public void visit(WhileStatementNode node) throws CompilationException
 	{
-		ScopeConstructorNode body = node.getBodyStatement();
+		AbstractScopeConstructorNode body = node.getBodyStatement();
 		if (is_complex_scope(body))
 			assign_stackframe(body, true);
 		
@@ -75,7 +77,7 @@ public class AssignConstructorsToScopesVisitor extends RecursiveVisitor
 	@Override
 	public void visit(DoWhileStatementNode node) throws CompilationException
 	{
-		ScopeConstructorNode body = node.getBodyStatement();
+		AbstractScopeConstructorNode body = node.getBodyStatement();
 		if (is_complex_scope(body))
 			assign_stackframe(body, true);
 		
@@ -83,17 +85,26 @@ public class AssignConstructorsToScopesVisitor extends RecursiveVisitor
 	}
 	
 	@Override
-	public void visit(ScopeConstructorNode node) throws CompilationException
+	public void visit(BlockScopeConstructorNode node) throws CompilationException
 	{
-		if (node.isFunctionScope())
-		{
-			assign_stackframe(node, is_complex_scope(node));
-		}
-		else if (!node.getLabels().isEmpty() && is_complex_scope(node))
+		if (!node.getLabels().isEmpty() && is_complex_scope(node))
 			assign_stackframe(node, true);
 		else
 			inherit_stackframe(node);
 		
 		super.visit(node);
+	}
+	
+	@Override
+	public void visit(FunctionScopeConstructorNode node)
+	        throws CompilationException
+	{
+		assign_stackframe(node, is_complex_scope(node));
+	    super.visit(node);
+	}
+
+	@Override
+	public void visit(FunctionDefinitionNode node) throws CompilationException
+	{
 	}
 }

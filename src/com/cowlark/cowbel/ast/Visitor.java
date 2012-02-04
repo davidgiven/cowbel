@@ -7,6 +7,7 @@
 package com.cowlark.cowbel.ast;
 
 import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
+import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
 import com.cowlark.cowbel.ast.nodes.BreakStatementNode;
 import com.cowlark.cowbel.ast.nodes.ContinueStatementNode;
@@ -14,9 +15,14 @@ import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.DirectFunctionCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
 import com.cowlark.cowbel.ast.nodes.DummyExpressionNode;
+import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionStatementNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.nodes.FunctionHeaderNode;
+import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.GotoStatementNode;
+import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
+import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.IfElseStatementNode;
 import com.cowlark.cowbel.ast.nodes.IfStatementNode;
 import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
@@ -25,11 +31,14 @@ import com.cowlark.cowbel.ast.nodes.LabelStatementNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
+import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
 import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
 import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
-import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.StatementListNode;
 import com.cowlark.cowbel.ast.nodes.StringConstantNode;
+import com.cowlark.cowbel.ast.nodes.TypeListNode;
+import com.cowlark.cowbel.ast.nodes.TypeVariableNode;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
 import com.cowlark.cowbel.ast.nodes.VarDeclarationNode;
 import com.cowlark.cowbel.ast.nodes.VarReferenceNode;
@@ -47,12 +56,32 @@ public class Visitor
 		visit((Node) node);
 	}
 	
-	public void visit(ScopeConstructorNode node) throws CompilationException
+	public void visit(BlockScopeConstructorNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+		
+	public void visit(FunctionScopeConstructorNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}
 		
 	public void visit(FunctionDefinitionNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+
+	public void visit(FunctionHeaderNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+
+	public void visit(ParameterDeclarationListNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+
+	public void visit(ParameterDeclarationNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}
@@ -162,6 +191,16 @@ public class Visitor
 		visit((Node) node);
 	}
 	
+	public void visit(IdentifierNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+
+	public void visit(IdentifierListNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+
 	public void visit(ArrayConstructorNode node) throws CompilationException
 	{
 		visit((Node) node);
@@ -176,4 +215,19 @@ public class Visitor
 	{
 		visit((Node) node);
 	}
+
+	public void visit(TypeListNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+	
+	public void visit(TypeVariableNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+	
+	public void visit(ExpressionListNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}	
 }
