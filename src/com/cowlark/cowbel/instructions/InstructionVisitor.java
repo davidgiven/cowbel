@@ -72,4 +72,9 @@ public class InstructionVisitor
 	{
 		visit((Instruction) insn);
 	}
+	
+	public void visit(CreateObjectReferenceInstruction insn)
+	{
+		visit((Instruction) insn);
+	}
 }

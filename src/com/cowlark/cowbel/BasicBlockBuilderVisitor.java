@@ -13,6 +13,7 @@ import com.cowlark.cowbel.ast.SimpleVisitor;
 import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
 import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
+import com.cowlark.cowbel.ast.nodes.BlockExpressionNode;
 import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
 import com.cowlark.cowbel.ast.nodes.BreakStatementNode;
@@ -95,6 +96,17 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	        throws CompilationException
 	{
 		visit((AbstractScopeConstructorNode) node);
+	}
+	
+	@Override
+	public void visit(BlockExpressionNode node) throws CompilationException
+	{
+		BlockScopeConstructorNode block = node.getBlock();
+		block.visit(this);
+		
+		_result = _currentBB.createTemporary(node, node.getType());
+		_currentBB.insnCreateObjectReference(node, block.getConstructor(),
+				_result);
 	}
 	
 	@Override

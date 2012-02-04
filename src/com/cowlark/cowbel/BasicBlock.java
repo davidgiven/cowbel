@@ -15,6 +15,7 @@ import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.instructions.ArrayConstructorInstruction;
 import com.cowlark.cowbel.instructions.BooleanConstantInstruction;
 import com.cowlark.cowbel.instructions.ConstructInstruction;
+import com.cowlark.cowbel.instructions.CreateObjectReferenceInstruction;
 import com.cowlark.cowbel.instructions.DirectFunctionCallInstruction;
 import com.cowlark.cowbel.instructions.FunctionExitInstruction;
 import com.cowlark.cowbel.instructions.GotoInstruction;
@@ -189,5 +190,12 @@ public class BasicBlock implements Comparable<BasicBlock>
 	public void insnVarCopy(Node node, Variable invar, Variable outvar)
 	{
 		addInstruction(new VarCopyInstruction(node, invar, outvar));
+	}
+	
+	public void insnCreateObjectReference(Node node, Constructor constructor,
+			Variable outvar)
+	{
+		addInstruction(new CreateObjectReferenceInstruction(node,
+				constructor, outvar));
 	}
 }

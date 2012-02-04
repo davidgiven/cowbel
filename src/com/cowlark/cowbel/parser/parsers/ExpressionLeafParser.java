@@ -6,6 +6,8 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
+import com.cowlark.cowbel.ast.nodes.BlockExpressionNode;
+import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.VarReferenceNode;
@@ -46,6 +48,11 @@ public class ExpressionLeafParser extends Parser
 		if (pr7.success())
 			return pr7;
 		
-		return combineParseErrors(pr1, pr2, pr3, pr4, pr5, pr6, pr7);
+		ParseResult pr8 = ScopeConstructorParser.parse(location);
+		if (pr8.success())
+			return new BlockExpressionNode(location, pr8.end(),
+					(BlockScopeConstructorNode) pr8);
+		
+		return combineParseErrors(pr1, pr2, pr3, pr4, pr5, pr6, pr7, pr8);
 	}
 }
