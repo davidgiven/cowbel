@@ -50,6 +50,13 @@ public class Compiler
 	private TreeSet<Constructor> _constructors = new TreeSet<Constructor>();
 	private FunctionScopeConstructorNode _ast;
 	
+	private Visitor _assign_functions_to_scopes_visitor =
+		new AssignFunctionsToScopesVisitor();
+	private Visitor _assign_constructors_to_scopes_visitor =
+		new AssignConstructorsToScopesVisitor(_constructors);
+	private Visitor _assign_variables_to_constructors_visitor =
+		new AssignVariablesToConstructorsVisitor();
+
 	public Compiler()
     {
 		_listener = new CompilerListenerAdapter();
@@ -141,9 +148,14 @@ public class Compiler
 				
 				record_variable_declarations(function);
 				check_types(function);
-				resolve_scopes_and_constructors(function);
 			}
 		}
+
+		for (Function function : _functions.values())
+			function.getBody().visit(_assign_constructors_to_scopes_visitor);
+		for (Function function : _functions.values())
+			function.getBody().visit(_assign_variables_to_constructors_visitor);
+		
 		_listener.onSymbolTableAnalysisEnd();
 		
 		/* Construct basic blocks and IR representation. */
@@ -327,6 +339,11 @@ public class Compiler
 		FunctionType type = (FunctionType) ast.getFunctionHeader().calculateFunctionType();
 		function.setType(type);
 		
+		if (ast.getParent() != null)
+			function.setScope(ast.getParent().getScope());
+
+		ast.getFunctionBody().setFunction(function);
+
 		_newFunctions.put(signature, function);
 		
 		return function;
@@ -376,6 +393,7 @@ public class Compiler
 		
 		/* Add any variable definitions to scope. */
 		
+		body.visit(_assign_functions_to_scopes_visitor);
 		body.visit(new RecordVariableDeclarationsVisitor());
 		body.visit(new ResolveVariableReferencesVisitor());
 	}
@@ -385,19 +403,4 @@ public class Compiler
 		function.getBody().checkTypes();
 	}
 	
-	private Visitor _assign_functions_to_scopes_visitor =
-		new AssignFunctionsToScopesVisitor();
-	private Visitor _assign_constructors_to_scopes_visitor =
-		new AssignConstructorsToScopesVisitor(_constructors);
-	private Visitor _assign_variables_to_constructors_visitor =
-		new AssignVariablesToConstructorsVisitor();
-	private void resolve_scopes_and_constructors(Function function)
-			throws CompilationException
-	{
-		FunctionScopeConstructorNode body = function.getBody();
-	
-		body.visit(_assign_functions_to_scopes_visitor);
-		body.visit(_assign_constructors_to_scopes_visitor);
-		body.visit(_assign_variables_to_constructors_visitor);
-	}
 }

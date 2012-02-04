@@ -28,8 +28,6 @@ public class IdentifierListNode extends Node
     {
 		super(start, end);
 		addChildren(ids);
-		
-		_symbols = new Symbol[getNumberOfChildren()];
     }
 	
 	public IdentifierListNode(Location start, Location end,
@@ -37,8 +35,6 @@ public class IdentifierListNode extends Node
     {
 		super(start, end);
 		addChildren(ids);
-		
-		_symbols = new Symbol[getNumberOfChildren()];
     }
 	
 	public IdentifierNode getIdentifier(int i)
@@ -54,6 +50,9 @@ public class IdentifierListNode extends Node
 	
 	public void setSymbol(int i, Symbol symbol)
 	{
+		if (_symbols == null)
+			_symbols = new Symbol[getNumberOfChildren()];
+
 		_symbols[i] = symbol;
 	}
 	
@@ -75,8 +74,9 @@ public class IdentifierListNode extends Node
 		{
 			_types = new ArrayList<Type>();
 			
-			for (Symbol s : _symbols)
-				_types.add(s.getSymbolType());
+			if (getNumberOfChildren() > 0)
+				for (Symbol s : _symbols)
+					_types.add(s.getSymbolType());
 		}
 		return _types;
 	}

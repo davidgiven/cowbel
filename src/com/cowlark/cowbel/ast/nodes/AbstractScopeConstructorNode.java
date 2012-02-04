@@ -28,6 +28,8 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 {
 	private TreeSet<Symbol> _importedSymbols = new TreeSet<Symbol>();
 	private TreeMap<Symbol, AbstractScopeConstructorNode> _exportedSymbols = new TreeMap<Symbol, AbstractScopeConstructorNode>();
+	private TreeSet<Function> _importedFunctions = new TreeSet<Function>();
+	private TreeMap<Function, AbstractScopeConstructorNode> _exportedFunctions = new TreeMap<Function, AbstractScopeConstructorNode>();
 	private TreeSet<AbstractScopeConstructorNode> _importedScopes = new TreeSet<AbstractScopeConstructorNode>();
 	private TreeSet<AbstractScopeConstructorNode> _exportedScopes = new TreeSet<AbstractScopeConstructorNode>();
 	private TreeSet<Symbol> _symbols = new TreeSet<Symbol>();
@@ -147,6 +149,17 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 			}
 		}
 		
+		if (!_exportedFunctions.isEmpty())
+		{
+			spaces(indent);
+			System.out.println("exported functions:");
+			for (Function e : _exportedFunctions.keySet())
+			{
+				spaces(indent+1);
+				System.out.println(e.toString());
+			}
+		}
+		
 		if (!_exportedScopes.isEmpty())
 		{
 			spaces(indent);
@@ -163,6 +176,17 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 			spaces(indent);
 			System.out.println("imported symbols:");
 			for (Symbol e: _importedSymbols)
+			{
+				spaces(indent+1);
+				System.out.println(e.toString());
+			}
+		}
+		
+		if (!_importedFunctions.isEmpty())
+		{
+			spaces(indent);
+			System.out.println("imported functions:");
+			for (Function e: _importedFunctions)
 			{
 				spaces(indent+1);
 				System.out.println(e.toString());
@@ -319,10 +343,31 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 		AbstractScopeConstructorNode symscope = symbol.getScope();
 		AbstractScopeConstructorNode thisscope = this;
 		
+		/* No need to import symbols from the current scope. */
+		
+		if (symscope == thisscope)
+			return;
+		
 		_importedSymbols.add(symbol);
 		symscope._exportedSymbols.put(symbol, this);
 		
 		recursive_import(symscope, thisscope);
+	}
+	
+	public void importFunction(Function function)
+	{
+		AbstractScopeConstructorNode funcscope = function.getScope();
+		AbstractScopeConstructorNode thisscope = this;
+		
+		/* No need to import symbols from the current scope. */
+		
+		if (funcscope == thisscope)
+			return;
+		
+		_importedFunctions.add(function);
+		funcscope._exportedFunctions.put(function, this);
+		
+		recursive_import(funcscope, thisscope);
 	}
 	
 	public void addLabel(Label label) throws CompilationException

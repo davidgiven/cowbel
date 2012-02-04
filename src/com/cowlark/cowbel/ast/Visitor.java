@@ -26,6 +26,7 @@ import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.IfElseStatementNode;
 import com.cowlark.cowbel.ast.nodes.IfStatementNode;
 import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
+import com.cowlark.cowbel.ast.nodes.InferredTypeNode;
 import com.cowlark.cowbel.ast.nodes.IntegerConstantNode;
 import com.cowlark.cowbel.ast.nodes.LabelStatementNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
@@ -222,6 +223,11 @@ public class Visitor
 	}
 	
 	public void visit(TypeVariableNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+	
+	public void visit(InferredTypeNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}

@@ -11,12 +11,14 @@ import java.util.List;
 import java.util.Vector;
 import com.cowlark.cowbel.TypeContext;
 import com.cowlark.cowbel.ast.HasNode;
+import com.cowlark.cowbel.ast.HasScope;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.Token;
 
-public abstract class Node extends Token implements Iterable<Node>, HasNode
+public abstract class Node extends Token implements Iterable<Node>, HasNode,
+		HasScope
 {
 	private Vector<Node> _children = new Vector<Node>();
 	private Node _parent;
@@ -108,7 +110,8 @@ public abstract class Node extends Token implements Iterable<Node>, HasNode
 	{
 	}
 	
-	public AbstractScopeConstructorNode getScope()
+	@Override
+    public AbstractScopeConstructorNode getScope()
 	{
 		if (_scope == null)
 		{
