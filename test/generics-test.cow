@@ -2,8 +2,9 @@ function notypeparams(): integer
 {
 }
 
-function onetypeparam<T>(): integer
+function onetypeparam<T>(value: T): T
 {
+	return value + value;
 }
 
 function twotypeparams<T1, T2>(): integer
@@ -13,11 +14,13 @@ function twotypeparams<T1, T2>(): integer
 /* Direct calls */
 
 notypeparams();
-onetypeparam<integer>();
+onetypeparam<integer>(1);
+onetypeparam<string>("1");
 twotypeparams<integer, integer>();
 
 /* Expression calls */
 
 (notypeparams());
-(onetypeparam<integer>());
+(onetypeparam<integer>(1));
+(onetypeparam<string>("1"));
 (twotypeparams<integer, integer>());
