@@ -96,7 +96,7 @@ public class CBackend extends ImperativeBackend
 	    
 	    /* Emit string constants. */
 	    
-	    compiler.getAst().visit(
+	    compiler.visit(
 	    		new RecursiveVisitor()
 	    		{
 	    			@Override
@@ -170,8 +170,8 @@ public class CBackend extends ImperativeBackend
 		
 		AbstractScopeConstructorNode node = constructor.getNode();
 		Function f = node.getFunctionScope().getFunction();
-		s = "struct C" + _constructorTypes.size() + "_" + escape(f.getName().getText()) +
-			"_" + escape(node.locationAsString());
+		s = "struct C" + _constructorTypes.size() + "_" +
+			escape(f.getName().getText());
 		
 		_constructorTypes.put(constructor, s);
 		return s;
@@ -185,8 +185,8 @@ public class CBackend extends ImperativeBackend
 		
 		AbstractScopeConstructorNode node = constructor.getNode();
 		Function f = node.getFunctionScope().getFunction();
-		s = "c" + _constructorLabels.size() + "_" + escape(f.getName().getText()) +
-			"_" + escape(node.locationAsString());
+		s = "c" + _constructorLabels.size() + "_" +
+			escape(f.getName().getText());
 		
 		_constructorLabels.put(constructor, s);
 		return s;
@@ -198,9 +198,7 @@ public class CBackend extends ImperativeBackend
 		if (s != null)
 			return s;
 		
-		Node node = symbol.getNode();
-		s = "s" + _symbolLabels.size() + "_" + escape(symbol.getName()) +
-			"_" + escape(node.locationAsString());
+		s = "s" + _symbolLabels.size() + "_" + escape(symbol.getName());
 		
 		_symbolLabels.put(symbol, s);
 		return s;
@@ -212,9 +210,8 @@ public class CBackend extends ImperativeBackend
 		if (s != null)
 			return s;
 		
-		Node node = function.getNode();
-		s = "s" + _symbolLabels.size() + "_" + escape(function.getName().getText()) +
-			"_" + escape(node.locationAsString());
+		s = "f" + _symbolLabels.size() + "_" +
+			escape(function.getName().getText());
 		
 		_functionLabels.put(function, s);
 		return s;
@@ -226,8 +223,9 @@ public class CBackend extends ImperativeBackend
 		if (s != null)
 			return s;
 		
+		Function f = node.getScope().getFunction();
 		s = "sc" + _stringLabels.size() +
-			"_" + escape(node.locationAsString());
+			"_" + escape(f.getName().getText());
 		
 		_stringLabels.put(node, s);
 		return s;

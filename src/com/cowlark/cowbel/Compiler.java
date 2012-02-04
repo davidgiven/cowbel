@@ -231,6 +231,12 @@ public class Compiler
 		visit(adapter);
 	}
 	
+	public void visit(Visitor visitor) throws CompilationException
+	{
+		for (Function f : _functions.values())
+			f.getBody().visit(visitor);
+	}
+	
 	public void dumpAnnotatedAST()
 	{
 		Visitor visitor = new ASTDumperVisitor();
@@ -341,8 +347,6 @@ public class Compiler
 		
 		if (ast.getParent() != null)
 			function.setScope(ast.getParent().getScope());
-
-		ast.getFunctionBody().setFunction(function);
 
 		_newFunctions.put(signature, function);
 		
