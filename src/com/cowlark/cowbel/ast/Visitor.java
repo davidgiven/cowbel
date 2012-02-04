@@ -39,6 +39,7 @@ import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
 import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
 import com.cowlark.cowbel.ast.nodes.StatementListNode;
 import com.cowlark.cowbel.ast.nodes.StringConstantNode;
+import com.cowlark.cowbel.ast.nodes.TypeAssignmentNode;
 import com.cowlark.cowbel.ast.nodes.TypeListNode;
 import com.cowlark.cowbel.ast.nodes.TypeVariableNode;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
@@ -88,6 +89,11 @@ public class Visitor
 		visit((Node) node);
 	}
 
+	public void visit(TypeAssignmentNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+	
 	public void visit(VarDeclarationNode node) throws CompilationException
 	{
 		visit((Node) node);
@@ -241,5 +247,5 @@ public class Visitor
 	public void visit(BlockExpressionNode node) throws CompilationException
 	{
 		visit((Node) node);
-	}
+	}	
 }

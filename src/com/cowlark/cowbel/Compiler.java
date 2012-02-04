@@ -49,7 +49,13 @@ public class Compiler
 	private TreeMap<String, Function> _newFunctions = new TreeMap<String, Function>();
 	private TreeSet<Constructor> _constructors = new TreeSet<Constructor>();
 	private FunctionScopeConstructorNode _ast;
-	
+
+	private Visitor _record_type_definitions_visitor =
+		new RecordTypeDefinitionsVisitor();
+	private Visitor _record_variable_declarations_visitor =
+		new RecordVariableDeclarationsVisitor();
+	private Visitor _resolve_variable_references_visitor =
+		new ResolveVariableReferencesVisitor();
 	private Visitor _assign_functions_to_scopes_visitor =
 		new AssignFunctionsToScopesVisitor();
 	private Visitor _assign_constructors_to_scopes_visitor =
@@ -394,12 +400,16 @@ public class Compiler
 		
 		pdln = node.getFunctionHeader().getOutputParametersNode();
 		add_parameters(typecontext, node, pdln, true);
+
+		/* Scan for type definitions. */
+		
+		body.visit(_record_type_definitions_visitor);
 		
 		/* Add any variable definitions to scope. */
 		
 		body.visit(_assign_functions_to_scopes_visitor);
-		body.visit(new RecordVariableDeclarationsVisitor());
-		body.visit(new ResolveVariableReferencesVisitor());
+		body.visit(_record_variable_declarations_visitor);
+		body.visit(_resolve_variable_references_visitor);
 	}
 	
 	private void check_types(Function function) throws CompilationException

@@ -141,21 +141,7 @@ public abstract class Node extends Token implements Iterable<Node>, HasNode,
 	public TypeContext getTypeContext()
 	{
 		if (_typecontext == null)
-		{
-			Node n = this;
-			
-			for (;;)
-			{
-				n = n.getParent();
-				if (n == null)
-					return null;
-				if (n._typecontext != null)
-				{
-					_typecontext = n._typecontext;
-					break;
-				}
-			}
-		}
+			_typecontext = new TypeContext(this, getParent().getTypeContext());
 			
 		return _typecontext;
 	}

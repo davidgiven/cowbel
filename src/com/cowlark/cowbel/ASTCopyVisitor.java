@@ -40,6 +40,7 @@ import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
 import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
 import com.cowlark.cowbel.ast.nodes.StatementListNode;
 import com.cowlark.cowbel.ast.nodes.StringConstantNode;
+import com.cowlark.cowbel.ast.nodes.TypeAssignmentNode;
 import com.cowlark.cowbel.ast.nodes.TypeListNode;
 import com.cowlark.cowbel.ast.nodes.TypeVariableNode;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
@@ -106,6 +107,13 @@ public class ASTCopyVisitor extends RecursiveVisitor
 	        throws CompilationException
 	{
 	    _result = new ParameterDeclarationNode(node.start(), node.end());
+	    super.visit(node);
+	}
+	
+	@Override
+	public void visit(TypeAssignmentNode node) throws CompilationException
+	{
+	    _result = new TypeAssignmentNode(node.start(), node.end());
 	    super.visit(node);
 	}
 	
