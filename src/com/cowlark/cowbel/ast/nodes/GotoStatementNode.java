@@ -12,9 +12,14 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class GotoStatementNode extends StatementNode implements HasLabel
+public class GotoStatementNode extends AbstractStatementNode implements HasLabel
 {
 	private Label _label;
+	
+	public GotoStatementNode(Location start, Location end)
+    {
+		super(start, end);
+    }
 	
 	public GotoStatementNode(Location start, Location end, IdentifierNode name)
     {

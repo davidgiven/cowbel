@@ -10,7 +10,7 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class IntegerConstantNode extends ExpressionLiteralNode
+public class IntegerConstantNode extends AbstractExpressionLiteralNode
 {
 	private long _value;
 	

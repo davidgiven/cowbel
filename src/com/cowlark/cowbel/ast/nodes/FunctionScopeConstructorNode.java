@@ -6,11 +6,18 @@
 
 package com.cowlark.cowbel.ast.nodes;
 
+import com.cowlark.cowbel.ast.Visitor;
+import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class FunctionScopeConstructorNode extends ScopeConstructorNode
+public class FunctionScopeConstructorNode extends AbstractScopeConstructorNode
 {
-	public FunctionScopeConstructorNode(Location start, Location end, StatementNode child)
+	public FunctionScopeConstructorNode(Location start, Location end)
+    {
+        super(start, end);
+    }
+	
+	public FunctionScopeConstructorNode(Location start, Location end, AbstractStatementNode child)
     {
         super(start, end, child);
     }
@@ -25,5 +32,11 @@ public class FunctionScopeConstructorNode extends ScopeConstructorNode
 	public FunctionScopeConstructorNode getFunctionScope()
 	{
 	    return this;
+	}
+
+	@Override
+	public void visit(Visitor visitor) throws CompilationException
+	{
+		visitor.visit(this);
 	}
 }

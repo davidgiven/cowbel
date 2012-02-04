@@ -11,17 +11,17 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class StatementListNode extends StatementNode
+public class StatementListNode extends AbstractStatementNode
 {
 	public StatementListNode(Location start, Location end,
-			List<StatementNode> statements)
+			List<AbstractStatementNode> statements)
     {
         super(start, end);
         addChildren(statements);
     }
 	
 	public StatementListNode(Location start, Location end,
-			StatementNode... statements)
+			AbstractStatementNode... statements)
 	{
 		super(start, end);
 		addChildren(statements);

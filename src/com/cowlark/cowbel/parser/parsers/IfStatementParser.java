@@ -6,10 +6,10 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
+import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
+import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.IfElseStatementNode;
 import com.cowlark.cowbel.ast.nodes.IfStatementNode;
-import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -33,16 +33,16 @@ public class IfStatementParser extends Parser
 		pr = ElseTokenParser.parse(positivepr.end());
 		if (pr.failed())
 			return new IfStatementNode(location, positivepr.end(),
-					(ExpressionNode) conditionalpr,
-					(ScopeConstructorNode) positivepr);
+					(AbstractExpressionNode) conditionalpr,
+					(AbstractScopeConstructorNode) positivepr);
 		
 		ParseResult negativepr = ScopeConstructorParser.parse(pr.end());
 		if (negativepr.failed())
 			return negativepr;
 		
 		return new IfElseStatementNode(location, negativepr.end(),
-				(ExpressionNode) conditionalpr,
-				(ScopeConstructorNode) positivepr,
-				(ScopeConstructorNode) negativepr);
+				(AbstractExpressionNode) conditionalpr,
+				(AbstractScopeConstructorNode) positivepr,
+				(AbstractScopeConstructorNode) negativepr);
 	}
 }

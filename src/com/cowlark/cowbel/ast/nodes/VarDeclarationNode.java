@@ -10,8 +10,13 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class VarDeclarationNode extends StatementNode
+public class VarDeclarationNode extends AbstractStatementNode
 {
+	public VarDeclarationNode(Location start, Location end)
+    {
+		super(start, end);
+    }
+	
 	public VarDeclarationNode(Location start, Location end,
 			ParameterDeclarationListNode variables)
     {

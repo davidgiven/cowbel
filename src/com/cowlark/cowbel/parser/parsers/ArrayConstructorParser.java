@@ -7,8 +7,8 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import java.util.ArrayList;
+import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -21,7 +21,7 @@ public class ArrayConstructorParser extends Parser
 		if (pr.failed())
 			return pr;
 		
-		ArrayList<ExpressionNode> params = new ArrayList<ExpressionNode>();
+		ArrayList<AbstractExpressionNode> params = new ArrayList<AbstractExpressionNode>();
 		Location n = pr.end();
 		pr = CloseSquareParser.parse(n);
 		if (pr.success())
@@ -34,7 +34,7 @@ public class ArrayConstructorParser extends Parser
 				if (pr.failed())
 					return pr;
 		
-				params.add((ExpressionNode) pr);
+				params.add((AbstractExpressionNode) pr);
 				
 				n = pr.end();
 				pr = CloseSquareParser.parse(n);

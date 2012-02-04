@@ -10,10 +10,14 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.types.Type;
-import com.cowlark.cowbel.types.TypeVariable;
 
-public class TypeVariableNode extends TypeNode
+public class TypeVariableNode extends AbstractTypeNode
 {
+	public TypeVariableNode(Location start, Location end)
+    {
+        super(start, end);
+    }
+	
 	public TypeVariableNode(Location start, Location end,
 			IdentifierNode node)
     {
@@ -27,9 +31,9 @@ public class TypeVariableNode extends TypeNode
 	}
 	
 	@Override
-    protected Type getTypeImpl()
+	public Type calculateType() throws CompilationException
 	{
-	    return TypeVariable.create(getIdentifier());
+		return getTypeContext().lookupType(getIdentifier());
 	}
 	
 	@Override

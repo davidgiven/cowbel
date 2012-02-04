@@ -12,7 +12,7 @@ import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.MutableLocation;
 
-public class IdentifierNode extends ExpressionNode
+public class IdentifierNode extends AbstractExpressionNode
 {
 	private static int _globalid = 0;
 	

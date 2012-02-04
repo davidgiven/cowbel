@@ -10,7 +10,7 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class BreakStatementNode extends StatementNode
+public class BreakStatementNode extends AbstractStatementNode
 {
 	public BreakStatementNode(Location start, Location end)
     {

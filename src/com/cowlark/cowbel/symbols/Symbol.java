@@ -8,9 +8,9 @@ package com.cowlark.cowbel.symbols;
 
 import com.cowlark.cowbel.Constructor;
 import com.cowlark.cowbel.ast.HasNode;
+import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.types.Type;
 
 public abstract class Symbol implements Comparable<Symbol>, HasNode
@@ -22,7 +22,7 @@ public abstract class Symbol implements Comparable<Symbol>, HasNode
 	private Node _node;
 	private IdentifierNode _name;
 	private Type _type;
-	private ScopeConstructorNode _scope;
+	private AbstractScopeConstructorNode _scope;
 	
 	public Symbol(Node node, IdentifierNode name, Type type)
 	{
@@ -73,12 +73,12 @@ public abstract class Symbol implements Comparable<Symbol>, HasNode
 		return 0;
 	}
 
-	public void setScope(ScopeConstructorNode scope)
+	public void setScope(AbstractScopeConstructorNode scope)
 	{
 		_scope = scope;
 	}
 	
-	public ScopeConstructorNode getScope()
+	public AbstractScopeConstructorNode getScope()
 	{
 		return _scope;
 	}
@@ -90,7 +90,5 @@ public abstract class Symbol implements Comparable<Symbol>, HasNode
 		return _scope.getConstructor();
 	}
 	
-	public abstract String getMangledName();
-	public abstract boolean collidesWith(Symbol other);
 	public abstract void addToConstructor(Constructor constructor);
 }

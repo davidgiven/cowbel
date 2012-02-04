@@ -14,13 +14,14 @@ import java.util.List;
 import com.cowlark.cowbel.BasicBlock;
 import com.cowlark.cowbel.Compiler;
 import com.cowlark.cowbel.Constructor;
+import com.cowlark.cowbel.Function;
 import com.cowlark.cowbel.ast.RecursiveVisitor;
+import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
-import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.StringConstantNode;
 import com.cowlark.cowbel.backend.ImperativeBackend;
 import com.cowlark.cowbel.errors.CompilationException;
@@ -35,7 +36,6 @@ import com.cowlark.cowbel.instructions.IntegerConstantInstruction;
 import com.cowlark.cowbel.instructions.MethodCallInstruction;
 import com.cowlark.cowbel.instructions.StringConstantInstruction;
 import com.cowlark.cowbel.instructions.VarCopyInstruction;
-import com.cowlark.cowbel.symbols.Function;
 import com.cowlark.cowbel.symbols.Symbol;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.ArrayType;
@@ -49,6 +49,8 @@ public class CBackend extends ImperativeBackend
 		new HashMap<Constructor, String>();
 	private HashMap<Constructor, String> _constructorLabels =
 		new HashMap<Constructor, String>();
+	private HashMap<Function, String> _functionLabels =
+		new HashMap<Function, String>();
 	private HashMap<Symbol, String> _symbolLabels =
 		new HashMap<Symbol, String>();
 	private HashMap<Type, String> _typeLabels =
@@ -166,9 +168,9 @@ public class CBackend extends ImperativeBackend
 		if (s != null)
 			return s;
 		
-		ScopeConstructorNode node = constructor.getNode();
+		AbstractScopeConstructorNode node = constructor.getNode();
 		Function f = node.getFunctionScope().getFunction();
-		s = "struct C" + _constructorTypes.size() + "_" + escape(f.getMangledName()) +
+		s = "struct C" + _constructorTypes.size() + "_" + escape(f.getName().getText()) +
 			"_" + escape(node.locationAsString());
 		
 		_constructorTypes.put(constructor, s);
@@ -181,9 +183,9 @@ public class CBackend extends ImperativeBackend
 		if (s != null)
 			return s;
 		
-		ScopeConstructorNode node = constructor.getNode();
+		AbstractScopeConstructorNode node = constructor.getNode();
 		Function f = node.getFunctionScope().getFunction();
-		s = "c" + _constructorLabels.size() + "_" + escape(f.getMangledName()) +
+		s = "c" + _constructorLabels.size() + "_" + escape(f.getName().getText()) +
 			"_" + escape(node.locationAsString());
 		
 		_constructorLabels.put(constructor, s);
@@ -201,6 +203,20 @@ public class CBackend extends ImperativeBackend
 			"_" + escape(node.locationAsString());
 		
 		_symbolLabels.put(symbol, s);
+		return s;
+	}
+	
+	private String clabel(Function function)
+	{
+		String s = _functionLabels.get(function);
+		if (s != null)
+			return s;
+		
+		Node node = function.getNode();
+		s = "s" + _symbolLabels.size() + "_" + escape(function.getName().getText()) +
+			"_" + escape(node.locationAsString());
+		
+		_functionLabels.put(function, s);
 		return s;
 	}
 	
@@ -223,7 +239,7 @@ public class CBackend extends ImperativeBackend
 		if (s != null)
 			return s;
 		
-		s = "B" + _bbLabels.size() + "_" + escape(bb.getFunction().getName());
+		s = "B" + _bbLabels.size() + "_" + escape(bb.getFunction().getName().getText());
 		
 		_bbLabels.put(bb, s);
 		return s;
@@ -316,9 +332,9 @@ public class CBackend extends ImperativeBackend
 
 		boolean first = true;
 		Constructor constructor = f.getConstructor();
-		if (constructor != null)
+		Constructor parent = constructor.getParentConstructor();
+		if (parent != null)
 		{
-			Constructor parent = constructor.getParentConstructor();
 			print(ctype(parent));
 			print("* ");
 			print(clabel(parent));

@@ -7,11 +7,11 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import java.util.ArrayList;
+import com.cowlark.cowbel.ast.nodes.AbstractTypeNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.InferredTypeNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
-import com.cowlark.cowbel.ast.nodes.TypeVariableNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -47,7 +47,7 @@ public class VariableDeclarationListParser extends Parser
 			ParameterDeclarationNode pdn = new ParameterDeclarationNode(
 					identifierpr, typepr.end(),
 					(IdentifierNode) identifierpr,
-					(TypeVariableNode) typepr);
+					(AbstractTypeNode) typepr);
 			params.add(pdn);
 
 			/* An equals token marks the end */

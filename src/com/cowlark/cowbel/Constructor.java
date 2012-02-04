@@ -9,8 +9,7 @@ package com.cowlark.cowbel;
 import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
-import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
-import com.cowlark.cowbel.symbols.Function;
+import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.symbols.Variable;
 
 public class Constructor implements Comparable<Constructor>
@@ -18,19 +17,19 @@ public class Constructor implements Comparable<Constructor>
 	private static int _globalid = 0;
 	
 	private int _id = _globalid++;
-	private ScopeConstructorNode _node;
+	private AbstractScopeConstructorNode _node;
 	private boolean _persistent;
 	private TreeSet<Variable> _registerVariables = new TreeSet<Variable>();
 	private TreeSet<Variable> _stackVariables = new TreeSet<Variable>();
 	private TreeSet<Function> _directFunctions = new TreeSet<Function>();
 	private TreeSet<Constructor> _parentConstructors = new TreeSet<Constructor>();
 	
-	public Constructor(ScopeConstructorNode node)
+	public Constructor(AbstractScopeConstructorNode node)
 	{
 		_node = node;
 	}
 	
-	public ScopeConstructorNode getNode()
+	public AbstractScopeConstructorNode getNode()
 	{
 		return _node;
 	}
@@ -64,7 +63,7 @@ public class Constructor implements Comparable<Constructor>
 	
 	public Constructor getParentConstructor()
 	{
-		ScopeConstructorNode parentscope = _node.getScope();
+		AbstractScopeConstructorNode parentscope = _node.getScope();
 		if (parentscope == null)
 			return null;
 		return parentscope.getConstructor();
@@ -76,7 +75,7 @@ public class Constructor implements Comparable<Constructor>
 		
 		do
 		{
-			ScopeConstructorNode parentscope = c.getNode().getScope();
+			AbstractScopeConstructorNode parentscope = c.getNode().getScope();
 			if (parentscope == null)
 				break;
 			c = parentscope.getConstructor();
@@ -88,7 +87,7 @@ public class Constructor implements Comparable<Constructor>
 	
 	public void addVariable(Variable variable)
 	{
-		ScopeConstructorNode scope = variable.getScope();
+		AbstractScopeConstructorNode scope = variable.getScope();
 		if (scope.isSymbolExportedToDifferentFunction(variable))
 			_stackVariables.add(variable);
 		else

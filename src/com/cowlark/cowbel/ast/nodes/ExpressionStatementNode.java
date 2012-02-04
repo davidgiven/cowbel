@@ -11,17 +11,22 @@ import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
-public class ExpressionStatementNode extends StatementNode
+public class ExpressionStatementNode extends AbstractStatementNode
 {
+	public ExpressionStatementNode(Location start, Location end)
+    {
+        super(start, end);
+    }
+	
 	public ExpressionStatementNode(Location start, Location end, ParseResult expr)
     {
         super(start, end);
-        addChild((ExpressionNode) expr);
+        addChild((AbstractExpressionNode) expr);
     }
 	
-	public ExpressionNode getExpression()
+	public AbstractExpressionNode getExpression()
     {
-	    return (ExpressionNode) getChild(0);
+	    return (AbstractExpressionNode) getChild(0);
     }
 	
 	@Override

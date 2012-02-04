@@ -16,10 +16,10 @@ import org.apache.commons.io.IOUtils;
 import com.cowlark.cowbel.BasicBlock;
 import com.cowlark.cowbel.Compiler;
 import com.cowlark.cowbel.Constructor;
+import com.cowlark.cowbel.Function;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.instructions.Instruction;
 import com.cowlark.cowbel.instructions.InstructionVisitor;
-import com.cowlark.cowbel.symbols.Function;
 
 public abstract class Backend extends InstructionVisitor
 {

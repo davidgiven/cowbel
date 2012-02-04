@@ -9,6 +9,7 @@ package com.cowlark.cowbel.ast.nodes;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import com.cowlark.cowbel.TypeContext;
 import com.cowlark.cowbel.ast.HasNode;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
@@ -19,7 +20,8 @@ public abstract class Node extends Token implements Iterable<Node>, HasNode
 {
 	private Vector<Node> _children = new Vector<Node>();
 	private Node _parent;
-	private ScopeConstructorNode _scope;
+	private AbstractScopeConstructorNode _scope;
+	private TypeContext _typecontext;
 	
 	public Node(Location start, Location end)
     {
@@ -86,11 +88,6 @@ public abstract class Node extends Token implements Iterable<Node>, HasNode
 		return "";
 	}
 	
-	public void dump()
-	{
-		dump(0);
-	}
-	
 	protected void spaces(int n)
 	{
 		for (int i = 0; i < n; i++)
@@ -105,16 +102,13 @@ public abstract class Node extends Token implements Iterable<Node>, HasNode
 		System.out.println(getShortDescription());
 
 		dumpDetails(indent+2);
-		
-		for (Node n : _children)
-			n.dump(indent+1);
 	}
 	
 	public void dumpDetails(int indent)
 	{
 	}
 	
-	public ScopeConstructorNode getScope()
+	public AbstractScopeConstructorNode getScope()
 	{
 		if (_scope == null)
 		{
@@ -125,9 +119,9 @@ public abstract class Node extends Token implements Iterable<Node>, HasNode
 				n = n.getParent();
 				if (n == null)
 					return null;
-				if (n instanceof ScopeConstructorNode)
+				if (n instanceof AbstractScopeConstructorNode)
 				{
-					_scope = (ScopeConstructorNode) n;
+					_scope = (AbstractScopeConstructorNode) n;
 					break;
 				}
 			}
@@ -136,9 +130,36 @@ public abstract class Node extends Token implements Iterable<Node>, HasNode
 		return _scope;
 	}
 	
-	public void setScope(ScopeConstructorNode scope)
+	public void setScope(AbstractScopeConstructorNode scope)
 	{
 		_scope = scope;
+	}
+	
+	public TypeContext getTypeContext()
+	{
+		if (_typecontext == null)
+		{
+			Node n = this;
+			
+			for (;;)
+			{
+				n = n.getParent();
+				if (n == null)
+					return null;
+				if (n._typecontext != null)
+				{
+					_typecontext = n._typecontext;
+					break;
+				}
+			}
+		}
+			
+		return _typecontext;
+	}
+	
+	public void setTypeContext(TypeContext typecontext)
+	{
+		_typecontext = typecontext;
 	}
 	
 	public boolean isLoopingNode()

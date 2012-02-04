@@ -7,8 +7,8 @@
 package com.cowlark.cowbel.instructions;
 
 import java.util.List;
+import com.cowlark.cowbel.Function;
 import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.symbols.Function;
 import com.cowlark.cowbel.symbols.Variable;
 
 public class DirectFunctionCallInstruction extends Instruction

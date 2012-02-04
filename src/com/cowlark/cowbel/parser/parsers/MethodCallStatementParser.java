@@ -6,8 +6,8 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
+import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
@@ -55,7 +55,7 @@ public class MethodCallStatementParser extends Parser
 				{
 					return new MethodCallStatementNode(
 							identifierpr, pr.end(),
-							(ExpressionNode) seed,
+							(AbstractExpressionNode) seed,
 							(IdentifierNode) identifierpr,
 							(TypeListNode) typeargspr,
 							(IdentifierListNode) variablespr,
@@ -66,7 +66,7 @@ public class MethodCallStatementParser extends Parser
 				
 				seed = new MethodCallExpressionNode(
 						identifierpr, argumentspr.end(),
-						(ExpressionNode) seed,
+						(AbstractExpressionNode) seed,
 						(IdentifierNode) identifierpr,
 						(TypeListNode) typeargspr,
 						(ExpressionListNode) argumentspr);
@@ -90,7 +90,7 @@ public class MethodCallStatementParser extends Parser
 			{
 				return new IndirectFunctionCallStatementNode(
 						location, pr.end(),
-						(ExpressionNode) seed,
+						(AbstractExpressionNode) seed,
 						(IdentifierListNode) variablespr,
 						(ExpressionListNode) argumentspr);
 			}
@@ -99,7 +99,7 @@ public class MethodCallStatementParser extends Parser
 			
 			seed = new IndirectFunctionCallExpressionNode(
 					argumentspr, argumentspr.end(),
-					(ExpressionNode) seed,
+					(AbstractExpressionNode) seed,
 					(ExpressionListNode) argumentspr);
 		}
 	}

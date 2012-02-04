@@ -7,13 +7,13 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import java.util.ArrayList;
+import com.cowlark.cowbel.ast.nodes.AbstractStatementNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
 import com.cowlark.cowbel.ast.nodes.StatementListNode;
-import com.cowlark.cowbel.ast.nodes.StatementNode;
 import com.cowlark.cowbel.ast.nodes.VarDeclarationNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
@@ -73,6 +73,6 @@ public class VarDeclParser extends Parser
 		return new StatementListNode(location, initialiserpr.end(),
 				new VarDeclarationNode(pdln, pdln.end(),
 						pdln),
-				(StatementNode) initialiserpr);
+				(AbstractStatementNode) initialiserpr);
 	}
 }

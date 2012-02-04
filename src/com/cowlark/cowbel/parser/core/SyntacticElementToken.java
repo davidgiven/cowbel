@@ -4,10 +4,8 @@
  * full license text.
  */
 
-package com.cowlark.cowbel.ast.nodes;
+package com.cowlark.cowbel.parser.core;
 
-import com.cowlark.cowbel.parser.core.Location;
-import com.cowlark.cowbel.parser.core.Token;
 
 public class SyntacticElementToken extends Token
 {

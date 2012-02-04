@@ -12,9 +12,14 @@ import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.symbols.Symbol;
 
-public class FunctionDefinitionNode extends StatementNode implements HasSymbol
+public class FunctionDefinitionNode extends AbstractStatementNode implements HasSymbol
 {
 	private Symbol _symbol;
+	
+	public FunctionDefinitionNode(Location start, Location end)
+    {
+		super(start, end);
+    }
 	
 	public FunctionDefinitionNode(Location start, Location end,
 			FunctionHeaderNode header, FunctionScopeConstructorNode body)

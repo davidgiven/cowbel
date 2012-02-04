@@ -6,17 +6,17 @@
 
 package com.cowlark.cowbel.errors;
 
+import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 
 public class IdentifierNotFound extends CompilationException
 {
     private static final long serialVersionUID = -4102890031928413989L;
 
-    private ScopeConstructorNode _scope;
+    private AbstractScopeConstructorNode _scope;
     private IdentifierNode _name;
     
-	public IdentifierNotFound(ScopeConstructorNode scope, IdentifierNode name)
+	public IdentifierNotFound(AbstractScopeConstructorNode scope, IdentifierNode name)
     {
 		_scope = scope;
 		_name = name;
@@ -25,7 +25,7 @@ public class IdentifierNotFound extends CompilationException
 	@Override
 	public String getMessage()
 	{
-		return "Identifier '" + _name.getText() + "' not found in scope at " +
-			_scope.toString();
+		return "Identifier '" + _name.getText() + "' not found at " +
+			_name.locationAsString();
 	}
 }

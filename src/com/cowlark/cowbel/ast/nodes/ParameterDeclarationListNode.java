@@ -11,7 +11,7 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class ParameterDeclarationListNode extends ExpressionNode
+public class ParameterDeclarationListNode extends AbstractExpressionNode
 {
 	public ParameterDeclarationListNode(Location start, Location end)
     {

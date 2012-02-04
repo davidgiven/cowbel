@@ -6,9 +6,9 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
+import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
+import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
-import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -38,7 +38,7 @@ public class DoWhileStatementParser extends Parser
 			return pr;
 		
 		return new DoWhileStatementNode(location, pr.end(),
-				(ScopeConstructorNode) bodypr,
-				(ExpressionNode) conditionalpr);
+				(AbstractScopeConstructorNode) bodypr,
+				(AbstractExpressionNode) conditionalpr);
 	}
 }

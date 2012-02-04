@@ -10,17 +10,23 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class DummyExpressionNode extends ExpressionNode
+public class DummyExpressionNode extends AbstractExpressionNode
 {
-	public DummyExpressionNode(Location start, Location end, ExpressionNode child)
+	public DummyExpressionNode(Location start, Location end)
+    {
+        super(start, end);
+    }
+	
+	public DummyExpressionNode(Location start, Location end, AbstractExpressionNode child)
     {
         super(start, end);
         addChild(child);
     }
 	
-	public ExpressionNode getChild()
+
+	public AbstractExpressionNode getChild()
 	{
-		return (ExpressionNode) getChild(0);
+		return (AbstractExpressionNode) getChild(0);
 	}
 	
 	@Override

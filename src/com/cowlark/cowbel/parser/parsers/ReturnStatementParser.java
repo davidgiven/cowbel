@@ -6,7 +6,7 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
+import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
 import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
 import com.cowlark.cowbel.parser.core.Location;
@@ -34,6 +34,6 @@ public class ReturnStatementParser extends Parser
 			return pr;
 
 		return new ReturnStatementNode(location, pr.end(),
-				(ExpressionNode) valuepr);
+				(AbstractExpressionNode) valuepr);
 	}
 }

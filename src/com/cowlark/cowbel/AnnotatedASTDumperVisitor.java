@@ -7,23 +7,26 @@
 package com.cowlark.cowbel;
 
 import com.cowlark.cowbel.ast.RecursiveVisitor;
-import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.errors.CompilationException;
 
-public class AssignFunctionsToScopesVisitor extends RecursiveVisitor
+public class AnnotatedASTDumperVisitor extends RecursiveVisitor
 {
+	private int _indent = 0;
+	
 	@Override
-	public void visit(FunctionDefinitionNode node) throws CompilationException
+	public void visit(Node node) throws CompilationException
 	{
+		node.dump(_indent);
+		_indent++;
+	    super.visit(node);
+	    _indent--;
 	}
 	
 	@Override
-	public void visit(BlockScopeConstructorNode node)
-	        throws CompilationException
+	public void visit(FunctionDefinitionNode node) throws CompilationException
 	{
-		Function f = node.getScope().getFunction();
-		node.setFunction(f);
-	    super.visit(node);
+		node.dump(_indent);
 	}
 }

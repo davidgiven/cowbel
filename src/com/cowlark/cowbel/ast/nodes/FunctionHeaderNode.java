@@ -16,7 +16,10 @@ import com.cowlark.cowbel.types.Type;
 
 public class FunctionHeaderNode extends Node
 {
-	private Type _type;
+	public FunctionHeaderNode(Location start, Location end)
+    {
+		super(start, end);
+    }
 	
 	public FunctionHeaderNode(Location start, Location end,
 			IdentifierNode name,
@@ -58,28 +61,24 @@ public class FunctionHeaderNode extends Node
 	}
 	
 	private static List<Type> parameters_to_type_list(
-			ParameterDeclarationListNode node)
+			ParameterDeclarationListNode node) throws CompilationException
 	{
 		Vector<Type> list = new Vector<Type>();
 		
 		for (Node n : node)
 		{
 			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
-			list.add(pdn.getVariableType());
+			AbstractTypeNode typenode = pdn.getVariableTypeNode();
+			list.add(typenode.calculateType());
 		}
 		
 		return list;
 	}
 	
-	public Type getFunctionType()
+	public Type calculateFunctionType() throws CompilationException
 	{
-		if (_type == null)
-		{
-			_type = FunctionType.create(
+		return FunctionType.create(
 					parameters_to_type_list(getInputParametersNode()),
 					parameters_to_type_list(getOutputParametersNode()));
-		}
-		
-		return _type;
 	}
 }

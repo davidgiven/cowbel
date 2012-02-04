@@ -10,18 +10,23 @@ import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class ReturnStatementNode extends StatementNode
+public class ReturnStatementNode extends AbstractStatementNode
 {
+	public ReturnStatementNode(Location start, Location end)
+    {
+		super(start, end);
+    }
+	
 	public ReturnStatementNode(Location start, Location end,
-			ExpressionNode value)
+			AbstractExpressionNode value)
     {
 		super(start, end);
 		addChild(value);
     }
 	
-	public ExpressionNode getValue()
+	public AbstractExpressionNode getValue()
 	{
-		return (ExpressionNode) getChild(0);
+		return (AbstractExpressionNode) getChild(0);
 	}
 	
 	@Override

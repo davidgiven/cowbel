@@ -6,9 +6,8 @@
 
 package com.cowlark.cowbel.errors;
 
+import com.cowlark.cowbel.Function;
 import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
-import com.cowlark.cowbel.symbols.Function;
-import com.cowlark.cowbel.types.FunctionType;
 
 public class InvalidExpressionReturn extends CompilationException
 {
@@ -26,11 +25,9 @@ public class InvalidExpressionReturn extends CompilationException
 	@Override
 	public String getMessage()
 	{
-		FunctionType ft = (FunctionType) _function.getSymbolType();
-		
 		return "Using an inline expression with 'return' is only valid for " +
 			"functions which return exactly one expression, but the " +
 			"function at "+_function.getNode().locationAsString()+" returns " +
-			ft.getOutputArgumentTypes().size();
+			_function.getType().getOutputArgumentTypes().size();
 	}
 }

@@ -11,7 +11,7 @@ import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
-import com.cowlark.cowbel.ast.nodes.TypeNode;
+import com.cowlark.cowbel.ast.nodes.TypeVariableNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -60,7 +60,7 @@ public class FunctionHeaderParser extends Parser
 					new ParameterDeclarationNode(
 							returntypepr.start(), returntypepr.end(),
 							IdentifierNode.createInternalIdentifier("return"),
-							(TypeNode) returntypepr
+							(TypeVariableNode) returntypepr
 						)
 				);
 		}

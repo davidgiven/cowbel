@@ -6,28 +6,23 @@
 
 package com.cowlark.cowbel.ast.nodes;
 
+import com.cowlark.cowbel.CheckAndInferStatementTypesVisitor;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
-import com.cowlark.cowbel.types.BooleanType;
-import com.cowlark.cowbel.types.Type;
 
-public class BooleanTypeNode extends TypeNode
+public abstract class AbstractStatementNode extends Node
 {
-	public BooleanTypeNode(Location start, Location end)
+	public AbstractStatementNode(Location start, Location end)
     {
         super(start, end);
     }
 	
-	@Override
-    protected Type getTypeImpl()
+	private static Visitor _check_and_infer_statement_types_visitor =
+		new CheckAndInferStatementTypesVisitor();
+	public void checkTypes() throws CompilationException
 	{
-	    return BooleanType.create();
+		visit(_check_and_infer_statement_types_visitor);
 	}
 	
-	@Override
-	public void visit(Visitor visitor) throws CompilationException
-	{
-		visitor.visit(this);
-	}
 }

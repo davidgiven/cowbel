@@ -12,7 +12,7 @@ import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.types.InferredType;
 import com.cowlark.cowbel.types.Type;
 
-public class InferredTypeNode extends TypeNode
+public class InferredTypeNode extends AbstractTypeNode
 {
 	public InferredTypeNode(Location start, Location end)
     {
@@ -20,15 +20,9 @@ public class InferredTypeNode extends TypeNode
     }
 	
 	@Override
-    protected Type getTypeImpl()
+	public Type calculateType()
 	{
 		return InferredType.create();
-	}
-	
-	@Override
-	public String getShortDescription()
-	{
-		return getType().toString();
 	}
 	
 	@Override

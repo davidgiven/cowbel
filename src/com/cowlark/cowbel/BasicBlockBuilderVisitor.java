@@ -10,7 +10,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 import com.cowlark.cowbel.ast.SimpleVisitor;
+import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
+import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
+import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
 import com.cowlark.cowbel.ast.nodes.BreakStatementNode;
 import com.cowlark.cowbel.ast.nodes.ContinueStatementNode;
@@ -19,9 +22,9 @@ import com.cowlark.cowbel.ast.nodes.DirectFunctionCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
 import com.cowlark.cowbel.ast.nodes.DummyExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionStatementNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.GotoStatementNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IfElseStatementNode;
@@ -33,7 +36,6 @@ import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
 import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
-import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.StringConstantNode;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
 import com.cowlark.cowbel.ast.nodes.VarDeclarationNode;
@@ -42,8 +44,6 @@ import com.cowlark.cowbel.ast.nodes.WhileStatementNode;
 import com.cowlark.cowbel.errors.BreakOrContinueNotInLoopException;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.methods.Method;
-import com.cowlark.cowbel.symbols.Function;
-import com.cowlark.cowbel.symbols.Symbol;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.FunctionType;
 import com.cowlark.cowbel.types.Type;
@@ -74,14 +74,27 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	{
 	}
 	
-	@Override
-	public void visit(ScopeConstructorNode node) throws CompilationException
+	private void visit(AbstractScopeConstructorNode node) throws CompilationException
 	{
-		ScopeConstructorNode parent = node.getScope();
+		AbstractScopeConstructorNode parent = node.getScope();
 		if ((parent == null) || (node.getConstructor() != parent.getConstructor())) 
 			_currentBB.insnConstruct(node, node.getConstructor());
 		
 		node.getChild().visit(this);
+	}
+	
+	@Override
+	public void visit(FunctionScopeConstructorNode node)
+	        throws CompilationException
+	{
+		visit((AbstractScopeConstructorNode) node);
+	}
+	
+	@Override
+	public void visit(BlockScopeConstructorNode node)
+	        throws CompilationException
+	{
+		visit((AbstractScopeConstructorNode) node);
 	}
 	
 	@Override
@@ -276,8 +289,8 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		IdentifierListNode variables = node.getOutputs();
 		int numinvars = arguments.getNumberOfChildren();
 		int numoutvars = variables.getNumberOfChildren();
-		Function function = (Function) node.getSymbol();
-		FunctionType functiontype = (FunctionType) function.getSymbolType();
+		Function function = node.getFunction();
+		FunctionType functiontype = function.getType();
 		List<Type> realouttypes = functiontype.getOutputArgumentTypes();
 		int numrealouttypes = realouttypes.size();
 		Vector<Variable> invars = new Vector<Variable>(numinvars);
@@ -346,7 +359,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	public void visit(DirectFunctionCallExpressionNode node) throws CompilationException
 	{
 		ExpressionListNode arguments = node.getInputs();
-		Symbol symbol = node.getSymbol();
+		Function function = node.getFunction();
 		int numinvars = arguments.getNumberOfChildren();
 		Vector<Variable> invars = new Vector<Variable>(numinvars);
 		
@@ -356,31 +369,11 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 			invars.add(_result);
 		}
 		
-		if (symbol instanceof Function)
-		{
-			/* Direct function call. */
-			
-			_result = _currentBB.createTemporary(node, node.getType());
-			_currentBB.insnDirectFunctionCall(node, (Function) symbol,
-					invars, Collections.singletonList(_result));
-		}
-		else
-		{
-			/* Indirect function call. */
-			
-			assert(false);
-			/*
-			_currentBB.insnIndirectFunctionCall(node, arguments.size());
-
-			Variable var = (Variable) smybol;
-			Constructor constructor = var.getConstructor();
-			
-			if (constructor.isStackVariable(var))
-				_currentBB.insnGetUpvalue(node, constructor, var);
-			else
-				_currentBB.insnGetLocal(node, var);
-				*/
-		}
+		/* Direct function call. */
+		
+		_result = _currentBB.createTemporary(node, node.getType());
+		_currentBB.insnDirectFunctionCall(node, function,
+				invars, Collections.singletonList(_result));
 	}
 	
 	@Override
@@ -420,10 +413,10 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	@Override
 	public void visit(ArrayConstructorNode node) throws CompilationException
 	{
-		List<ExpressionNode> members = node.getListMembers();
+		List<AbstractExpressionNode> members = node.getListMembers();
 		Vector<Variable> values = new Vector<Variable>();
 		
-		for (ExpressionNode e : members)
+		for (AbstractExpressionNode e : members)
 		{
 			e.visit(this);
 			values.add(_result);

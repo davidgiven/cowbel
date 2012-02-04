@@ -7,9 +7,9 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import java.util.ArrayList;
-import com.cowlark.cowbel.ast.nodes.ScopeConstructorNode;
+import com.cowlark.cowbel.ast.nodes.AbstractStatementNode;
+import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.StatementListNode;
-import com.cowlark.cowbel.ast.nodes.StatementNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -27,11 +27,11 @@ public class ScopeConstructorParser extends Parser
 			if (pr.failed())
 				return pr;
 			
-			return new ScopeConstructorNode(location, pr.end(),
-					(StatementNode) pr);
+			return new BlockScopeConstructorNode(location, pr.end(),
+					(AbstractStatementNode) pr);
 		}
 		
-		ArrayList<StatementNode> statements = new ArrayList<StatementNode>();
+		ArrayList<AbstractStatementNode> statements = new ArrayList<AbstractStatementNode>();
 		Location n = pr.end();
 		for (;;)
 		{
@@ -46,11 +46,11 @@ public class ScopeConstructorParser extends Parser
 			if (pr.failed())
 				return pr;
 			
-			statements.add((StatementNode) pr);
+			statements.add((AbstractStatementNode) pr);
 			n = pr.end();
 		}
 		
-		return new ScopeConstructorNode(location, n,
+		return new BlockScopeConstructorNode(location, n,
 				new StatementListNode(location, n, statements));
 	}
 }

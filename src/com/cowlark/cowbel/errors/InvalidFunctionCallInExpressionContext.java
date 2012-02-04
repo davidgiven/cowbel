@@ -7,18 +7,18 @@
 package com.cowlark.cowbel.errors;
 
 import java.util.List;
-import com.cowlark.cowbel.ast.nodes.ExpressionNode;
+import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
 import com.cowlark.cowbel.types.Type;
 
 public class InvalidFunctionCallInExpressionContext extends CompilationException
 {
     private static final long serialVersionUID = 2219952398091478590L;
     
-	private ExpressionNode _node;
+	private AbstractExpressionNode _node;
 	private List<Type> _inputTypes;
 	private List<Type> _outputTypes;
     
-	public InvalidFunctionCallInExpressionContext(ExpressionNode node,
+	public InvalidFunctionCallInExpressionContext(AbstractExpressionNode node,
 			List<Type> inputTypes, List<Type> outputTypes)
     {
 		_node = node;

@@ -18,6 +18,11 @@ public class IdentifierListNode extends Node
 {
 	private Symbol[] _symbols;
 	
+	IdentifierListNode(Location start, Location end)
+    {
+		super(start, end);
+    }
+	
 	public IdentifierListNode(Location start, Location end,
 			List<IdentifierNode> ids)
     {
