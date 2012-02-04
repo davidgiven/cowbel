@@ -83,11 +83,15 @@ public class FunctionTemplate implements Comparable<FunctionTemplate>, HasNode
 		if (ids.getNumberOfChildren() != types.getNumberOfChildren())
 			throw new FunctionTypeParameterMismatch(node, _ast, ids, types);
 		
+		/* Types in the assignment list are looked up according to the type
+		 * context of the *caller*! */
+		
+		TypeContext tc = types.getTypeContext();
 		for (int i=0; i<ids.getNumberOfChildren(); i++)
 		{
 			IdentifierNode id = ids.getIdentifier(i);
 			TypeVariableNode typenode = types.getType(i);
-			Type type = _parentContext.lookupType(typenode.getIdentifier());
+			Type type = tc.lookupType(typenode.getIdentifier());
 			
 			newcontext.addType(id, type);
 		}
