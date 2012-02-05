@@ -77,7 +77,7 @@ public class ForStatementParser extends Parser
 			steppr = new IntegerConstantNode(oneloc, oneend, 1);
 		}
 							
-		ParseResult bodypr = ScopeConstructorParser.parse(n);
+		ParseResult bodypr = StatementScopeConstructorParser.parse(n);
 		if (bodypr.failed())
 			return bodypr;
 		

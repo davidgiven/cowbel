@@ -69,7 +69,7 @@ public class FunctionHeaderNode extends Node
 		{
 			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
 			AbstractTypeNode typenode = pdn.getVariableTypeNode();
-			list.add(typenode.calculateType());
+			list.add(typenode.getType());
 		}
 		
 		return list;

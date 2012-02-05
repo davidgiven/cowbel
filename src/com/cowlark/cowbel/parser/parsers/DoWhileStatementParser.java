@@ -21,7 +21,7 @@ public class DoWhileStatementParser extends Parser
 		if (pr.failed())
 			return pr;
 		
-		ParseResult bodypr = ScopeConstructorParser.parse(pr.end());
+		ParseResult bodypr = StatementScopeConstructorParser.parse(pr.end());
 		if (bodypr.failed())
 			return bodypr;
 		

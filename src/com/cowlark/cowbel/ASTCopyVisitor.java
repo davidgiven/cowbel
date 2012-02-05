@@ -30,6 +30,7 @@ import com.cowlark.cowbel.ast.nodes.IfStatementNode;
 import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.InferredTypeNode;
 import com.cowlark.cowbel.ast.nodes.IntegerConstantNode;
+import com.cowlark.cowbel.ast.nodes.InterfaceTypeNode;
 import com.cowlark.cowbel.ast.nodes.LabelStatementNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
@@ -331,6 +332,13 @@ public class ASTCopyVisitor extends RecursiveVisitor
 	public void visit(BlockExpressionNode node) throws CompilationException
 	{
 	    _result = new BlockExpressionNode(node.start(), node.end());
+	    super.visit(node);
+	}
+
+	@Override
+	public void visit(InterfaceTypeNode node) throws CompilationException
+	{
+	    _result = new InterfaceTypeNode(node.start(), node.end());
 	    super.visit(node);
 	}
 	

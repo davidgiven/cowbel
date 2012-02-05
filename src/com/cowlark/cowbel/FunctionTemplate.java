@@ -6,96 +6,93 @@
 
 package com.cowlark.cowbel;
 
-import com.cowlark.cowbel.ast.HasNode;
+import java.util.Map;
+import java.util.TreeMap;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.cowbel.ast.nodes.FunctionHeaderNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.TypeListNode;
-import com.cowlark.cowbel.ast.nodes.TypeVariableNode;
 import com.cowlark.cowbel.errors.CompilationException;
-import com.cowlark.cowbel.errors.FunctionTypeParameterMismatch;
-import com.cowlark.cowbel.types.Type;
+import com.cowlark.cowbel.types.FunctionType;
 
-public class FunctionTemplate implements Comparable<FunctionTemplate>, HasNode
+public class FunctionTemplate extends AbstractTemplate
 {
-	private static int _globalid = 0;
+	private static ASTCopyVisitor astCopyVisitor = new ASTCopyVisitor();
+	private static TreeMap<String, Function> _functions = new TreeMap<String, Function>();
+	private static TreeMap<String, Function> _newFunctions = new TreeMap<String, Function>();
 	
-	private int _id = _globalid++;
-	private TypeContext _parentContext;
-	private FunctionDefinitionNode _ast;
-	private String _signature;
+	/** Return the map of fully instantiated functions. */
+	
+	public static Map<String, Function> getInstantiatedFunctions()
+	{
+		return _functions;
+	}
+	
+	/** Fetch the next partially instantiated function and add it to the
+	 * fully instantiated function list. */
+	
+	public static Function getNextPendingFunction()
+	{
+		Map.Entry<String, Function> e = _newFunctions.pollFirstEntry();
+		if (e == null)
+			return null;
+		
+		_functions.put(e.getKey(), e.getValue());
+		return e.getValue();
+	}
+	
+	private FunctionDefinitionNode _definition;
 	
 	public FunctionTemplate(TypeContext parentContext,
 			FunctionDefinitionNode ast)
 	{
-		_parentContext = parentContext;
-		_ast = ast;
-		
-		FunctionHeaderNode header = _ast.getFunctionHeader();
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append(header.getFunctionName().getText());
-		sb.append("<");
-		sb.append(header.getTypeVariables().getNumberOfChildren());
-		sb.append(">(");
-		sb.append(header.getInputParametersNode().getNumberOfChildren());
-		sb.append(")");
-		_signature = sb.toString();
+		super(parentContext, ast.getFunctionHeader());
+		_definition = ast;
 	}
 	
-	@Override
-    public FunctionDefinitionNode getNode()
-	{
-		return _ast;
-	}
+	public FunctionDefinitionNode getFunctionDefinition()
+    {
+	    return _definition;
+    }
 	
-	public String getSignature()
-	{
-		return _signature;
-	}
+	/** Returns the function instance for the given template with the given
+	 * type assignments. If no suitable function has already been instantiated,
+	 * instantiate a new one and add it to the compiler's pending list.
+	 */
 	
-	public String getName()
+	public Function instantiate(Node node, TypeListNode typeassignments)
+				throws CompilationException
 	{
-		return _ast.getFunctionHeader().getFunctionName().getText();
-	}
-	
-	@Override
-	public int compareTo(FunctionTemplate other)
-	{
-		if (_id < other._id)
-			return -1;
-		if (_id > other._id)
-			return 1;
-		return 0;
-	}
+		TypeContext tc = createTypeContext(node, typeassignments);
+		String signature = tc.getSignature();
+		signature += " ";
+		signature += getFunctionDefinition().locationAsString();
 
-	public TypeContext createTypeContext(Node node, TypeListNode types)
-		throws CompilationException
-	{
-		if ((types == null) || (types.getNumberOfChildren() == 0))
-			return _parentContext;
+		Function function = _functions.get(signature);
+		if (function != null)
+			return function;
+		function = _newFunctions.get(signature);
+		if (function != null)
+			return function;
 		
-		TypeContext newcontext = new TypeContext(node, _parentContext);
+		/* Deep-copy the AST tree so the version the function gets can be
+		 * annotated without affecting any other instantiations. */
 		
-		IdentifierListNode ids = _ast.getFunctionHeader().getTypeVariables();
-		if (ids.getNumberOfChildren() != types.getNumberOfChildren())
-			throw new FunctionTypeParameterMismatch(node, _ast, ids, types);
+		getFunctionDefinition().visit(astCopyVisitor);
+		FunctionDefinitionNode ast = (FunctionDefinitionNode) astCopyVisitor.getResult();
 		
-		/* Types in the assignment list are looked up according to the type
-		 * context of the *caller*! */
+		ast.setParent(getFunctionDefinition().getParent());
+		ast.setTypeContext(tc);
 		
-		TypeContext tc = types.getTypeContext();
-		for (int i=0; i<ids.getNumberOfChildren(); i++)
-		{
-			IdentifierNode id = ids.getIdentifier(i);
-			TypeVariableNode typenode = types.getType(i);
-			Type type = tc.lookupType(typenode.getIdentifier());
-			
-			newcontext.addType(id, type);
-		}
+		function = new Function(signature, ast);
+		FunctionType type = (FunctionType) ast.getFunctionHeader().calculateFunctionType();
+		function.setType(type);
 		
-		return newcontext;
+		if (ast.getParent() != null)
+			function.setScope(ast.getParent().getScope());
+
+		_newFunctions.put(signature, function);
+		
+		return function;
 	}
+	
 }

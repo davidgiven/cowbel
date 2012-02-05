@@ -6,37 +6,36 @@
 
 package com.cowlark.cowbel.ast.nodes;
 
+import java.util.Collection;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
+import com.cowlark.cowbel.types.InterfaceType;
 import com.cowlark.cowbel.types.Type;
 
-public abstract class AbstractTypeNode extends Node
+public class InterfaceTypeNode extends AbstractTypeNode
 {
-	public Type _type;
-	
-	public AbstractTypeNode(Location start, Location end)
+	public InterfaceTypeNode(Location start, Location end)
     {
         super(start, end);
     }
+	
+	public InterfaceTypeNode(Location start, Location end,
+			Collection<FunctionHeaderNode> entries)
+    {
+        super(start, end);
+        addChildren(entries);
+    }
+		
+	@Override
+	public Type calculateType()
+	{
+		return InterfaceType.create(this);
+	}
 	
 	@Override
 	public void visit(Visitor visitor) throws CompilationException
 	{
 		visitor.visit(this);
 	}
-	
-	protected abstract Type calculateType() throws CompilationException;
-	
-	public Type getType() throws CompilationException
-    {
-		if (_type == null)
-			_type = calculateType();
-	    return _type;
-    }
-	
-	public void setType(Type type)
-    {
-	    _type = type;
-    }
 }

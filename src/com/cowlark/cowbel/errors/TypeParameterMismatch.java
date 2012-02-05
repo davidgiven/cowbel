@@ -6,27 +6,27 @@
 
 package com.cowlark.cowbel.errors;
 
-import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.nodes.FunctionHeaderNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.TypeListNode;
 
-public class FunctionTypeParameterMismatch extends CompilationException
+public class TypeParameterMismatch extends CompilationException
 {
     private static final long serialVersionUID = 5677501661277120026L;
     
 	private Node _node;
-    private FunctionDefinitionNode _function;
+    private FunctionHeaderNode _header;
     private IdentifierListNode _ids;
     private TypeListNode _types;
     
-	public FunctionTypeParameterMismatch(Node node,
-			FunctionDefinitionNode function,
+	public TypeParameterMismatch(Node node,
+			FunctionHeaderNode function,
 			IdentifierListNode ids,
 			TypeListNode types)
     {
 		_node = node;
-		_function = function;
+		_header = function;
 		_ids = ids;
 		_types = types;
     }
@@ -34,8 +34,8 @@ public class FunctionTypeParameterMismatch extends CompilationException
 	@Override
 	public String getMessage()
 	{
-		return "Function at "+_function.locationAsString()+" was called with " +
-			" an incorrect number of type parameters (" +
+		return "Function or method at "+_header.locationAsString()+" was " +
+			"called with  an incorrect number of type parameters (" +
 			_types.getNumberOfChildren() + " instead of " +
 			_ids.getNumberOfChildren();
 	}

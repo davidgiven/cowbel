@@ -7,13 +7,12 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import java.util.ArrayList;
-import com.cowlark.cowbel.ast.nodes.AbstractStatementNode;
-import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.StatementListNode;
+import com.cowlark.cowbel.ast.nodes.FunctionHeaderNode;
+import com.cowlark.cowbel.ast.nodes.InterfaceTypeNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
-public class ScopeConstructorParser extends Parser
+public class InterfaceDeclarationParser extends Parser
 {
 	@Override
 	protected ParseResult parseImpl(Location location)
@@ -22,7 +21,7 @@ public class ScopeConstructorParser extends Parser
 		if (pr.failed())
 			return pr;
 		
-		ArrayList<AbstractStatementNode> statements = new ArrayList<AbstractStatementNode>();
+		ArrayList<FunctionHeaderNode> statements = new ArrayList<FunctionHeaderNode>();
 		Location n = pr.end();
 		for (;;)
 		{
@@ -33,15 +32,14 @@ public class ScopeConstructorParser extends Parser
 				break;
 			}
 			
-			pr = StatementParser.parse(n);
+			pr = InterfaceEntryParser.parse(n);
 			if (pr.failed())
 				return pr;
 			
-			statements.add((AbstractStatementNode) pr);
+			statements.add((FunctionHeaderNode) pr);
 			n = pr.end();
 		}
 		
-		return new BlockScopeConstructorNode(location, n,
-				new StatementListNode(location, n, statements));
+		return new InterfaceTypeNode(location, n, statements);
 	}
 }

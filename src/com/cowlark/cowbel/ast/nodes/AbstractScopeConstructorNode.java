@@ -9,7 +9,6 @@ package com.cowlark.cowbel.ast.nodes;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import com.cowlark.cowbel.Compiler;
 import com.cowlark.cowbel.Constructor;
 import com.cowlark.cowbel.Function;
 import com.cowlark.cowbel.FunctionTemplate;
@@ -311,8 +310,7 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 			{
 				if (ft.getSignature().equals(signature))
 				{
-					return Compiler.Instance.getFunctionInstance(
-							node, node.getTypeArguments(), ft);
+					return ft.instantiate(node, node.getTypeArguments());
 				}
 			}
 				
@@ -340,8 +338,8 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 		{
 			if (ft.getSignature().equals(signature))
 			{
-				Function function = Compiler.Instance.getFunctionInstance(
-						node, node.getTypeArguments(), ft);
+				Function function = ft.instantiate(node,
+						node.getTypeArguments());
 				return new FunctionMethod(function);
 			}
 		}

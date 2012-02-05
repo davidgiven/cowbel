@@ -45,7 +45,7 @@ public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
 		{
 			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
 			IdentifierNode name = pdn.getVariableName();
-			Type type = pdn.getVariableTypeNode().calculateType();
+			Type type = pdn.getVariableTypeNode().getType();
 			
 			Variable v = new Variable(pdn, name, type);
 			v.setScope(scope);
