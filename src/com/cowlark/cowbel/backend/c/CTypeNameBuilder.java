@@ -13,6 +13,7 @@ import com.cowlark.cowbel.types.BooleanType;
 import com.cowlark.cowbel.types.ClassType;
 import com.cowlark.cowbel.types.FunctionType;
 import com.cowlark.cowbel.types.IntegerType;
+import com.cowlark.cowbel.types.InterfaceType;
 import com.cowlark.cowbel.types.StringType;
 import com.cowlark.cowbel.types.Type;
 import com.cowlark.cowbel.types.TypeVisitor;
@@ -66,6 +67,14 @@ public class CTypeNameBuilder extends TypeVisitor
 		Constructor constructor = block.getConstructor();
 		_type = _backend.ctype(constructor);
 		_type = _type + "*";
+	}
+	
+	
+	@Override
+	public void visit(InterfaceType type)
+	{
+		assert(false);
+		throw null;
 	}
 	
 	@Override

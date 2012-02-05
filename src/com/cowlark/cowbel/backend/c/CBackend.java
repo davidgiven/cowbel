@@ -42,6 +42,7 @@ import com.cowlark.cowbel.instructions.StringConstantInstruction;
 import com.cowlark.cowbel.instructions.VarCopyInstruction;
 import com.cowlark.cowbel.methods.FunctionMethod;
 import com.cowlark.cowbel.methods.PrimitiveMethod;
+import com.cowlark.cowbel.methods.VirtualMethod;
 import com.cowlark.cowbel.symbols.Symbol;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.ArrayType;
@@ -573,6 +574,13 @@ public class CBackend extends ImperativeBackend
 	{
 		Function function = method.getFunction();
 		function_call(insn, function);
+	}
+	
+	@Override
+	public void visit(MethodCallInstruction insn, VirtualMethod method)
+	{
+		assert(false);
+		throw null;
 	}
 	
 	@Override
