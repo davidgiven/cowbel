@@ -26,7 +26,7 @@ public class IfStatementParser extends Parser
 		if (conditionalpr.failed())
 			return conditionalpr;
 		
-		ParseResult positivepr = ScopeConstructorParser.parse(conditionalpr.end());
+		ParseResult positivepr = StatementScopeConstructorParser.parse(conditionalpr.end());
 		if (positivepr.failed())
 			return positivepr;
 		
@@ -36,7 +36,7 @@ public class IfStatementParser extends Parser
 					(AbstractExpressionNode) conditionalpr,
 					(AbstractScopeConstructorNode) positivepr);
 		
-		ParseResult negativepr = ScopeConstructorParser.parse(pr.end());
+		ParseResult negativepr = StatementScopeConstructorParser.parse(pr.end());
 		if (negativepr.failed())
 			return negativepr;
 		

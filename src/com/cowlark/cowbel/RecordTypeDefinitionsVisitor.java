@@ -27,7 +27,7 @@ public class RecordTypeDefinitionsVisitor extends RecursiveVisitor
 		TypeContext typeContext = node.getScope().getTypeContext();
 		IdentifierNode id = node.getIdentifier();
 		AbstractTypeNode typenode = node.getType();
-		Type type = typenode.calculateType();
+		Type type = typenode.getType();
 		
 		typeContext.addType(id, type);
 	}

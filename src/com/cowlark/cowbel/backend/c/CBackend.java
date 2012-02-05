@@ -106,6 +106,11 @@ public class CBackend extends ImperativeBackend
 	    		new RecursiveVisitor()
 	    		{
 	    			@Override
+                    public void visit(FunctionDefinitionNode node) throws CompilationException
+	    			{
+	    			};
+	    			
+	    			@Override
                     public void visit(StringConstantNode node)
 	    				throws CompilationException
 	    			{

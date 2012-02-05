@@ -12,4 +12,5 @@ public interface MethodVisitor
 {
 	public void visit(MethodCallInstruction insn, FunctionMethod method);
 	public void visit(MethodCallInstruction insn, PrimitiveMethod method);
+	public void visit(MethodCallInstruction insn, VirtualMethod method);
 }

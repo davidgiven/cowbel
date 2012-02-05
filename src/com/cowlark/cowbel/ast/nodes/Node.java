@@ -6,8 +6,8 @@
 
 package com.cowlark.cowbel.ast.nodes;
 
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Vector;
 import com.cowlark.cowbel.TypeContext;
 import com.cowlark.cowbel.ast.HasNode;
@@ -47,7 +47,7 @@ public abstract class Node extends Token implements Iterable<Node>, HasNode,
 		return _children.get(i);
 	}
 
-	public void addChildren(List<? extends Node> children)
+	public void addChildren(Collection<? extends Node> children)
 	{
 		for (Node n : children)
 			addChild(n);

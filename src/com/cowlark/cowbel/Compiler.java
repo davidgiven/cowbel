@@ -8,8 +8,6 @@ package com.cowlark.cowbel;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
@@ -21,7 +19,6 @@ import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
-import com.cowlark.cowbel.ast.nodes.TypeListNode;
 import com.cowlark.cowbel.backend.Backend;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.FailedParseException;
@@ -33,7 +30,6 @@ import com.cowlark.cowbel.parser.core.MutableLocation;
 import com.cowlark.cowbel.parser.core.ParseResult;
 import com.cowlark.cowbel.parser.parsers.Parser;
 import com.cowlark.cowbel.symbols.Variable;
-import com.cowlark.cowbel.types.FunctionType;
 import com.cowlark.cowbel.types.Type;
 
 public class Compiler
@@ -45,13 +41,13 @@ public class Compiler
 	private Location _input;
 	private TypeContext _rootTypeContext;
 	private Function _mainFunction;
-	private TreeMap<String, Function> _functions = new TreeMap<String, Function>();
-	private TreeMap<String, Function> _newFunctions = new TreeMap<String, Function>();
 	private TreeSet<Constructor> _constructors = new TreeSet<Constructor>();
 	private FunctionScopeConstructorNode _ast;
 
 	private Visitor _record_type_definitions_visitor =
 		new RecordTypeDefinitionsVisitor();
+	private Visitor _define_interfaces_visitor =
+		new DefineInterfacesVisitor();
 	private Visitor _record_variable_declarations_visitor =
 		new RecordVariableDeclarationsVisitor();
 	private Visitor _resolve_variable_references_visitor =
@@ -96,7 +92,8 @@ public class Compiler
 	
 	public Collection<Function> getFunctions()
 	{
-		return Collections.unmodifiableCollection(_functions.values());
+		return Collections.unmodifiableCollection(
+				FunctionTemplate.getInstantiatedFunctions().values());
 	}
 	
 	public void compile() throws CompilationException
@@ -143,23 +140,22 @@ public class Compiler
 				);
 			
 			FunctionTemplate template = new FunctionTemplate(_rootTypeContext, mainnode);
-			_mainFunction = getFunctionInstance(mainnode, null, template);
+			_mainFunction = template.instantiate(mainnode, null);
 			
-			while (!_newFunctions.isEmpty())
+			for (;;)
 			{
-				Map.Entry<String, Function> e = _newFunctions.pollFirstEntry();
-				String signature = e.getKey();
-				Function function = e.getValue();
-				_functions.put(signature, function);
+				Function function = FunctionTemplate.getNextPendingFunction();
+				if (function == null)
+					break;
 				
 				record_variable_declarations(function);
 				check_types(function);
 			}
 		}
 
-		for (Function function : _functions.values())
+		for (Function function : getFunctions())
 			function.getBody().visit(_assign_constructors_to_scopes_visitor);
-		for (Function function : _functions.values())
+		for (Function function : getFunctions())
 			function.getBody().visit(_assign_variables_to_constructors_visitor);
 		
 		_listener.onSymbolTableAnalysisEnd();
@@ -168,7 +164,7 @@ public class Compiler
 		
 		_listener.onBasicBlockAnalysisBegin();
 		
-		for (Function f : _functions.values())
+		for (Function f : getFunctions())
 			f.buildBasicBlocks();
 		
 		_listener.onBasicBlockAnalysisEnd();
@@ -179,7 +175,7 @@ public class Compiler
 		_backend.prologue();
 		for (Constructor c : _constructors)
 			_backend.visit(c);
-		for (Function f : _functions.values())
+		for (Function f : getFunctions())
 			_backend.compileFunction(f);
 		_backend.epilogue();
 		_listener.onCodeGenerationEnd();
@@ -190,11 +186,10 @@ public class Compiler
 		TreeSet<BasicBlock> pending = new TreeSet<BasicBlock>();
 		TreeSet<BasicBlock> seen = new TreeSet<BasicBlock>();
 		
-		for (Map.Entry<String, Function> e : _functions.entrySet())
+		for (Function function : getFunctions())
 		{
-			Function f = e.getValue();
-			pending.add(f.getEntryBB());
-			seen.add(f.getEntryBB());
+			pending.add(function.getEntryBB());
+			seen.add(function.getEntryBB());
 			
 			while (!pending.isEmpty())
 			{
@@ -239,7 +234,7 @@ public class Compiler
 	
 	public void visit(Visitor visitor) throws CompilationException
 	{
-		for (Function f : _functions.values())
+		for (Function f : getFunctions())
 			f.getBody().visit(visitor);
 	}
 	
@@ -247,15 +242,14 @@ public class Compiler
 	{
 		Visitor visitor = new ASTDumperVisitor();
 		
-		for (Map.Entry<String, Function> e : _functions.entrySet())
+		for (Function function : getFunctions())
 		{
-			Function f = e.getValue();
 			System.out.println();
-			System.out.println(f.toString());
+			System.out.println(function.toString());
 			
 			try
 			{
-				f.getNode().visit(visitor);
+				function.getNode().visit(visitor);
 			}
 			catch (CompilationException ex)
 			{
@@ -269,13 +263,12 @@ public class Compiler
 		TreeSet<BasicBlock> pending = new TreeSet<BasicBlock>();
 		TreeSet<BasicBlock> seen = new TreeSet<BasicBlock>();
 		
-		for (Map.Entry<String, Function> e : _functions.entrySet())
+		for (Function function : getFunctions())
 		{
-			Function f = e.getValue();
-			System.out.println(f.toString());
+			System.out.println(function.toString());
 			
-			pending.add(f.getEntryBB());
-			seen.add(f.getEntryBB());
+			pending.add(function.getEntryBB());
+			seen.add(function.getEntryBB());
 			
 			while (!pending.isEmpty())
 			{
@@ -315,50 +308,6 @@ public class Compiler
 		}
 	}
 	
-	private static ASTCopyVisitor astCopyVisitor = new ASTCopyVisitor();
-	
-	/** Returns the function instance for the given template with the given
-	 * type assignments. If no suitable function has already been instantiated,
-	 * instantiate a new one and add it to the compiler's pending list.
-	 */
-	
-	public Function getFunctionInstance(Node node,
-			TypeListNode typeassignments, FunctionTemplate template)
-				throws CompilationException
-	{
-		TypeContext tc = template.createTypeContext(node, typeassignments);
-		String signature = tc.getSignature();
-		signature += " ";
-		signature += template.getNode().locationAsString();
-
-		Function function = _functions.get(signature);
-		if (function != null)
-			return function;
-		function = _newFunctions.get(signature);
-		if (function != null)
-			return function;
-		
-		/* Deep-copy the AST tree so the version the function gets can be
-		 * annotated without affecting any other instantiations. */
-		
-		template.getNode().visit(astCopyVisitor);
-		FunctionDefinitionNode ast = (FunctionDefinitionNode) astCopyVisitor.getResult();
-		
-		ast.setParent(template.getNode().getParent());
-		ast.setTypeContext(tc);
-		
-		function = new Function(signature, ast);
-		FunctionType type = (FunctionType) ast.getFunctionHeader().calculateFunctionType();
-		function.setType(type);
-		
-		if (ast.getParent() != null)
-			function.setScope(ast.getParent().getScope());
-
-		_newFunctions.put(signature, function);
-		
-		return function;
-	}
-	
 	private void add_parameters(
 			TypeContext typecontext,
 			FunctionDefinitionNode node,
@@ -371,7 +320,7 @@ public class Compiler
 		{
 			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
 			IdentifierNode variablename = pdn.getVariableName();
-			Type variabletype = pdn.getVariableTypeNode().calculateType();
+			Type variabletype = pdn.getVariableTypeNode().getType();
 			
 			Variable v = new Variable(pdn, variablename, variabletype);
 			v.setParameter(true);
@@ -404,6 +353,7 @@ public class Compiler
 		/* Scan for type definitions. */
 		
 		body.visit(_record_type_definitions_visitor);
+		body.visit(_define_interfaces_visitor);
 		
 		/* Add any variable definitions to scope. */
 		

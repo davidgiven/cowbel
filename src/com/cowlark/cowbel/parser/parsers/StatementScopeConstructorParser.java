@@ -6,42 +6,29 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import java.util.ArrayList;
 import com.cowlark.cowbel.ast.nodes.AbstractStatementNode;
 import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.StatementListNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
-public class ScopeConstructorParser extends Parser
+public class StatementScopeConstructorParser extends Parser
 {
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
 		ParseResult pr = OpenBraceParser.parse(location);
 		if (pr.failed())
-			return pr;
-		
-		ArrayList<AbstractStatementNode> statements = new ArrayList<AbstractStatementNode>();
-		Location n = pr.end();
-		for (;;)
 		{
-			pr = CloseBraceParser.parse(n);
-			if (pr.success())
-			{
-				n = pr.end();
-				break;
-			}
+			/* This is a single-statement block. */
 			
-			pr = StatementParser.parse(n);
+			pr = StatementParser.parse(location);
 			if (pr.failed())
 				return pr;
 			
-			statements.add((AbstractStatementNode) pr);
-			n = pr.end();
+			return new BlockScopeConstructorNode(location, pr.end(),
+					(AbstractStatementNode) pr);
 		}
 		
-		return new BlockScopeConstructorNode(location, n,
-				new StatementListNode(location, n, statements));
+		return ScopeConstructorParser.parse(location);
 	}
 }

@@ -37,6 +37,7 @@ public abstract class Parser
 	public static OperatorParser OperatorParser = new OperatorParser();
 	public static MethodNameParser MethodNameParser = new MethodNameParser();
 	public static ScopeConstructorParser ScopeConstructorParser = new ScopeConstructorParser();
+	public static StatementScopeConstructorParser StatementScopeConstructorParser = new StatementScopeConstructorParser();
 	public static ReturnStatementParser ReturnStatementParser = new ReturnStatementParser();
 	public static IfStatementParser IfStatementParser = new IfStatementParser();
 	public static LabelStatementParser LabelStatementParser = new LabelStatementParser();
@@ -55,6 +56,8 @@ public abstract class Parser
 	public static TypeVariableListParser TypeVariableListParser = new TypeVariableListParser();
 	public static TypeListParser TypeListParser = new TypeListParser();
 	public static TypeAssignmentParser TypeAssignmentParser = new TypeAssignmentParser();
+	public static InterfaceDeclarationParser InterfaceDeclarationParser = new InterfaceDeclarationParser();
+	public static InterfaceEntryParser InterfaceEntryParser = new InterfaceEntryParser();
 	
 	public static Parser EOFParser = new EOFParser();
 	public static Parser DotParser = new TrivialParser(".");

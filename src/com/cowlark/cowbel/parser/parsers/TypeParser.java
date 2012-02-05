@@ -16,10 +16,14 @@ public class TypeParser extends Parser
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
-		ParseResult pr = IdentifierParser.parse(location);
-		if (pr.failed())
-			return pr;
+		ParseResult interfacepr = InterfaceDeclarationParser.parse(location);
+		if (interfacepr.success())
+			return interfacepr;
 		
-		return new TypeVariableNode(pr, pr.end(), (IdentifierNode) pr);
+		ParseResult identifierpr = IdentifierParser.parse(location);
+		if (identifierpr.success())
+			return new TypeVariableNode(identifierpr, identifierpr.end(), (IdentifierNode) identifierpr);
+		
+		return combineParseErrors(interfacepr, identifierpr);
 	}
 }

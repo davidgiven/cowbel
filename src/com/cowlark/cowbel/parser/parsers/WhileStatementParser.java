@@ -25,7 +25,7 @@ public class WhileStatementParser extends Parser
 		if (conditionalpr.failed())
 			return conditionalpr;
 		
-		ParseResult bodypr = ScopeConstructorParser.parse(conditionalpr.end());
+		ParseResult bodypr = StatementScopeConstructorParser.parse(conditionalpr.end());
 		if (bodypr.failed())
 			return bodypr;
 		

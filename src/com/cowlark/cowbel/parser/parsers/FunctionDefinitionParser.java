@@ -22,7 +22,7 @@ public class FunctionDefinitionParser extends Parser
 		if (headerpr.failed())
 			return headerpr;
 
-		ParseResult bodypr = ScopeConstructorParser.parse(headerpr.end());
+		ParseResult bodypr = StatementScopeConstructorParser.parse(headerpr.end());
 		if (bodypr.failed())
 			return bodypr;
 		
