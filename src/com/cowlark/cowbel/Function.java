@@ -15,8 +15,11 @@ import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.types.FunctionType;
 
-public class Function implements HasNode, HasScope
+public class Function implements Comparable<Function>, HasNode, HasScope
 {
+	private static int _globalid = 0;
+	
+	private int _id = _globalid++;
 	private String _signature;
 	private FunctionDefinitionNode _node;
 	private AbstractScopeConstructorNode _scope;
@@ -30,6 +33,16 @@ public class Function implements HasNode, HasScope
 		_signature = signature;
 		_node = node;
     }
+	
+	@Override
+	public int compareTo(Function o)
+	{
+	    if (_id < o._id)
+	    	return -1;
+	    if (_id > o._id)
+	    	return 1;
+	    return 0;
+	}
 	
 	@Override
 	public String toString()

@@ -6,6 +6,7 @@
 
 package com.cowlark.cowbel.types;
 
+import java.util.Collection;
 import com.cowlark.cowbel.ast.HasInputs;
 import com.cowlark.cowbel.ast.HasTypeArguments;
 import com.cowlark.cowbel.ast.IsMethod;
@@ -16,7 +17,7 @@ import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.TypesNotCompatibleException;
 import com.cowlark.cowbel.methods.Method;
 
-public class ClassType extends Type
+public class ClassType extends Type implements HasInterfaces
 {
 	public static ClassType create(BlockScopeConstructorNode block)
 	{
@@ -39,6 +40,12 @@ public class ClassType extends Type
 	public String getCanonicalTypeName()
 	{
 	    return "{" + getId() + "}";
+	}
+	
+	@Override
+	public Collection<InterfaceType> getInterfaces()
+	{
+		return _block.getInterfaces();
 	}
 	
 	@Override

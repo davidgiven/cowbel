@@ -10,18 +10,41 @@
  * information.
  */
 
-type printable =
+type Maybe =
 {
-	function print();
+	function get(): integer;
+	function valid(): boolean;
 };
 
-var o =
+function Maybe<T>(): Maybe
 {
-	function print()
+	return
 	{
-		"Hello, world!".print();
-	}
-};
+		implements Maybe;
+		
+		function get(): T
+		{ }
+		
+		function valid(): boolean
+			return false;
+	};
+}
 
-o.print();
+function Maybe<T>(value: T): Maybe
+{
+	return
+	{
+		implements Maybe;
+		
+		function get(): T
+			return value;
+		
+		function valid(): boolean
+			return true;
+	};
+}
 
+var null = Maybe<integer>();
+var one = Maybe<integer>(1);
+
+var x = one.get();

@@ -8,7 +8,6 @@ package com.cowlark.cowbel.backend.c;
 
 import com.cowlark.cowbel.Constructor;
 import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
-import com.cowlark.cowbel.types.ArrayType;
 import com.cowlark.cowbel.types.BooleanType;
 import com.cowlark.cowbel.types.ClassType;
 import com.cowlark.cowbel.types.FunctionType;
@@ -54,13 +53,6 @@ public class CTypeNameBuilder extends TypeVisitor
 	}
 	
 	@Override
-	public void visit(ArrayType type)
-	{
-		type.getChildType().visit(this);
-		_type = _type + "*";
-	}
-	
-	@Override
 	public void visit(ClassType type)
 	{
 		BlockScopeConstructorNode block = type.getBlock();
@@ -69,12 +61,11 @@ public class CTypeNameBuilder extends TypeVisitor
 		_type = _type + "*";
 	}
 	
-	
 	@Override
 	public void visit(InterfaceType type)
 	{
-		assert(false);
-		throw null;
+		_type = _backend.ctype((InterfaceType) type);
+		_type = _type + "*";
 	}
 	
 	@Override

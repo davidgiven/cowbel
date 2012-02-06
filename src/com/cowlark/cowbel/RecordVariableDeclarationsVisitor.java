@@ -10,13 +10,16 @@ import com.cowlark.cowbel.ast.RecursiveVisitor;
 import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
+import com.cowlark.cowbel.ast.nodes.ImplementsStatementNode;
 import com.cowlark.cowbel.ast.nodes.LabelStatementNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
 import com.cowlark.cowbel.ast.nodes.VarDeclarationNode;
+import com.cowlark.cowbel.errors.CanOnlyImplementInterfaces;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.symbols.Variable;
+import com.cowlark.cowbel.types.InterfaceType;
 import com.cowlark.cowbel.types.Type;
 
 public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
@@ -68,5 +71,17 @@ public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
 		node.setLabel(label);
 		
 	    super.visit(node);
+	}
+	
+	@Override
+	public void visit(ImplementsStatementNode node) throws CompilationException
+	{
+		AbstractScopeConstructorNode scope = node.getScope();
+		Type type = node.getTypeNode().getType();
+		
+		if (!(type instanceof InterfaceType))
+			throw new CanOnlyImplementInterfaces(node, type);
+		
+		scope.addInterface((InterfaceType) type);
 	}
 }

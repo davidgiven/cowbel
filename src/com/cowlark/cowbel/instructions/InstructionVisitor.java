@@ -48,11 +48,6 @@ public class InstructionVisitor
 		visit((Instruction) insn);
 	}
 	
-	public void visit(ArrayConstructorInstruction insn)
-	{
-		visit((Instruction) insn);
-	}
-	
 	public void visit(BooleanConstantInstruction insn)
 	{
 		visit((Instruction) insn);

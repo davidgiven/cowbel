@@ -7,7 +7,6 @@
 package com.cowlark.cowbel;
 
 import com.cowlark.cowbel.ast.RecursiveVisitor;
-import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BlockExpressionNode;
 import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
@@ -27,6 +26,7 @@ import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.IfElseStatementNode;
 import com.cowlark.cowbel.ast.nodes.IfStatementNode;
+import com.cowlark.cowbel.ast.nodes.ImplementsStatementNode;
 import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.InferredTypeNode;
 import com.cowlark.cowbel.ast.nodes.IntegerConstantNode;
@@ -280,13 +280,6 @@ public class ASTCopyVisitor extends RecursiveVisitor
 	}
 	
 	@Override
-    public void visit(ArrayConstructorNode node) throws CompilationException
-	{
-		_result = new ArrayConstructorNode(node.start(), node.end());
-		super.visit(node);
-	}
-	
-	@Override
     public void visit(MethodCallExpressionNode node) throws CompilationException
 	{
 		_result = new MethodCallExpressionNode(node.start(), node.end());
@@ -341,6 +334,13 @@ public class ASTCopyVisitor extends RecursiveVisitor
 	    _result = new InterfaceTypeNode(node.start(), node.end());
 	    super.visit(node);
 	}
+	
+	@Override
+    public void visit(ImplementsStatementNode node) throws CompilationException
+	{
+		_result = new ImplementsStatementNode(node.start(), node.end());
+		super.visit(node);
+	};
 	
 	@Override
 	public void visit(Node node) throws CompilationException

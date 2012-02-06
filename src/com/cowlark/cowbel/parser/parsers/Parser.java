@@ -16,7 +16,6 @@ public abstract class Parser
 	public static AtomParser AtomParser = new AtomParser();
 	public static IntegerConstantParser IntegerConstantParser = new IntegerConstantParser();
 	public static StringConstantParser StringConstantParser = new StringConstantParser();
-	public static ArrayConstructorParser ArrayConstructorParser = new ArrayConstructorParser();
 	public static ExpressionLowParser ExpressionLowParser = new ExpressionLowParser();
 	public static ExpressionMediumParser ExpressionMediumParser = new ExpressionMediumParser();
 	public static ExpressionHighParser ExpressionHighParser = new ExpressionHighParser();
@@ -58,6 +57,7 @@ public abstract class Parser
 	public static TypeAssignmentParser TypeAssignmentParser = new TypeAssignmentParser();
 	public static InterfaceDeclarationParser InterfaceDeclarationParser = new InterfaceDeclarationParser();
 	public static InterfaceEntryParser InterfaceEntryParser = new InterfaceEntryParser();
+	public static ImplementsStatementParser ImplementsStatementParser = new ImplementsStatementParser();
 	
 	public static Parser EOFParser = new EOFParser();
 	public static Parser DotParser = new TrivialParser(".");
@@ -84,15 +84,13 @@ public abstract class Parser
 	public static Parser ElseTokenParser = new TrivialParser("else");
 	public static Parser GotoTokenParser = new TrivialParser("goto");
 	public static Parser ReturnTokenParser = new TrivialParser("return");
-	public static Parser StringTokenParser = new TrivialParser("string");
-	public static Parser IntegerTokenParser = new TrivialParser("integer");
-	public static Parser BooleanTokenParser = new TrivialParser("boolean");
 	public static Parser BreakTokenParser = new TrivialParser("break");
 	public static Parser ContinueTokenParser = new TrivialParser("continue");
 	public static Parser WhileTokenParser = new TrivialParser("while");
 	public static Parser DoTokenParser = new TrivialParser("do");
 	public static Parser ForTokenParser = new TrivialParser("for");
 	public static Parser TypeTokenParser = new TrivialParser("type");
+	public static Parser ImplementsTokenParser = new TrivialParser("implements");
 
 	private static HashMap<Location, HashMap<Parser, ParseResult>> _cache =
 		new HashMap<Location, HashMap<Parser, ParseResult>>(); 

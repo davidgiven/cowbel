@@ -8,8 +8,7 @@ package com.cowlark.cowbel.types;
 
 public class StringType extends PrimitiveType
 {
-	private static StringType _instance =
-		Type.canonicalise(new StringType());
+	private static StringType _instance = new StringType();
 	
 	public static StringType create()
 	{

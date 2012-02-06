@@ -6,7 +6,6 @@
 
 package com.cowlark.cowbel;
 
-import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.FunctionHeaderNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.TypeListNode;
@@ -17,8 +16,9 @@ import com.cowlark.cowbel.types.InterfaceType;
 
 public class MethodTemplate extends AbstractTemplate
 {
+	private static ASTCopyVisitor astCopyVisitor = new ASTCopyVisitor();
+
 	private InterfaceType _type;
-	private FunctionDefinitionNode _definition;
 	
 	public MethodTemplate(TypeContext parentContext,
 			FunctionHeaderNode ast, InterfaceType type)
@@ -46,12 +46,20 @@ public class MethodTemplate extends AbstractTemplate
 		signature += getNode().locationAsString();
 
 		VirtualMethod method = _type.lookupVirtualMethod(signature);
-		if (method == null);
+		if (method != null)
+			return method;
 
-		method = new VirtualMethod(this, tc);
+		/* Duplicate the function header (only). */
+		
+		getNode().visit(astCopyVisitor);
+		FunctionHeaderNode ast = (FunctionHeaderNode) astCopyVisitor.getResult();
+		
+		ast.setParent(getNode().getParent());
+		ast.setTypeContext(tc);
+		
+		method = new VirtualMethod(this, ast, tc, typeassignments);
 		_type.addVirtualMethod(signature, method);
 		
 		return method;
 	}
-	
 }

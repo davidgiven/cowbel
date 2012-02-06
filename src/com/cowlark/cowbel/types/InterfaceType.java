@@ -6,12 +6,15 @@
 
 package com.cowlark.cowbel.types;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import com.cowlark.cowbel.MethodTemplate;
 import com.cowlark.cowbel.ast.HasInputs;
 import com.cowlark.cowbel.ast.HasTypeArguments;
 import com.cowlark.cowbel.ast.IsMethod;
+import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.InterfaceTypeNode;
 import com.cowlark.cowbel.ast.nodes.Node;
@@ -21,7 +24,7 @@ import com.cowlark.cowbel.errors.TypesNotCompatibleException;
 import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.methods.VirtualMethod;
 
-public class InterfaceType extends Type
+public class InterfaceType extends Type implements HasInterfaces
 {
 	public static InterfaceType create(InterfaceTypeNode block)
 	{
@@ -33,6 +36,8 @@ public class InterfaceType extends Type
 		new TreeSet<MethodTemplate>();
 	private TreeMap<String, VirtualMethod> _methods =
 		new TreeMap<String, VirtualMethod>();
+	private TreeSet<AbstractScopeConstructorNode> _implementations =
+		new TreeSet<AbstractScopeConstructorNode>();
 	
 	private InterfaceType(InterfaceTypeNode node)
     {
@@ -44,6 +49,11 @@ public class InterfaceType extends Type
 	    return _node;
     }
 	
+	public Collection<VirtualMethod> getMethods()
+    {
+	    return Collections.unmodifiableCollection(_methods.values());
+    }
+	
 	@Override
 	public String getCanonicalTypeName()
 	{
@@ -51,10 +61,27 @@ public class InterfaceType extends Type
 	}
 	
 	@Override
-	protected void unifyWithImpl(Node node, Type other)
+	public Collection<InterfaceType> getInterfaces()
+	{
+	    return Collections.singleton(this);
+	}
+	
+	@Override
+	protected void unifyWithImpl(Node node, Type src)
 	        throws CompilationException
 	{
-		throw new TypesNotCompatibleException(node, this, other);
+		if (src instanceof HasInterfaces)
+		{
+			HasInterfaces hi = (HasInterfaces) src;
+			
+			for (InterfaceType i : hi.getInterfaces())
+			{
+				if (i == this)
+					return;
+			}
+		}
+		
+		throw new TypesNotCompatibleException(node, this, src);
 	}
 	
 	@Override
@@ -62,6 +89,21 @@ public class InterfaceType extends Type
 		Method lookupMethod(
 	        T node, IdentifierNode id) throws CompilationException
 	{
+		StringBuilder sb = new StringBuilder();
+		sb.append(node.getMethodIdentifier().getText());
+		sb.append("<");
+		sb.append(node.getTypeArguments().getNumberOfChildren());
+		sb.append(">(");
+		sb.append(node.getInputs().getNumberOfChildren());
+		sb.append(")");
+		String signature = sb.toString();
+
+		for (MethodTemplate mt : _methodTemplates)
+		{
+			if (mt.getSignature().equals(signature))
+				return mt.instantiate(node, node.getTypeArguments());
+		}
+		
 		assert(false);
 		throw null;
 		//InterfaceType type = (InterfaceType) node.getMethodReceiver().getType().getRealType();
@@ -90,6 +132,26 @@ public class InterfaceType extends Type
 	public void addVirtualMethod(String signature, VirtualMethod method)
 	{
 		_methods.put(signature, method);
+		
+		assert(_implementations.size() == 0);
+	}
+
+	public void addImplementation(AbstractScopeConstructorNode implementation)
+	{
+		_implementations.add(implementation);
+	}
+	
+	public void instantiateMethods() throws CompilationException
+	{
+		for (AbstractScopeConstructorNode implementation : _implementations)
+			for (VirtualMethod m : _methods.values())
+				implementation.lookupMethod(getNode(), m);
+	}
+	
+	public void dumpDetails()
+	{
+		for (AbstractScopeConstructorNode i : _implementations)
+			System.out.println(i.toString());
 	}
 	
 	@Override

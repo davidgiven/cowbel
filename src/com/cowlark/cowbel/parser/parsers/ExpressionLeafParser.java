@@ -32,10 +32,6 @@ public class ExpressionLeafParser extends Parser
 		if (pr3.success())
 			return pr3;
 		
-		ParseResult pr4 = ArrayConstructorParser.parse(location);
-		if (pr4.success())
-			return pr4;
-		
 		ParseResult pr5 = TrueTokenParser.parse(location);
 		if (pr5.success())
 			return new BooleanConstantNode(location, pr5.end(), true);
@@ -53,6 +49,6 @@ public class ExpressionLeafParser extends Parser
 			return new BlockExpressionNode(location, pr8.end(),
 					(BlockScopeConstructorNode) pr8);
 		
-		return combineParseErrors(pr1, pr2, pr3, pr4, pr5, pr6, pr7, pr8);
+		return combineParseErrors(pr1, pr2, pr3, pr5, pr6, pr7, pr8);
 	}
 }

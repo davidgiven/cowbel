@@ -8,14 +8,11 @@ package com.cowlark.cowbel.methods;
 
 import java.util.HashMap;
 import com.cowlark.cowbel.instructions.MethodCallInstruction;
-import com.cowlark.cowbel.types.Type;
 
 public abstract class PrimitiveMethod extends Method
 {
 
 	private static HashMap<String, Method> _primitiveMethods;
-	private static HashMap<Type, HashMap<String, Method>> _typeFamilyMethods;
-	private static HashMap<String, TemplatedMethod.Factory> _typeFamilyTemplates;
 
 	static
     {
@@ -38,15 +35,7 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new IntegerNegateMethod());
     	registerPrimitiveMethod(new IntegerAddMethod());
     	registerPrimitiveMethod(new IntegerSubMethod());
-    	registerPrimitiveMethod(new IntegerToStringMethod());
-    
-    	_typeFamilyTemplates = new HashMap<String, TemplatedMethod.Factory>();
-    	registerTemplatedMethodFactory(new ArrayResizeMethod.Factory());
-    	registerTemplatedMethodFactory(new ArraySizeMethod.Factory());
-    	registerTemplatedMethodFactory(new ArrayGetMethod.Factory());
-    	registerTemplatedMethodFactory(new ArraySetMethod.Factory());
-    	
-    	_typeFamilyMethods = new HashMap<Type, HashMap<String, Method>>();
+    	registerPrimitiveMethod(new IntegerToStringMethod());    
     }
 
 	public static Method lookupPrimitiveMethod(String signature)
@@ -54,37 +43,9 @@ public abstract class PrimitiveMethod extends Method
     	return _primitiveMethods.get(signature);
     }
 
-	public static Method lookupTypeFamilyMethod(Type type, String signature)
-    {
-    	HashMap<String, Method> catalogue = _typeFamilyMethods.get(type);
-    	if (catalogue == null)
-    	{
-    		catalogue = new HashMap<String, Method>();
-    		_typeFamilyMethods.put(type, catalogue);
-    	}
-    	
-    	Method method = catalogue.get(signature);
-    	if (method == null)
-    	{
-    		TemplatedMethod.Factory f = _typeFamilyTemplates.get(signature);
-    		if (f == null)
-    			return null;
-    		
-    		method = f.create(type);
-    		catalogue.put(signature, method);
-    	}
-    	
-    	return method;
-    }
-
 	public static void registerPrimitiveMethod(PrimitiveMethod method)
     {
     	_primitiveMethods.put(method.getSignature(), method);
-    }
-
-	public static void registerTemplatedMethodFactory(TemplatedMethod.Factory factory)
-    {
-    	_typeFamilyTemplates.put(factory.getSignature(), factory);
     }
 
 	private String _identifier;

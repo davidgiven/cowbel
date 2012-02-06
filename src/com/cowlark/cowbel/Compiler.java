@@ -30,9 +30,11 @@ import com.cowlark.cowbel.parser.core.MutableLocation;
 import com.cowlark.cowbel.parser.core.ParseResult;
 import com.cowlark.cowbel.parser.parsers.Parser;
 import com.cowlark.cowbel.symbols.Variable;
+import com.cowlark.cowbel.types.HasInterfaces;
+import com.cowlark.cowbel.types.InterfaceType;
 import com.cowlark.cowbel.types.Type;
 
-public class Compiler
+public class Compiler implements HasInterfaces
 {
 	public static Compiler Instance;
 	
@@ -42,6 +44,7 @@ public class Compiler
 	private TypeContext _rootTypeContext;
 	private Function _mainFunction;
 	private TreeSet<Constructor> _constructors = new TreeSet<Constructor>();
+	private TreeSet<InterfaceType> _interfaces = new TreeSet<InterfaceType>();
 	private FunctionScopeConstructorNode _ast;
 
 	private Visitor _record_type_definitions_visitor =
@@ -96,6 +99,12 @@ public class Compiler
 				FunctionTemplate.getInstantiatedFunctions().values());
 	}
 	
+	@Override
+	public Collection<InterfaceType> getInterfaces()
+	{
+	    return Collections.unmodifiableCollection(_interfaces);
+	}
+	
 	public void compile() throws CompilationException
 	{
 		_listener.onParseBegin();
@@ -142,14 +151,28 @@ public class Compiler
 			FunctionTemplate template = new FunctionTemplate(_rootTypeContext, mainnode);
 			_mainFunction = template.instantiate(mainnode, null);
 			
-			for (;;)
+			Function function = FunctionTemplate.getNextPendingFunction();
+			while (function != null)
 			{
-				Function function = FunctionTemplate.getNextPendingFunction();
-				if (function == null)
-					break;
+				do
+				{
+					if (function == null)
+						break;
+					
+					record_variable_declarations(function);
+					check_types(function); /* will instantiate new functions */
+					
+					function = FunctionTemplate.getNextPendingFunction();
+				}
+				while (function != null);
 				
-				record_variable_declarations(function);
-				check_types(function);
+				/* We've processed all pending function instantiations. Now
+				 * instantiate any functions that are used as methods. */
+				
+				for (InterfaceType itype : _interfaces)
+					itype.instantiateMethods();
+			
+				function = FunctionTemplate.getNextPendingFunction();
 			}
 		}
 
@@ -173,6 +196,8 @@ public class Compiler
 		
 		_listener.onCodeGenerationBegin();
 		_backend.prologue();
+		for (InterfaceType i : _interfaces)
+			_backend.visit(i);
 		for (Constructor c : _constructors)
 			_backend.visit(c);
 		for (Function f : getFunctions())
@@ -308,6 +333,16 @@ public class Compiler
 		}
 	}
 	
+	public void dumpInterfaces()
+	{
+		for (InterfaceType i : _interfaces)
+		{
+			System.out.println(i.toString());
+			i.dumpDetails();
+			System.out.println("");
+		}
+	}
+	
 	private void add_parameters(
 			TypeContext typecontext,
 			FunctionDefinitionNode node,
@@ -366,5 +401,9 @@ public class Compiler
 	{
 		function.getBody().checkTypes();
 	}
-	
+
+	public void addInterface(InterfaceType itype)
+	{
+		_interfaces.add(itype);
+	}
 }
