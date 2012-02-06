@@ -20,6 +20,7 @@ import com.cowlark.cowbel.ast.nodes.InterfaceTypeNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.MultipleDefinitionException;
+import com.cowlark.cowbel.errors.NoSuchMethodException;
 import com.cowlark.cowbel.errors.TypesNotCompatibleException;
 import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.methods.VirtualMethod;
@@ -104,11 +105,7 @@ public class InterfaceType extends Type implements HasInterfaces
 				return mt.instantiate(node, node.getTypeArguments());
 		}
 		
-		assert(false);
-		throw null;
-		//InterfaceType type = (InterfaceType) node.getMethodReceiver().getType().getRealType();
-		//BlockScopeConstructorNode block = type.getBlock();
-		//return block.lookupMethod(node);
+		throw new NoSuchMethodException(node, this, id);
 	}
 
 	public void addMethodTemplate(MethodTemplate template)
@@ -132,8 +129,6 @@ public class InterfaceType extends Type implements HasInterfaces
 	public void addVirtualMethod(String signature, VirtualMethod method)
 	{
 		_methods.put(signature, method);
-		
-		assert(_implementations.size() == 0);
 	}
 
 	public void addImplementation(AbstractScopeConstructorNode implementation)
