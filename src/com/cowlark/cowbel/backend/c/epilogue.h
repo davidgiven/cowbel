@@ -14,7 +14,7 @@
 
 int main(int argc, const char* argv[])
 {
-	s0__main___internal__1_0();
+	cowbel_main();
 	return 0;
 }
 
