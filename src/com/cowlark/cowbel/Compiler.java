@@ -195,6 +195,7 @@ public class Compiler implements HasInterfaces
 		/* Code generation. */
 		
 		_listener.onCodeGenerationBegin();
+		_backend.setMainFunction(_mainFunction);
 		_backend.prologue();
 		for (InterfaceType i : _interfaces)
 			_backend.visit(i);

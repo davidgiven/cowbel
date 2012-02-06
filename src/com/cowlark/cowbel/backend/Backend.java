@@ -42,6 +42,8 @@ public abstract class Backend extends InstructionVisitor
 		_stream = new PrintStream(stream);
     }
 	
+	public abstract void setMainFunction(Function mainFunction);
+	
 	protected Compiler getCompiler()
 	{
 		return _compiler;

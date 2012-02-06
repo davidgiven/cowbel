@@ -83,6 +83,12 @@ public class CBackend extends ImperativeBackend
     }
 	
 	@Override
+	public void setMainFunction(Function mainFunction)
+	{
+		_functionLabels.put(mainFunction, "cowbel_main");
+	}
+	
+	@Override
 	public void prologue() throws CompilationException
 	{
 		Compiler compiler = getCompiler();
