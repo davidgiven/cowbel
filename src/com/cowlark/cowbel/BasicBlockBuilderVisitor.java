@@ -10,9 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 import com.cowlark.cowbel.ast.SimpleVisitor;
-import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
 import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BlockExpressionNode;
 import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
@@ -30,6 +28,7 @@ import com.cowlark.cowbel.ast.nodes.GotoStatementNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IfElseStatementNode;
 import com.cowlark.cowbel.ast.nodes.IfStatementNode;
+import com.cowlark.cowbel.ast.nodes.ImplementsStatementNode;
 import com.cowlark.cowbel.ast.nodes.IntegerConstantNode;
 import com.cowlark.cowbel.ast.nodes.LabelStatementNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
@@ -47,7 +46,9 @@ import com.cowlark.cowbel.errors.BreakOrContinueNotInLoopException;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.symbols.Variable;
+import com.cowlark.cowbel.types.ClassType;
 import com.cowlark.cowbel.types.FunctionType;
+import com.cowlark.cowbel.types.InterfaceType;
 import com.cowlark.cowbel.types.Type;
 
 public class BasicBlockBuilderVisitor extends SimpleVisitor
@@ -69,6 +70,22 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	public BasicBlock getCurrentBasicBlock()
 	{
 		return _currentBB;
+	}
+	
+	private Variable cast(Node node, Variable value, Type targettype)
+	{
+		Type srctype = value.getSymbolType().getRealType();
+		targettype = targettype.getRealType();
+		
+		if (srctype.equals(targettype))
+			return value;
+		
+		assert(targettype instanceof InterfaceType);
+		assert(srctype instanceof ClassType);
+		
+		_result = _currentBB.createTemporary(node, targettype);
+		_currentBB.insnVarCopy(node, value, _result);
+		return _result;
 	}
 	
 	@Override
@@ -116,6 +133,11 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	}
 	
 	@Override
+	public void visit(ImplementsStatementNode node) throws CompilationException
+	{
+	}
+	
+	@Override
 	public void visit(VarDeclarationNode node) throws CompilationException
 	{
 	}
@@ -130,7 +152,10 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		for (int i = 0; i < size; i++)
 		{
 			eln.getExpression(i).visit(this);
-			_currentBB.insnVarCopy(node, _result, (Variable) iln.getSymbol(i));
+			
+			Variable var = (Variable) iln.getSymbol(i);
+			_result = cast(node, _result, var.getSymbolType());
+			_currentBB.insnVarCopy(node, _result, var);
 		}
 	}
 	
@@ -140,9 +165,10 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		FunctionDefinitionNode fdn = (FunctionDefinitionNode) _function.getNode();
 		node.getValue().visit(this);
 		
-		_currentBB.insnVarCopy(node, _result,
-				(Variable) fdn.getFunctionHeader().getOutputParametersNode()
-					.getParameter(0).getSymbol());
+		Variable var = (Variable) fdn.getFunctionHeader().getOutputParametersNode()
+			.getParameter(0).getSymbol(); 
+		_result = cast(node, _result, var.getSymbolType()); 
+		_currentBB.insnVarCopy(node, _result, var);
 		_currentBB.insnGoto(node, _function.getExitBB());
 		_currentBB.terminate();
 	}
@@ -309,6 +335,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		int numoutvars = variables.getNumberOfChildren();
 		Function function = node.getFunction();
 		FunctionType functiontype = function.getType();
+		List<Type> realintypes = functiontype.getInputArgumentTypes();
 		List<Type> realouttypes = functiontype.getOutputArgumentTypes();
 		int numrealouttypes = realouttypes.size();
 		Vector<Variable> invars = new Vector<Variable>(numinvars);
@@ -317,22 +344,32 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		for (int i = 0; i < numinvars; i++)
 		{
 			arguments.getExpression(i).visit(this);
+			_result = cast(node, _result, realintypes.get(i));
 			invars.add(_result);
 		}
 
 		for (int i = 0; i < numrealouttypes; i++)
 		{
-			Variable v;
-			if (i < numoutvars)
-				v = (Variable) variables.getSymbol(i);
-			else
-				v = _currentBB.createTemporary(node, realouttypes.get(i));
+			Variable v = _currentBB.createTemporary(node, realouttypes.get(i));
 			outvars.add(v);
 		}
 		
 		/* Direct function call. */
 		
 		_currentBB.insnDirectFunctionCall(node, function, invars, outvars);
+		
+		/* Copy (and type convert) the output results into their target
+		 * variables. */
+		
+		for (int i = 0; i < numrealouttypes; i++)
+		{
+			if (i < numoutvars)
+			{
+				Variable src = outvars.get(i);
+				Variable dest = (Variable) variables.getSymbol(i);
+				_currentBB.insnVarCopy(node, src, dest);
+			}
+		}
 	}
 	
 	@Override
@@ -344,10 +381,11 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		IdentifierListNode variables = node.getOutputs();
 		int numinvars = arguments.getNumberOfChildren();
 		int numoutvars = variables.getNumberOfChildren();
+		List<Type> realintypes = method.getInputTypes();
 		List<Type> realouttypes = method.getOutputTypes();
-		int numrealoutvars = realouttypes.size();
+		int numrealouttypes = realouttypes.size();
 		Vector<Variable> invars = new Vector<Variable>(numinvars);
-		Vector<Variable> outvars = new Vector<Variable>(numrealoutvars);
+		Vector<Variable> outvars = new Vector<Variable>(numrealouttypes);
 		
 		for (int i = 0; i < numinvars; i++)
 		{
@@ -355,13 +393,9 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 			invars.add(_result);
 		}
 
-		for (int i = 0; i < numrealoutvars; i++)
+		for (int i = 0; i < numrealouttypes; i++)
 		{
-			Variable v;
-			if (i < numoutvars)
-				v = (Variable) variables.getSymbol(i);
-			else
-				v = _currentBB.createTemporary(node, realouttypes.get(i));
+			Variable v = _currentBB.createTemporary(node, realouttypes.get(i));
 			outvars.add(v);
 		}
 		
@@ -371,6 +405,19 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		_currentBB.insnMethodCall(node,
 				node.getMethod(), receiver,
 				invars, outvars);
+		
+		/* Copy (and type convert) the output results into their target
+		 * variables. */
+		
+		for (int i = 0; i < numrealouttypes; i++)
+		{
+			if (i < numoutvars)
+			{
+				Variable src = outvars.get(i);
+				Variable dest = (Variable) variables.getSymbol(i);
+				_currentBB.insnVarCopy(node, src, dest);
+			}
+		}
 	}
 	
 	@Override
@@ -397,6 +444,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	@Override
 	public void visit(MethodCallExpressionNode node) throws CompilationException
 	{
+		Method method = node.getMethod();
 		ExpressionListNode arguments = node.getInputs();
 		int numinvars = arguments.getNumberOfChildren();
 		Vector<Variable> invars = new Vector<Variable>(numinvars);
@@ -411,9 +459,10 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		Variable receiver = _result;
 		
 		_result = _currentBB.createTemporary(node, node.getType());
-		_currentBB.insnMethodCall(node,
-				node.getMethod(), receiver,
+		_currentBB.insnMethodCall(node, method, receiver,
 				invars, Collections.singletonList(_result));
+		
+		_result = cast(node, _result, method.getOutputTypes().get(0));
 	}
 	
 	@Override
@@ -426,22 +475,6 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	public void visit(VarReferenceNode node) throws CompilationException
 	{
 		_result = (Variable) node.getSymbol();
-	}
-	
-	@Override
-	public void visit(ArrayConstructorNode node) throws CompilationException
-	{
-		List<AbstractExpressionNode> members = node.getListMembers();
-		Vector<Variable> values = new Vector<Variable>();
-		
-		for (AbstractExpressionNode e : members)
-		{
-			e.visit(this);
-			values.add(_result);
-		}
-		
-		_result = _currentBB.createTemporary(node, node.getType());
-		_currentBB.insnListConstructor(node, values, _result);
 	}
 	
 	@Override

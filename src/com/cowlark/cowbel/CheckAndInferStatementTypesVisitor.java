@@ -27,6 +27,7 @@ import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.IfElseStatementNode;
 import com.cowlark.cowbel.ast.nodes.IfStatementNode;
+import com.cowlark.cowbel.ast.nodes.ImplementsStatementNode;
 import com.cowlark.cowbel.ast.nodes.LabelStatementNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.Node;
@@ -121,8 +122,8 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 			throw new InvalidExpressionReturn(node, function);
 		
 		Type returntype = returntypes.get(0);
-		valuetype.unifyWith(node, returntype);
 		valuetype.ensureConcrete(node);
+		returntype.unifyWith(node, valuetype);
 	}
 
 	@Override
@@ -260,6 +261,10 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		validate_function_call(node, function);
 	}
 	
+	@Override
+	public void visit(ImplementsStatementNode node) throws CompilationException
+	{
+	}
 
 	@Override
 	public void visit(Node node) throws CompilationException

@@ -8,8 +8,7 @@ package com.cowlark.cowbel.types;
 
 public class IntegerType extends PrimitiveType
 {
-	private static IntegerType _instance =
-		Type.canonicalise(new IntegerType());
+	private static IntegerType _instance = new IntegerType();
 	
 	public static IntegerType create()
 	{

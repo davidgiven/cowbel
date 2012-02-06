@@ -19,7 +19,7 @@
 #include <stdarg.h>
 #include <string.h>
 
-typedef bool s_boolean_t;
+typedef int s_boolean_t;
 typedef int s_int_t;
 
 typedef struct s_string s_string_t;
@@ -54,7 +54,7 @@ struct s_array
 };
 
 #define S_ALLOC_CONSTRUCTOR(type) \
-	((type*) malloc(sizeof(type)))
+	((sizeof(type) > 0) ? ((type*) malloc(sizeof(type))) : NULL)
 
 #define S_CONSTRUCT_CONSTANT_STRING(data) \
 	((s_string_t
@@ -171,78 +171,6 @@ success:
 fail:
 	*result = 0;
 	return;
-}
-
-/* Array methods */
-
-static s_array_t* s_construct_array(unsigned itemsize, unsigned length)
-{
-	s_array_t* array = (s_array_t*) malloc(sizeof(s_array_t));
-	array->length = array->allocedlength = length;
-	array->itemsize = itemsize;
-	array->data = (char*) malloc(itemsize * length);
-	memset(array->data, 0, itemsize * length);
-	return array;
-}
-
-#define S_CONSTRUCT_ARRAY(type, length) \
-	((type*) s_construct_array(sizeof(type), length))
-
-template <class T> T* S_INIT_ARRAY(T* a, ...)
-{
-	s_array_t* array = (s_array_t*) a;
-	va_list ap;
-
-	va_start(ap, a);
-	T* data = (T*) array->data;
-	for (unsigned i = 0; i < array->length; i++)
-	{
-		T value = va_arg(ap, T);
-		data[i] = value;
-	}
-
-	return a;
-}
-
-static void* s_array_get_lvalue(s_array_t* array, unsigned index)
-{
-	if (index >= array->length)
-		s_throw("Array access out of bounds");
-
-	return (void*) (array->data + index*array->itemsize);
-}
-
-template <class T> void S_METHOD_ARRAY_GET(T* array, unsigned index, T* value)
-{
-	*value = *(T*) s_array_get_lvalue((s_array_t*) array, index);
-}
-
-template <class T> void S_METHOD_ARRAY_SET(T* array, unsigned index, T value)
-{
-	(*(T*) s_array_get_lvalue((s_array_t*) array, index)) = value;
-}
-
-template <class T> void S_METHOD_ARRAY_RESIZE(T* a, unsigned newlength, T value)
-{
-	s_array_t* array = (s_array_t*) a;
-
-	if (newlength < array->length)
-	{
-		array->length = newlength;
-		return;
-	}
-
-	if (newlength > array->allocedlength)
-	{
-		array->data = (char*) realloc(array->data, newlength * array->itemsize);
-		array->allocedlength = newlength;
-	}
-
-	T* data = (T*) array->data;
-	for (unsigned i = array->length; i < newlength; i++)
-		data[i] = value;
-
-	array->length = newlength;
 }
 
 /* END cowbel runtime library */

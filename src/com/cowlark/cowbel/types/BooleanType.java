@@ -8,8 +8,7 @@ package com.cowlark.cowbel.types;
 
 public class BooleanType extends PrimitiveType
 {
-	private static BooleanType _instance =
-		Type.canonicalise(new BooleanType());
+	private static BooleanType _instance = new BooleanType();
 	
 	public static BooleanType create()
 	{

@@ -20,11 +20,11 @@ import com.cowlark.cowbel.methods.PrimitiveMethod;
 public abstract class PrimitiveType extends Type
 {
 	@Override
-	protected void unifyWithImpl(Node node, Type other)
+	protected void unifyWithImpl(Node node, Type src)
 	        throws CompilationException
 	{
-		if (!(getClass().equals(other.getClass())))
-			throw new TypesNotCompatibleException(node, this, other);
+		if (!(getClass().equals(src.getClass())))
+			throw new TypesNotCompatibleException(node, this, src);
 	}
 	
 	@Override

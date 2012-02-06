@@ -34,7 +34,7 @@ public class InferredType extends Type
 	}
 	
 	@Override
-	protected Type getRealType()
+	public Type getRealType()
 	{
 		if (_realType == null)
 			return this;

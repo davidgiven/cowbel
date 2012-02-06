@@ -32,6 +32,7 @@ public class Main
 	public static boolean DumpAST;
 	public static boolean DumpIR;
 	public static boolean DumpConstructors;
+	public static boolean DumpInterfaces;
 	
 	private static void abort(String message)
 	{
@@ -69,6 +70,9 @@ public class Main
 		options.addOption("dc", "dump-constructors", false,
 						"dump constructors to stdout");
 		
+		options.addOption("dn", "dump-interfaces", false,
+						"dump interfaces to stdout");
+		
 		CommandLine cli = null;
 		try
 		{
@@ -91,6 +95,7 @@ public class Main
 			DumpAST = cli.hasOption("da");
 			DumpIR = cli.hasOption("di");
 			DumpConstructors = cli.hasOption("dc");
+			DumpInterfaces = cli.hasOption("dn");
 		}
 		catch (ParseException e)
 		{
@@ -143,6 +148,8 @@ public class Main
 				c.dumpAnnotatedAST();
 			if (DumpConstructors)
 				c.dumpConstructors();
+			if (DumpInterfaces)
+				c.dumpInterfaces();
 			if (DumpIR)
 				c.dumpBasicBlocks();
 			

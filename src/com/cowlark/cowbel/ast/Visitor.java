@@ -6,7 +6,6 @@
 
 package com.cowlark.cowbel.ast;
 
-import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BlockExpressionNode;
 import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
@@ -26,6 +25,7 @@ import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.IfElseStatementNode;
 import com.cowlark.cowbel.ast.nodes.IfStatementNode;
+import com.cowlark.cowbel.ast.nodes.ImplementsStatementNode;
 import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.InferredTypeNode;
 import com.cowlark.cowbel.ast.nodes.IntegerConstantNode;
@@ -210,11 +210,6 @@ public class Visitor
 		visit((Node) node);
 	}
 
-	public void visit(ArrayConstructorNode node) throws CompilationException
-	{
-		visit((Node) node);
-	}
-	
 	public void visit(MethodCallExpressionNode node) throws CompilationException
 	{
 		visit((Node) node);
@@ -253,5 +248,10 @@ public class Visitor
 	public void visit(InterfaceTypeNode node) throws CompilationException
 	{
 		visit((Node) node);
-	}	
+	}
+	
+	public void visit(ImplementsStatementNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
 }

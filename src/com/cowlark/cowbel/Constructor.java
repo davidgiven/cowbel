@@ -6,13 +6,19 @@
 
 package com.cowlark.cowbel;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.methods.VirtualMethod;
 import com.cowlark.cowbel.symbols.Variable;
+import com.cowlark.cowbel.types.HasInterfaces;
+import com.cowlark.cowbel.types.InterfaceType;
 
-public class Constructor implements Comparable<Constructor>
+public class Constructor implements Comparable<Constructor>, HasInterfaces
 {
 	private static int _globalid = 0;
 	
@@ -21,8 +27,10 @@ public class Constructor implements Comparable<Constructor>
 	private boolean _persistent;
 	private TreeSet<Variable> _registerVariables = new TreeSet<Variable>();
 	private TreeSet<Variable> _stackVariables = new TreeSet<Variable>();
-	private TreeSet<Function> _directFunctions = new TreeSet<Function>();
 	private TreeSet<Constructor> _parentConstructors = new TreeSet<Constructor>();
+	private TreeSet<InterfaceType> _interfaces = new TreeSet<InterfaceType>();
+	private TreeMap<VirtualMethod, Function> _virtualMethods =
+		new TreeMap<VirtualMethod, Function>();
 	
 	public Constructor(AbstractScopeConstructorNode node)
 	{
@@ -33,6 +41,11 @@ public class Constructor implements Comparable<Constructor>
 	{
 		return _node;
 	}
+	
+	public int getId()
+    {
+	    return _id;
+    }
 	
 	public boolean isPersistent()
 	{
@@ -94,9 +107,9 @@ public class Constructor implements Comparable<Constructor>
 			_registerVariables.add(variable);
 	}
 	
-	public void addFunction(Function function)
+	public void addInterface(InterfaceType itype)
 	{
-		_directFunctions.add(function);
+		_interfaces.add(itype);
 	}
 	
 	public Set<Variable> getStackVariables()
@@ -119,6 +132,22 @@ public class Constructor implements Comparable<Constructor>
 		return Collections.unmodifiableSet(_parentConstructors);
 	}
 	
+	@Override
+	public Collection<InterfaceType> getInterfaces()
+	{
+	    return Collections.unmodifiableCollection(_interfaces);
+	}
+
+	public void addVirtualMethod(VirtualMethod method, Function function)
+	{
+		_virtualMethods.put(method, function);
+	}
+	
+	public Function getFunctionForVirtualMethod(VirtualMethod method)
+	{
+		return _virtualMethods.get(method);
+	}
+	
 	public void dumpDetails()
 	{
 		System.out.println(_node.toString());
@@ -134,11 +163,24 @@ public class Constructor implements Comparable<Constructor>
 			}
 		}
 		
-		System.out.println("direct functions:");
-		for (Function f : _directFunctions)
+		if (_interfaces.size() > 0)
+		{
+			System.out.println("interfaces:");
+			
+			for (InterfaceType i : _interfaces)
+			{
+				System.out.print("  ");
+				System.out.println(i.toString());
+			}
+		}
+		
+		System.out.println("virtual methods:");
+		for (Map.Entry<VirtualMethod, Function> e : _virtualMethods.entrySet())
 		{
 			System.out.print("  ");
-			System.out.println(f.toString());
+			System.out.print(e.getKey().toString());
+			System.out.print(" -> ");
+			System.out.println(e.getValue().toString());
 		}
 		
 		System.out.println("register variables:");

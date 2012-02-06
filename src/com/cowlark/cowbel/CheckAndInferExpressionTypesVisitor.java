@@ -12,7 +12,6 @@ import java.util.Vector;
 import com.cowlark.cowbel.ast.HasInputs;
 import com.cowlark.cowbel.ast.SimpleVisitor;
 import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
-import com.cowlark.cowbel.ast.nodes.ArrayConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BlockExpressionNode;
 import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
@@ -33,11 +32,9 @@ import com.cowlark.cowbel.errors.FunctionParameterMismatch;
 import com.cowlark.cowbel.errors.InvalidFunctionCallInExpressionContext;
 import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.symbols.Symbol;
-import com.cowlark.cowbel.types.ArrayType;
 import com.cowlark.cowbel.types.BooleanType;
 import com.cowlark.cowbel.types.ClassType;
 import com.cowlark.cowbel.types.FunctionType;
-import com.cowlark.cowbel.types.InferredType;
 import com.cowlark.cowbel.types.IntegerType;
 import com.cowlark.cowbel.types.StringType;
 import com.cowlark.cowbel.types.Type;
@@ -139,21 +136,6 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 		assert(function != null);
 		
 		validate_function_call(node, function);
-	}
-	
-	@Override
-	public void visit(ArrayConstructorNode node) throws CompilationException
-	{
-		List<AbstractExpressionNode> members = node.getListMembers();
-		Type type = InferredType.create();
-		
-		for (AbstractExpressionNode exp : members)
-		{
-			Type t = exp.calculateType();
-			type.unifyWith(node, t);
-		}
-		
-		node.setType(ArrayType.create(type));
 	}
 	
 	@Override

@@ -6,25 +6,60 @@
 
 package com.cowlark.cowbel.methods;
 
+import java.util.List;
+import java.util.Vector;
+import com.cowlark.cowbel.MethodTemplate;
 import com.cowlark.cowbel.TypeContext;
+import com.cowlark.cowbel.ast.nodes.AbstractTypeNode;
+import com.cowlark.cowbel.ast.nodes.FunctionHeaderNode;
+import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
+import com.cowlark.cowbel.ast.nodes.TypeListNode;
+import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.instructions.MethodCallInstruction;
+import com.cowlark.cowbel.types.Type;
 
 public class VirtualMethod extends Method
 {
-	private com.cowlark.cowbel.MethodTemplate _template;
+	private MethodTemplate _template;
+	private TypeListNode _typeassignments;
 	
-	public VirtualMethod(com.cowlark.cowbel.MethodTemplate template, TypeContext typecontext)
+	public VirtualMethod(MethodTemplate template,
+			FunctionHeaderNode header, TypeContext typecontext,
+			TypeListNode typeassignments)
+				throws CompilationException
     {
 		_template = template;
+		_typeassignments = typeassignments;
+
+		List<Type> inputtypes = new Vector<Type>();
+		for (Node n : header.getInputParametersNode())
+		{
+			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
+			AbstractTypeNode tn = pdn.getVariableTypeNode();
+			inputtypes.add(tn.getType());
+		}
 		
-//		FunctionType functiontype = function.getType();
-//		setInputTypes(functiontype.getInputArgumentTypes());
-//		setOutputTypes(functiontype.getOutputArgumentTypes());
+		List<Type> outputtypes = new Vector<Type>();
+		for (Node n : header.getOutputParametersNode())
+		{
+			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
+			AbstractTypeNode tn = pdn.getVariableTypeNode();
+			outputtypes.add(tn.getType());
+		}
+		
+		setInputTypes(inputtypes);
+		setOutputTypes(outputtypes);
     }
 
-	public com.cowlark.cowbel.MethodTemplate getTemplate()
+	public MethodTemplate getTemplate()
     {
 	    return _template;
+    }
+	
+	public TypeListNode getTypeAssignments()
+    {
+	    return _typeassignments;
     }
 	
 	@Override

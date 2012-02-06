@@ -35,7 +35,7 @@ public class TypeVariable extends Type
 	}
 	
 	@Override
-	protected Type getRealType()
+	public Type getRealType()
 	{
 		assert(false);
 		return null;

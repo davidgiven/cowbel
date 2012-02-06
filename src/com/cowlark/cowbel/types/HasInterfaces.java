@@ -4,13 +4,11 @@
  * full license text.
  */
 
-package com.cowlark.cowbel.methods;
+package com.cowlark.cowbel.types;
 
-import com.cowlark.cowbel.types.Type;
+import java.util.Collection;
 
-public abstract class MethodTemplate extends Method
+public interface HasInterfaces
 {
-	MethodTemplate(Type receiver)
-	{
-	}
+	public Collection<InterfaceType> getInterfaces();
 }

@@ -6,9 +6,13 @@
 
 package com.cowlark.cowbel.ast.nodes;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import com.cowlark.cowbel.Compiler;
 import com.cowlark.cowbel.Constructor;
 import com.cowlark.cowbel.Function;
 import com.cowlark.cowbel.FunctionTemplate;
@@ -23,10 +27,14 @@ import com.cowlark.cowbel.errors.IdentifierNotFound;
 import com.cowlark.cowbel.errors.MultipleDefinitionException;
 import com.cowlark.cowbel.methods.FunctionMethod;
 import com.cowlark.cowbel.methods.Method;
+import com.cowlark.cowbel.methods.VirtualMethod;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.symbols.Symbol;
+import com.cowlark.cowbel.types.HasInterfaces;
+import com.cowlark.cowbel.types.InterfaceType;
 
 public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
+		implements HasInterfaces
 {
 	private TreeSet<Symbol> _importedSymbols = new TreeSet<Symbol>();
 	private TreeMap<Symbol, AbstractScopeConstructorNode> _exportedSymbols = new TreeMap<Symbol, AbstractScopeConstructorNode>();
@@ -35,8 +43,11 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 	private TreeSet<AbstractScopeConstructorNode> _importedScopes = new TreeSet<AbstractScopeConstructorNode>();
 	private TreeSet<AbstractScopeConstructorNode> _exportedScopes = new TreeSet<AbstractScopeConstructorNode>();
 	private TreeSet<Symbol> _symbols = new TreeSet<Symbol>();
+	private TreeSet<Function> _functions = new TreeSet<Function>();
 	private TreeSet<FunctionTemplate> _functionTemplates = new TreeSet<FunctionTemplate>();
+	private TreeMap<VirtualMethod, Function> _virtualMethods = new TreeMap<VirtualMethod, Function>();
 	private TreeMap<String, Label> _labels = new TreeMap<String, Label>();
+	private TreeSet<InterfaceType> _interfaces = new TreeSet<InterfaceType>();
 	private Function _function;
 	private Constructor _constructor;
 	
@@ -91,9 +102,9 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 		return _functionTemplates;
 	}
 	
-	public Set<Label> getLabels()
+	public Collection<Label> getLabels()
 	{
-		return new TreeSet<Label>(_labels.values());
+		return Collections.unmodifiableCollection(_labels.values());
 	}
 	
 	public Set<AbstractScopeConstructorNode> getImportedScopes()
@@ -105,6 +116,12 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 	{
 		return _exportedScopes;
 	}
+	
+	@Override
+    public Collection<InterfaceType> getInterfaces()
+    {
+	    return Collections.unmodifiableCollection(_interfaces);
+    }
 	
 	@Override
 	public String getShortDescription()
@@ -203,6 +220,17 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 			{
 				spaces(indent+1);
 				System.out.println(e.toString());
+			}
+		}
+		
+		if (!_interfaces.isEmpty())
+		{
+			spaces(indent);
+			System.out.println("interfaces implemented here:");
+			for (InterfaceType i : _interfaces)
+			{
+				spaces(indent+1);
+				System.out.println(i.toString());
 			}
 		}
 	}
@@ -310,7 +338,9 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 			{
 				if (ft.getSignature().equals(signature))
 				{
-					return ft.instantiate(node, node.getTypeArguments());
+					Function function = ft.instantiate(node, node.getTypeArguments());
+					scope.addFunction(function);
+					return function;
 				}
 			}
 				
@@ -320,7 +350,11 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 		return null;
 	}
 
-	/* Just look here (for now). */
+	/** Looks up a method on the specified scope and returns it. Used for
+	 * direct class calls only (*not* virtual calls via interfaces).
+	 * 
+	 * Currently just looks at the current scope. */
+
 	public <T extends Node & HasInputs & IsMethod & HasTypeArguments>
 		Method lookupMethod(T node)
 			throws CompilationException
@@ -340,6 +374,7 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 			{
 				Function function = ft.instantiate(node,
 						node.getTypeArguments());
+				addFunction(function);
 				return new FunctionMethod(function);
 			}
 		}
@@ -347,6 +382,25 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 		return null;
 	}
 	
+	public Method lookupMethod(Node node, VirtualMethod method)
+			throws CompilationException
+	{
+		String signature = method.getName();
+	
+		for (FunctionTemplate ft : getFunctionTemplates())
+		{
+			if (ft.getSignature().equals(signature))
+			{
+				Function function = ft.instantiate(node,
+						method.getTypeAssignments());
+				addVirtualMethod(method, function);
+				return new FunctionMethod(function);
+			}
+		}
+	
+		return null;
+	}
+
 	private void recursive_import(AbstractScopeConstructorNode root, AbstractScopeConstructorNode leaf)
 	{
 		if (root == leaf)
@@ -447,5 +501,33 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 		
 		Function f = s.getFunction();
 		return (f != _function);
+	}
+	
+	public void addInterface(InterfaceType itype) throws CompilationException
+	{
+		itype.addImplementation(this);
+		_interfaces.add(itype);
+		Compiler.Instance.addInterface(itype);
+	}
+	
+	public void addFunction(Function function)
+	{
+		_functions.add(function);
+	}
+	
+	public Collection<Function> getFunctions()
+	{
+		return Collections.unmodifiableCollection(_functions);
+	}
+	
+	public void addVirtualMethod(VirtualMethod method, Function function)
+	{
+		addFunction(function);
+		_virtualMethods.put(method, function);
+	}
+	
+	public Collection<Map.Entry<VirtualMethod, Function>> getVirtualMethods()
+	{
+		return Collections.unmodifiableCollection(_virtualMethods.entrySet());
 	}
 }

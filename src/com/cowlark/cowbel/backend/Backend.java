@@ -22,6 +22,7 @@ import com.cowlark.cowbel.instructions.Instruction;
 import com.cowlark.cowbel.instructions.InstructionVisitor;
 import com.cowlark.cowbel.instructions.MethodCallInstruction;
 import com.cowlark.cowbel.methods.MethodVisitor;
+import com.cowlark.cowbel.types.InterfaceType;
 
 public abstract class Backend extends InstructionVisitor
 		implements MethodVisitor
@@ -124,6 +125,7 @@ public abstract class Backend extends InstructionVisitor
 		insn.visit(this);
 	}
 	
+	public abstract void visit(InterfaceType itype);
 	public abstract void visit(Constructor constructor);
 	
 	@Override

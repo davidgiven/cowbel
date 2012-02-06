@@ -15,8 +15,11 @@ import com.cowlark.cowbel.errors.TypesNotCompatibleException;
 import com.cowlark.cowbel.instructions.MethodCallInstruction;
 import com.cowlark.cowbel.types.Type;
 
-public abstract class Method
+public abstract class Method implements Comparable<Method>
 {
+	private static int _globalid = 0;
+	
+	private int _id = _globalid++;
 	private List<Type> _inputTypes;
 	private List<Type> _outputTypes;
 	private int _argumentTypeCount = 0;
@@ -25,6 +28,21 @@ public abstract class Method
     {
     }
 
+	public int getId()
+    {
+	    return _id;
+    }
+	
+	@Override
+	public int compareTo(Method o)
+	{
+	    if (_id < o._id)
+	    	return -1;
+	    if (_id > o._id)
+	    	return 1;
+	    return 0;
+	}
+	
 	public abstract String getName();
 	
 	protected void setInputTypes(Type... types)

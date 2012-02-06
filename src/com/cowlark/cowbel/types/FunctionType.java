@@ -23,8 +23,7 @@ public class FunctionType extends PrimitiveType
 	public static FunctionType create(List<Type> inputarguments,
 			List<Type> outputarguments)
 	{
-		FunctionType type = new FunctionType(inputarguments, outputarguments);
-		return Type.canonicalise(type);
+		return new FunctionType(inputarguments, outputarguments);
 	}
 	
 	public static FunctionType createVoidVoid()

@@ -12,7 +12,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.instructions.ArrayConstructorInstruction;
 import com.cowlark.cowbel.instructions.BooleanConstantInstruction;
 import com.cowlark.cowbel.instructions.ConstructInstruction;
 import com.cowlark.cowbel.instructions.CreateObjectReferenceInstruction;
@@ -166,12 +165,6 @@ public class BasicBlock implements Comparable<BasicBlock>
 				inargs, outargs));
 	}
 
-	public void insnListConstructor(Node node, List<Variable> values,
-			Variable outvar)
-	{
-		addInstruction(new ArrayConstructorInstruction(node, values, outvar));
-	}
-	
 	public void insnBooleanConstant(Node node, boolean value, Variable var)
 	{
 		addInstruction(new BooleanConstantInstruction(node, value, var));

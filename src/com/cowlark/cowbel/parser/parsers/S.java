@@ -40,6 +40,7 @@ public class S
     	"while",
     	"do",
     	"for",
-    	"type"
+    	"type",
+    	"implements"
     };
 }
