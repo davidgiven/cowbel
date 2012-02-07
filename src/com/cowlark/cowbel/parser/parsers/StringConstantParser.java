@@ -37,11 +37,25 @@ public class StringConstantParser extends Parser
 			switch (c)
 			{
 				case '\\':
+				{
 					c = end.codepointAtOffset(0);
 					end.advance();
 
-					sb.appendCodePoint(c);
+					switch (c)
+					{
+						case 'n':
+							sb.appendCodePoint('\n');
+							break;
+							
+						case 'r':
+							sb.appendCodePoint('\r');
+							break;
+							
+						default:
+							return new InvalidCharacterInStringConstant(end);
+					}
 					break;
+				}
 
 				case -1:
 				case '\n':
