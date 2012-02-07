@@ -6,8 +6,6 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.TypeVariableNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -20,10 +18,10 @@ public class TypeParser extends Parser
 		if (interfacepr.success())
 			return interfacepr;
 		
-		ParseResult identifierpr = IdentifierParser.parse(location);
-		if (identifierpr.success())
-			return new TypeVariableNode(identifierpr, identifierpr.end(), (IdentifierNode) identifierpr);
+		ParseResult variablepr = TypeVariableParser.parse(location);
+		if (variablepr.success())
+			return variablepr;
 		
-		return combineParseErrors(interfacepr, identifierpr);
+		return combineParseErrors(interfacepr, variablepr);
 	}
 }

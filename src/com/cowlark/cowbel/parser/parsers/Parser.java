@@ -27,6 +27,7 @@ public abstract class Parser
 	public static StatementParser StatementParser = new StatementParser();
 	public static VarDeclParser VarDeclParser = new VarDeclParser();
 	public static TypeParser TypeParser = new TypeParser();
+	public static TypeVariableParser TypeVariableParser = new TypeVariableParser();
 	public static FunctionHeaderParser FunctionHeaderParser = new FunctionHeaderParser();
 	public static ParameterDeclarationListParser ParameterDeclarationListParser = new ParameterDeclarationListParser();
 	public static ParameterDeclarationParser ParameterDeclarationParser = new ParameterDeclarationParser();

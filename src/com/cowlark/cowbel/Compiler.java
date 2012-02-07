@@ -163,6 +163,7 @@ public class Compiler implements HasInterfaces
 					if (function == null)
 						break;
 					
+					record_type_declarations(function);
 					record_variable_declarations(function);
 					check_types(function); /* will instantiate new functions */
 					
@@ -180,16 +181,16 @@ public class Compiler implements HasInterfaces
 			}
 		}
 
-		visit(_classify_scope_kinds_visitor);
-		visit(_assign_constructors_to_scopes_visitor);
-		visit(_collect_constructors_visitor);
-		visit(_assign_variables_to_constructors_visitor);
-		
 		_listener.onSymbolTableAnalysisEnd();
 		
 		/* Construct basic blocks and IR representation. */
 		
 		_listener.onBasicBlockAnalysisBegin();
+		
+		visit(_classify_scope_kinds_visitor);
+		visit(_assign_constructors_to_scopes_visitor);
+		visit(_collect_constructors_visitor);
+		visit(_assign_variables_to_constructors_visitor);
 		
 		for (Function f : getFunctions())
 			f.buildBasicBlocks();
@@ -371,6 +372,15 @@ public class Compiler implements HasInterfaces
 		}
 	}
 	
+	private void record_type_declarations(Function function)
+			throws CompilationException
+	{
+		FunctionDefinitionNode node = (FunctionDefinitionNode) function.getNode();
+		FunctionScopeConstructorNode body = node.getFunctionBody();
+		body.visit(_record_type_definitions_visitor);
+		body.visit(_define_interfaces_visitor);				
+	}
+	
 	private void record_variable_declarations(Function function)
 			throws CompilationException
 	{
@@ -390,11 +400,6 @@ public class Compiler implements HasInterfaces
 		pdln = node.getFunctionHeader().getOutputParametersNode();
 		add_parameters(typecontext, node, pdln, true);
 
-		/* Scan for type definitions. */
-		
-		body.visit(_record_type_definitions_visitor);
-		body.visit(_define_interfaces_visitor);
-		
 		/* Add any variable definitions to scope. */
 		
 		body.visit(_assign_functions_to_scopes_visitor);

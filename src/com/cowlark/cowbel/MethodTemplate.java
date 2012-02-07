@@ -14,7 +14,7 @@ import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.methods.VirtualMethod;
 import com.cowlark.cowbel.types.InterfaceType;
 
-public class MethodTemplate extends AbstractTemplate
+public class MethodTemplate extends AbstractCallableTemplate
 {
 	private static ASTCopyVisitor astCopyVisitor = new ASTCopyVisitor();
 

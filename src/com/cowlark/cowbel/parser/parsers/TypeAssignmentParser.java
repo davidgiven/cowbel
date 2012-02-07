@@ -7,6 +7,7 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import com.cowlark.cowbel.ast.nodes.AbstractTypeNode;
+import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.TypeAssignmentNode;
 import com.cowlark.cowbel.parser.core.Location;
@@ -25,7 +26,11 @@ public class TypeAssignmentParser extends Parser
 		if (typenamepr.failed())
 			return typenamepr;
 		
-		pr = EqualsParser.parse(typenamepr.end());
+		ParseResult typevarspr = TypeVariableListParser.parse(typenamepr.end());
+		if (typevarspr.failed())
+			return typevarspr;
+		
+		pr = EqualsParser.parse(typevarspr.end());
 		if (pr.failed())
 			return pr;
 		
@@ -39,6 +44,7 @@ public class TypeAssignmentParser extends Parser
 		
 		return new TypeAssignmentNode(location, pr.end(),
 				(IdentifierNode) typenamepr,
+				(IdentifierListNode) typevarspr,
 				(AbstractTypeNode) typepr);
 	}
 }

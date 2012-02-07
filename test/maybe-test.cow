@@ -1,0 +1,108 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+type Maybe<T> =
+{
+	function valid(): boolean;
+	function get(): T;
+};
+
+function Maybe<T>(): Maybe<T>
+	return
+	{
+		implements Maybe<T>;
+		
+		function valid(): boolean
+			return false;
+			
+		function get(): T
+			{} /* abort */
+	};
+
+function Maybe<T>(value: T): Maybe<T>
+	return
+	{
+		implements Maybe<T>;
+		
+		function valid(): boolean
+			return true;
+			
+		function get(): T
+			return value;
+	};
+
+type Queue<T> =
+{
+	function isEmpty(): boolean;
+	function push(value: T);
+	function pop(): T;
+};
+
+function Queue<T>(): Queue<T>
+{
+	type Node<T> =
+	{
+		function get(): T;
+		function next(): Maybe<Node<T>>;
+	};
+	
+	function Node<T>(value: T, next: Maybe<Node<T>>): Node<T>
+	{
+		return
+		{
+			implements Node<T>;
+			
+			function get(): T
+				return value;
+				
+			function next(): Maybe<Node<T>>
+				return next;
+		};
+	}
+	
+	var head = Maybe<Node<T>>();
+	
+	return
+	{
+		implements Queue<T>;
+		
+		function isEmpty(): boolean
+			return !head.valid();
+			
+		function push(value: T)
+		{
+			var node = Node<T>(value, head);
+			head = Maybe<Node<T>>(node);
+		}
+			
+		function pop(): T
+		{
+			var node = head.get();
+			var value = node.get();
+			head = node.next();
+			return value;
+		}
+	};
+}
+
+var q = Queue<integer>();
+q.push(1);
+q.push(2);
+q.push(3);
+q.push(4);
+
+while (!q.isEmpty())
+{
+	var i = q.pop();
+	i.toString().print();
+}
+	

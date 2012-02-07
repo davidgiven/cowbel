@@ -19,10 +19,11 @@ public class TypeVariableNode extends AbstractTypeNode
     }
 	
 	public TypeVariableNode(Location start, Location end,
-			IdentifierNode node)
+			IdentifierNode node, TypeListNode typeassignments)
     {
         super(start, end);
         addChild(node);
+        addChild(typeassignments);
     }
 	
 	public IdentifierNode getIdentifier()
@@ -30,10 +31,15 @@ public class TypeVariableNode extends AbstractTypeNode
 		return (IdentifierNode) getChild(0);
 	}
 	
+	public TypeListNode getTypeAssignments()
+	{
+		return (TypeListNode) getChild(1);
+	}
+	
 	@Override
 	public Type calculateType() throws CompilationException
 	{
-		return getTypeContext().lookupType(getIdentifier());
+		return getTypeContext().lookupType(this);
 	}
 	
 	@Override
