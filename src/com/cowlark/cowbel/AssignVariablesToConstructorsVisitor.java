@@ -13,6 +13,7 @@ import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.symbols.Symbol;
+import com.cowlark.cowbel.types.InterfaceType;
 
 public class AssignVariablesToConstructorsVisitor extends RecursiveVisitor
 {
@@ -23,12 +24,16 @@ public class AssignVariablesToConstructorsVisitor extends RecursiveVisitor
 	
 	private void visit(AbstractScopeConstructorNode node) throws CompilationException
 	{
-		Constructor sf = node.getConstructor();
+		Constructor c = node.getConstructor();
+		
+		for (InterfaceType i : node.getInterfaces())
+			c.addInterface(i);
+		
 		for (Symbol s : node.getSymbols())
-			s.addToConstructor(sf);
+			s.addToConstructor(c);
 
 		for (AbstractScopeConstructorNode s : node.getImportedScopes())
-			sf.addConstructor(s.getConstructor());
+			c.addConstructor(s.getConstructor());
 		
 		super.visit(node);
 	}

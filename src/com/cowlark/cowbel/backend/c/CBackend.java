@@ -297,7 +297,8 @@ public class CBackend extends ImperativeBackend
 		if (s != null)
 			return s;
 
-		s = "struct I" + _interfaceTypes.size() + "_" + type.getId();
+		s = "struct I" + _interfaceTypes.size() + "_" + type.getId() +
+			"_" + type.toString();
 		
 		_interfaceTypes.put(type, s);
 		return s;
@@ -309,7 +310,8 @@ public class CBackend extends ImperativeBackend
 		if (s != null)
 			return s;
 
-		s = "i" + _interfaceTypes.size() + "_" + type.getId();
+		s = "i" + _interfaceTypes.size() + "_" + type.getId() +
+			"_" + type.toString();
 		
 		_interfaceLabels.put(type, s);
 		return s;
@@ -334,29 +336,37 @@ public class CBackend extends ImperativeBackend
 
 	/* Produces an lvalue to the variable's storage. */
 	
-	private void printvar(Node node, Variable var)
+	private String clvalue(Node node, Variable var)
 	{
+		StringBuilder sb = new StringBuilder();
 		Constructor varcon = var.getConstructor();
 		
 		if (varcon.isStackVariable(var))
 		{
 			Constructor current = node.getScope().getConstructor();
 			
-			print(clabel(current));
+			sb.append(clabel(current));
 			if (current != varcon)
 			{
-				print("->");
-				print(clabel(varcon));
+				sb.append("->");
+				sb.append(clabel(varcon));
 			}
-			print("->");
-			print(clabel(var));
+			sb.append("->");
+			sb.append(clabel(var));
 		}
 		else
 		{
 			if (var.isOutputParameter())
-				print("*");
-			print(clabel(var));
+				sb.append("*");
+			sb.append(clabel(var));
 		}
+		
+		return sb.toString();
+	}
+	
+	private void printvar(Node node, Variable var)
+	{
+		print(clvalue(node, var));
 	}
 	
 	@Override
@@ -745,8 +755,9 @@ public class CBackend extends ImperativeBackend
 	public void visit(MethodCallInstruction insn, VirtualMethod method)
 	{
 		Variable var = insn.getReceiver();
-		String callable = clabel(var) + "->" + clabel(method);
-		String constructor = clabel(var) + "->o";
+		String lvalue = clvalue(insn.getNode(), var);
+		String callable = lvalue + "->" + clabel(method);
+		String constructor = lvalue + "->o";
 		function_call(insn, callable, constructor);
 	}
 	

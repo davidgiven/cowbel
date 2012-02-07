@@ -54,7 +54,7 @@ struct s_array
 };
 
 #define S_ALLOC_CONSTRUCTOR(type) \
-	((sizeof(type) > 0) ? ((type*) malloc(sizeof(type))) : NULL)
+	((sizeof(type) > 0) ? ((type*) calloc(1, sizeof(type))) : NULL)
 
 #define S_CONSTRUCT_CONSTANT_STRING(data) \
 	((s_string_t

@@ -86,7 +86,7 @@ public class Constructor implements Comparable<Constructor>, HasInterfaces
 	{
 		Constructor c = this;
 		
-		do
+		while (c != constructor)
 		{
 			AbstractScopeConstructorNode parentscope = c.getNode().getScope();
 			if (parentscope == null)
@@ -95,7 +95,6 @@ public class Constructor implements Comparable<Constructor>, HasInterfaces
 			
 			_parentConstructors.add(c);
 		}
-		while (c != constructor);
 	}
 	
 	public void addVariable(Variable variable)

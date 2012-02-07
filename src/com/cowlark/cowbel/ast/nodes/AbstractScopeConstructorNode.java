@@ -36,6 +36,13 @@ import com.cowlark.cowbel.types.InterfaceType;
 public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 		implements HasInterfaces
 {
+	public enum ScopeType
+	{
+		TRIVIAL,
+		SIGNIFICANT,
+		PERSISTENT
+	};
+	
 	private TreeSet<Symbol> _importedSymbols = new TreeSet<Symbol>();
 	private TreeMap<Symbol, AbstractScopeConstructorNode> _exportedSymbols = new TreeMap<Symbol, AbstractScopeConstructorNode>();
 	private TreeSet<Function> _importedFunctions = new TreeSet<Function>();
@@ -50,6 +57,7 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 	private TreeSet<InterfaceType> _interfaces = new TreeSet<InterfaceType>();
 	private Function _function;
 	private Constructor _constructor;
+	private ScopeType _scopeType = ScopeType.TRIVIAL;
 	
 	public AbstractScopeConstructorNode(Location start, Location end)
     {
@@ -66,6 +74,17 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 	{
 		return (AbstractStatementNode) getChild(0);
 	}
+	
+	public ScopeType getScopeType()
+    {
+	    return _scopeType;
+    }
+	
+	public void setScopeType(ScopeType scopeType)
+    {
+		if (scopeType.ordinal() > _scopeType.ordinal())
+			_scopeType = scopeType;
+    }
 	
 	public boolean isFunctionScope()
 	{
@@ -126,7 +145,7 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 	@Override
 	public String getShortDescription()
 	{
-		return "";
+		return ": " + _scopeType.toString();
 	}
 	
 	@Override
