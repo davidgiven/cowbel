@@ -1,0 +1,129 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+type ListNode =
+{
+	function prev(): ListNode;
+	function setPrev(n: ListNode); 
+	function next(): ListNode;
+	function setNext(n: ListNode);
+	function get(): integer;
+	function set(v: integer);
+	function finished(): boolean;
+};
+	
+type List =
+{
+	function first(): ListNode;
+	function last(): ListNode;
+	
+	function push(v: integer);
+};
+
+function List<T>(): List
+{
+	var head: ListNode =
+	{
+		implements ListNode;
+		
+		var _next = head;
+		
+		function prev(): ListNode {}
+		function setPrev(n: ListNode) {}
+		function next(): ListNode return _next;
+		function setNext(n: ListNode) _next = n;
+		function get(): T {}
+		function set(v: T) {}
+		function finished(): boolean return true;
+	};
+	
+	var tail: ListNode =
+	{
+		implements ListNode;
+		
+		var _prev = head;
+		
+		function prev(): ListNode return _prev;
+		function setPrev(n: ListNode) _prev = n;
+		function next(): ListNode {}
+		function setNext(n: ListNode) {}
+		function get(): T {}
+		function set(v: T) {}
+		function finished(): boolean return true;
+	};
+	
+	tail.setPrev(head);
+	head.setNext(tail);
+	
+	return
+	{
+		implements List;
+
+		function _makenode(value: T): ListNode
+		{
+			return
+			{
+				implements ListNode;
+				
+				var _prev = head;
+				var _next = head;
+		
+				function prev(): ListNode return _prev;
+				function setPrev(n: ListNode) _prev = n;
+				function next(): ListNode return _next;
+				function setNext(n: ListNode) _next = n;
+				function get(): T return value;
+				function set(v: T) value = v; 
+				function finished(): boolean return false;
+			};
+		}
+		
+		function insertbefore(newnode: ListNode, before: ListNode)
+		{
+			var oldprev = before.prev();
+			oldprev.setNext(newnode);
+			newnode.setPrev(oldprev);
+			newnode.setNext(before);
+			before.setPrev(newnode);
+		}
+		
+		function first(): ListNode
+			return head.next();
+			
+		function last(): ListNode
+			return tail.prev();
+			 
+		function push(v: T)
+		{
+			var newnode = _makenode(v);
+			insertbefore(newnode, tail);
+		}		
+	};
+}
+
+var list = List<integer>();
+list.push(5);
+list.push(4);
+list.push(3);
+list.push(2);
+list.push(1);
+list.push(0);
+
+var iterator = list.first();
+while (!iterator.finished())
+{
+	var value = iterator.get();
+	value.toString().print();
+	"\n".print();
+	
+	iterator = iterator.next();
+}
