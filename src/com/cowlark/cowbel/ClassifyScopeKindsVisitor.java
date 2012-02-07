@@ -20,6 +20,14 @@ import com.cowlark.cowbel.errors.CompilationException;
 
 public class ClassifyScopeKindsVisitor extends RecursiveVisitor
 {
+	private void make_significant_persistent(AbstractScopeConstructorNode node)
+	{
+		while (node.getScopeType() == ScopeType.TRIVIAL)
+			node = node.getScope();
+		
+		node.setScopeType(ScopeType.PERSISTENT);
+	}
+	
 	@Override
 	public void visit(IfStatementNode node) throws CompilationException
 	{
@@ -53,14 +61,15 @@ public class ClassifyScopeKindsVisitor extends RecursiveVisitor
 			throws CompilationException
 	{
 		/* If this scope exports any symbols to scopes in a different function,
-		 * it must be persistent (or bad stuff happens). */
+		 * then the scope's significant scope must be persistent (or bad
+		 * stuff happens). */
 		
 		Function thisf = node.getFunction();
 		for (AbstractScopeConstructorNode n : node.getExportedScopes())
 		{
 			if (n.getFunction() != thisf)
 			{
-				node.setScopeType(ScopeType.PERSISTENT);
+				make_significant_persistent(node);
 				return;
 			}
 		}
