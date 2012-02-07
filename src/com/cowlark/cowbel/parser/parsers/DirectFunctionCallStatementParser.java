@@ -24,7 +24,7 @@ public class DirectFunctionCallStatementParser extends Parser
 	ParseResult parseWithVariableList(IdentifierListNode variablespr,
 			Location location)
 	{
-		ParseResult identifierpr = IdentifierParser.parse(variablespr.end());
+		ParseResult identifierpr = IdentifierParser.parse(location);
 		if (identifierpr.failed())
 			return identifierpr;
 
