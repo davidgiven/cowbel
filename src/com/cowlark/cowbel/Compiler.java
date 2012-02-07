@@ -57,8 +57,12 @@ public class Compiler implements HasInterfaces
 		new ResolveVariableReferencesVisitor();
 	private Visitor _assign_functions_to_scopes_visitor =
 		new AssignFunctionsToScopesVisitor();
+	private Visitor _classify_scope_kinds_visitor =
+		new ClassifyScopeKindsVisitor();
 	private Visitor _assign_constructors_to_scopes_visitor =
-		new AssignConstructorsToScopesVisitor(_constructors);
+		new AssignConstructorsToScopesVisitor();
+	private Visitor _collect_constructors_visitor =
+		new CollectConstructorsVisitor(_constructors);
 	private Visitor _assign_variables_to_constructors_visitor =
 		new AssignVariablesToConstructorsVisitor();
 
@@ -176,10 +180,10 @@ public class Compiler implements HasInterfaces
 			}
 		}
 
-		for (Function function : getFunctions())
-			function.getBody().visit(_assign_constructors_to_scopes_visitor);
-		for (Function function : getFunctions())
-			function.getBody().visit(_assign_variables_to_constructors_visitor);
+		visit(_classify_scope_kinds_visitor);
+		visit(_assign_constructors_to_scopes_visitor);
+		visit(_collect_constructors_visitor);
+		visit(_assign_variables_to_constructors_visitor);
 		
 		_listener.onSymbolTableAnalysisEnd();
 		

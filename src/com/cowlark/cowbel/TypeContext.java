@@ -105,6 +105,7 @@ public class TypeContext implements Comparable<TypeContext>
 		}
 			
 		_types.put(identifier, type);
+		type.setNameHint(identifier.getText());
 	}
 	
 	public Type lookupType(IdentifierNode identifier) throws CompilationException

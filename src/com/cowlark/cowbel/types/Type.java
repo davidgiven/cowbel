@@ -19,6 +19,7 @@ public abstract class Type implements Comparable<Type>
 {
 	private static int _globalid = 0;
 	private int _id = _globalid++;
+	private String _nameHint;
 	
 	public abstract String getCanonicalTypeName();
 	
@@ -27,9 +28,16 @@ public abstract class Type implements Comparable<Type>
 	    return _id;
     }
 	
+	public void setNameHint(String nameHint)
+    {
+	    _nameHint = nameHint;
+    }
+	
 	@Override
 	public String toString()
 	{
+		if (_nameHint != null)
+			return _nameHint;
 	    return getCanonicalTypeName(); 
 	}
 	

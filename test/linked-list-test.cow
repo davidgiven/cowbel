@@ -110,6 +110,8 @@ function List<T>(): List
 	};
 }
 
+/* Push some numbers onto the list. */
+
 var list = List<integer>();
 list.push(5);
 list.push(4);
@@ -118,12 +120,13 @@ list.push(2);
 list.push(1);
 list.push(0);
 
+/* Now iterate through the list. */
+
 var iterator = list.first();
 while (!iterator.finished())
 {
 	var value = iterator.get();
 	value.toString().print();
-	"\n".print();
 	
 	iterator = iterator.next();
 }
