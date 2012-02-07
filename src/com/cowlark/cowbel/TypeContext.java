@@ -6,10 +6,16 @@
 
 package com.cowlark.cowbel;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Vector;
+import com.cowlark.cowbel.ast.nodes.AbstractTypeNode;
 import com.cowlark.cowbel.ast.nodes.IdentifierNode;
 import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.nodes.TypeAssignmentNode;
+import com.cowlark.cowbel.ast.nodes.TypeVariableNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.MultipleDefinitionException;
 import com.cowlark.cowbel.errors.TypeNotFound;
@@ -19,11 +25,20 @@ public class TypeContext implements Comparable<TypeContext>
 {
 	private static int _globalid = 0;
 	
+	private static class InstantiationData
+	{
+		Type type;
+		IdentifierNode identifier;
+		List<Type> typeassignments;
+	};
+	
 	private int _id = _globalid++;
 	private Node _node;
 	private TypeContext _parent;
-	private TreeMap<IdentifierNode, Type> _types =
-		new TreeMap<IdentifierNode, Type>(IdentifierNode.valueComparator);
+	private TreeMap<String, InstantiationData> _types =
+		new TreeMap<String, InstantiationData>();
+	private TreeMap<String, TypeTemplate> _typeTemplates =
+		new TreeMap<String, TypeTemplate>();
 	
 	public TypeContext(Node node, TypeContext parent)
 	{
@@ -57,71 +72,131 @@ public class TypeContext implements Comparable<TypeContext>
 		return 1;
 	}
 	
-	private void add_assignments_to_map(Map<String, Type> map)
-	{
-		if (_parent != null)
-			_parent.add_assignments_to_map(map);
-		
-		for (Map.Entry<IdentifierNode, Type> e : _types.entrySet())
-			map.put(e.getKey().getText(), e.getValue());
-	}
-	
-	public Map<String, Type> getTypeAssignments()
-	{
-		Map<String, Type> map = new TreeMap<String, Type>();
-		add_assignments_to_map(map);
-		return map;
-	}
-	
 	public String getSignature()
 	{
+		return toString();
+	}
+	
+	public void addTypeTemplate(TypeAssignmentNode node)
+		throws CompilationException
+	{
 		StringBuilder sb = new StringBuilder();
-		
-		boolean first = true;
-		for (Map.Entry<String, Type> e : getTypeAssignments().entrySet())
+		sb.append(node.getIdentifier().getText());
+		sb.append('<');
+		sb.append(node.getTypeVariables().getNumberOfChildren());
+		sb.append('>');
+		String signature = sb.toString();
+
+		if (_typeTemplates.containsKey(signature))
 		{
-			if (!first)
-				sb.append(' ');
-			first = false;
-			
-			sb.append(e.getKey());
-			sb.append("=");
-			sb.append(e.getValue().getCanonicalTypeName());
+			for (Map.Entry<String, TypeTemplate> e : _typeTemplates.entrySet())
+			{
+				if (e.getKey().equals(signature))
+				{
+					if (e.getValue() != null)
+						throw new MultipleDefinitionException(
+								e.getValue().getNode().getIdentifier(),
+									node.getIdentifier());
+					else
+						throw new MultipleDefinitionException(
+								e.getValue().getNode().getIdentifier(),
+									null);
+				}
+			}
 		}
 		
-		return sb.toString();
+		_typeTemplates.put(signature, new TypeTemplate(this, node));
 	}
 	
 	public void addType(IdentifierNode identifier, Type type)
 		throws CompilationException
 	{
-		if (_types.containsKey(identifier))
-		{
-			for (Map.Entry<IdentifierNode, Type> e : _types.entrySet())
-			{
-				if (IdentifierNode.valueComparator.compare(e.getKey(), identifier) == 0)
-					throw new MultipleDefinitionException(e.getKey(), identifier);
-			}
-		}
-			
-		_types.put(identifier, type);
+		/* Add an instantiation for this type. */
+		
+		String signature = identifier.getText() + "<>";
+		
+		InstantiationData id = _types.get(signature);
+		if (id != null)
+			throw new MultipleDefinitionException(id.identifier, identifier);
+		
+		id = new InstantiationData();
+		id.identifier = identifier;
+		id.type = type;
+		id.typeassignments = Collections.emptyList();
+		_types.put(signature, id);
+		
 		type.setNameHint(identifier.getText());
+		
+		/* Add a dummy template to prevent redefinition. */
+		
+		_typeTemplates.put(identifier.getText() + "<0>", null);
 	}
 	
-	public Type lookupType(IdentifierNode identifier) throws CompilationException
+	public Type lookupType(TypeVariableNode typevar) throws CompilationException
 	{
+		List<Type> types = new Vector<Type>();
+		for (Node n : typevar.getTypeAssignments())
+		{
+			AbstractTypeNode atn = (AbstractTypeNode) n;
+			Type type = atn.getType();
+			types.add(type);
+		}
+		
+		/* Calculate the type instantiation signature. */
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(typevar.getIdentifier().getText());
+		sb.append('<');
+		
+		boolean first = true;
+		for (Type t : types)
+		{
+			if (!first)
+				sb.append(", ");
+			first = false;
+			
+			sb.append(t.getId());
+		}
+		sb.append('>');
+		
+		String instantiationsignature = sb.toString();
+		
+		/* Calculate the type template signature. */
+		
+		sb = new StringBuilder();
+		sb.append(typevar.getIdentifier().getText());
+		sb.append('<');
+		sb.append(typevar.getTypeAssignments().getNumberOfChildren());
+		sb.append('>');
+		
+		String templatesignature = sb.toString();
+		
+		/* Now search up the type context chain looking for either a type
+		 * instantiation or a type template that matches. */
+		
 		TypeContext tc = this;
 		
 		do
 		{
-			Type t = tc._types.get(identifier);
-			if (t != null)
-				return t;
+			InstantiationData id = tc._types.get(instantiationsignature);
+			if (id != null)
+				return id.type;
+			
+			TypeTemplate tt = tc._typeTemplates.get(templatesignature);
+			if (tt != null)
+			{
+				id = new InstantiationData();
+				id.identifier = tt.getNode().getIdentifier();
+				id.typeassignments = types;
+				id.type = tt.instantiate(typevar, types);
+				tc._types.put(instantiationsignature, id);
+				return id.type;
+			}
 
 			tc = tc._parent;
 		}
 		while (tc != null);
 		
-		throw new TypeNotFound(this, identifier);
+		throw new TypeNotFound(this, typevar);
 	}
 }

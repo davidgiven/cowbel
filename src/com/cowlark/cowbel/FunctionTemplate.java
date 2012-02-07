@@ -14,7 +14,7 @@ import com.cowlark.cowbel.ast.nodes.TypeListNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.types.FunctionType;
 
-public class FunctionTemplate extends AbstractTemplate
+public class FunctionTemplate extends AbstractCallableTemplate
 {
 	private static ASTCopyVisitor astCopyVisitor = new ASTCopyVisitor();
 	private static TreeMap<String, Function> _functions = new TreeMap<String, Function>();

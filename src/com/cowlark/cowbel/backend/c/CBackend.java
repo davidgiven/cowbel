@@ -334,6 +334,23 @@ public class CBackend extends ImperativeBackend
 		return "f" + _funcid++ + "_" + name;
 	}
 
+	/* Produces an lvalue to the constructor. */
+	
+	private String clvalue(Node node, Constructor c)
+	{
+		StringBuilder sb = new StringBuilder();
+		Constructor current = node.getScope().getConstructor();
+		
+		sb.append(clabel(current));
+		if (current != c)
+		{
+			sb.append("->");
+			sb.append(clabel(c));
+		}
+		
+		return sb.toString();
+	}
+	
 	/* Produces an lvalue to the variable's storage. */
 	
 	private String clvalue(Node node, Variable var)
@@ -343,14 +360,7 @@ public class CBackend extends ImperativeBackend
 		
 		if (varcon.isStackVariable(var))
 		{
-			Constructor current = node.getScope().getConstructor();
-			
-			sb.append(clabel(current));
-			if (current != varcon)
-			{
-				sb.append("->");
-				sb.append(clabel(varcon));
-			}
+			sb.append(clvalue(node, varcon));
 			sb.append("->");
 			sb.append(clabel(var));
 		}
@@ -711,9 +721,10 @@ public class CBackend extends ImperativeBackend
 	@Override
 	public void visit(DirectFunctionCallInstruction insn)
 	{
+		Node node = insn.getNode();
 		Function function = insn.getFunction();
 		function_call(insn, clabel(function),
-				clabel(function.getConstructor().getParentConstructor()));
+				clvalue(node, function.getConstructor().getParentConstructor()));
 	}
 	
 	@Override

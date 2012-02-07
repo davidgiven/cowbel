@@ -17,8 +17,8 @@ import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.TypeParameterMismatch;
 import com.cowlark.cowbel.types.Type;
 
-public abstract class AbstractTemplate
-		implements Comparable<AbstractTemplate>, HasNode
+public abstract class AbstractCallableTemplate
+		implements Comparable<AbstractCallableTemplate>, HasNode
 {
 	private static int _globalid = 0;
 	
@@ -27,7 +27,7 @@ public abstract class AbstractTemplate
 	private FunctionHeaderNode _ast;
 	private String _signature;
 	
-	public AbstractTemplate(TypeContext parentContext,
+	public AbstractCallableTemplate(TypeContext parentContext,
 			FunctionHeaderNode ast)
 	{
 		_parentContext = parentContext;
@@ -60,7 +60,7 @@ public abstract class AbstractTemplate
 	}
 	
 	@Override
-	public int compareTo(AbstractTemplate other)
+	public int compareTo(AbstractCallableTemplate other)
 	{
 		if (_id < other._id)
 			return -1;
@@ -89,7 +89,7 @@ public abstract class AbstractTemplate
 		{
 			IdentifierNode id = ids.getIdentifier(i);
 			TypeVariableNode typenode = types.getType(i);
-			Type type = tc.lookupType(typenode.getIdentifier());
+			Type type = tc.lookupType(typenode);
 			
 			newcontext.addType(id, type);
 		}

@@ -18,10 +18,12 @@ public class TypeAssignmentNode extends AbstractStatementNode
     }
 	
 	public TypeAssignmentNode(Location start, Location end,
-			IdentifierNode identifier, AbstractTypeNode type)
+			IdentifierNode identifier, IdentifierListNode typevars,
+			AbstractTypeNode type)
     {
 		super(start, end);
 		addChild(identifier);
+		addChild(typevars);
 		addChild(type);
     }
 
@@ -30,9 +32,14 @@ public class TypeAssignmentNode extends AbstractStatementNode
 		return (IdentifierNode) getChild(0);
 	}
 	
-	public AbstractTypeNode getType()
+	public IdentifierListNode getTypeVariables()
 	{
-		return (AbstractTypeNode) getChild(1);
+		return (IdentifierListNode) getChild(1);
+	}
+	
+	public AbstractTypeNode getTypeNode()
+	{
+		return (AbstractTypeNode) getChild(2);
 	}
 	
 	@Override

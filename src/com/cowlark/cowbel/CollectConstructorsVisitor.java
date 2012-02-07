@@ -6,20 +6,12 @@
 
 package com.cowlark.cowbel;
 
-import java.util.Map;
 import java.util.Set;
 import com.cowlark.cowbel.ast.RecursiveVisitor;
-import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.BlockExpressionNode;
 import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.WhileStatementNode;
 import com.cowlark.cowbel.errors.CompilationException;
-import com.cowlark.cowbel.methods.VirtualMethod;
-import com.cowlark.cowbel.types.InterfaceType;
 
 public class CollectConstructorsVisitor extends RecursiveVisitor
 {

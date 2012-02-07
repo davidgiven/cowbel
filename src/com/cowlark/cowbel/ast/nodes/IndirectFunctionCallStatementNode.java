@@ -12,7 +12,7 @@ import com.cowlark.cowbel.parser.core.Location;
 
 public class IndirectFunctionCallStatementNode extends AbstractStatementNode
 {
-	IndirectFunctionCallStatementNode(Location start, Location end)
+	public IndirectFunctionCallStatementNode(Location start, Location end)
     {
 		super(start, end);
     }

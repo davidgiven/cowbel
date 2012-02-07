@@ -7,25 +7,25 @@
 package com.cowlark.cowbel.errors;
 
 import com.cowlark.cowbel.TypeContext;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
+import com.cowlark.cowbel.ast.nodes.TypeVariableNode;
 
 public class TypeNotFound extends CompilationException
 {
     private static final long serialVersionUID = -2409430033855342682L;
     
 	private TypeContext _typecontext;
-    private IdentifierNode _name;
+    private TypeVariableNode _typevar;
     
-	public TypeNotFound(TypeContext typecontext, IdentifierNode name)
+	public TypeNotFound(TypeContext typecontext, TypeVariableNode typevar)
     {
 		_typecontext = typecontext;
-		_name = name;
+		_typevar = typevar;
     }
 	
 	@Override
 	public String getMessage()
 	{
-		return "Type '" + _name.getText() + "' not found in scope at " +
+		return "Type '" + _typevar.getText() + "' not found in scope at " +
 			_typecontext.getNode().locationAsString();
 	}
 }
