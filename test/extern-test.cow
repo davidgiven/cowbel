@@ -19,7 +19,7 @@ type Array<T> =
 
 function Array<T>(size: integer, initialiser: T): Array<T>
 {
-	var ptr: integer = 0;
+	var ptr: __extern = 0;
 	extern "${ptr} = calloc(${size}, sizeof(${initialiser}));";
 	
 	return

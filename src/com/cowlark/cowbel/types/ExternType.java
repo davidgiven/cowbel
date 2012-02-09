@@ -10,23 +10,23 @@ import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.TypesNotCompatibleException;
 
-public class IntegerType extends PrimitiveType
+public class ExternType extends PrimitiveType
 {
-	private static IntegerType _instance = new IntegerType();
+	private static ExternType _instance = new ExternType();
 	
-	public static IntegerType create()
+	public static ExternType create()
 	{
 		return _instance;
 	}
 	
-	private IntegerType()
+	private ExternType()
     {
     }
 	
 	@Override
 	public String getCanonicalTypeName()
 	{
-	    return "integer";
+	    return "__extern";
 	}
 	
 	@Override
@@ -34,4 +34,16 @@ public class IntegerType extends PrimitiveType
 	{
 	    visitor.visit(this);	    
 	}
+	
+	/* Special hole in the type rules: integers can be assigned to __extern. */
+	
+	@Override
+	protected void unifyWithImpl(Node node, Type src)
+	        throws CompilationException
+	{
+		if (src instanceof IntegerType)
+			return;
+		
+		super.unifyWithImpl(node, src);
+	}	
 }
