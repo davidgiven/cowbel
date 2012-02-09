@@ -8,7 +8,6 @@ package com.cowlark.cowbel.types;
 
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.errors.CompilationException;
-import com.cowlark.cowbel.errors.TypesNotCompatibleException;
 
 public class ExternType extends PrimitiveType
 {

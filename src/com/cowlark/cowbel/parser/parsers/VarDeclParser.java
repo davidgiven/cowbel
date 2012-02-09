@@ -64,14 +64,14 @@ public class VarDeclParser extends Parser
 		}
 		
 		IdentifierListNode identifierspr = new IdentifierListNode(
-				variablespr, variablespr.end(), identifiers);
+				variablespr.start(), variablespr.end(), identifiers);
 		
 		ParseResult initialiserpr = parse_initialiser(identifierspr, variablespr.end());
 		if (initialiserpr.failed())
 			return initialiserpr;
 		
 		return new StatementListNode(location, initialiserpr.end(),
-				new VarDeclarationNode(pdln, pdln.end(),
+				new VarDeclarationNode(pdln.start(), pdln.end(),
 						pdln),
 				(AbstractStatementNode) initialiserpr);
 	}

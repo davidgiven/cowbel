@@ -8,6 +8,9 @@ package com.cowlark.cowbel.parser.core;
 
 public class Location implements Comparable<Location>
 {
+	private static int _globalid = 0;
+	
+	private int _id = _globalid++;
 	protected String _data;
 	protected String _filename;
 	protected int _offset;
@@ -35,14 +38,16 @@ public class Location implements Comparable<Location>
 	@Override
 	public int hashCode()
 	{
-		return _filename.hashCode() ^ (_offset << 16);
+		return _id ^ (_offset << 16);
 	}
 	
 	@Override
 	public int compareTo(Location o)
 	{
-		// FIXME: need to compare more than just offsets
-		
+		if (_id < o._id)
+			return -1;
+		if (_id > o._id)
+			return 1;
 		if (_offset < o._offset)
 			return -1;
 		if (_offset > o._offset)
@@ -55,6 +60,21 @@ public class Location implements Comparable<Location>
 	{
 		return (compareTo((Location)obj) == 0);
 	}
+	
+	public int getColumn()
+    {
+	    return _offset - _lineOffset;
+    }
+	
+	public int getLineNumber()
+    {
+	    return _lineNumber;
+    }
+	
+	public String getFilename()
+    {
+	    return _filename;
+    }
 	
 	public String locationAsString()
 	{
