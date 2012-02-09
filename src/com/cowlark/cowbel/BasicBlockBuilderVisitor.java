@@ -48,7 +48,9 @@ import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.ClassType;
+import com.cowlark.cowbel.types.ExternType;
 import com.cowlark.cowbel.types.FunctionType;
+import com.cowlark.cowbel.types.IntegerType;
 import com.cowlark.cowbel.types.InterfaceType;
 import com.cowlark.cowbel.types.Type;
 
@@ -81,6 +83,12 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		if (srctype.equals(targettype))
 			return value;
 		
+		/* Special hole in the type rules: integers can be cast to __extern;
+		 * but the extern is left uninitialised. */
+		
+		if ((targettype instanceof ExternType) && (srctype instanceof IntegerType))
+			return _currentBB.createTemporary(node, targettype);
+
 		assert(targettype instanceof InterfaceType);
 		assert(srctype instanceof ClassType);
 		

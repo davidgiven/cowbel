@@ -10,6 +10,7 @@ import com.cowlark.cowbel.Constructor;
 import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
 import com.cowlark.cowbel.types.BooleanType;
 import com.cowlark.cowbel.types.ClassType;
+import com.cowlark.cowbel.types.ExternType;
 import com.cowlark.cowbel.types.FunctionType;
 import com.cowlark.cowbel.types.IntegerType;
 import com.cowlark.cowbel.types.InterfaceType;
@@ -32,6 +33,12 @@ public class CTypeNameBuilder extends TypeVisitor
 		_type = null;
 		type.visit(this);
 		return _type;
+	}
+	
+	@Override
+	public void visit(ExternType type)
+	{
+		_type = "void*";
 	}
 	
 	@Override
