@@ -22,6 +22,7 @@ import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
 import com.cowlark.cowbel.ast.nodes.DummyExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionStatementNode;
+import com.cowlark.cowbel.ast.nodes.ExternStatementNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.GotoStatementNode;
@@ -317,6 +318,19 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		
 		_currentBB.insnGoto(node, next);
 		_currentBB.terminate();
+	}
+	
+	@Override
+	public void visit(ExternStatementNode node) throws CompilationException
+	{
+		List<Variable> variables = new Vector<Variable>();
+		for (Node n : node)
+		{
+			VarReferenceNode varnode = (VarReferenceNode) n;
+			variables.add((Variable) varnode.getSymbol());
+		}
+		
+		_currentBB.insnExtern(node, node.getTemplate(), variables);
 	}
 	
 	@Override
