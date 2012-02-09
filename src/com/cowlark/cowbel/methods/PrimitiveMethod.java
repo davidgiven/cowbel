@@ -35,6 +35,7 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new IntegerNegateMethod());
     	registerPrimitiveMethod(new IntegerAddMethod());
     	registerPrimitiveMethod(new IntegerSubMethod());
+    	registerPrimitiveMethod(new IntegerMultiplyMethod());
     	registerPrimitiveMethod(new IntegerToStringMethod());    
     }
 
