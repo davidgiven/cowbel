@@ -16,6 +16,7 @@ import com.cowlark.cowbel.instructions.BooleanConstantInstruction;
 import com.cowlark.cowbel.instructions.ConstructInstruction;
 import com.cowlark.cowbel.instructions.CreateObjectReferenceInstruction;
 import com.cowlark.cowbel.instructions.DirectFunctionCallInstruction;
+import com.cowlark.cowbel.instructions.ExternInstruction;
 import com.cowlark.cowbel.instructions.FunctionExitInstruction;
 import com.cowlark.cowbel.instructions.GotoInstruction;
 import com.cowlark.cowbel.instructions.IfInstruction;
@@ -190,5 +191,10 @@ public class BasicBlock implements Comparable<BasicBlock>
 	{
 		addInstruction(new CreateObjectReferenceInstruction(node,
 				constructor, outvar));
+	}
+	
+	public void insnExtern(Node node, String template, List<Variable> vars)
+	{
+		addInstruction(new ExternInstruction(node, template, vars));
 	}
 }

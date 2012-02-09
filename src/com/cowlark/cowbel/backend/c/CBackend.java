@@ -28,6 +28,7 @@ import com.cowlark.cowbel.instructions.BooleanConstantInstruction;
 import com.cowlark.cowbel.instructions.ConstructInstruction;
 import com.cowlark.cowbel.instructions.CreateObjectReferenceInstruction;
 import com.cowlark.cowbel.instructions.DirectFunctionCallInstruction;
+import com.cowlark.cowbel.instructions.ExternInstruction;
 import com.cowlark.cowbel.instructions.FunctionExitInstruction;
 import com.cowlark.cowbel.instructions.GotoInstruction;
 import com.cowlark.cowbel.instructions.HasInputVariables;
@@ -800,6 +801,25 @@ public class CBackend extends ImperativeBackend
 		}
 		
 		print(";\n");
+	}
+	
+	@Override
+	public void visit(ExternInstruction insn)
+	{
+		Node node = insn.getNode();
+		String template = insn.getTemplate();
+		List<Variable> vars = insn.getVariables();
+		
+		for (int i=0; i<template.length(); i++)
+		{
+			char c = template.charAt(i);
+			if (c < 10)
+				printvar(node, vars.get((int) c));
+			else
+				print(c);
+		}
+		
+		print("\n");
 	}
 	
 	@Override

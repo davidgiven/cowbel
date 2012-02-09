@@ -17,6 +17,7 @@ import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
 import com.cowlark.cowbel.ast.nodes.DummyExpressionNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionStatementNode;
+import com.cowlark.cowbel.ast.nodes.ExternStatementNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.FunctionHeaderNode;
 import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
@@ -260,4 +261,9 @@ public class Visitor
 	{
 		visit((Node) node);
 	}
+	
+	public void visit(ExternStatementNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}	
 }

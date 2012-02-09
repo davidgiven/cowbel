@@ -50,6 +50,12 @@ public class StringConstantParser extends Parser
 						case 'r':
 							sb.appendCodePoint('\r');
 							break;
+					
+						case '\\':
+						case '"':
+						case '\'':
+							sb.appendCodePoint(c);
+							break;
 							
 						default:
 							return new InvalidCharacterInStringConstant(end);

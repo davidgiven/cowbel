@@ -41,6 +41,7 @@ public class S
     	"do",
     	"for",
     	"type",
-    	"implements"
+    	"implements",
+    	"extern"
     };
 }

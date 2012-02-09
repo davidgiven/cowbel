@@ -20,6 +20,7 @@ import com.cowlark.cowbel.ast.nodes.DirectFunctionCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
 import com.cowlark.cowbel.ast.nodes.ExpressionStatementNode;
+import com.cowlark.cowbel.ast.nodes.ExternStatementNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.GotoStatementNode;
@@ -36,6 +37,7 @@ import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
 import com.cowlark.cowbel.ast.nodes.TypeAssignmentNode;
 import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
 import com.cowlark.cowbel.ast.nodes.VarDeclarationNode;
+import com.cowlark.cowbel.ast.nodes.VarReferenceNode;
 import com.cowlark.cowbel.ast.nodes.WhileStatementNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.FunctionParameterMismatch;
@@ -266,6 +268,16 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 	{
 	}
 
+	@Override
+	public void visit(ExternStatementNode node) throws CompilationException
+	{
+		for (Node n : node)
+		{
+			VarReferenceNode varnode = (VarReferenceNode) n;
+			varnode.calculateType();
+		}
+	}
+	
 	@Override
 	public void visit(Node node) throws CompilationException
 	{

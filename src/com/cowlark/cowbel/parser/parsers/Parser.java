@@ -59,6 +59,7 @@ public abstract class Parser
 	public static InterfaceDeclarationParser InterfaceDeclarationParser = new InterfaceDeclarationParser();
 	public static InterfaceEntryParser InterfaceEntryParser = new InterfaceEntryParser();
 	public static ImplementsStatementParser ImplementsStatementParser = new ImplementsStatementParser();
+	public static ExternStatementParser ExternStatementParser = new ExternStatementParser();
 	
 	public static Parser EOFParser = new EOFParser();
 	public static Parser DotParser = new TrivialParser(".");
@@ -92,6 +93,7 @@ public abstract class Parser
 	public static Parser ForTokenParser = new TrivialParser("for");
 	public static Parser TypeTokenParser = new TrivialParser("type");
 	public static Parser ImplementsTokenParser = new TrivialParser("implements");
+	public static Parser ExternTokenParser = new TrivialParser("extern");
 
 	private static HashMap<Location, HashMap<Parser, ParseResult>> _cache =
 		new HashMap<Location, HashMap<Parser, ParseResult>>(); 

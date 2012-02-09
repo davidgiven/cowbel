@@ -4,5 +4,6 @@
 	<classpathentry kind="lib" path="/usr/share/java/commons-io.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/usr/share/java/commons-cli.jar"/>
+	<classpathentry kind="lib" path="/usr/share/java/commons-lang3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
