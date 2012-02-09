@@ -22,6 +22,16 @@ public class CompilerTimer implements CompilerListener
 		System.err.println(message + ": " + delta + "ms");
 	}
 	
+	public void onPreprocessBegin()
+	{
+		reset();
+	}
+	
+	public void onPreprocessEnd()
+	{
+		report("Preprocessing");
+	}
+	
 	@Override
 	public void onParseBegin()
 	{

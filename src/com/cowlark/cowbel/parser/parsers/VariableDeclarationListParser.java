@@ -40,12 +40,12 @@ public class VariableDeclarationListParser extends Parser
 			}
 			else
 			{
-				typepr = new InferredTypeNode(identifierpr, identifierpr.end());
+				typepr = new InferredTypeNode(identifierpr.start(), identifierpr.end());
 				n = identifierpr.end();
 			}
 			
 			ParameterDeclarationNode pdn = new ParameterDeclarationNode(
-					identifierpr, typepr.end(),
+					identifierpr.start(), typepr.end(),
 					(IdentifierNode) identifierpr,
 					(AbstractTypeNode) typepr);
 			params.add(pdn);

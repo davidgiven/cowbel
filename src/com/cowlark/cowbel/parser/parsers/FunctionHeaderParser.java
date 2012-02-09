@@ -46,7 +46,7 @@ public class FunctionHeaderParser extends Parser
 					(IdentifierNode) namepr,
 					(IdentifierListNode) typevarspr,
 					(ParameterDeclarationListNode) inputargspr,
-					new ParameterDeclarationListNode(pr, pr));
+					new ParameterDeclarationListNode(pr.start(), pr.start()));
 		}
 		
 		ParseResult outputargspr;

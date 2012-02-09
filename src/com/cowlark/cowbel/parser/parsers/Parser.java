@@ -7,6 +7,8 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.MutableLocation;
 import com.cowlark.cowbel.parser.core.ParseResult;
@@ -154,11 +156,43 @@ public abstract class Parser
 		}
 	}
 	
+	private static Pattern _line_directive_pattern =
+		Pattern.compile(" ([0-9]+) \"([^\"]*)\".*");
+	
+	private void line_directive(MutableLocation loc)
+	{
+		StringBuilder sb = new StringBuilder();
+		
+		for (;;)
+		{
+			int c = loc.codepointAtOffset(0);
+			loc.advance();
+			
+			if (c == '\n')
+				break;
+			sb.appendCodePoint(c);
+		}
+		
+		Matcher match = _line_directive_pattern.matcher(sb);
+		if (!match.find())
+			return;
+		
+		loc.setLineNumber(Integer.valueOf(match.group(1)));
+		loc.setFilename(match.group(2));
+	}
+	
 	private void whitespace(MutableLocation loc)
 	{
 		for (;;)
 		{
 			int c = loc.codepointAtOffset(0);
+			
+			if ((c == '#') && (loc.getColumn() == 0))
+			{
+				line_directive(loc);
+				continue;
+			}
+			
 			if (!Character.isWhitespace(c))
 			{
 				if (c == '/')
@@ -188,7 +222,7 @@ public abstract class Parser
 			return pr;
 
 		int c = location.codepointAtOffset(0);
-		if (Character.isWhitespace(c) || (c == '/'))
+		if (Character.isWhitespace(c) || (c == '/') || (c == '#'))
 		{
 			MutableLocation ml = new MutableLocation(location);
 			whitespace(ml);

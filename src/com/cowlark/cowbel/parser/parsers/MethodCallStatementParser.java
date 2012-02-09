@@ -54,7 +54,7 @@ public class MethodCallStatementParser extends Parser
 				if (pr.success())
 				{
 					return new MethodCallStatementNode(
-							identifierpr, pr.end(),
+							identifierpr.start(), pr.end(),
 							(AbstractExpressionNode) seed,
 							(IdentifierNode) identifierpr,
 							(TypeListNode) typeargspr,
@@ -65,7 +65,7 @@ public class MethodCallStatementParser extends Parser
 				/* If not, add it to the seed and go around again. */
 				
 				seed = new MethodCallExpressionNode(
-						identifierpr, argumentspr.end(),
+						identifierpr.start(), argumentspr.end(),
 						(AbstractExpressionNode) seed,
 						(IdentifierNode) identifierpr,
 						(TypeListNode) typeargspr,
@@ -98,7 +98,7 @@ public class MethodCallStatementParser extends Parser
 			/* Otherwise, update the seed and go around again. */
 			
 			seed = new IndirectFunctionCallExpressionNode(
-					argumentspr, argumentspr.end(),
+					argumentspr.start(), argumentspr.end(),
 					(AbstractExpressionNode) seed,
 					(ExpressionListNode) argumentspr);
 		}

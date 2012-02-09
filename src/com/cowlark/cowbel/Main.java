@@ -7,7 +7,6 @@
 package com.cowlark.cowbel;
 
 import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,7 +16,7 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import com.cowlark.cowbel.backend.Backend;
 import com.cowlark.cowbel.backend.c.CBackend;
 import com.cowlark.cowbel.errors.CompilationException;
@@ -29,6 +28,7 @@ public class Main
 {
 	public static String OutputFile;
 	public static String Backend;
+	public static String Preprocessor = "cpp -undef -nostdinc";
 	public static boolean DumpAST;
 	public static boolean DumpIR;
 	public static boolean DumpConstructors;
@@ -44,6 +44,7 @@ public class Main
 	{
 		HelpFormatter hf = new HelpFormatter();
 		hf.printHelp("cowbel [<options>] <input files...>", options);
+		System.err.println("\nPreprocessor: " + Preprocessor);
 		System.exit(0);
 	}
 	
@@ -60,6 +61,12 @@ public class Main
 		
 		options.addOption("b", "backend", true,
 						"specifies backend to use");
+		
+		options.addOption("p", "preprocessor", true,
+						"specifies preprocessor to use");
+		
+		options.addOption("I", "include", true,
+						"adds include path");
 		
 		options.addOption("da", "dump-ast", false,
 						"dump AST to stdout");
@@ -96,6 +103,14 @@ public class Main
 			DumpIR = cli.hasOption("di");
 			DumpConstructors = cli.hasOption("dc");
 			DumpInterfaces = cli.hasOption("dn");
+			
+			if (cli.hasOption("p"))
+				Preprocessor = cli.getOptionValue("p");
+			
+			String[] includes = cli.getOptionValues("I");
+			if (includes != null)
+				for (String s : includes)
+					Preprocessor = Preprocessor + " -I '" + s + "'";
 		}
 		catch (ParseException e)
 		{
@@ -124,11 +139,21 @@ public class Main
 		if (args.length > 1)
 			abort("Sorry, only one input filename is supported currently.");
 		
+		CompilerTimer timer = new CompilerTimer();
+		
 		try
 		{
 			String filename = args[0];
 			
-			String data = FileUtils.readFileToString(new File(filename), "UTF-8");
+			timer.onPreprocessBegin();
+			Process preprocessor = Runtime.getRuntime().exec(Preprocessor+" "+filename);
+			String data = IOUtils.toString(preprocessor.getInputStream());
+			int result = preprocessor.waitFor();
+			timer.onPreprocessEnd();
+			
+			if (result != 0)
+				System.exit(result);
+
 			Location loc = new Location(data, filename);
 			
 			FileOutputStream fos = new FileOutputStream(OutputFile);
@@ -138,7 +163,7 @@ public class Main
 
 			Compiler c = new Compiler();
 			Backend backend = createBackend(c, bos);
-			c.setListener(new CompilerTimer());
+			c.setListener(timer);
 			c.setInput(loc);
 			c.setBackend(backend);
 			c.compile();
@@ -172,6 +197,11 @@ public class Main
 		catch (IOException e)
 		{
 			System.err.println("I/O error: "+e.getMessage());
+			System.exit(1);
+		}
+		catch (InterruptedException e)
+		{
+			System.err.println("Failed to invoke preprocessor");
 			System.exit(1);
 		}
 	}

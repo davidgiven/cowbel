@@ -13,6 +13,16 @@ public class MutableLocation extends Location
 	    super(loc);
     }
 	
+	public void setLineNumber(int i)
+	{
+		_lineNumber = i;
+	}
+	
+	public void setFilename(String f)
+	{
+		_filename = f;
+	}
+	
 	public void advance()
 	{
 		if (_offset >= _data.length())

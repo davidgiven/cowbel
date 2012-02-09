@@ -29,7 +29,7 @@ public class PrefixOperatorParser extends Parser
 		
 		return new MethodCallExpressionNode(location, pr2.end(),
 				(AbstractExpressionNode)pr2, (IdentifierNode)pr1,
-				new TypeListNode(pr1, pr1.end()),
-				new ExpressionListNode(pr1, pr1.end()));
+				new TypeListNode(pr1.start(), pr1.end()),
+				new ExpressionListNode(pr1.start(), pr1.end()));
 	}
 }

@@ -25,8 +25,8 @@ public class ExpressionLowParser extends Parser
 		
 		return new MethodCallExpressionNode(seed.start(), right.end(),
 				(AbstractExpressionNode) seed, (IdentifierNode) operator,
-				new TypeListNode(operator, operator.end()),
-				new ExpressionListNode(right, right.end(),
+				new TypeListNode(operator.start(), operator.end()),
+				new ExpressionListNode(right.start(), right.end(),
 						(AbstractExpressionNode) right));
 	}
 	

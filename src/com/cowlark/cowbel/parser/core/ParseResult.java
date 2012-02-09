@@ -6,14 +6,28 @@
 
 package com.cowlark.cowbel.parser.core;
 
-public abstract class ParseResult extends Location
+public abstract class ParseResult implements Comparable<ParseResult>
 {
+	private static int _globalid = 0;
+	
+	private int _id = _globalid++;
+	private Location _start;
 	private Location _end;
 	
 	public ParseResult(Location start, Location end)
 	{
-		super(start);
+		_start = start;
 		_end = end;
+	}
+	
+	@Override
+    public int compareTo(ParseResult o)
+	{
+		if (_id < o._id)
+			return -1;
+		if (_id > o._id)
+			return 1;
+		return 0;
 	}
 	
 	abstract public boolean failed();
@@ -25,7 +39,7 @@ public abstract class ParseResult extends Location
 
 	public Location start()
 	{
-		return this;
+		return _start;
 	}
 	
 	public Location end()
@@ -43,17 +57,22 @@ public abstract class ParseResult extends Location
 	{
 		if (_text == null)
 		{
-			int len = calculateLengthTo(end());
-			_text = getText(len);
+			int len = start().calculateLengthTo(end());
+			_text = start().getText(len);
 		}
 		return _text;
 	}
 	
-	
+	public String locationAsString()
+	{
+		return start().locationAsString();
+	}
+		
 	@Override
 	public String toString()
 	{
-		int len = calculateLengthTo(end());
-		return getClass().toString() + "=("+locationAsString()+"='" + shortened(len, 16) + "')";
+		Location loc = start();
+		int len = loc.calculateLengthTo(end());
+		return getClass().toString() + "=("+loc.locationAsString()+"='" + loc.shortened(len, 16) + "')";
 	}
 }
