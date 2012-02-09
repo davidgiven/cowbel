@@ -148,6 +148,7 @@ public class Main
 			timer.onPreprocessBegin();
 			Process preprocessor = Runtime.getRuntime().exec(Preprocessor+" "+filename);
 			String data = IOUtils.toString(preprocessor.getInputStream());
+			IOUtils.copy(preprocessor.getErrorStream(), System.err);
 			int result = preprocessor.waitFor();
 			timer.onPreprocessEnd();
 			
