@@ -30,6 +30,11 @@ public abstract class ParseResult implements Comparable<ParseResult>
 		return 0;
 	}
 	
+	public int getId()
+    {
+	    return _id;
+    }
+	
 	abstract public boolean failed();
 	
 	public boolean success()
