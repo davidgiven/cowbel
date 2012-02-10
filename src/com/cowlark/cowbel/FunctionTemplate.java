@@ -8,6 +8,7 @@ package com.cowlark.cowbel;
 
 import java.util.Map;
 import java.util.TreeMap;
+import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.TypeListNode;
@@ -62,10 +63,20 @@ public class FunctionTemplate extends AbstractCallableTemplate
 	public Function instantiate(Node node, TypeListNode typeassignments)
 				throws CompilationException
 	{
+		FunctionDefinitionNode funcdef = getFunctionDefinition();
+		
 		TypeContext tc = createTypeContext(node, typeassignments);
 		String signature = tc.getSignature();
 		signature += " ";
-		signature += getFunctionDefinition().locationAsString();
+		
+		AbstractScopeConstructorNode definingscope = funcdef.getScope();
+		if (definingscope != null)
+		{
+			signature += definingscope.getId();
+			signature += " ";
+		}
+		
+		signature += funcdef.locationAsString();
 
 		Function function = _functions.get(signature);
 		if (function != null)
@@ -77,18 +88,18 @@ public class FunctionTemplate extends AbstractCallableTemplate
 		/* Deep-copy the AST tree so the version the function gets can be
 		 * annotated without affecting any other instantiations. */
 		
-		getFunctionDefinition().visit(astCopyVisitor);
+		funcdef.visit(astCopyVisitor);
 		FunctionDefinitionNode ast = (FunctionDefinitionNode) astCopyVisitor.getResult();
 		
-		ast.setParent(getFunctionDefinition().getParent());
+		ast.setParent(funcdef.getParent());
 		ast.setTypeContext(tc);
 		
 		function = new Function(signature, ast);
 		FunctionType type = (FunctionType) ast.getFunctionHeader().calculateFunctionType();
 		function.setType(type);
 		
-		if (ast.getParent() != null)
-			function.setScope(ast.getParent().getScope());
+		if (definingscope != null)
+			function.setScope(definingscope);
 
 		_newFunctions.put(signature, function);
 		

@@ -72,6 +72,11 @@ public class Function implements Comparable<Function>, HasNode, HasScope
 	    _scope = scope;
     }
 	
+	public AbstractScopeConstructorNode getDefiningScope()
+	{
+		return _node.getScope();
+	}
+	
 	public FunctionType getType()
     {
 	    return _type;

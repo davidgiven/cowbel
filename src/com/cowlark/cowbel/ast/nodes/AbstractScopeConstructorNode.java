@@ -457,7 +457,7 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 	
 	public void importFunction(Function function)
 	{
-		AbstractScopeConstructorNode funcscope = function.getScope();
+		AbstractScopeConstructorNode funcscope = function.getDefiningScope();
 		AbstractScopeConstructorNode thisscope = this;
 		
 		/* No need to import symbols from the current scope. */
