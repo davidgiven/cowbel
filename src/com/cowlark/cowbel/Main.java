@@ -110,7 +110,7 @@ public class Main
 			String[] includes = cli.getOptionValues("I");
 			if (includes != null)
 				for (String s : includes)
-					Preprocessor = Preprocessor + " -I '" + s + "'";
+					Preprocessor = Preprocessor + " -I " + s;
 		}
 		catch (ParseException e)
 		{
