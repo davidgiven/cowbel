@@ -95,9 +95,15 @@ public class ExpressionHighParser extends Parser
 			pr = OpenAngleBracketParser.parse(seed.end());
 			if (pr.success())
 			{
-				seed = parseFunctionCall(seed, pr.end());
-				if (seed.failed())
+				ParseResult funcpr = parseFunctionCall(seed, pr.end());
+				if (funcpr.failed())
+				{
+					/* Ambiguity! We will fail here on expressons like a < b.
+					 * We want the a to be parsed, so instead of returning an
+					 * error, we return the seed. */
 					return seed;
+				}
+				seed = funcpr;
 				continue;
 			}
 			
