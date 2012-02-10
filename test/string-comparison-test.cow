@@ -12,16 +12,23 @@
 
 #include "SimpleIO.ch"
 
-type number = int;
-
-function test<T>(i: T)
+function compare(s1: string, s2: string)
 {
-	println(i.toString());
+	println("s1=<"+s1+">");
+	println("s2=<"+s2+">");
+	
+	if (s1 == s2)
+		println("equal!");
+	else
+		println("not equal.");
+	println("");
 }
 
-test<number>(42);
-
-{
-	type number = boolean;
-	test<number>(true);
-}
+compare("foo", "foo");
+compare("foo", "oo");
+compare("foo", "fo");
+compare("oo", "foo");
+compare("fo", "foo");
+compare("", "");
+compare("foo", "");
+compare("", "foo");

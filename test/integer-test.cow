@@ -18,7 +18,7 @@ function testresultb(t: string, i1: int, i2: int, r: boolean)
 	if (r)
 		s = "true";
 		
-	println(i1.toString() + " " + t " " + i2.toString() + " = " + s); 
+	println(i1.toString() + " " + t + " " + i2.toString() + " = " + s); 
 }
 
 function testresulti(t: string, i1: int, i2: int, r: int)

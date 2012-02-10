@@ -46,4 +46,39 @@ function Array<T>(size: int, initialiser: T): Array<T>
 	};
 }
 
+
+type Array2D<T> =
+{
+	function get(x: int, y: int): T;
+	function set(x: int, y: int, value: T);
+	function size(): (width: int, height: int);
+};
+
+function Array2D<T>(width: int, height: int, initialiser: T): Array2D<T>
+{
+	var ptr: __extern = 0;
+	extern "${ptr} = calloc(${width}*${height}, sizeof(${initialiser}));";
+	
+	return
+	{
+		implements Array2D<T>;
+		
+		function get(x: int, y: int): (result: T)
+		{
+			extern "${result} = ((typeof(${result})*)${ptr})[${x} + ${y}*${width}];";
+		}
+		
+		function set(x: int, y: int, value: T)
+		{
+			extern "((typeof(${value})*)${ptr})[${x} + ${y}*${width}] = ${value};";
+		}
+		
+		function size(): (w: int, h: int)
+		{
+			w = width;
+			h = height;
+		}
+	};
+}
+
 #endif
