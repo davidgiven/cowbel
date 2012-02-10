@@ -1,0 +1,117 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+#include "Array.ch"
+
+function fannkuch(n: integer): (sum: integer, maxflips: integer)
+{
+	var p = Array<integer>(n, 0);
+	var q = Array<integer>(n, 0);
+	var s = Array<integer>(n, 0);
+	
+	var sign = 1;
+	maxflips = 0;
+	sum = 0;
+	var m = n - 1;
+
+	for i = 0, n
+	{
+		p.set(i, i);
+		q.set(i, i);
+		s.set(i, i);
+	}
+			
+	do
+	{
+    	var q0 = p.get(0);
+    	if (q0 != 0)
+     	{
+      		for i = 1, n
+      			q.set(i, p.get(i));
+     			
+         	var flips = 1;
+         	do
+         	{
+         		var qq = q.get(q0); 
+            	if (qq == 0)
+            	{
+               		sum = sum + (sign*flips);
+	       			if (flips > maxflips)
+	       				maxflips = flips;
+               		break;
+               	}
+               	
+               	q.set(q0, q0);
+               	if (q0 >= 3)
+               	{
+               		var i = 1;
+               		var j = q0 - 1;
+               		 
+               		do
+               		{
+               			var t = q.get(i);
+               			q.set(i, q.get(j));
+               			q.set(j, t);
+               			i = i + 1;
+               			j = j - 1;
+               		}
+               		while (i < j);
+               	}
+	    		q0 = qq;
+	    		flips = flips + 1;
+	    	}
+	    	while (true);
+	    }
+
+      	if (sign == 1)
+      	{
+      		var t = p.get(1);
+      		p.set(1, p.get(0));
+      		p.set(0, t);
+      		sign = -1;
+      	}
+      	else
+      	{
+      		var t = p.get(1);
+      		p.set(1, p.get(2));
+      		p.set(2, t);
+      		sign = 1;
+      		
+      		for i = 2, n
+      		{
+      			var sx = s.get(i);
+      			if (sx != 0)
+      			{
+      				s.set(i, sx-1);
+      				break;
+      			}
+      			
+      			if (i == m)
+      				return;
+      			
+      			s.set(i, i);
+      			
+      			t = p.get(0);
+      			for j = 0, i+1
+      				p.set(j, p.get(j+1));
+      			p.set(i+1, t);
+      		}
+      	}
+	}
+	while (true);
+}
+
+var n = 11;
+var sum, maxflips = fannkuch(n);
+
+sum.toString().print();
+("Pfannkuchen(" + n.toString() + ") = " + maxflips.toString()).print(); 
