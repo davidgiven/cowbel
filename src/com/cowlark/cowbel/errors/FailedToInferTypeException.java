@@ -21,4 +21,12 @@ public class FailedToInferTypeException extends CompilationException
 		_node = node;
 		_type = type;
     }
+	
+	@Override
+    public String getMessage()
+	{
+		return "Failed to infer the type of the variable at "+
+			_node.locationAsString() + "; you are probably assigning it " +
+			"to itself.";
+	}
 }
