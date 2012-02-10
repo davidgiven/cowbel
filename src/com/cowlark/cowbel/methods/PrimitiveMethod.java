@@ -21,6 +21,10 @@ public abstract class PrimitiveMethod extends Method
     {
     	_primitiveMethods = new HashMap<String, Method>();
     	
+    	/************************************************************/
+    	/*                           STRINGS                        */
+    	/************************************************************/
+
     	registerPrimitiveMethod(new PrimitiveMethod()
 		{
             {
@@ -91,7 +95,7 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new PrimitiveMethod()
 		{
             {
-    			setSignature("boolean.!.1", "boolean._or");
+    			setSignature("boolean.|.1", "boolean._or");
     			setOutputTypes(BooleanType.create());
     			setInputTypes(BooleanType.create());
             }
