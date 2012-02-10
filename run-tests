@@ -1,0 +1,51 @@
+#!/bin/sh
+# cowbel test suite
+# 
+# Written in 2012 by David Given.
+#
+# To the extent possible under law, the author has dedicated all copyright
+# and related and neighboring rights to this software to the public domain
+# worldwide. This software is distributed without any warranty.
+#
+# Please see the file COPYING.CC0 in the distribution package for more
+# information.
+
+for f in \
+	test/array-test.cow \
+	test/assignment-test.cow \
+	test/boolean-test.cow \
+	test/bug-function-scopes.cow \
+	test/bug-inherited-stack-frame.cow \
+	test/deep-upvalues-test.cow \
+	test/extern-test.cow \
+	test/generics-test.cow \
+	test/integer-test.cow \
+	test/interfaces-test.cow \
+	test/life.cow \
+	test/linked-list-test.cow \
+	test/loop-test.cow \
+	test/maybe-test.cow \
+	test/object-constructors-test.cow \
+	test/string-comparison-test.cow \
+	test/type-assignment-test.cow \
+;do
+	echo $f
+	
+	logfile=$f.log
+
+	(
+		if (./cowbel -q -I include -o out.c $f) then
+			if (gcc -Os out.c) then
+				./a.out
+			fi
+		fi
+		exit 1
+	) 2>&1 > $logfile
+
+	if ! cmp --quiet $logfile $logfile.pristine; then 		
+		echo FAILED
+		echo
+		diff -u $logfile.pristine $logfile
+		exit 1
+	fi
+done

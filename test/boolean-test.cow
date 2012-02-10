@@ -12,16 +12,26 @@
 
 #include "SimpleIO.ch"
 
-type number = int;
-
-function test<T>(i: T)
+function printb(b: boolean)
 {
-	println(i.toString());
+	println(b.toString());
 }
 
-test<number>(42);
-
+function test(b: boolean)
 {
-	type number = boolean;
-	test<number>(true);
+	printb(b);
+	printb(!b);
+	printb(b & true);
+	printb(b & false);
+	printb(b | true);
+	printb(b | false);
+	printb(b ^ true);
+	printb(b ^ false);
 }
+
+println("with true:");
+test(true);
+
+println("");
+println("with false:");
+test(false);

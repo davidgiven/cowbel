@@ -1,0 +1,32 @@
+s1=<foo>
+s2=<foo>
+equal!
+
+s1=<foo>
+s2=<oo>
+not equal.
+
+s1=<foo>
+s2=<fo>
+not equal.
+
+s1=<oo>
+s2=<foo>
+not equal.
+
+s1=<fo>
+s2=<foo>
+not equal.
+
+s1=<>
+s2=<>
+equal!
+
+s1=<foo>
+s2=<>
+not equal.
+
+s1=<>
+s2=<foo>
+not equal.
+

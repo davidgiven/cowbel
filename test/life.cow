@@ -10,45 +10,35 @@
  * information.
  */
 
+#include "SimpleIO.ch"
+#include "Array.ch"
+
 var width = 10;
 var height = 10;
 
-/* Nasty hack to set the size of an array. */
-var buffera = [[0]]; buffera.resize(height, [0]);
-var bufferb = [[0]]; bufferb.resize(height, [0]);
+var buffera = Array2D<int>(width, height, 0);
+var bufferb = Array2D<int>(width, height, 0);
 var front = buffera;
 var back = bufferb;
-
-function print(s: string)
-{
-	s.print();
-}
 
 function wipe_buffers()
 {
 	for y = 0, height
-	{
-		var rowa = [0]; rowa.resize(width, 0);
-		buffera.set(y, rowa);
-		var rowb = [0]; rowb.resize(width, 0);
-		bufferb.set(y, rowb);
-
-		for x = 0, width		
+		for x = 0, width
 		{
-			rowa.set(x, 0);
-			rowb.set(x, 0);
+			buffera.set(x, y, 0);
+			bufferb.set(x, y, 0);
 		}
-	}
 }
 
 function getxy(x: int, y: int): int
 {
-	return front.get(y).get(x);
+	return front.get(x, y);
 }
 
 function setxy(x: int, y: int, value: int)
 {
-	front.get(y).set(x, value);
+	front.set(x, y, value);
 }
 	
 function populate_front()
@@ -64,18 +54,17 @@ function draw_front()
 {
 	for y = 0, height
 	{
-		var row = front.get(y);
 		var s = "";
 
 		for x = 0, width		
 		{
-			var cell = row.get(x);
+			var cell = front.get(x, y);
 			if (cell == 0)
 				s = s + ".";
 			else
 				s = s + "*";
 		}
-		print(s);
+		println(s);
 	}
 }
 
@@ -96,12 +85,12 @@ function do_cell(x: int, y: int)
 	if (s == 2)
 	{
 		var v = getxy(x, y);
-		back.get(y).set(x, v);
+		back.set(x, y, v);
 	}
 	else if (s == 3)
-		back.get(y).set(x, 1);
+		back.set(x, y, 1);
 	else
-		back.get(y).set(x, 0);
+		back.set(x, y, 0);
 }
 
 function process()
@@ -118,15 +107,15 @@ function process()
 	 
 function run()
 {
-	print("Initialising. (Be patient...)");
+	println("Initialising. (Be patient...)");
 	wipe_buffers();
 	populate_front();
 
 	var b = true;
 	for generations = 0, 10
 	{
-		print("");
-		print("Frame " + generations.toString());
+		println("");
+		println("Frame " + generations.toString());
 		process();
 		
 		if (b)

@@ -1,0 +1,99 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+#include "SimpleIO.ch"
+
+function count(from: int, max: int, delta: int): int
+{
+	var total = 0;
+	var i = from;
+label:
+	println(i.toString());
+	total = total + i;
+	i = i + delta;
+	if (i != max)
+		goto label;
+		
+	println("total = "+total.toString());
+}
+
+count(-15, 15, 1);
+count(15, -15, -1);
+
+function iterative_fibonacci(n: int): int
+{
+	if ((n == 1) | (n == 2))
+		return 1;
+	var fibprev = 1;
+	var fib = 1;
+	
+	var cur = 2;
+label:
+	var temp = fib;
+	fib = fib + fibprev;
+	fibprev = temp;
+	
+	cur = cur + 1;
+	if (cur < n)
+		goto label;
+
+   return fib;
+}
+
+function fibonacci_test(n: int)
+{
+	var i = 1;
+	
+	while (i < n)
+	{
+		println(i.toString() + " = " + iterative_fibonacci(i).toString());
+		i = i + 1;
+	}
+}
+
+fibonacci_test(40);
+
+function break_test(n: int)
+{
+	var total = 0;
+	do
+	{
+		println(total.toString() + " " + n.toString());
+		if (total > n)
+			break;
+			
+		total = total + 1;
+		
+		if (total < 5)
+		{
+			println("continuing");
+			continue;
+		}
+	}
+	while (true);
+	println("breaked");
+}
+
+break_test(10);
+
+function for_test(n: int)
+{
+	println("for_test up");
+	for i = 0, n
+		println("i="+i.toString());
+		
+	println("for_test down");
+	for i = n, 0, -1
+		println("i="+i.toString());
+}
+
+for_test(15);

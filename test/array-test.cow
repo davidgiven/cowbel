@@ -1,0 +1,69 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+#include "SimpleIO.ch"
+#include "Array.ch"
+
+function test()
+{
+	var i = Array<int>(4, 7);
+	println("i.length() = " + i.length().toString());
+	
+	var j = i.get(2);
+	println(j.toString());
+	
+	i.set(2, 99);
+
+	j = i.get(2);
+	println(j.toString());
+	
+}
+
+function dump_matrix(matrix: Array<Array<int>>)
+{
+	var y = 0;
+	
+	while (y < matrix.length())
+	{
+		var row = matrix.get(y);
+		var s = "";
+		
+		var x = 0;
+		while (x < row.length())
+		{
+			s = s + " " + row.get(x).toString();
+			x = x + 1;
+		}
+		
+		println(s);
+		y = y + 1;
+	}
+}
+
+function multitest()
+{
+	var array = Array<Array<int>>(4, Array<int>(0, 0));
+	
+	for i = 0, 4
+		array.set(i, Array<int>(4, 0));
+	
+	dump_matrix(array);
+	
+	array.get(0).set(0, 1);
+	array.get(1).set(0, 2);
+	array.get(1).set(1, 99);
+	
+	dump_matrix(array);
+}
+
+test();
+multitest();

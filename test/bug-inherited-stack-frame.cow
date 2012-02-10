@@ -1,0 +1,47 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+type ListNode =
+{
+	function prev(): ListNode;
+	function setPrev(n: ListNode); 
+	function next(): ListNode;
+	function setNext(n: ListNode);
+};
+	
+function List()
+{
+	var head: ListNode =
+	{
+		implements ListNode;
+		
+		var _next = head;
+		
+		function setPrev(n: ListNode) {}
+		function setNext(n: ListNode) _next = n;
+	};
+	
+	var tail: ListNode =
+	{
+		implements ListNode;
+		
+		var _prev = head;
+		
+		function setPrev(n: ListNode) _prev = n;
+		function setNext(n: ListNode) {}
+	};
+	
+	tail.setPrev(head);
+	head.setNext(tail);
+}
+
+List();

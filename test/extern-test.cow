@@ -10,6 +10,8 @@
  * information.
  */
 
+#include "SimpleIO.ch"
+
 type Array<T> =
 {
 	function get(i: int): T;
@@ -44,4 +46,4 @@ function Array<T>(size: int, initialiser: T): Array<T>
 }
 
 var a = Array<int>(100, 0);
-a.get(50).toString().print();
+print(a.get(50).toString());

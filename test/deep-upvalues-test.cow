@@ -12,16 +12,32 @@
 
 #include "SimpleIO.ch"
 
-type number = int;
+var a = 1;
 
-function test<T>(i: T)
+function f1(i1: int)
 {
-	println(i.toString());
+	function f2(i2: int)
+	{
+		function f3(i3: int)
+		{
+			function f4(i4: int)
+			{
+				function f5(i5: int)
+				{
+					function f6(i6: int)
+					{
+						a = a + i1 + i2 + i3 + i4 + i5 + i6;
+					}
+					f6(i5+1);
+				}
+				f5(i4+1);
+			}
+			f4(i3+1);
+		}
+		f3(i2+1);
+	}
+	f2(i1+1);
 }
 
-test<number>(42);
-
-{
-	type number = boolean;
-	test<number>(true);
-}
+f1(1);
+println(a.toString());

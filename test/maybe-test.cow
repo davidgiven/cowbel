@@ -10,6 +10,8 @@
  * information.
  */
 
+#include "SimpleIO.ch"
+
 type Maybe<T> =
 {
 	function valid(): boolean;
@@ -103,6 +105,6 @@ q.push(4);
 while (!q.isEmpty())
 {
 	var i = q.pop();
-	i.toString().print();
+	println(i.toString());
 }
 	
