@@ -10,6 +10,7 @@
  * information.
  */
 
+#include "SimpleIO.ch"
 #include "Array.ch"
 
 function fannkuch(n: integer): (sum: integer, maxflips: integer)
@@ -113,5 +114,5 @@ function fannkuch(n: integer): (sum: integer, maxflips: integer)
 var n = 11;
 var sum, maxflips = fannkuch(n);
 
-sum.toString().print();
-("Pfannkuchen(" + n.toString() + ") = " + maxflips.toString()).print(); 
+println(sum.toString());
+println("Pfannkuchen(" + n.toString() + ") = " + maxflips.toString()); 

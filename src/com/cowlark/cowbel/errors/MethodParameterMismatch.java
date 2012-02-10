@@ -33,4 +33,11 @@ public class MethodParameterMismatch extends CompilationException
 		_methodinput = methodinput;
 		_calledinput = calledinput;
     }
+	
+	@Override
+	public String getMessage()
+	{
+		return "Method parameter mismatch in call to " +
+				_method.getName() + " at " + _node.locationAsString();
+	}
 }

@@ -8,6 +8,9 @@ package com.cowlark.cowbel.methods;
 
 import java.util.HashMap;
 import com.cowlark.cowbel.instructions.MethodCallInstruction;
+import com.cowlark.cowbel.types.BooleanType;
+import com.cowlark.cowbel.types.IntegerType;
+import com.cowlark.cowbel.types.StringType;
 
 public abstract class PrimitiveMethod extends Method
 {
@@ -17,27 +20,223 @@ public abstract class PrimitiveMethod extends Method
 	static
     {
     	_primitiveMethods = new HashMap<String, Method>();
-    	registerPrimitiveMethod(new StringEqualsMethod());
-    	registerPrimitiveMethod(new StringAddMethod());
-    	registerPrimitiveMethod(new StringReplaceMethod());
-    	registerPrimitiveMethod(new StringPrintMethod());
-    	registerPrimitiveMethod(new BooleanToStringMethod());
-    	registerPrimitiveMethod(new BooleanNotMethod());
-    	registerPrimitiveMethod(new BooleanAndMethod());
-    	registerPrimitiveMethod(new BooleanOrMethod());
-    	registerPrimitiveMethod(new BooleanXorMethod());
-    	registerPrimitiveMethod(new IntegerEqualsMethod());
-    	registerPrimitiveMethod(new IntegerNotEqualsMethod());
-    	registerPrimitiveMethod(new IntegerGreaterThanMethod());
-    	registerPrimitiveMethod(new IntegerLessThanMethod());
-    	registerPrimitiveMethod(new IntegerGreaterThanOrEqualsMethod());
-    	registerPrimitiveMethod(new IntegerLessThanOrEqualsMethod());
-    	registerPrimitiveMethod(new IntegerNegateMethod());
-    	registerPrimitiveMethod(new IntegerAddMethod());
-    	registerPrimitiveMethod(new IntegerSubMethod());
-    	registerPrimitiveMethod(new IntegerMultiplyMethod());
-    	registerPrimitiveMethod(new IntegerToStringMethod());    
-    }
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("string.==.1", "string._eq");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(StringType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("string.!=.1", "string._ne");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(StringType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("string.+.1", "string._add");
+    			setOutputTypes(StringType.create());
+    			setInputTypes(StringType.create());
+            }
+		});
+    	
+    	/************************************************************/
+    	/*                          BOOLEANS                        */
+    	/************************************************************/
+
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("boolean.==.1", "boolean._eq");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(BooleanType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("boolean.!=.1", "boolean._ne");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(BooleanType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("boolean.!.0", "boolean._not");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes();
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("boolean.&.1", "boolean._and");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(BooleanType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("boolean.!.1", "boolean._or");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(BooleanType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("boolean.^.1", "boolean._xor");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(BooleanType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("boolean.toString.0", "boolean.toString");
+    			setOutputTypes(StringType.create());
+    			setInputTypes();
+            }
+		});
+    	
+    	/************************************************************/
+    	/*                          INTEGERS                        */
+    	/************************************************************/
+
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("integer.==.1", "integer._eq");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(IntegerType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("integer.!=.1", "integer._ne");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(IntegerType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("integer.<.1", "integer._lt");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(IntegerType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("integer.<=.1", "integer._le");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(IntegerType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("integer.>.1", "integer._gt");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(IntegerType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("integer.>=.1", "integer._ge");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(IntegerType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("integer.+.1", "integer._add");
+    			setOutputTypes(IntegerType.create());
+    			setInputTypes(IntegerType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("integer.-.1", "integer._sub");
+    			setOutputTypes(IntegerType.create());
+    			setInputTypes(IntegerType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("integer.-.0", "integer._negate");
+    			setOutputTypes(IntegerType.create());
+    			setInputTypes(IntegerType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("integer.*.1", "integer._multiply");
+    			setOutputTypes(IntegerType.create());
+    			setInputTypes(IntegerType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("integer./.1", "integer._divide");
+    			setOutputTypes(IntegerType.create());
+    			setInputTypes(IntegerType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("integer.%.1", "integer._modulus");
+    			setOutputTypes(IntegerType.create());
+    			setInputTypes(IntegerType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("integer.toString.0", "integer.toString");
+    			setOutputTypes(StringType.create());
+    			setInputTypes();
+            }
+		});
+    	
+}
 
 	public static Method lookupPrimitiveMethod(String signature)
     {

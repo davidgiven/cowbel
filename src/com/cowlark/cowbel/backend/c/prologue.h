@@ -68,16 +68,22 @@ static void s_throw(const char* message)
 
 /* Boolean methods */
 
+#define S_METHOD_BOOLEAN__EQ(a, b, z) (*z) = (a) == (b)
+#define S_METHOD_BOOLEAN__NE(a, b, z) (*z) = (a) != (b)
 #define S_METHOD_BOOLEAN__NOT(b, z) (*z) = !(b)
+#define S_METHOD_BOOLEAN__AND(a, b, z) (*z) = (a) & (b)
 #define S_METHOD_BOOLEAN__OR(a, b, z) (*z) = (a) | (b)
+#define S_METHOD_BOOLEAN__XOR(a, b, z) (*z) = (a) ^ (b)
 
 /* Integer methods */
 
 #define S_METHOD_INTEGER__ADD(a, b, z) (*z) = (a) + (b)
 #define S_METHOD_INTEGER__SUB(a, b, z) (*z) = (a) - (b)
 #define S_METHOD_INTEGER__MULTIPLY(a, b, z) (*z) = (a) * (b)
-#define S_METHOD_INTEGER__EQUALS(a, b, z) (*z) = (a) == (b)
-#define S_METHOD_INTEGER__NOTEQUALS(a, b, z) (*z) = (a) != (b)
+#define S_METHOD_INTEGER__DIVIDE(a, b, z) (*z) = (a) / (b)
+#define S_METHOD_INTEGER__MODULUS(a, b, z) (*z) = (a) % (b)
+#define S_METHOD_INTEGER__EQ(a, b, z) (*z) = (a) == (b)
+#define S_METHOD_INTEGER__NE(a, b, z) (*z) = (a) != (b)
 #define S_METHOD_INTEGER__GE(a, b, z) (*z) = (a) >= (b)
 #define S_METHOD_INTEGER__GT(a, b, z) (*z) = (a) > (b)
 #define S_METHOD_INTEGER__LE(a, b, z) (*z) = (a) <= (b)
@@ -106,7 +112,6 @@ static void s_method_string_print_cb(s_string_t* s, void* user)
 static void S_METHOD_STRING_PRINT(s_string_t* s)
 {
 	s_string_traverse(s, s_method_string_print_cb, NULL);
-	putchar('\n');
 }
 
 static void S_METHOD_STRING__ADD(s_string_t* left, s_string_t* right,
@@ -121,7 +126,7 @@ static void S_METHOD_STRING__ADD(s_string_t* left, s_string_t* right,
 	*result = newstring;
 }
 
-static void S_METHOD_STRING__EQUALS(s_string_t* left, s_string_t* right,
+static void S_METHOD_STRING__EQ(s_string_t* left, s_string_t* right,
 		s_boolean_t* result)
 {
 	int count;
@@ -175,5 +180,7 @@ fail:
 	*result = 0;
 	return;
 }
+
+#define S_METHOD_STRING__NE(l, r) !S_METHOD_STRING__EQ(l, r)
 
 /* END cowbel runtime library */
