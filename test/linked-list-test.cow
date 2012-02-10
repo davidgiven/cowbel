@@ -18,7 +18,7 @@ type ListNode =
 	function setPrev(n: ListNode); 
 	function next(): ListNode;
 	function setNext(n: ListNode);
-	function get(): integer;	function set(v: integer);
+	function get(): int;	function set(v: int);
 	function finished(): boolean;
 };
 	
@@ -27,7 +27,7 @@ type List =
 	function first(): ListNode;
 	function last(): ListNode;
 	
-	function push(v: integer);
+	function push(v: int);
 };
 
 function List<T>(): List
@@ -113,7 +113,7 @@ function List<T>(): List
 
 /* Push some numbers onto the list. */
 
-var list = List<integer>();
+var list = List<int>();
 list.push(5);
 list.push(4);
 list.push(3);

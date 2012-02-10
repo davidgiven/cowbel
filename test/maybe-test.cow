@@ -94,7 +94,7 @@ function Queue<T>(): Queue<T>
 	};
 }
 
-var q = Queue<integer>();
+var q = Queue<int>();
 q.push(1);
 q.push(2);
 q.push(3);
