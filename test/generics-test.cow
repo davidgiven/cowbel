@@ -36,3 +36,8 @@ twotypeparams<int, int>();
 (onetypeparam<int>(1));
 (onetypeparam<string>("1"));
 (twotypeparams<int, int>());
+
+/* Ambiguous calls. */
+
+var a, b, c = 1, 2, 3;
+var d = a < (b - c);
