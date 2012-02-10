@@ -1,0 +1,43 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+#include "SimpleIO.ch"
+
+function bottle(n: int)
+{
+	printi(n);
+	if (n == 1)
+		print(" bottle");
+	else
+		print(" bottles");
+}
+
+function sing(verses: int)
+{
+	do
+	{
+		bottle(verses);
+		println(" of beer on the wall,");
+		bottle(verses);
+		println(" of beer,");
+		println("Take one down, pass it around,");
+		
+		verses = verses - 1;
+		
+		bottle(verses);
+		println(" of beer on the wall.");
+		println("");
+	}
+	while (verses > 0); 
+}
+
+sing(99);

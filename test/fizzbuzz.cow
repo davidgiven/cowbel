@@ -1,0 +1,25 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+#include "SimpleIO.ch"
+
+for i = 1, 101
+{
+	if ((i % 15) == 0)
+		println("Fizzbuzz");
+	else if ((i % 3) == 0)
+		println("Fizz");
+	else if ((i % 5) == 0)
+		println("Buzz");
+	else
+		println(i.toString());
+}
