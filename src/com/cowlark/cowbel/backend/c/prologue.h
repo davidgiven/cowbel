@@ -68,12 +68,19 @@ static void s_throw(const char* message)
 
 /* Boolean methods */
 
+static s_string_t s_true_label =
+	{ NULL, NULL, "true", 4, 4, NULL };
+
+static s_string_t s_false_label =
+	{ NULL, NULL, "false", 5, 5, NULL };
+
 #define S_METHOD_BOOLEAN__EQ(a, b, z) (*z) = (a) == (b)
 #define S_METHOD_BOOLEAN__NE(a, b, z) (*z) = (a) != (b)
 #define S_METHOD_BOOLEAN__NOT(b, z) (*z) = !(b)
 #define S_METHOD_BOOLEAN__AND(a, b, z) (*z) = (a) & (b)
 #define S_METHOD_BOOLEAN__OR(a, b, z) (*z) = (a) | (b)
 #define S_METHOD_BOOLEAN__XOR(a, b, z) (*z) = (a) ^ (b)
+#define S_METHOD_BOOLEAN_TOSTRING(a, z) (*z) = (a) ? &s_true_label : &s_false_label
 
 /* Integer methods */
 
