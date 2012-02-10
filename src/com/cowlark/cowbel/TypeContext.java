@@ -35,6 +35,7 @@ public class TypeContext implements Comparable<TypeContext>
 	private int _id = _globalid++;
 	private Node _node;
 	private TypeContext _parent;
+	private String _signature;
 	private TreeMap<String, InstantiationData> _types =
 		new TreeMap<String, InstantiationData>();
 	private TreeMap<String, TypeTemplate> _typeTemplates =
@@ -74,7 +75,36 @@ public class TypeContext implements Comparable<TypeContext>
 	
 	public String getSignature()
 	{
-		return toString();
+		if (_signature == null)
+		{
+			TreeMap<String, Type> types = new TreeMap<String, Type>();
+			
+			TypeContext tc = this;
+			while (tc != null)
+			{
+				for (InstantiationData id : _types.values())
+				{
+					String s = id.identifier.getText();
+					if (!types.containsKey(s))
+						types.put(s, id.type);
+				}
+				
+				tc = tc.getParent();
+			}
+			
+			StringBuilder sb = new StringBuilder();
+			for (Map.Entry<String, Type> e : types.entrySet())
+			{
+				sb.append(e.getKey());
+				sb.append("=");
+				sb.append(e.getValue().getCanonicalTypeName());
+				sb.append(" ");
+			}
+
+			_signature = sb.toString();
+		}
+		
+		return _signature;
 	}
 	
 	public void addTypeTemplate(TypeAssignmentNode node)
@@ -111,6 +141,8 @@ public class TypeContext implements Comparable<TypeContext>
 	public void addType(IdentifierNode identifier, Type type)
 		throws CompilationException
 	{
+		assert(_signature == null);
+		
 		/* Add an instantiation for this type. */
 		
 		String signature = identifier.getText() + "<>";
