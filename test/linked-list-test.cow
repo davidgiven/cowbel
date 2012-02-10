@@ -10,14 +10,15 @@
  * information.
  */
 
+#include "SimpleIO.ch"
+
 type ListNode =
 {
 	function prev(): ListNode;
 	function setPrev(n: ListNode); 
 	function next(): ListNode;
 	function setNext(n: ListNode);
-	function get(): integer;
-	function set(v: integer);
+	function get(): integer;	function set(v: integer);
 	function finished(): boolean;
 };
 	
@@ -126,7 +127,8 @@ var iterator = list.first();
 while (!iterator.finished())
 {
 	var value = iterator.get();
-	value.toString().print();
+	printi(value);
+	println("");
 	
 	iterator = iterator.next();
 }
