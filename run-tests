@@ -11,6 +11,8 @@
 # information.
 
 for f in \
+	test/fizzbuzz.cow \
+	test/99-bottles.cow \
 	test/mandelbrot.cow \
 	test/real-test.cow \
 	test/array-test.cow \
