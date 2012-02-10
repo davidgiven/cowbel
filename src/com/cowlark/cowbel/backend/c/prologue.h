@@ -96,6 +96,8 @@ static s_string_t s_false_label =
 #define S_METHOD_INT__GT(a, b, z) (*z) = (a) > (b)
 #define S_METHOD_INT__LE(a, b, z) (*z) = (a) <= (b)
 #define S_METHOD_INT__LT(a, b, z) (*z) = (a) < (b)
+#define S_METHOD_INT__SHL(a, b, z) (*z) = (a) << (b)
+#define S_METHOD_INT__SHR(a, b, z) (*z) = (a) >> (b)
 
 static void S_METHOD_INT_TOSTRING(int value, s_string_t** result)
 {
@@ -109,6 +111,9 @@ static void S_METHOD_INT_TOSTRING(int value, s_string_t** result)
     s->seglength = s->totallength = strlen(buffer);
     *result = s;
 }
+
+#define S_METHOD_INT_TOREAL(a, z) (*z) = (s_real_t)a
+
 
 /* Real methods */
 
@@ -135,6 +140,8 @@ static void S_METHOD_REAL_TOSTRING(s_real_t value, s_string_t** result)
     s->seglength = s->totallength = strlen(buffer);
     *result = s;
 }
+
+#define S_METHOD_REAL_TOINT(a, z) (*z) = (s_int_t)a
 
 /* String methods */
 

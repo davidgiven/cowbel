@@ -241,6 +241,33 @@ public abstract class PrimitiveMethod extends Method
             }
 		});
     	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("int.toReal.0", "int.toReal");
+    			setOutputTypes(RealType.create());
+    			setInputTypes();
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("int.<<.1", "int._shl");
+    			setOutputTypes(IntegerType.create());
+    			setInputTypes(IntegerType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("int.>>.1", "int._shr");
+    			setOutputTypes(IntegerType.create());
+    			setInputTypes(IntegerType.create());
+            }
+		});
+    	
     	/************************************************************/
     	/*                           REALS                          */
     	/************************************************************/
@@ -353,6 +380,14 @@ public abstract class PrimitiveMethod extends Method
             }
 		});
     	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("real.toInt.0", "real.toInt");
+    			setOutputTypes(IntegerType.create());
+    			setInputTypes();
+            }
+		});
     }
 
 	public static Method lookupPrimitiveMethod(String signature)
