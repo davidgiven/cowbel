@@ -75,9 +75,12 @@ static void s_throw(const char* message)
 
 #define S_METHOD_INTEGER__ADD(a, b, z) (*z) = (a) + (b)
 #define S_METHOD_INTEGER__SUB(a, b, z) (*z) = (a) - (b)
+#define S_METHOD_INTEGER__MULTIPLY(a, b, z) (*z) = (a) * (b)
 #define S_METHOD_INTEGER__EQUALS(a, b, z) (*z) = (a) == (b)
 #define S_METHOD_INTEGER__NOTEQUALS(a, b, z) (*z) = (a) != (b)
+#define S_METHOD_INTEGER__GE(a, b, z) (*z) = (a) >= (b)
 #define S_METHOD_INTEGER__GT(a, b, z) (*z) = (a) > (b)
+#define S_METHOD_INTEGER__LE(a, b, z) (*z) = (a) <= (b)
 #define S_METHOD_INTEGER__LT(a, b, z) (*z) = (a) < (b)
 
 static void S_METHOD_INTEGER_TOSTRING(int value, s_string_t** result)
