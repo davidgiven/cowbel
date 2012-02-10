@@ -27,7 +27,6 @@ import com.cowlark.cowbel.parser.core.Location;
 public class Main
 {
 	public static String OutputFile;
-	public static String Backend;
 	public static String Preprocessor = "cpp -undef -nostdinc";
 	public static boolean DumpAST;
 	public static boolean DumpIR;
@@ -58,9 +57,6 @@ public class Main
 		
 		options.addOption("o", "output", true,
 						"sets output file");
-		
-		options.addOption("b", "backend", true,
-						"specifies backend to use");
 		
 		options.addOption("p", "preprocessor", true,
 						"specifies preprocessor to use");
@@ -95,10 +91,6 @@ public class Main
 			if (OutputFile == null)
 				throw new ParseException("You must specify an output filename.");
 			
-			Backend = cli.getOptionValue('b');
-			if (Backend == null)
-				throw new ParseException("You must specify a backend.");
-			
 			DumpAST = cli.hasOption("da");
 			DumpIR = cli.hasOption("di");
 			DumpConstructors = cli.hasOption("dc");
@@ -122,11 +114,7 @@ public class Main
 	
 	private static Backend createBackend(Compiler compiler, OutputStream os)
 	{
-		if (Backend.equals("c"))
-			return new CBackend(compiler, os);
-		
-		abort("The backend '"+Backend+"' is not recognised.");
-		return null;
+		return new CBackend(compiler, os);
 	}
 	
 	public static void main(String[] args)
