@@ -8,13 +8,14 @@ package com.cowlark.cowbel.ast.nodes;
 
 import java.util.List;
 import java.util.Vector;
+import com.cowlark.cowbel.ast.HasIdentifier;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.types.FunctionType;
 import com.cowlark.cowbel.types.Type;
 
-public class FunctionHeaderNode extends Node
+public class FunctionHeaderNode extends Node implements HasIdentifier
 {
 	public FunctionHeaderNode(Location start, Location end)
     {
@@ -43,6 +44,12 @@ public class FunctionHeaderNode extends Node
 	public IdentifierNode getFunctionName()
 	{
 		return (IdentifierNode) getChild(0);
+	}
+	
+	@Override
+	public IdentifierNode getIdentifier()
+	{
+	    return getFunctionName();
 	}
 	
 	public IdentifierListNode getTypeVariables()

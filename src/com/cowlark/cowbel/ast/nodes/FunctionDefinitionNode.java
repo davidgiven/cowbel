@@ -6,13 +6,15 @@
 
 package com.cowlark.cowbel.ast.nodes;
 
+import com.cowlark.cowbel.ast.HasIdentifier;
 import com.cowlark.cowbel.ast.HasSymbol;
 import com.cowlark.cowbel.ast.Visitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.symbols.Symbol;
 
-public class FunctionDefinitionNode extends AbstractStatementNode implements HasSymbol
+public class FunctionDefinitionNode extends AbstractStatementNode implements
+		HasSymbol, HasIdentifier
 {
 	private Symbol _symbol;
 	
@@ -43,6 +45,12 @@ public class FunctionDefinitionNode extends AbstractStatementNode implements Has
 	public FunctionScopeConstructorNode getFunctionBody()
 	{
 		return (FunctionScopeConstructorNode) getChild(1);
+	}
+	
+	@Override
+	public IdentifierNode getIdentifier()
+	{
+	    return getFunctionHeader().getFunctionName();
 	}
 	
 	@Override
