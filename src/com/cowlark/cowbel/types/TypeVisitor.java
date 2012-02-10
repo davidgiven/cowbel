@@ -12,6 +12,7 @@ public abstract class TypeVisitor
 	public abstract void visit(BooleanType type);
 	public abstract void visit(FunctionType type);
 	public abstract void visit(IntegerType type);
+	public abstract void visit(RealType type);
 	public abstract void visit(StringType type);
 	public abstract void visit(ClassType type);
 	public abstract void visit(InterfaceType type);

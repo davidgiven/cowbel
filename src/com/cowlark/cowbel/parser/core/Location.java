@@ -6,7 +6,7 @@
 
 package com.cowlark.cowbel.parser.core;
 
-public class Location implements Comparable<Location>
+public class Location implements Comparable<Location>, CharSequence
 {
 	private static int _globalid = 0;
 	
@@ -124,5 +124,23 @@ public class Location implements Comparable<Location>
 	public String toString()
 	{
 		return getClass().toString() + "=("+locationAsString()+"='" + shortened(17, 16) + "')";
+	}
+
+	@Override
+	public char charAt(int index)
+	{
+		return (char) codepointAtOffset(index);
+	}
+	
+	@Override
+	public int length()
+	{
+		return _data.length() - _offset;
+	}
+	
+	@Override
+	public CharSequence subSequence(int start, int end)
+	{
+		return _data.substring(_offset+start, _offset+end);
 	}
 }

@@ -40,7 +40,7 @@ public class ExpressionLeafParser extends Parser
 		if (pr6.success())
 			return new BooleanConstantNode(location, pr6.end(), false);
 		
-		ParseResult pr7 = IntegerConstantParser.parse(location);
+		ParseResult pr7 = NumericConstantParser.parse(location);
 		if (pr7.success())
 			return pr7;
 		

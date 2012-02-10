@@ -10,6 +10,7 @@ import java.util.HashMap;
 import com.cowlark.cowbel.instructions.MethodCallInstruction;
 import com.cowlark.cowbel.types.BooleanType;
 import com.cowlark.cowbel.types.IntegerType;
+import com.cowlark.cowbel.types.RealType;
 import com.cowlark.cowbel.types.StringType;
 
 public abstract class PrimitiveMethod extends Method
@@ -240,7 +241,119 @@ public abstract class PrimitiveMethod extends Method
             }
 		});
     	
-}
+    	/************************************************************/
+    	/*                           REALS                          */
+    	/************************************************************/
+
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("real.==.1", "real._eq");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(RealType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("real.!=.1", "real._ne");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(RealType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("real.<.1", "real._lt");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(RealType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("real.<=.1", "real._le");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(RealType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("real.>.1", "real._gt");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(RealType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("real.>=.1", "real._ge");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(RealType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("real.+.1", "real._add");
+    			setOutputTypes(RealType.create());
+    			setInputTypes(RealType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("real.-.1", "real._sub");
+    			setOutputTypes(RealType.create());
+    			setInputTypes(RealType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("real.-.0", "real._negate");
+    			setOutputTypes(RealType.create());
+    			setInputTypes(RealType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("real.*.1", "real._multiply");
+    			setOutputTypes(RealType.create());
+    			setInputTypes(RealType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("real./.1", "real._divide");
+    			setOutputTypes(RealType.create());
+    			setInputTypes(RealType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("real.toString.0", "real.toString");
+    			setOutputTypes(StringType.create());
+    			setInputTypes();
+            }
+		});
+    	
+    }
 
 	public static Method lookupPrimitiveMethod(String signature)
     {

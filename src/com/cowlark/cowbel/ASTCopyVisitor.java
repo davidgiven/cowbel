@@ -39,6 +39,7 @@ import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
+import com.cowlark.cowbel.ast.nodes.RealConstantNode;
 import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
 import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
 import com.cowlark.cowbel.ast.nodes.StatementListNode;
@@ -264,6 +265,13 @@ public class ASTCopyVisitor extends RecursiveVisitor
     public void visit(IntegerConstantNode node) throws CompilationException
 	{
 		_result = new IntegerConstantNode(node.start(), node.end(), node.getValue());
+		super.visit(node);
+	}
+	
+	@Override
+    public void visit(RealConstantNode node) throws CompilationException
+	{
+		_result = new RealConstantNode(node.start(), node.end(), node.getValue());
 		super.visit(node);
 	}
 	

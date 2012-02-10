@@ -37,6 +37,7 @@ import com.cowlark.cowbel.instructions.IfInstruction;
 import com.cowlark.cowbel.instructions.Instruction;
 import com.cowlark.cowbel.instructions.IntegerConstantInstruction;
 import com.cowlark.cowbel.instructions.MethodCallInstruction;
+import com.cowlark.cowbel.instructions.RealConstantInstruction;
 import com.cowlark.cowbel.instructions.StringConstantInstruction;
 import com.cowlark.cowbel.instructions.VarCopyInstruction;
 import com.cowlark.cowbel.methods.FunctionMethod;
@@ -836,6 +837,18 @@ public class CBackend extends ImperativeBackend
 	
 	@Override
 	public void visit(IntegerConstantInstruction insn)
+	{
+		Node node = insn.getNode();
+		
+		print("\t");
+		printvar(node, insn.getOutputVariable());
+		print(" = ");
+		print(insn.getValue());
+		print(";\n");
+	}
+	
+	@Override
+	public void visit(RealConstantInstruction insn)
 	{
 		Node node = insn.getNode();
 		

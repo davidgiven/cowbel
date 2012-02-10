@@ -63,6 +63,11 @@ public class InstructionVisitor
 		visit((Instruction) insn);
 	}
 	
+	public void visit(RealConstantInstruction insn)
+	{
+		visit((Instruction) insn);
+	}
+	
 	public void visit(VarCopyInstruction insn)
 	{
 		visit((Instruction) insn);
