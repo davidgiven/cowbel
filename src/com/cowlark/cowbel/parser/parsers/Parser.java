@@ -16,7 +16,7 @@ import com.cowlark.cowbel.parser.core.ParseResult;
 public abstract class Parser
 {
 	public static AtomParser AtomParser = new AtomParser();
-	public static IntegerConstantParser IntegerConstantParser = new IntegerConstantParser();
+	public static NumericConstantParser NumericConstantParser = new NumericConstantParser();
 	public static StringConstantParser StringConstantParser = new StringConstantParser();
 	public static ExpressionLowParser ExpressionLowParser = new ExpressionLowParser();
 	public static ExpressionMediumParser ExpressionMediumParser = new ExpressionMediumParser();

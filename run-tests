@@ -11,6 +11,7 @@
 # information.
 
 for f in \
+	test/real-test.cow \
 	test/array-test.cow \
 	test/assignment-test.cow \
 	test/boolean-test.cow \

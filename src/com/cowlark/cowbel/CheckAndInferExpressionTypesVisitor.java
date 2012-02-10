@@ -24,6 +24,7 @@ import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.IntegerConstantNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.nodes.RealConstantNode;
 import com.cowlark.cowbel.ast.nodes.StringConstantNode;
 import com.cowlark.cowbel.ast.nodes.VarReferenceNode;
 import com.cowlark.cowbel.errors.AttemptToCallNonFunctionTypeException;
@@ -36,6 +37,7 @@ import com.cowlark.cowbel.types.BooleanType;
 import com.cowlark.cowbel.types.ClassType;
 import com.cowlark.cowbel.types.FunctionType;
 import com.cowlark.cowbel.types.IntegerType;
+import com.cowlark.cowbel.types.RealType;
 import com.cowlark.cowbel.types.StringType;
 import com.cowlark.cowbel.types.Type;
 
@@ -69,6 +71,12 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 	public void visit(IntegerConstantNode node) throws CompilationException
 	{
 		node.setType(IntegerType.create());
+	}
+	
+	@Override
+	public void visit(RealConstantNode node) throws CompilationException
+	{
+		node.setType(RealType.create());
 	}
 	
 	@Override

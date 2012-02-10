@@ -35,6 +35,7 @@ import com.cowlark.cowbel.ast.nodes.LabelStatementNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
 import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.nodes.RealConstantNode;
 import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
 import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
 import com.cowlark.cowbel.ast.nodes.StringConstantNode;
@@ -518,6 +519,13 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	{
 		_result = _currentBB.createTemporary(node, node.getType());
 		_currentBB.insnIntegerConstant(node, node.getValue(), _result);
+	}
+	
+	@Override
+	public void visit(RealConstantNode node) throws CompilationException
+	{
+		_result = _currentBB.createTemporary(node, node.getType());
+		_currentBB.insnRealConstant(node, node.getValue(), _result);
 	}
 	
 	@Override

@@ -38,6 +38,7 @@ import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
 import com.cowlark.cowbel.ast.nodes.Node;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
+import com.cowlark.cowbel.ast.nodes.RealConstantNode;
 import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
 import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
 import com.cowlark.cowbel.ast.nodes.StatementListNode;
@@ -198,6 +199,11 @@ public class Visitor
 	}
 	
 	public void visit(IntegerConstantNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+	
+	public void visit(RealConstantNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}

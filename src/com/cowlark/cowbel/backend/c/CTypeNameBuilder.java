@@ -14,6 +14,7 @@ import com.cowlark.cowbel.types.ExternType;
 import com.cowlark.cowbel.types.FunctionType;
 import com.cowlark.cowbel.types.IntegerType;
 import com.cowlark.cowbel.types.InterfaceType;
+import com.cowlark.cowbel.types.RealType;
 import com.cowlark.cowbel.types.StringType;
 import com.cowlark.cowbel.types.Type;
 import com.cowlark.cowbel.types.TypeVisitor;
@@ -51,6 +52,12 @@ public class CTypeNameBuilder extends TypeVisitor
 	public void visit(IntegerType type)
 	{
 		_type = "s_int_t";
+	}
+	
+	@Override
+	public void visit(RealType type)
+	{
+		_type = "s_real_t";
 	}
 	
 	@Override

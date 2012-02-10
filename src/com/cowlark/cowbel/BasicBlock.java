@@ -24,6 +24,7 @@ import com.cowlark.cowbel.instructions.Instruction;
 import com.cowlark.cowbel.instructions.InstructionVisitor;
 import com.cowlark.cowbel.instructions.IntegerConstantInstruction;
 import com.cowlark.cowbel.instructions.MethodCallInstruction;
+import com.cowlark.cowbel.instructions.RealConstantInstruction;
 import com.cowlark.cowbel.instructions.StringConstantInstruction;
 import com.cowlark.cowbel.instructions.VarCopyInstruction;
 import com.cowlark.cowbel.methods.Method;
@@ -179,6 +180,11 @@ public class BasicBlock implements Comparable<BasicBlock>
 	public void insnIntegerConstant(Node node, long value, Variable var)
 	{
 		addInstruction(new IntegerConstantInstruction(node, value, var));
+	}
+	
+	public void insnRealConstant(Node node, double value, Variable var)
+	{
+		addInstruction(new RealConstantInstruction(node, value, var));
 	}
 	
 	public void insnVarCopy(Node node, Variable invar, Variable outvar)
