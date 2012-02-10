@@ -9,6 +9,12 @@ package com.cowlark.cowbel;
 public class CompilerTimer implements CompilerListener
 {
 	private long _clock;
+	private boolean _quiet;
+	
+	public CompilerTimer(boolean quiet)
+    {
+		_quiet = quiet;
+    }
 	
 	private void reset()
 	{
@@ -18,8 +24,9 @@ public class CompilerTimer implements CompilerListener
 	private void report(String message)
 	{
 		long delta = System.currentTimeMillis() - _clock;
-		
-		System.err.println(message + ": " + delta + "ms");
+	
+		if (!_quiet)
+			System.err.println(message + ": " + delta + "ms");
 	}
 	
 	public void onPreprocessBegin()

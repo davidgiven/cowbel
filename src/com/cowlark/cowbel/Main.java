@@ -28,6 +28,7 @@ public class Main
 {
 	public static String OutputFile;
 	public static String Preprocessor = "cpp -undef -nostdinc";
+	public static boolean Quiet;
 	public static boolean DumpAST;
 	public static boolean DumpIR;
 	public static boolean DumpConstructors;
@@ -64,6 +65,9 @@ public class Main
 		options.addOption("I", "include", true,
 						"adds include path");
 		
+		options.addOption("q", "quiet", false,
+						"don't show timing information");
+		
 		options.addOption("da", "dump-ast", false,
 						"dump AST to stdout");
 
@@ -91,6 +95,7 @@ public class Main
 			if (OutputFile == null)
 				throw new ParseException("You must specify an output filename.");
 			
+			Quiet = cli.hasOption("q");
 			DumpAST = cli.hasOption("da");
 			DumpIR = cli.hasOption("di");
 			DumpConstructors = cli.hasOption("dc");
@@ -127,7 +132,7 @@ public class Main
 		if (args.length > 1)
 			abort("Sorry, only one input filename is supported currently.");
 		
-		CompilerTimer timer = new CompilerTimer();
+		CompilerTimer timer = new CompilerTimer(Quiet);
 		
 		try
 		{
