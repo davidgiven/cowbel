@@ -48,4 +48,6 @@ for f in \
 		diff -u $logfile.pristine $logfile
 		exit 1
 	fi
+	
+	rm -f $logfile
 done
