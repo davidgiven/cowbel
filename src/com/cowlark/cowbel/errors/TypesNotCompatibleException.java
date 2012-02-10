@@ -23,4 +23,12 @@ public class TypesNotCompatibleException extends CompilationException
 		_type1 = type1;
 		_type2 = type2;
     }
+	
+	@Override
+	public String getMessage()
+	{
+		return "Cannot unify type " + _type2.getCanonicalTypeName() +
+				" with " + _type1.getCanonicalTypeName() + " at " +
+				_node.locationAsString();
+	}
 }

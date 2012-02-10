@@ -1,0 +1,53 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+#include "SimpleIO.ch"
+
+function testresultb(t: string, i1: integer, i2: integer, r: boolean)
+{
+	var s = "false";
+	if (r)
+		s = "true";
+		
+	println(i1.toString() + " " + t " " + i2.toString() + " = " + s); 
+}
+
+function testresulti(t: string, i1: integer, i2: integer, r: integer)
+{
+	println(i1.toString() + " " + t + " " + i2.toString() + " = " + r.toString());
+}
+
+function test(i1: integer, i2: integer)
+{
+	testresultb("==", i1, i2, (i1 == i2));
+	testresultb("!=", i1, i2, (i1 != i2));
+	testresultb(">", i1, i2, (i1 > i2));
+	testresultb("<", i1, i2, (i1 < i2));
+	testresultb(">=", i1, i2, (i1 >= i2));
+	testresultb("<=", i1, i2, (i1 <= i2));
+	testresulti("+", i1, i2, (i1 + i2));
+	testresulti("-", i1, i2, (i1 - i2));
+	testresulti("*", i1, i2, (i1 * i2));
+	testresulti("/", i1, i2, (i1 / i2));
+	testresulti("%", i1, i2, (i1 % i2));
+}
+
+function testm(i1: integer, i2: integer)
+{
+	test(i1, i2);
+	test(i2, i1);
+}
+
+testm(1234, 1234);
+testm(1234, 78);
+testm(-1234, 78);
+testm(-1234, -78);
