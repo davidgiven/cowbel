@@ -77,19 +77,19 @@ static void s_throw(const char* message)
 
 /* Integer methods */
 
-#define S_METHOD_INTEGER__ADD(a, b, z) (*z) = (a) + (b)
-#define S_METHOD_INTEGER__SUB(a, b, z) (*z) = (a) - (b)
-#define S_METHOD_INTEGER__MULTIPLY(a, b, z) (*z) = (a) * (b)
-#define S_METHOD_INTEGER__DIVIDE(a, b, z) (*z) = (a) / (b)
-#define S_METHOD_INTEGER__MODULUS(a, b, z) (*z) = (a) % (b)
-#define S_METHOD_INTEGER__EQ(a, b, z) (*z) = (a) == (b)
-#define S_METHOD_INTEGER__NE(a, b, z) (*z) = (a) != (b)
-#define S_METHOD_INTEGER__GE(a, b, z) (*z) = (a) >= (b)
-#define S_METHOD_INTEGER__GT(a, b, z) (*z) = (a) > (b)
-#define S_METHOD_INTEGER__LE(a, b, z) (*z) = (a) <= (b)
-#define S_METHOD_INTEGER__LT(a, b, z) (*z) = (a) < (b)
+#define S_METHOD_INT__ADD(a, b, z) (*z) = (a) + (b)
+#define S_METHOD_INT__SUB(a, b, z) (*z) = (a) - (b)
+#define S_METHOD_INT__MULTIPLY(a, b, z) (*z) = (a) * (b)
+#define S_METHOD_INT__DIVIDE(a, b, z) (*z) = (a) / (b)
+#define S_METHOD_INT__MODULUS(a, b, z) (*z) = (a) % (b)
+#define S_METHOD_INT__EQ(a, b, z) (*z) = (a) == (b)
+#define S_METHOD_INT__NE(a, b, z) (*z) = (a) != (b)
+#define S_METHOD_INT__GE(a, b, z) (*z) = (a) >= (b)
+#define S_METHOD_INT__GT(a, b, z) (*z) = (a) > (b)
+#define S_METHOD_INT__LE(a, b, z) (*z) = (a) <= (b)
+#define S_METHOD_INT__LT(a, b, z) (*z) = (a) < (b)
 
-static void S_METHOD_INTEGER_TOSTRING(int value, s_string_t** result)
+static void S_METHOD_INT_TOSTRING(int value, s_string_t** result)
 {
 	s_string_t* s = (s_string_t*) malloc(sizeof(s_string_t));
 	s->prev = s->next = NULL;

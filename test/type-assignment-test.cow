@@ -15,7 +15,7 @@ function print(s: string)
 	s.print();
 }
 
-type number = integer;
+type number = int;
 
 function test<T>(i: T)
 {

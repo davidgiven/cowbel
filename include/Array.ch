@@ -15,12 +15,12 @@
 
 type Array<T> =
 {
-	function get(i: integer): T;
-	function set(i: integer, value: T);
-	function length(): integer;
+	function get(i: int): T;
+	function set(i: int, value: T);
+	function length(): int;
 };
 
-function Array<T>(size: integer, initialiser: T): Array<T>
+function Array<T>(size: int, initialiser: T): Array<T>
 {
 	var ptr: __extern = 0;
 	extern "${ptr} = calloc(${size}, sizeof(${initialiser}));";
@@ -29,17 +29,17 @@ function Array<T>(size: integer, initialiser: T): Array<T>
 	{
 		implements Array<T>;
 		
-		function get(i: integer): (result: T)
+		function get(i: int): (result: T)
 		{
 			extern "${result} = ((typeof(${result})*)${ptr})[${i}];";
 		}
 		
-		function set(i: integer, value: T)
+		function set(i: int, value: T)
 		{
 			extern "((typeof(${value})*)${ptr})[${i}] = ${value};";
 		}
 		
-		function length(): integer
+		function length(): int
 		{
 			return size;
 		}

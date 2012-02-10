@@ -16,7 +16,7 @@ var o = {
 		return in;
 	}
 	
-	testfunc<integer>(1);
+	testfunc<int>(1);
 	testfunc<string>("1");
 	
 	function fnord()
@@ -24,6 +24,6 @@ var o = {
 	}
 };
 
-o.testfunc<integer>(2);
+o.testfunc<int>(2);
 o.testfunc<boolean>(true);
 

@@ -41,12 +41,12 @@ function wipe_buffers()
 	}
 }
 
-function getxy(x: integer, y: integer): integer
+function getxy(x: int, y: int): int
 {
 	return front.get(y).get(x);
 }
 
-function setxy(x: integer, y: integer, value: integer)
+function setxy(x: int, y: int, value: int)
 {
 	front.get(y).set(x, value);
 }
@@ -79,7 +79,7 @@ function draw_front()
 	}
 }
 
-function do_cell(x: integer, y: integer)
+function do_cell(x: int, y: int)
 {
 	var s = 
 		getxy(x-1, y-1) +

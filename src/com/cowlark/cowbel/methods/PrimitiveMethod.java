@@ -122,7 +122,7 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new PrimitiveMethod()
 		{
             {
-    			setSignature("integer.==.1", "integer._eq");
+    			setSignature("int.==.1", "int._eq");
     			setOutputTypes(BooleanType.create());
     			setInputTypes(IntegerType.create());
             }
@@ -131,7 +131,7 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new PrimitiveMethod()
 		{
             {
-    			setSignature("integer.!=.1", "integer._ne");
+    			setSignature("int.!=.1", "int._ne");
     			setOutputTypes(BooleanType.create());
     			setInputTypes(IntegerType.create());
             }
@@ -140,7 +140,7 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new PrimitiveMethod()
 		{
             {
-    			setSignature("integer.<.1", "integer._lt");
+    			setSignature("int.<.1", "int._lt");
     			setOutputTypes(BooleanType.create());
     			setInputTypes(IntegerType.create());
             }
@@ -149,7 +149,7 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new PrimitiveMethod()
 		{
             {
-    			setSignature("integer.<=.1", "integer._le");
+    			setSignature("int.<=.1", "int._le");
     			setOutputTypes(BooleanType.create());
     			setInputTypes(IntegerType.create());
             }
@@ -158,7 +158,7 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new PrimitiveMethod()
 		{
             {
-    			setSignature("integer.>.1", "integer._gt");
+    			setSignature("int.>.1", "int._gt");
     			setOutputTypes(BooleanType.create());
     			setInputTypes(IntegerType.create());
             }
@@ -167,7 +167,7 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new PrimitiveMethod()
 		{
             {
-    			setSignature("integer.>=.1", "integer._ge");
+    			setSignature("int.>=.1", "int._ge");
     			setOutputTypes(BooleanType.create());
     			setInputTypes(IntegerType.create());
             }
@@ -176,7 +176,7 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new PrimitiveMethod()
 		{
             {
-    			setSignature("integer.+.1", "integer._add");
+    			setSignature("int.+.1", "int._add");
     			setOutputTypes(IntegerType.create());
     			setInputTypes(IntegerType.create());
             }
@@ -185,7 +185,7 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new PrimitiveMethod()
 		{
             {
-    			setSignature("integer.-.1", "integer._sub");
+    			setSignature("int.-.1", "int._sub");
     			setOutputTypes(IntegerType.create());
     			setInputTypes(IntegerType.create());
             }
@@ -194,7 +194,7 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new PrimitiveMethod()
 		{
             {
-    			setSignature("integer.-.0", "integer._negate");
+    			setSignature("int.-.0", "int._negate");
     			setOutputTypes(IntegerType.create());
     			setInputTypes(IntegerType.create());
             }
@@ -203,7 +203,7 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new PrimitiveMethod()
 		{
             {
-    			setSignature("integer.*.1", "integer._multiply");
+    			setSignature("int.*.1", "int._multiply");
     			setOutputTypes(IntegerType.create());
     			setInputTypes(IntegerType.create());
             }
@@ -212,7 +212,7 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new PrimitiveMethod()
 		{
             {
-    			setSignature("integer./.1", "integer._divide");
+    			setSignature("int./.1", "int._divide");
     			setOutputTypes(IntegerType.create());
     			setInputTypes(IntegerType.create());
             }
@@ -221,7 +221,7 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new PrimitiveMethod()
 		{
             {
-    			setSignature("integer.%.1", "integer._modulus");
+    			setSignature("int.%.1", "int._modulus");
     			setOutputTypes(IntegerType.create());
     			setInputTypes(IntegerType.create());
             }
@@ -230,7 +230,7 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new PrimitiveMethod()
 		{
             {
-    			setSignature("integer.toString.0", "integer.toString");
+    			setSignature("int.toString.0", "int.toString");
     			setOutputTypes(StringType.create());
     			setInputTypes();
             }

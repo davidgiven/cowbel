@@ -13,11 +13,11 @@
 #include "SimpleIO.ch"
 #include "Array.ch"
 
-function fannkuch(n: integer): (sum: integer, maxflips: integer)
+function fannkuch(n: int): (sum: int, maxflips: int)
 {
-	var p = Array<integer>(n, 0);
-	var q = Array<integer>(n, 0);
-	var s = Array<integer>(n, 0);
+	var p = Array<int>(n, 0);
+	var q = Array<int>(n, 0);
+	var s = Array<int>(n, 0);
 	
 	var sign = 1;
 	maxflips = 0;

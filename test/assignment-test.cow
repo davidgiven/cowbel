@@ -14,12 +14,12 @@ function zeroreturn()
 {
 }
 
-function onereturn(): integer
+function onereturn(): int
 {
 	return 1;
 }
 
-function multireturn(): (a: integer, b: integer, c: integer)
+function multireturn(): (a: int, b: int, c: int)
 {
 	a = 1;
 	b = 2;

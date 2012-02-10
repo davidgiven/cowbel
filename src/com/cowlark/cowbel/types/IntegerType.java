@@ -6,7 +6,6 @@
 
 package com.cowlark.cowbel.types;
 
-
 public class IntegerType extends PrimitiveType
 {
 	private static IntegerType _instance = new IntegerType();
@@ -23,7 +22,7 @@ public class IntegerType extends PrimitiveType
 	@Override
 	public String getCanonicalTypeName()
 	{
-	    return "integer";
+	    return "int";
 	}
 	
 	@Override

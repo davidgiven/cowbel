@@ -18,12 +18,12 @@ function print(s: string)
 	extern 'S_METHOD_STRING_PRINT(${s});';
 }
 
-function printc(i: integer)
+function printc(i: int)
 {
 	extern 'putchar(${i});';
 }
 
-function printi(i: integer)
+function printi(i: int)
 {
 	extern 'printf("%d", ${i});';
 }

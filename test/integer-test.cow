@@ -12,7 +12,7 @@
 
 #include "SimpleIO.ch"
 
-function testresultb(t: string, i1: integer, i2: integer, r: boolean)
+function testresultb(t: string, i1: int, i2: int, r: boolean)
 {
 	var s = "false";
 	if (r)
@@ -21,12 +21,12 @@ function testresultb(t: string, i1: integer, i2: integer, r: boolean)
 	println(i1.toString() + " " + t " " + i2.toString() + " = " + s); 
 }
 
-function testresulti(t: string, i1: integer, i2: integer, r: integer)
+function testresulti(t: string, i1: int, i2: int, r: int)
 {
 	println(i1.toString() + " " + t + " " + i2.toString() + " = " + r.toString());
 }
 
-function test(i1: integer, i2: integer)
+function test(i1: int, i2: int)
 {
 	testresultb("==", i1, i2, (i1 == i2));
 	testresultb("!=", i1, i2, (i1 != i2));
@@ -41,7 +41,7 @@ function test(i1: integer, i2: integer)
 	testresulti("%", i1, i2, (i1 % i2));
 }
 
-function testm(i1: integer, i2: integer)
+function testm(i1: int, i2: int)
 {
 	test(i1, i2);
 	test(i2, i1);

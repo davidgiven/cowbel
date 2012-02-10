@@ -10,7 +10,7 @@
  * information.
  */
 
-function notypeparams(): integer
+function notypeparams(): int
 {
 }
 
@@ -19,20 +19,20 @@ function onetypeparam<T>(value: T): T
 	return value + value;
 }
 
-function twotypeparams<T1, T2>(): integer
+function twotypeparams<T1, T2>(): int
 {
 }
 
 /* Direct calls */
 
 notypeparams();
-onetypeparam<integer>(1);
+onetypeparam<int>(1);
 onetypeparam<string>("1");
-twotypeparams<integer, integer>();
+twotypeparams<int, int>();
 
 /* Expression calls */
 
 (notypeparams());
-(onetypeparam<integer>(1));
+(onetypeparam<int>(1));
 (onetypeparam<string>("1"));
-(twotypeparams<integer, integer>());
+(twotypeparams<int, int>());

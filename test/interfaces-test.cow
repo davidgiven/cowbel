@@ -12,7 +12,7 @@
 
 type Maybe =
 {
-	function get(): integer;
+	function get(): int;
 	function valid(): boolean;
 };
 
@@ -44,7 +44,7 @@ function Maybe<T>(value: T): Maybe
 	};
 }
 
-var null = Maybe<integer>();
-var one = Maybe<integer>(1);
+var null = Maybe<int>();
+var one = Maybe<int>(1);
 
 var x = one.get();
