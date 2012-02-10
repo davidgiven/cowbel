@@ -1,0 +1,71 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+#include "SimpleIO.ch"
+
+var width, height = 100, 100;
+var wscale = 2.0 / width.toReal();
+var m, limit2 = 50, 4.0;
+
+print("P4\n");
+
+printi(width);
+print(" ");
+printi(height);
+print("\n");
+
+for y = 0, height-1
+{
+	var Ci = ((2*y).toReal() / height.toReal()) - 1.0;
+	
+	var xb = 0;
+	while (xb < width)
+	{
+		var xbb = xb + 8;
+		
+		if (xbb > width)
+			xbb = width;
+			
+		var bits = 0;
+		for x = xb, xbb
+		{
+			bits = bits + bits;
+			
+			var Zr, Zi, Zrq, Ziq = 0.0, 0.0, 0.0, 0.0;
+			var Cr = (x.toReal() * wscale) - 1.5;
+			
+			for i = 1, m
+			{
+				var Zri = Zr * Zi;
+				Zr = Zrq - Ziq + Cr;
+				Zi = Zri + Zri + Ci;
+				Zrq = Zr * Zr;
+				Ziq = Zi * Zi;
+				if ((Zrq + Ziq) > limit2)
+				{
+					bits = bits + 1;
+					break;
+				}
+			}
+		}
+		
+		if (width < xbb)
+		{
+			for x = width, xbb+1
+				bits = bits + bits + 1;
+		}
+		
+		printc(255-bits);
+		
+		xb = xb + 8;
+	}
+}
