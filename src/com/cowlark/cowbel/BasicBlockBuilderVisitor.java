@@ -277,9 +277,9 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		_currentBB.terminate();
 		
 		_currentBB = _continueBB;
-		_currentBB.insnIf(node, _result, _continueBB, _breakBB);
 		node.getBodyStatement().visit(this);
 		node.getConditionalExpression().visit(this);
+		_currentBB.insnIf(node, _result, _continueBB, _breakBB);
 		_currentBB.terminate();
 		
 		_currentBB = _breakBB;
