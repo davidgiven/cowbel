@@ -11,6 +11,7 @@
 # information.
 
 for f in \
+	test/operators-test.cow \
 	test/application-test.cow \
 	test/fizzbuzz.cow \
 	test/99-bottles.cow \
