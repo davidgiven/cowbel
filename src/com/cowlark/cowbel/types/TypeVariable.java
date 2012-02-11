@@ -31,11 +31,11 @@ public class TypeVariable extends Type
 	@Override
 	public boolean isVoidType()
 	{
-		return getRealType().isVoidType();
+		return getConcreteType().isVoidType();
 	}
 	
 	@Override
-	public Type getRealType()
+	public Type getConcreteType()
 	{
 		assert(false);
 		return null;
