@@ -13,25 +13,45 @@
 #ifndef COWBEL_SIMPLEIO
 #define COWBEL_SIMPLEIO
 
+/** Prints a string to stdout.
+ **/
+ 
 function print(s: string)
 {
 	extern 'S_METHOD_STRING_PRINT(${s});';
 }
 
+/** Prints a newline-terminated string to stdout.
+ **/
+ 
+function println(s: string)
+{
+	print(s);
+	printc(10);
+}
+
+/** Prints a single character to stdout.
+ **/
+ 
 function printc(i: int)
 {
 	extern 'putchar(${i});';
 }
 
+/** Prints a decimal integer to stdout.
+ **/
+ 
 function printi(i: int)
 {
 	extern 'printf("%d", ${i});';
 }
 
-function println(s: string)
+/** Prints a real to stdout.
+ **/
+ 
+function printr(r: real)
 {
-	print(s);
-	printc(10);
+	extern 'printf("%f", ${r});';
 }
 
 #endif

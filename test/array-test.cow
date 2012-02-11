@@ -16,7 +16,8 @@
 function test()
 {
 	var i = Array<int>(4, 7);
-	println("i.length() = " + i.length().toString());
+	var min, length = i.bounds();
+	println("i.length() = " + length.toString());
 	
 	var j = i.get(2);
 	println(j.toString());
@@ -30,15 +31,15 @@ function test()
 
 function dump_matrix(matrix: Array<Array<int>>)
 {
-	var y = 0;
+	var y, highy = matrix.bounds();
 	
-	while (y < matrix.length())
+	while (y < highy)
 	{
 		var row = matrix.get(y);
 		var s = "";
 		
-		var x = 0;
-		while (x < row.length())
+		var x, highx = row.bounds();
+		while (x < highx)
 		{
 			s = s + " " + row.get(x).toString();
 			x = x + 1;
