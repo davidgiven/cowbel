@@ -22,7 +22,7 @@ import com.cowlark.cowbel.ast.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.ParameterDeclarationNode;
 import com.cowlark.cowbel.ast.RecursiveASTVisitor;
 import com.cowlark.cowbel.ast.StringConstantNode;
-import com.cowlark.cowbel.backend.ImperativeBackend;
+import com.cowlark.cowbel.backend.Backend;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.instructions.BooleanConstantInstruction;
 import com.cowlark.cowbel.instructions.ConstructInstruction;
@@ -49,7 +49,7 @@ import com.cowlark.cowbel.types.HasInterfaces;
 import com.cowlark.cowbel.types.InterfaceType;
 import com.cowlark.cowbel.types.Type;
 
-public class CBackend extends ImperativeBackend
+public class CBackend extends Backend
 {
 	private static Charset UTF8 = Charset.forName("utf-8");
 	
