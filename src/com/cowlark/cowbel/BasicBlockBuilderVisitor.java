@@ -429,7 +429,7 @@ public class BasicBlockBuilderVisitor extends SimpleASTVisitor
 			outvars.add(v);
 		}
 		
-		node.getMethodReceiver().visit(this);
+		node.getReceiver().visit(this);
 		Variable receiver = _result;
 		
 		_currentBB.insnMethodCall(node,
@@ -485,7 +485,7 @@ public class BasicBlockBuilderVisitor extends SimpleASTVisitor
 			invars.add(_result);
 		}
 		
-		node.getMethodReceiver().visit(this);
+		node.getReceiver().visit(this);
 		Variable receiver = _result;
 		
 		_result = _currentBB.createTemporary(node, node.getType());

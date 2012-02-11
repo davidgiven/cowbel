@@ -91,7 +91,7 @@ public class InterfaceType extends Type implements HasInterfaces
 	        T node, IdentifierNode id) throws CompilationException
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append(node.getMethodIdentifier().getText());
+		sb.append(node.getIdentifier().getText());
 		sb.append("<");
 		sb.append(node.getTypeArguments().getNumberOfChildren());
 		sb.append(">(");

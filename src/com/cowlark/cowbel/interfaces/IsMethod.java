@@ -7,10 +7,8 @@
 package com.cowlark.cowbel.interfaces;
 
 import com.cowlark.cowbel.ast.AbstractExpressionNode;
-import com.cowlark.cowbel.ast.IdentifierNode;
 
-public interface IsMethod
+public interface IsMethod extends HasIdentifier
 {
-	public IdentifierNode getMethodIdentifier();
-	public AbstractExpressionNode getMethodReceiver();
+	public AbstractExpressionNode getReceiver();
 }
