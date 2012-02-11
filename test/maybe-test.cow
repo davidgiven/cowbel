@@ -11,36 +11,7 @@
  */
 
 #include "SimpleIO.ch"
-
-type Maybe<T> =
-{
-	function valid(): boolean;
-	function get(): T;
-};
-
-function Maybe<T>(): Maybe<T>
-	return
-	{
-		implements Maybe<T>;
-		
-		function valid(): boolean
-			return false;
-			
-		function get(): T
-			{} /* abort */
-	};
-
-function Maybe<T>(value: T): Maybe<T>
-	return
-	{
-		implements Maybe<T>;
-		
-		function valid(): boolean
-			return true;
-			
-		function get(): T
-			return value;
-	};
+#include "Maybe.ch"
 
 type Queue<T> =
 {
