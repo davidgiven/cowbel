@@ -13,13 +13,32 @@
 #ifndef COWBEL_ARRAY
 #define COWBEL_ARRAY
 
+/** Represents a mutable one-dimensional array.
+ **/
+ 
 type Array<T> =
 {
+	/** Returns the value at a particular index.
+	 **/
+	 
 	function get(i: int): T;
+	
+	/** Sets the value at a particular index.
+	 **/
+	 
 	function set(i: int, value: T);
-	function length(): int;
+	
+	/** Returns the bounds of the array as [low, high).
+	 **/
+	 
+	function bounds(): (low: int, high: int);
 };
 
+/** Creates a 0-based one-dimensional array.
+ **
+ ** All entries in the array are initialised to the same, specified, value.
+ **/
+ 
 function Array<T>(size: int, initialiser: T): Array<T>
 {
 	var ptr: __extern = 0;
@@ -39,21 +58,40 @@ function Array<T>(size: int, initialiser: T): Array<T>
 			extern "((typeof(${value})*)${ptr})[${i}] = ${value};";
 		}
 		
-		function length(): int
+		function bounds(): (low: int, high: int)
 		{
-			return size;
+			low = 0;
+			high = size;
 		}
 	};
 }
 
-
+/** Represents a mutable two-dimensional array.
+ **/
+ 
 type Array2D<T> =
 {
+	/** Returns the value at a particular (x, y) pair.
+	 **/
+	 
 	function get(x: int, y: int): T;
+	
+	/** Sets the value at a particular (x, y) pair.
+	 **/
+	  
 	function set(x: int, y: int, value: T);
-	function size(): (width: int, height: int);
+	
+	/** Returns the bounds of the array as two [low, high) pairs.
+	 **/
+	 
+	function bounds(): (lowx: int, highx: int, lowy: int, highy: int);
 };
 
+/** Creates a 0-based two-dimensional array.
+ **
+ ** All entries in the array are initialised to the same, specified, value.
+ **/
+ 
 function Array2D<T>(width: int, height: int, initialiser: T): Array2D<T>
 {
 	var ptr: __extern = 0;
@@ -73,10 +111,12 @@ function Array2D<T>(width: int, height: int, initialiser: T): Array2D<T>
 			extern "((typeof(${value})*)${ptr})[${x} + ${y}*${width}] = ${value};";
 		}
 		
-		function size(): (w: int, h: int)
+		function bounds(): (lowx: int, highx: int, lowy: int, highy: int)
 		{
-			w = width;
-			h = height;
+			lowx = 0;
+			highx = width;
+			lowy = 0;
+			highy = height;
 		}
 	};
 }
