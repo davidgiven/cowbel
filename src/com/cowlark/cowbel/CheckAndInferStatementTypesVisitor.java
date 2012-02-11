@@ -222,11 +222,11 @@ public class CheckAndInferStatementTypesVisitor extends SimpleASTVisitor
 	@Override
 	public void visit(MethodCallStatementNode node) throws CompilationException
 	{
-		AbstractExpressionNode receiver = node.getMethodReceiver();
+		AbstractExpressionNode receiver = node.getReceiver();
 		Type receivertype = receiver.calculateType();
 		receivertype.ensureConcrete(node);
 		
-		IdentifierNode name = node.getMethodIdentifier();
+		IdentifierNode name = node.getIdentifier();
 		Method method = receivertype.lookupMethod(node, name);
 		node.setMethod(method);
 		

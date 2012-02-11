@@ -47,13 +47,13 @@ public class MethodCallExpressionNode extends AbstractExpressionNode
 	}
 	
 	@Override
-    public AbstractExpressionNode getMethodReceiver()
+    public AbstractExpressionNode getReceiver()
 	{
 		return (AbstractExpressionNode) getChild(0);
 	}
 	
 	@Override
-    public IdentifierNode getMethodIdentifier()
+    public IdentifierNode getIdentifier()
 	{
 		return (IdentifierNode) getChild(1);
 	}
@@ -73,7 +73,7 @@ public class MethodCallExpressionNode extends AbstractExpressionNode
 	@Override
 	public String getShortDescription()
 	{
-	    return getMethodIdentifier().getText();
+	    return getIdentifier().getText();
 	}
 	
 	@Override

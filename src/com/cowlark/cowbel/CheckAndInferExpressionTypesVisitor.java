@@ -149,7 +149,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleASTVisitor
 	@Override
 	public void visit(MethodCallExpressionNode node) throws CompilationException
 	{
-		AbstractExpressionNode receiver = node.getMethodReceiver();
+		AbstractExpressionNode receiver = node.getReceiver();
 		Type receivertype = receiver.calculateType();
 		receivertype.ensureConcrete(node);
 		
@@ -162,7 +162,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleASTVisitor
 			argumenttypes.add(type);
 		}
 		
-		IdentifierNode name = node.getMethodIdentifier();
+		IdentifierNode name = node.getIdentifier();
 		Method method = receivertype.lookupMethod(node, name);
 		node.setMethod(method);
 		method.typeCheck(node, null, argumenttypes);
