@@ -11,6 +11,7 @@
 # information.
 
 for f in \
+	test/application-test.cow \
 	test/fizzbuzz.cow \
 	test/99-bottles.cow \
 	test/mandelbrot.cow \
@@ -40,7 +41,9 @@ for f in \
 	(
 		if (./cowbel -q -I include -o out.c $f) then
 			if (gcc -Os out.c) then
-				./a.out
+				if ! ./a.out; then
+					echo "Exited with $?"
+				fi
 			fi
 		fi
 		exit 1
