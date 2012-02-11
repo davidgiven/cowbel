@@ -7,9 +7,9 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import java.util.ArrayList;
-import com.cowlark.cowbel.ast.nodes.AbstractStatementNode;
-import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.StatementListNode;
+import com.cowlark.cowbel.ast.AbstractStatementNode;
+import com.cowlark.cowbel.ast.BlockScopeConstructorNode;
+import com.cowlark.cowbel.ast.StatementListNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 

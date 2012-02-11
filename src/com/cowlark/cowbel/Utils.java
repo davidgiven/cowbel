@@ -7,7 +7,7 @@
 package com.cowlark.cowbel;
 
 import java.util.List;
-import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.TypesNotCompatibleException;
 import com.cowlark.cowbel.types.Type;

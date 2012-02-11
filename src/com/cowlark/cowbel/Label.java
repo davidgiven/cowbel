@@ -6,10 +6,10 @@
 
 package com.cowlark.cowbel;
 
-import com.cowlark.cowbel.ast.HasNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.LabelStatementNode;
-import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.IdentifierNode;
+import com.cowlark.cowbel.ast.LabelStatementNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.interfaces.HasNode;
 
 public class Label implements HasNode
 {

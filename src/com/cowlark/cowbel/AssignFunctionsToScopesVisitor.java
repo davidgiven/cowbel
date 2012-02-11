@@ -6,12 +6,12 @@
 
 package com.cowlark.cowbel;
 
-import com.cowlark.cowbel.ast.RecursiveVisitor;
-import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.BlockScopeConstructorNode;
+import com.cowlark.cowbel.ast.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.RecursiveASTVisitor;
 import com.cowlark.cowbel.errors.CompilationException;
 
-public class AssignFunctionsToScopesVisitor extends RecursiveVisitor
+public class AssignFunctionsToScopesVisitor extends RecursiveASTVisitor
 {
 	@Override
 	public void visit(FunctionDefinitionNode node) throws CompilationException

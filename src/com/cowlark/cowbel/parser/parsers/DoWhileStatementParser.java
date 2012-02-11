@@ -6,9 +6,9 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
-import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
+import com.cowlark.cowbel.ast.AbstractExpressionNode;
+import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.ast.DoWhileStatementNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 

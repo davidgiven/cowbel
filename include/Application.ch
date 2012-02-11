@@ -68,7 +68,7 @@ function Abort(message: string)
 function AbortOutOfBounds()
  	Abort("out of bounds access");
  	
-/** Stops exection with an 'Operation not supported' error.
+/** Stops execution with an 'Operation not supported' error.
  **/
  
 function AbortOperationNotSupported()

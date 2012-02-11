@@ -7,7 +7,7 @@
 package com.cowlark.cowbel.backend.c;
 
 import com.cowlark.cowbel.Constructor;
-import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
+import com.cowlark.cowbel.ast.BlockScopeConstructorNode;
 import com.cowlark.cowbel.types.BooleanType;
 import com.cowlark.cowbel.types.ClassType;
 import com.cowlark.cowbel.types.ExternType;

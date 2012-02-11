@@ -6,10 +6,10 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
-import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
+import com.cowlark.cowbel.ast.ExpressionListNode;
+import com.cowlark.cowbel.ast.IdentifierListNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.ast.VarAssignmentNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 

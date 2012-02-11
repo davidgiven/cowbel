@@ -6,12 +6,12 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.FunctionHeaderNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
-import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
-import com.cowlark.cowbel.ast.nodes.TypeVariableNode;
+import com.cowlark.cowbel.ast.FunctionHeaderNode;
+import com.cowlark.cowbel.ast.IdentifierListNode;
+import com.cowlark.cowbel.ast.IdentifierNode;
+import com.cowlark.cowbel.ast.ParameterDeclarationListNode;
+import com.cowlark.cowbel.ast.ParameterDeclarationNode;
+import com.cowlark.cowbel.ast.TypeVariableNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 

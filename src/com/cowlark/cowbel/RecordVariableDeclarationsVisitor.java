@@ -6,23 +6,23 @@
 
 package com.cowlark.cowbel;
 
-import com.cowlark.cowbel.ast.RecursiveVisitor;
-import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.ImplementsStatementNode;
-import com.cowlark.cowbel.ast.nodes.LabelStatementNode;
-import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
-import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
-import com.cowlark.cowbel.ast.nodes.VarDeclarationNode;
+import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.ast.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.IdentifierNode;
+import com.cowlark.cowbel.ast.ImplementsStatementNode;
+import com.cowlark.cowbel.ast.LabelStatementNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.ast.ParameterDeclarationListNode;
+import com.cowlark.cowbel.ast.ParameterDeclarationNode;
+import com.cowlark.cowbel.ast.RecursiveASTVisitor;
+import com.cowlark.cowbel.ast.VarDeclarationNode;
 import com.cowlark.cowbel.errors.CanOnlyImplementInterfaces;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.InterfaceType;
 import com.cowlark.cowbel.types.Type;
 
-public class RecordVariableDeclarationsVisitor extends RecursiveVisitor
+public class RecordVariableDeclarationsVisitor extends RecursiveASTVisitor
 {
 	@Override
 	public void visit(FunctionDefinitionNode node)

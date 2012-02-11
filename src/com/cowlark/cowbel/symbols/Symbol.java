@@ -7,14 +7,17 @@
 package com.cowlark.cowbel.symbols;
 
 import com.cowlark.cowbel.Constructor;
-import com.cowlark.cowbel.ast.HasNode;
-import com.cowlark.cowbel.ast.HasScope;
-import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.ast.IdentifierNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.interfaces.HasIdentifier;
+import com.cowlark.cowbel.interfaces.HasNode;
+import com.cowlark.cowbel.interfaces.HasScope;
+import com.cowlark.cowbel.interfaces.HasType;
 import com.cowlark.cowbel.types.Type;
 
-public abstract class Symbol implements Comparable<Symbol>, HasNode, HasScope
+public abstract class Symbol implements Comparable<Symbol>, HasNode, HasScope,
+		HasIdentifier, HasType
 {
 	private static int _globalId = 0;
 	
@@ -38,24 +41,21 @@ public abstract class Symbol implements Comparable<Symbol>, HasNode, HasScope
 		return _node;
 	}
 	
-	public IdentifierNode getSymbolName()
+	@Override
+    public IdentifierNode getIdentifier()
 	{
 		return _name;
 	}
 	
-	public Type getSymbolType()
+	@Override
+    public Type getType()
 	{
 		return _type;
 	}
 	
-	public void setSymbolType(Type type)
+	public void setType(Type type)
 	{
 		_type = type;
-	}
-	
-	public String getName()
-	{
-		return getSymbolName().getText();
 	}
 	
 	@Override

@@ -7,9 +7,9 @@
 package com.cowlark.cowbel.errors;
 
 import java.util.List;
-import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
-import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.TypeListNode;
+import com.cowlark.cowbel.ast.IdentifierListNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.ast.TypeListNode;
 import com.cowlark.cowbel.types.Type;
 
 public class TypeParameterMismatch extends CompilationException

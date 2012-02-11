@@ -6,9 +6,9 @@
 
 package com.cowlark.cowbel.errors;
 
-import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
-import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
+import com.cowlark.cowbel.ast.ExpressionListNode;
+import com.cowlark.cowbel.ast.IdentifierListNode;
+import com.cowlark.cowbel.ast.VarAssignmentNode;
 
 public class WrongNumberOfExpressionsInMultipleAssignments extends CompilationException
 {

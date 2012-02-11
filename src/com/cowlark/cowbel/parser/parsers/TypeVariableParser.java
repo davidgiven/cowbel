@@ -6,9 +6,9 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.TypeListNode;
-import com.cowlark.cowbel.ast.nodes.TypeVariableNode;
+import com.cowlark.cowbel.ast.IdentifierNode;
+import com.cowlark.cowbel.ast.TypeListNode;
+import com.cowlark.cowbel.ast.TypeVariableNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 

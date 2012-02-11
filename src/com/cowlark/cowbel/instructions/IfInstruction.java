@@ -7,7 +7,7 @@
 package com.cowlark.cowbel.instructions;
 
 import com.cowlark.cowbel.BasicBlock;
-import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.symbols.Variable;
 
 public class IfInstruction extends Instruction

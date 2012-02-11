@@ -15,13 +15,13 @@ import com.cowlark.cowbel.BasicBlock;
 import com.cowlark.cowbel.Compiler;
 import com.cowlark.cowbel.Constructor;
 import com.cowlark.cowbel.Function;
-import com.cowlark.cowbel.ast.RecursiveVisitor;
-import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
-import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
-import com.cowlark.cowbel.ast.nodes.StringConstantNode;
+import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.ast.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.ast.ParameterDeclarationListNode;
+import com.cowlark.cowbel.ast.ParameterDeclarationNode;
+import com.cowlark.cowbel.ast.RecursiveASTVisitor;
+import com.cowlark.cowbel.ast.StringConstantNode;
 import com.cowlark.cowbel.backend.ImperativeBackend;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.instructions.BooleanConstantInstruction;
@@ -126,7 +126,7 @@ public class CBackend extends ImperativeBackend
 	    /* Emit string constants. */
 	    
 	    compiler.visit(
-	    		new RecursiveVisitor()
+	    		new RecursiveASTVisitor()
 	    		{
 	    			@Override
                     public void visit(FunctionDefinitionNode node) throws CompilationException
@@ -232,7 +232,8 @@ public class CBackend extends ImperativeBackend
 		if (s != null)
 			return s;
 		
-		s = "s" + _symbolLabels.size() + "_" + escape(symbol.getName());
+		s = "s" + _symbolLabels.size() + "_" +
+			escape(symbol.getIdentifier().getText());
 		
 		_symbolLabels.put(symbol, s);
 		return s;
@@ -279,7 +280,7 @@ public class CBackend extends ImperativeBackend
 	
 	private String ctype(Symbol symbol)
 	{
-		return ctype(symbol.getSymbolType());
+		return ctype(symbol.getType());
 	}
 	
 	String ctype(Type type)
@@ -783,8 +784,8 @@ public class CBackend extends ImperativeBackend
 		printvar(node, insn.getOutputVariable());
 		print(" = ");
 		
-		Type srctype = insn.getInputVariable().getSymbolType().getRealType();
-		Type desttype = insn.getOutputVariable().getSymbolType().getRealType();
+		Type srctype = insn.getInputVariable().getType().getRealType();
+		Type desttype = insn.getOutputVariable().getType().getRealType();
 		if (srctype.equals(desttype))
 			printvar(node, insn.getInputVariable());
 		else

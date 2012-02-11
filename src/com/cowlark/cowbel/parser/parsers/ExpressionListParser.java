@@ -7,8 +7,8 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import java.util.LinkedList;
-import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
+import com.cowlark.cowbel.ast.AbstractExpressionNode;
+import com.cowlark.cowbel.ast.ExpressionListNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 import com.cowlark.cowbel.parser.errors.ExpectedSyntacticElement;

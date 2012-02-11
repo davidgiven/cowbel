@@ -6,8 +6,8 @@
 
 package com.cowlark.cowbel.errors;
 
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.IdentifierNode;
+import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.types.Type;
 
 public class NoSuchMethodException extends CompilationException

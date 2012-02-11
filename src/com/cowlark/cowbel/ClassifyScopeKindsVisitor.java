@@ -6,19 +6,19 @@
 
 package com.cowlark.cowbel;
 
-import com.cowlark.cowbel.ast.RecursiveVisitor;
-import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode.ScopeType;
-import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
-import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.IfElseStatementNode;
-import com.cowlark.cowbel.ast.nodes.IfStatementNode;
-import com.cowlark.cowbel.ast.nodes.WhileStatementNode;
+import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.ast.AbstractScopeConstructorNode.ScopeType;
+import com.cowlark.cowbel.ast.BlockScopeConstructorNode;
+import com.cowlark.cowbel.ast.DoWhileStatementNode;
+import com.cowlark.cowbel.ast.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.FunctionScopeConstructorNode;
+import com.cowlark.cowbel.ast.IfElseStatementNode;
+import com.cowlark.cowbel.ast.IfStatementNode;
+import com.cowlark.cowbel.ast.RecursiveASTVisitor;
+import com.cowlark.cowbel.ast.WhileStatementNode;
 import com.cowlark.cowbel.errors.CompilationException;
 
-public class ClassifyScopeKindsVisitor extends RecursiveVisitor
+public class ClassifyScopeKindsVisitor extends RecursiveASTVisitor
 {
 	private void make_significant_persistent(AbstractScopeConstructorNode node)
 	{

@@ -8,13 +8,13 @@ package com.cowlark.cowbel;
 
 import java.util.List;
 import java.util.TreeSet;
-import com.cowlark.cowbel.ast.HasNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.TypeAssignmentNode;
+import com.cowlark.cowbel.ast.IdentifierListNode;
+import com.cowlark.cowbel.ast.IdentifierNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.ast.TypeAssignmentNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.TypeParameterMismatch;
+import com.cowlark.cowbel.interfaces.HasNode;
 import com.cowlark.cowbel.types.Type;
 
 public class TypeTemplate implements Comparable<TypeTemplate>, HasNode

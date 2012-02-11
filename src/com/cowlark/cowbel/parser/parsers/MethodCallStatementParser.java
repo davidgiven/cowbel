@@ -6,16 +6,16 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
-import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallStatementNode;
-import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
-import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
-import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.TypeListNode;
+import com.cowlark.cowbel.ast.AbstractExpressionNode;
+import com.cowlark.cowbel.ast.ExpressionListNode;
+import com.cowlark.cowbel.ast.IdentifierListNode;
+import com.cowlark.cowbel.ast.IdentifierNode;
+import com.cowlark.cowbel.ast.IndirectFunctionCallExpressionNode;
+import com.cowlark.cowbel.ast.IndirectFunctionCallStatementNode;
+import com.cowlark.cowbel.ast.MethodCallExpressionNode;
+import com.cowlark.cowbel.ast.MethodCallStatementNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.ast.TypeListNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 

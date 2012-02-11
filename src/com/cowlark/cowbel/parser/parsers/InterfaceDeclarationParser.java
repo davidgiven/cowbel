@@ -7,8 +7,8 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import java.util.ArrayList;
-import com.cowlark.cowbel.ast.nodes.FunctionHeaderNode;
-import com.cowlark.cowbel.ast.nodes.InterfaceTypeNode;
+import com.cowlark.cowbel.ast.FunctionHeaderNode;
+import com.cowlark.cowbel.ast.InterfaceTypeNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 

@@ -6,15 +6,15 @@
 
 package com.cowlark.cowbel;
 
-import com.cowlark.cowbel.ast.RecursiveVisitor;
-import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.cowbel.ast.nodes.FunctionHeaderNode;
-import com.cowlark.cowbel.ast.nodes.InterfaceTypeNode;
-import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.FunctionHeaderNode;
+import com.cowlark.cowbel.ast.InterfaceTypeNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.ast.RecursiveASTVisitor;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.types.InterfaceType;
 
-public class DefineInterfacesVisitor extends RecursiveVisitor
+public class DefineInterfacesVisitor extends RecursiveASTVisitor
 {
 	@Override
 	public void visit(FunctionDefinitionNode node) throws CompilationException

@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.methods.VirtualMethod;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.HasInterfaces;

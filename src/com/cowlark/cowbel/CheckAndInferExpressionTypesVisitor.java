@@ -9,28 +9,28 @@ package com.cowlark.cowbel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import com.cowlark.cowbel.ast.HasInputs;
-import com.cowlark.cowbel.ast.SimpleVisitor;
-import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
-import com.cowlark.cowbel.ast.nodes.BlockExpressionNode;
-import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
-import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
-import com.cowlark.cowbel.ast.nodes.DummyExpressionNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
-import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.IndirectFunctionCallExpressionNode;
-import com.cowlark.cowbel.ast.nodes.IntegerConstantNode;
-import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
-import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.RealConstantNode;
-import com.cowlark.cowbel.ast.nodes.StringConstantNode;
-import com.cowlark.cowbel.ast.nodes.VarReferenceNode;
+import com.cowlark.cowbel.ast.AbstractExpressionNode;
+import com.cowlark.cowbel.ast.BlockExpressionNode;
+import com.cowlark.cowbel.ast.BlockScopeConstructorNode;
+import com.cowlark.cowbel.ast.BooleanConstantNode;
+import com.cowlark.cowbel.ast.DirectFunctionCallExpressionNode;
+import com.cowlark.cowbel.ast.DummyExpressionNode;
+import com.cowlark.cowbel.ast.ExpressionListNode;
+import com.cowlark.cowbel.ast.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.IdentifierNode;
+import com.cowlark.cowbel.ast.IndirectFunctionCallExpressionNode;
+import com.cowlark.cowbel.ast.IntegerConstantNode;
+import com.cowlark.cowbel.ast.MethodCallExpressionNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.ast.RealConstantNode;
+import com.cowlark.cowbel.ast.SimpleASTVisitor;
+import com.cowlark.cowbel.ast.StringConstantNode;
+import com.cowlark.cowbel.ast.VarReferenceNode;
 import com.cowlark.cowbel.errors.AttemptToCallNonFunctionTypeException;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.FunctionParameterMismatch;
 import com.cowlark.cowbel.errors.InvalidFunctionCallInExpressionContext;
+import com.cowlark.cowbel.interfaces.HasInputs;
 import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.symbols.Symbol;
 import com.cowlark.cowbel.types.BooleanType;
@@ -41,7 +41,7 @@ import com.cowlark.cowbel.types.RealType;
 import com.cowlark.cowbel.types.StringType;
 import com.cowlark.cowbel.types.Type;
 
-public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
+public class CheckAndInferExpressionTypesVisitor extends SimpleASTVisitor
 {
 	@Override
 	public void visit(FunctionDefinitionNode node) throws CompilationException
@@ -83,7 +83,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleVisitor
 	public void visit(VarReferenceNode node) throws CompilationException
 	{
 		Symbol symbol = node.getSymbol();
-		Type type = symbol.getSymbolType();
+		Type type = symbol.getType();
 		type.ensureConcrete(node);
 		node.setType(type);
 	}

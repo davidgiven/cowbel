@@ -7,13 +7,13 @@
 package com.cowlark.cowbel;
 
 import java.util.Set;
-import com.cowlark.cowbel.ast.RecursiveVisitor;
-import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
+import com.cowlark.cowbel.ast.BlockScopeConstructorNode;
+import com.cowlark.cowbel.ast.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.FunctionScopeConstructorNode;
+import com.cowlark.cowbel.ast.RecursiveASTVisitor;
 import com.cowlark.cowbel.errors.CompilationException;
 
-public class CollectConstructorsVisitor extends RecursiveVisitor
+public class CollectConstructorsVisitor extends RecursiveASTVisitor
 {
 	private Set<Constructor> _constructors;
 	

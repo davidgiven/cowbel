@@ -6,7 +6,7 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.StringConstantNode;
+import com.cowlark.cowbel.ast.StringConstantNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.MutableLocation;
 import com.cowlark.cowbel.parser.core.ParseResult;

@@ -7,8 +7,8 @@
 package com.cowlark.cowbel.instructions;
 
 import java.util.List;
-import com.cowlark.cowbel.ast.HasNode;
-import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.interfaces.HasNode;
 import com.cowlark.cowbel.symbols.Variable;
 
 public abstract class Instruction implements HasNode

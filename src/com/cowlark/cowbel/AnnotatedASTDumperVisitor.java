@@ -6,12 +6,12 @@
 
 package com.cowlark.cowbel;
 
-import com.cowlark.cowbel.ast.RecursiveVisitor;
-import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.ast.RecursiveASTVisitor;
 import com.cowlark.cowbel.errors.CompilationException;
 
-public class AnnotatedASTDumperVisitor extends RecursiveVisitor
+public class AnnotatedASTDumperVisitor extends RecursiveASTVisitor
 {
 	private int _indent = 0;
 	

@@ -7,14 +7,14 @@
 package com.cowlark.cowbel.types;
 
 import java.util.Collection;
-import com.cowlark.cowbel.ast.HasInputs;
-import com.cowlark.cowbel.ast.HasTypeArguments;
-import com.cowlark.cowbel.ast.IsMethod;
-import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.BlockScopeConstructorNode;
+import com.cowlark.cowbel.ast.IdentifierNode;
+import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.TypesNotCompatibleException;
+import com.cowlark.cowbel.interfaces.HasInputs;
+import com.cowlark.cowbel.interfaces.HasTypeArguments;
+import com.cowlark.cowbel.interfaces.IsMethod;
 import com.cowlark.cowbel.methods.Method;
 
 public class ClassType extends Type implements HasInterfaces
