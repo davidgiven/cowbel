@@ -78,8 +78,8 @@ public class BasicBlockBuilderVisitor extends SimpleASTVisitor
 	
 	private Variable cast(Node node, Variable value, Type targettype)
 	{
-		Type srctype = value.getType().getRealType();
-		targettype = targettype.getRealType();
+		Type srctype = value.getType().getConcreteType();
+		targettype = targettype.getConcreteType();
 		
 		if (srctype.equals(targettype))
 			return value;

@@ -784,8 +784,8 @@ public class CBackend extends Backend
 		printvar(node, insn.getOutputVariable());
 		print(" = ");
 		
-		Type srctype = insn.getInputVariable().getType().getRealType();
-		Type desttype = insn.getOutputVariable().getType().getRealType();
+		Type srctype = insn.getInputVariable().getType().getConcreteType();
+		Type desttype = insn.getOutputVariable().getType().getConcreteType();
 		if (srctype.equals(desttype))
 			printvar(node, insn.getInputVariable());
 		else

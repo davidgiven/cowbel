@@ -30,11 +30,11 @@ public class InferredType extends Type
 	@Override
 	public boolean isVoidType()
 	{
-		return getRealType().isVoidType();
+		return getConcreteType().isVoidType();
 	}
 	
 	@Override
-	public Type getRealType()
+	public Type getConcreteType()
 	{
 		if (_realType == null)
 			return this;

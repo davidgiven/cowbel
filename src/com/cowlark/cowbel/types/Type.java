@@ -65,14 +65,14 @@ public abstract class Type implements Comparable<Type>
 	
 	public boolean equals(Type other)
 	{
-		return getRealType()._id == other.getRealType()._id;
+		return getConcreteType()._id == other.getConcreteType()._id;
 	}
 	
 	@Override
 	public int compareTo(Type o)
 	{
-		Type thist = getRealType();
-		Type othert = o.getRealType();
+		Type thist = getConcreteType();
+		Type othert = o.getConcreteType();
 		
 		if (thist._id < othert._id)
 			return -1;
@@ -81,7 +81,7 @@ public abstract class Type implements Comparable<Type>
 		return 0;
 	}
 	
-	public Type getRealType()
+	public Type getConcreteType()
 	{
 		return this;
 	}
@@ -90,8 +90,8 @@ public abstract class Type implements Comparable<Type>
 	
 	public void unifyWith(Node node, Type src) throws CompilationException
 	{
-		Type t1 = getRealType();
-		Type t2 = src.getRealType();
+		Type t1 = getConcreteType();
+		Type t2 = src.getConcreteType();
 
 		/* Ensure that if one of the types is an InferredType, it is always
 		 * the receiver. */

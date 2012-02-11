@@ -60,7 +60,7 @@ public class ClassType extends Type implements HasInterfaces
 		Method lookupMethod(
 	        T node, IdentifierNode id) throws CompilationException
 	{
-		ClassType type = (ClassType) node.getMethodReceiver().getType().getRealType();
+		ClassType type = (ClassType) node.getMethodReceiver().getType().getConcreteType();
 		BlockScopeConstructorNode block = type.getBlock();
 		return block.lookupMethod(node);
 	}
