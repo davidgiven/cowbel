@@ -1,0 +1,58 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+#include "SimpleIO.ch"
+
+type Proxy<T> =
+{
+	function * (): T;
+	
+	function += (other: T): T;
+	function -= (other: T): T;
+};
+
+function Proxy<T>(value: T): Proxy<T>
+{
+	return
+	{
+		implements Proxy<T>;
+	
+		function * (): T
+			return value;
+				
+		function += (other: T): T
+		{
+			value = value + other;
+			return value;
+		}
+		
+		function -= (other: T): T
+		{
+			value = value - other;
+			return value;
+		}
+	};
+}
+
+var p = Proxy<int>(9);
+println("p is " + (*p).toString());
+p += 10;
+println("p is " + (*p).toString());
+p -= 14;
+println("p is " + (*p).toString());
+
+var q = Proxy<real>(9.0);
+println("q is " + (*q).toString());
+q += 10.0;
+println("q is " + (*q).toString());
+q -= 14.0;
+println("q is " + (*q).toString());

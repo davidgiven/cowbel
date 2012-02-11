@@ -24,7 +24,7 @@ public class FunctionHeaderParser extends Parser
 		if (pr.failed())
 			return pr;
 		
-		ParseResult namepr = IdentifierParser.parse(pr.end());
+		ParseResult namepr = MethodNameParser.parse(pr.end());
 		if (namepr.failed())
 			return namepr;
 		
