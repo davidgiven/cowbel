@@ -9,16 +9,16 @@ package com.cowlark.cowbel;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.TreeSet;
-import com.cowlark.cowbel.ast.Visitor;
-import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.cowbel.ast.nodes.FunctionHeaderNode;
-import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
-import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
+import com.cowlark.cowbel.ast.ASTVisitor;
+import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.ast.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.FunctionHeaderNode;
+import com.cowlark.cowbel.ast.FunctionScopeConstructorNode;
+import com.cowlark.cowbel.ast.IdentifierListNode;
+import com.cowlark.cowbel.ast.IdentifierNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.ast.ParameterDeclarationListNode;
+import com.cowlark.cowbel.ast.ParameterDeclarationNode;
 import com.cowlark.cowbel.backend.Backend;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.FailedParseException;
@@ -47,23 +47,23 @@ public class Compiler implements HasInterfaces
 	private TreeSet<InterfaceType> _interfaces = new TreeSet<InterfaceType>();
 	private FunctionScopeConstructorNode _ast;
 
-	private Visitor _record_type_definitions_visitor =
+	private ASTVisitor _record_type_definitions_visitor =
 		new RecordTypeDefinitionsVisitor();
-	private Visitor _define_interfaces_visitor =
+	private ASTVisitor _define_interfaces_visitor =
 		new DefineInterfacesVisitor();
-	private Visitor _record_variable_declarations_visitor =
+	private ASTVisitor _record_variable_declarations_visitor =
 		new RecordVariableDeclarationsVisitor();
-	private Visitor _resolve_variable_references_visitor =
+	private ASTVisitor _resolve_variable_references_visitor =
 		new ResolveVariableReferencesVisitor();
-	private Visitor _assign_functions_to_scopes_visitor =
+	private ASTVisitor _assign_functions_to_scopes_visitor =
 		new AssignFunctionsToScopesVisitor();
-	private Visitor _classify_scope_kinds_visitor =
+	private ASTVisitor _classify_scope_kinds_visitor =
 		new ClassifyScopeKindsVisitor();
-	private Visitor _assign_constructors_to_scopes_visitor =
+	private ASTVisitor _assign_constructors_to_scopes_visitor =
 		new AssignConstructorsToScopesVisitor();
-	private Visitor _collect_constructors_visitor =
+	private ASTVisitor _collect_constructors_visitor =
 		new CollectConstructorsVisitor(_constructors);
-	private Visitor _assign_variables_to_constructors_visitor =
+	private ASTVisitor _assign_variables_to_constructors_visitor =
 		new AssignVariablesToConstructorsVisitor();
 
 	public Compiler()
@@ -263,7 +263,7 @@ public class Compiler implements HasInterfaces
 		visit(adapter);
 	}
 	
-	public void visit(Visitor visitor) throws CompilationException
+	public void visit(ASTVisitor visitor) throws CompilationException
 	{
 		for (Function f : getFunctions())
 			f.getBody().visit(visitor);
@@ -271,7 +271,7 @@ public class Compiler implements HasInterfaces
 	
 	public void dumpAnnotatedAST()
 	{
-		Visitor visitor = new ASTDumperVisitor();
+		ASTVisitor visitor = new ASTDumperVisitor();
 		
 		for (Function function : getFunctions())
 		{

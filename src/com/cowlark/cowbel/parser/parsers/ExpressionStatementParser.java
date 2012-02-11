@@ -6,7 +6,7 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.ExpressionStatementNode;
+import com.cowlark.cowbel.ast.ExpressionStatementNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 

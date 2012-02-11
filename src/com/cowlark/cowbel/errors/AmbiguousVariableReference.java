@@ -7,8 +7,8 @@
 package com.cowlark.cowbel.errors;
 
 import java.util.Set;
-import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
+import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.ast.IdentifierNode;
 import com.cowlark.cowbel.symbols.Symbol;
 
 public class AmbiguousVariableReference extends CompilationException

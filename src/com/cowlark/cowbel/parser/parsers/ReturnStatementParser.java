@@ -6,9 +6,9 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
-import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
-import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
+import com.cowlark.cowbel.ast.AbstractExpressionNode;
+import com.cowlark.cowbel.ast.ReturnStatementNode;
+import com.cowlark.cowbel.ast.ReturnVoidStatementNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 

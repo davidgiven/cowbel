@@ -6,10 +6,10 @@
 
 package com.cowlark.cowbel.errors;
 
-import com.cowlark.cowbel.ast.HasIdentifier;
-import com.cowlark.cowbel.ast.HasNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.IdentifierNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.interfaces.HasIdentifier;
+import com.cowlark.cowbel.interfaces.HasNode;
 
 public class MultipleDefinitionException extends CompilationException
 {

@@ -7,7 +7,7 @@
 package com.cowlark.cowbel.errors;
 
 import java.util.List;
-import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
+import com.cowlark.cowbel.ast.AbstractExpressionNode;
 import com.cowlark.cowbel.types.Type;
 
 public class InvalidFunctionCallInExpressionContext extends CompilationException

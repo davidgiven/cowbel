@@ -7,49 +7,49 @@
 package com.cowlark.cowbel;
 
 import java.util.List;
-import com.cowlark.cowbel.ast.HasInputs;
-import com.cowlark.cowbel.ast.HasOutputs;
-import com.cowlark.cowbel.ast.SimpleVisitor;
-import com.cowlark.cowbel.ast.nodes.AbstractExpressionNode;
-import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.AbstractStatementNode;
-import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.BreakStatementNode;
-import com.cowlark.cowbel.ast.nodes.ContinueStatementNode;
-import com.cowlark.cowbel.ast.nodes.DirectFunctionCallStatementNode;
-import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionStatementNode;
-import com.cowlark.cowbel.ast.nodes.ExternStatementNode;
-import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.GotoStatementNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.IfElseStatementNode;
-import com.cowlark.cowbel.ast.nodes.IfStatementNode;
-import com.cowlark.cowbel.ast.nodes.ImplementsStatementNode;
-import com.cowlark.cowbel.ast.nodes.LabelStatementNode;
-import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
-import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
-import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
-import com.cowlark.cowbel.ast.nodes.TypeAssignmentNode;
-import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
-import com.cowlark.cowbel.ast.nodes.VarDeclarationNode;
-import com.cowlark.cowbel.ast.nodes.VarReferenceNode;
-import com.cowlark.cowbel.ast.nodes.WhileStatementNode;
+import com.cowlark.cowbel.ast.AbstractExpressionNode;
+import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.ast.AbstractStatementNode;
+import com.cowlark.cowbel.ast.BlockScopeConstructorNode;
+import com.cowlark.cowbel.ast.BreakStatementNode;
+import com.cowlark.cowbel.ast.ContinueStatementNode;
+import com.cowlark.cowbel.ast.DirectFunctionCallStatementNode;
+import com.cowlark.cowbel.ast.DoWhileStatementNode;
+import com.cowlark.cowbel.ast.ExpressionListNode;
+import com.cowlark.cowbel.ast.ExpressionStatementNode;
+import com.cowlark.cowbel.ast.ExternStatementNode;
+import com.cowlark.cowbel.ast.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.FunctionScopeConstructorNode;
+import com.cowlark.cowbel.ast.GotoStatementNode;
+import com.cowlark.cowbel.ast.IdentifierListNode;
+import com.cowlark.cowbel.ast.IdentifierNode;
+import com.cowlark.cowbel.ast.IfElseStatementNode;
+import com.cowlark.cowbel.ast.IfStatementNode;
+import com.cowlark.cowbel.ast.ImplementsStatementNode;
+import com.cowlark.cowbel.ast.LabelStatementNode;
+import com.cowlark.cowbel.ast.MethodCallStatementNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.ast.ReturnStatementNode;
+import com.cowlark.cowbel.ast.ReturnVoidStatementNode;
+import com.cowlark.cowbel.ast.SimpleASTVisitor;
+import com.cowlark.cowbel.ast.TypeAssignmentNode;
+import com.cowlark.cowbel.ast.VarAssignmentNode;
+import com.cowlark.cowbel.ast.VarDeclarationNode;
+import com.cowlark.cowbel.ast.VarReferenceNode;
+import com.cowlark.cowbel.ast.WhileStatementNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.FunctionParameterMismatch;
 import com.cowlark.cowbel.errors.InvalidExpressionReturn;
 import com.cowlark.cowbel.errors.MethodParameterMismatch;
+import com.cowlark.cowbel.interfaces.HasInputs;
+import com.cowlark.cowbel.interfaces.HasOutputs;
 import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.symbols.Symbol;
 import com.cowlark.cowbel.types.BooleanType;
 import com.cowlark.cowbel.types.FunctionType;
 import com.cowlark.cowbel.types.Type;
 
-public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
+public class CheckAndInferStatementTypesVisitor extends SimpleASTVisitor
 {
 	@Override
 	public void visit(FunctionDefinitionNode node) throws CompilationException
@@ -93,7 +93,7 @@ public class CheckAndInferStatementTypesVisitor extends SimpleVisitor
 		for (int i = 0; i < ids.getNumberOfChildren(); i++)
 		{
 			Symbol symbol = ids.getSymbol(i);
-			Type symboltype = symbol.getSymbolType();
+			Type symboltype = symbol.getType();
 			
 			AbstractExpressionNode expression = exprs.getExpression(i);
 			Type expressiontype = expression.calculateType();

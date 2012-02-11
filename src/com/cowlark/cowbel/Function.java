@@ -6,13 +6,13 @@
 
 package com.cowlark.cowbel;
 
-import com.cowlark.cowbel.ast.HasNode;
-import com.cowlark.cowbel.ast.HasScope;
-import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
+import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.ast.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.FunctionScopeConstructorNode;
+import com.cowlark.cowbel.ast.IdentifierNode;
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.HasNode;
+import com.cowlark.cowbel.interfaces.HasScope;
 import com.cowlark.cowbel.types.FunctionType;
 
 public class Function implements Comparable<Function>, HasNode, HasScope

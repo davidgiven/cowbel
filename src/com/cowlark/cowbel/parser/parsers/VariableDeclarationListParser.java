@@ -7,11 +7,11 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import java.util.ArrayList;
-import com.cowlark.cowbel.ast.nodes.AbstractTypeNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.InferredTypeNode;
-import com.cowlark.cowbel.ast.nodes.ParameterDeclarationListNode;
-import com.cowlark.cowbel.ast.nodes.ParameterDeclarationNode;
+import com.cowlark.cowbel.ast.AbstractTypeNode;
+import com.cowlark.cowbel.ast.IdentifierNode;
+import com.cowlark.cowbel.ast.InferredTypeNode;
+import com.cowlark.cowbel.ast.ParameterDeclarationListNode;
+import com.cowlark.cowbel.ast.ParameterDeclarationNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 

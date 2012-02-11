@@ -6,30 +6,30 @@
 
 package com.cowlark.cowbel;
 
-import com.cowlark.cowbel.ast.HasFunction;
-import com.cowlark.cowbel.ast.HasIdentifier;
-import com.cowlark.cowbel.ast.HasInputs;
-import com.cowlark.cowbel.ast.HasOutputs;
-import com.cowlark.cowbel.ast.HasSymbol;
-import com.cowlark.cowbel.ast.HasTypeArguments;
-import com.cowlark.cowbel.ast.RecursiveVisitor;
-import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
-import com.cowlark.cowbel.ast.nodes.DirectFunctionCallStatementNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
-import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.cowbel.ast.nodes.GotoStatementNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
-import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
-import com.cowlark.cowbel.ast.nodes.VarReferenceNode;
+import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.ast.DirectFunctionCallExpressionNode;
+import com.cowlark.cowbel.ast.DirectFunctionCallStatementNode;
+import com.cowlark.cowbel.ast.ExpressionListNode;
+import com.cowlark.cowbel.ast.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.GotoStatementNode;
+import com.cowlark.cowbel.ast.IdentifierListNode;
+import com.cowlark.cowbel.ast.IdentifierNode;
+import com.cowlark.cowbel.ast.MethodCallStatementNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.ast.RecursiveASTVisitor;
+import com.cowlark.cowbel.ast.VarAssignmentNode;
+import com.cowlark.cowbel.ast.VarReferenceNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.WrongNumberOfExpressionsInMultipleAssignments;
+import com.cowlark.cowbel.interfaces.HasFunction;
+import com.cowlark.cowbel.interfaces.HasIdentifier;
+import com.cowlark.cowbel.interfaces.HasInputs;
+import com.cowlark.cowbel.interfaces.HasOutputs;
+import com.cowlark.cowbel.interfaces.HasSymbol;
+import com.cowlark.cowbel.interfaces.HasTypeArguments;
 import com.cowlark.cowbel.symbols.Symbol;
 
-public class ResolveVariableReferencesVisitor extends RecursiveVisitor
+public class ResolveVariableReferencesVisitor extends RecursiveASTVisitor
 {
 	@Override
 	public void visit(FunctionDefinitionNode node) throws CompilationException

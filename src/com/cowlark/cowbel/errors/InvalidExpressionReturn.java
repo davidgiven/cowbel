@@ -7,7 +7,7 @@
 package com.cowlark.cowbel.errors;
 
 import com.cowlark.cowbel.Function;
-import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
+import com.cowlark.cowbel.ast.ReturnStatementNode;
 
 public class InvalidExpressionReturn extends CompilationException
 {

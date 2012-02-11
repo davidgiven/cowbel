@@ -6,9 +6,9 @@
 
 package com.cowlark.cowbel;
 
-import com.cowlark.cowbel.ast.nodes.FunctionHeaderNode;
-import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.TypeListNode;
+import com.cowlark.cowbel.ast.FunctionHeaderNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.ast.TypeListNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.methods.VirtualMethod;

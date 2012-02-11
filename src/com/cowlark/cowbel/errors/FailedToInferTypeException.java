@@ -6,7 +6,7 @@
 
 package com.cowlark.cowbel.errors;
 
-import com.cowlark.cowbel.ast.nodes.Node;
+import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.types.Type;
 
 public class FailedToInferTypeException extends CompilationException

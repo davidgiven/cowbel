@@ -6,15 +6,15 @@
 
 package com.cowlark.cowbel;
 
-import com.cowlark.cowbel.ast.HasNode;
-import com.cowlark.cowbel.ast.nodes.FunctionHeaderNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierNode;
-import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.TypeListNode;
-import com.cowlark.cowbel.ast.nodes.TypeVariableNode;
+import com.cowlark.cowbel.ast.FunctionHeaderNode;
+import com.cowlark.cowbel.ast.IdentifierListNode;
+import com.cowlark.cowbel.ast.IdentifierNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.ast.TypeListNode;
+import com.cowlark.cowbel.ast.TypeVariableNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.TypeParameterMismatch;
+import com.cowlark.cowbel.interfaces.HasNode;
 import com.cowlark.cowbel.types.Type;
 
 public abstract class AbstractCallableTemplate

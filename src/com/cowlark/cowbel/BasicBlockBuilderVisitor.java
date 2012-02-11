@@ -9,41 +9,41 @@ package com.cowlark.cowbel;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
-import com.cowlark.cowbel.ast.SimpleVisitor;
-import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.BlockExpressionNode;
-import com.cowlark.cowbel.ast.nodes.BlockScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.BooleanConstantNode;
-import com.cowlark.cowbel.ast.nodes.BreakStatementNode;
-import com.cowlark.cowbel.ast.nodes.ContinueStatementNode;
-import com.cowlark.cowbel.ast.nodes.DirectFunctionCallExpressionNode;
-import com.cowlark.cowbel.ast.nodes.DirectFunctionCallStatementNode;
-import com.cowlark.cowbel.ast.nodes.DoWhileStatementNode;
-import com.cowlark.cowbel.ast.nodes.DummyExpressionNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionListNode;
-import com.cowlark.cowbel.ast.nodes.ExpressionStatementNode;
-import com.cowlark.cowbel.ast.nodes.ExternStatementNode;
-import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.cowbel.ast.nodes.FunctionScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.GotoStatementNode;
-import com.cowlark.cowbel.ast.nodes.IdentifierListNode;
-import com.cowlark.cowbel.ast.nodes.IfElseStatementNode;
-import com.cowlark.cowbel.ast.nodes.IfStatementNode;
-import com.cowlark.cowbel.ast.nodes.ImplementsStatementNode;
-import com.cowlark.cowbel.ast.nodes.IntegerConstantNode;
-import com.cowlark.cowbel.ast.nodes.LabelStatementNode;
-import com.cowlark.cowbel.ast.nodes.MethodCallExpressionNode;
-import com.cowlark.cowbel.ast.nodes.MethodCallStatementNode;
-import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.RealConstantNode;
-import com.cowlark.cowbel.ast.nodes.ReturnStatementNode;
-import com.cowlark.cowbel.ast.nodes.ReturnVoidStatementNode;
-import com.cowlark.cowbel.ast.nodes.StringConstantNode;
-import com.cowlark.cowbel.ast.nodes.TypeAssignmentNode;
-import com.cowlark.cowbel.ast.nodes.VarAssignmentNode;
-import com.cowlark.cowbel.ast.nodes.VarDeclarationNode;
-import com.cowlark.cowbel.ast.nodes.VarReferenceNode;
-import com.cowlark.cowbel.ast.nodes.WhileStatementNode;
+import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.ast.BlockExpressionNode;
+import com.cowlark.cowbel.ast.BlockScopeConstructorNode;
+import com.cowlark.cowbel.ast.BooleanConstantNode;
+import com.cowlark.cowbel.ast.BreakStatementNode;
+import com.cowlark.cowbel.ast.ContinueStatementNode;
+import com.cowlark.cowbel.ast.DirectFunctionCallExpressionNode;
+import com.cowlark.cowbel.ast.DirectFunctionCallStatementNode;
+import com.cowlark.cowbel.ast.DoWhileStatementNode;
+import com.cowlark.cowbel.ast.DummyExpressionNode;
+import com.cowlark.cowbel.ast.ExpressionListNode;
+import com.cowlark.cowbel.ast.ExpressionStatementNode;
+import com.cowlark.cowbel.ast.ExternStatementNode;
+import com.cowlark.cowbel.ast.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.FunctionScopeConstructorNode;
+import com.cowlark.cowbel.ast.GotoStatementNode;
+import com.cowlark.cowbel.ast.IdentifierListNode;
+import com.cowlark.cowbel.ast.IfElseStatementNode;
+import com.cowlark.cowbel.ast.IfStatementNode;
+import com.cowlark.cowbel.ast.ImplementsStatementNode;
+import com.cowlark.cowbel.ast.IntegerConstantNode;
+import com.cowlark.cowbel.ast.LabelStatementNode;
+import com.cowlark.cowbel.ast.MethodCallExpressionNode;
+import com.cowlark.cowbel.ast.MethodCallStatementNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.ast.RealConstantNode;
+import com.cowlark.cowbel.ast.ReturnStatementNode;
+import com.cowlark.cowbel.ast.ReturnVoidStatementNode;
+import com.cowlark.cowbel.ast.SimpleASTVisitor;
+import com.cowlark.cowbel.ast.StringConstantNode;
+import com.cowlark.cowbel.ast.TypeAssignmentNode;
+import com.cowlark.cowbel.ast.VarAssignmentNode;
+import com.cowlark.cowbel.ast.VarDeclarationNode;
+import com.cowlark.cowbel.ast.VarReferenceNode;
+import com.cowlark.cowbel.ast.WhileStatementNode;
 import com.cowlark.cowbel.errors.BreakOrContinueNotInLoopException;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.methods.Method;
@@ -55,7 +55,7 @@ import com.cowlark.cowbel.types.IntegerType;
 import com.cowlark.cowbel.types.InterfaceType;
 import com.cowlark.cowbel.types.Type;
 
-public class BasicBlockBuilderVisitor extends SimpleVisitor
+public class BasicBlockBuilderVisitor extends SimpleASTVisitor
 {
 	private Function _function;
 	private BasicBlock _currentBB;
@@ -78,7 +78,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 	
 	private Variable cast(Node node, Variable value, Type targettype)
 	{
-		Type srctype = value.getSymbolType().getRealType();
+		Type srctype = value.getType().getRealType();
 		targettype = targettype.getRealType();
 		
 		if (srctype.equals(targettype))
@@ -163,7 +163,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		for (int i = 0; i < size; i++)
 		{
 			eln.getExpression(i).visit(this);
-			Variable v = _currentBB.createTemporary(node, _result.getSymbolType());
+			Variable v = _currentBB.createTemporary(node, _result.getType());
 			_currentBB.insnVarCopy(node, _result, v);
 			inputs.add(v);
 		}
@@ -171,7 +171,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		for (int i = 0; i < size; i++)
 		{
 			Variable var = (Variable) iln.getSymbol(i);
-			_result = cast(node, inputs.get(i), var.getSymbolType());
+			_result = cast(node, inputs.get(i), var.getType());
 			_currentBB.insnVarCopy(node, _result, var);
 		}
 	}
@@ -184,7 +184,7 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		
 		Variable var = (Variable) fdn.getFunctionHeader().getOutputParametersNode()
 			.getParameter(0).getSymbol(); 
-		_result = cast(node, _result, var.getSymbolType()); 
+		_result = cast(node, _result, var.getType()); 
 		_currentBB.insnVarCopy(node, _result, var);
 		_currentBB.insnGoto(node, _function.getExitBB());
 		_currentBB.terminate();

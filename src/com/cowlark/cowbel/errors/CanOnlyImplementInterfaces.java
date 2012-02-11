@@ -6,7 +6,7 @@
 
 package com.cowlark.cowbel.errors;
 
-import com.cowlark.cowbel.ast.nodes.ImplementsStatementNode;
+import com.cowlark.cowbel.ast.ImplementsStatementNode;
 import com.cowlark.cowbel.types.Type;
 
 public class CanOnlyImplementInterfaces extends CompilationException

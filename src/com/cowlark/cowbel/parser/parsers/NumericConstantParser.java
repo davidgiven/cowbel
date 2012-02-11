@@ -8,8 +8,8 @@ package com.cowlark.cowbel.parser.parsers;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.cowlark.cowbel.ast.nodes.IntegerConstantNode;
-import com.cowlark.cowbel.ast.nodes.RealConstantNode;
+import com.cowlark.cowbel.ast.IntegerConstantNode;
+import com.cowlark.cowbel.ast.RealConstantNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.MutableLocation;
 import com.cowlark.cowbel.parser.core.ParseResult;

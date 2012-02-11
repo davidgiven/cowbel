@@ -8,10 +8,10 @@ package com.cowlark.cowbel;
 
 import java.util.Map;
 import java.util.TreeMap;
-import com.cowlark.cowbel.ast.nodes.AbstractScopeConstructorNode;
-import com.cowlark.cowbel.ast.nodes.FunctionDefinitionNode;
-import com.cowlark.cowbel.ast.nodes.Node;
-import com.cowlark.cowbel.ast.nodes.TypeListNode;
+import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.ast.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.ast.TypeListNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.types.FunctionType;
 

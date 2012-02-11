@@ -6,8 +6,8 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.nodes.AbstractTypeNode;
-import com.cowlark.cowbel.ast.nodes.ImplementsStatementNode;
+import com.cowlark.cowbel.ast.AbstractTypeNode;
+import com.cowlark.cowbel.ast.ImplementsStatementNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 

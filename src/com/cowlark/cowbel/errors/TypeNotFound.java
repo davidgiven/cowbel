@@ -7,7 +7,7 @@
 package com.cowlark.cowbel.errors;
 
 import com.cowlark.cowbel.TypeContext;
-import com.cowlark.cowbel.ast.nodes.TypeVariableNode;
+import com.cowlark.cowbel.ast.TypeVariableNode;
 
 public class TypeNotFound extends CompilationException
 {
