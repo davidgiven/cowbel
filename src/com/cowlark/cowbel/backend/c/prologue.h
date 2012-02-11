@@ -38,34 +38,48 @@ typedef void s_string_traverse_cb(s_string_t* s, void* user);
 
 static void s_string_traverse(s_string_t* s, s_string_traverse_cb* cb, void* user)
 {
-        if (s->prev)
-                s_string_traverse(s->prev, cb, user);
-        cb(s, user);
-        if (s->next)
-                s_string_traverse(s->next, cb, user);
+	if (s->prev)
+		s_string_traverse(s->prev, cb, user);
+	cb(s, user);
+	if (s->next)
+		s_string_traverse(s->next, cb, user);
 }
 
-typedef struct s_array s_array_t;
-struct s_array
+static void s_string_cdata_cb(s_string_t* s, void* user)
 {
-	unsigned length;
-	unsigned allocedlength;
-	unsigned itemsize;
-	char* data;
-};
+	char** pout = (char**) user;
+	memcpy(*pout, s->data, s->seglength);
+	(*pout) += s->seglength;
+}
+
+static const char* s_string_cdata(s_string_t* s)
+{
+	if (s->cdata)
+		return s->cdata;
+
+	char* outputbuffer = malloc(s->totallength + 1);
+
+	char* pout = outputbuffer;
+	s_string_traverse(s, s_string_cdata_cb, &pout);
+
+	s->cdata = outputbuffer;
+	return outputbuffer;
+}
+
+static s_string_t* s_create_string_constant(const char* data)
+{
+	s_string_t* s = malloc(sizeof(s_string_t));
+	s->next = s->prev = NULL;
+	s->data = s->cdata = data;
+	s->seglength = s->totallength = strlen(data);
+	return s;
+}
 
 #define S_ALLOC_CONSTRUCTOR(type) \
-	((sizeof(type) > 0) ? ((type*) calloc(1, sizeof(type))) : NULL)
+	((sizeof(type) > 0) ? ((type*) malloc(sizeof(type))) : NULL)
 
-#define S_CONSTRUCT_CONSTANT_STRING(data) \
-	((s_string_t
-
-static void s_throw(const char* message)
-{
-	fflush(stdout);
-	fprintf(stderr, "Runtime error: %s\n", message);
-	exit(1);
-}
+static int s_argc;
+static s_string_t** s_argv;
 
 /* Boolean methods */
 

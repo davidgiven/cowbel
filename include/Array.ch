@@ -13,6 +13,8 @@
 #ifndef COWBEL_ARRAY
 #define COWBEL_ARRAY
 
+#include "Application.ch"
+
 /** Represents a mutable one-dimensional array.
  **/
  
@@ -47,14 +49,24 @@ function Array<T>(size: int, initialiser: T): Array<T>
 	return
 	{
 		implements Array<T>;
-		
+
+		function _boundscheck(i: int)
+		{
+			if (i < 0)
+				AbortOutOfBounds();
+			else if (i >= size)
+				AbortOutOfBounds(); 
+		}
+				
 		function get(i: int): (result: T)
 		{
+			_boundscheck(i);
 			extern "${result} = ((typeof(${result})*)${ptr})[${i}];";
 		}
 		
 		function set(i: int, value: T)
 		{
+			_boundscheck(i);
 			extern "((typeof(${value})*)${ptr})[${i}] = ${value};";
 		}
 		
@@ -100,14 +112,28 @@ function Array2D<T>(width: int, height: int, initialiser: T): Array2D<T>
 	return
 	{
 		implements Array2D<T>;
-		
+
+		function _boundscheck(x: int, y: int)
+		{
+			if (x < 0)
+				AbortOutOfBounds();
+			if (x >= width)
+				AbortOutOfBounds();
+			if (y < 0)
+				AbortOutOfBounds();
+			if (y >= height)
+				AbortOutOfBounds();
+		}
+				
 		function get(x: int, y: int): (result: T)
 		{
+			_boundscheck(x, y);
 			extern "${result} = ((typeof(${result})*)${ptr})[${x} + ${y}*${width}];";
 		}
 		
 		function set(x: int, y: int, value: T)
 		{
+			_boundscheck(x, y);
 			extern "((typeof(${value})*)${ptr})[${x} + ${y}*${width}] = ${value};";
 		}
 		
