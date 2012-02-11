@@ -159,12 +159,19 @@ public class BasicBlockBuilderVisitor extends SimpleVisitor
 		ExpressionListNode eln = node.getExpressions();
 		int size = eln.getNumberOfChildren();
 		
+		List<Variable> inputs = new Vector<Variable>();
 		for (int i = 0; i < size; i++)
 		{
 			eln.getExpression(i).visit(this);
-			
+			Variable v = _currentBB.createTemporary(node, _result.getSymbolType());
+			_currentBB.insnVarCopy(node, _result, v);
+			inputs.add(v);
+		}
+		
+		for (int i = 0; i < size; i++)
+		{
 			Variable var = (Variable) iln.getSymbol(i);
-			_result = cast(node, _result, var.getSymbolType());
+			_result = cast(node, inputs.get(i), var.getSymbolType());
 			_currentBB.insnVarCopy(node, _result, var);
 		}
 	}
