@@ -16,6 +16,7 @@ import com.cowlark.cowbel.Compiler;
 import com.cowlark.cowbel.Constructor;
 import com.cowlark.cowbel.Function;
 import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.ast.ExternStatementNode;
 import com.cowlark.cowbel.ast.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.ast.ParameterDeclarationListNode;
@@ -24,6 +25,7 @@ import com.cowlark.cowbel.ast.RecursiveASTVisitor;
 import com.cowlark.cowbel.ast.StringConstantNode;
 import com.cowlark.cowbel.backend.Backend;
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.errors.InvalidExternTemplate;
 import com.cowlark.cowbel.instructions.BooleanConstantInstruction;
 import com.cowlark.cowbel.instructions.ConstructInstruction;
 import com.cowlark.cowbel.instructions.CreateObjectReferenceInstruction;
@@ -97,6 +99,34 @@ public class CBackend extends Backend
         InputStream is = getClass().getResourceAsStream("prologue.h");
         print(is);
 	    
+        /* Find any #include externs. */
+        
+	    compiler.visit(
+	    		new RecursiveASTVisitor()
+	    		{
+	    			@Override
+                    public void visit(FunctionDefinitionNode node) throws CompilationException
+	    			{
+	    			};
+	    			
+	    			@Override
+                    public void visit(ExternStatementNode node) throws CompilationException
+	    			{
+	    				String template = node.getTemplate();
+	    				
+	    				if (template.startsWith("#include"))
+	    				{
+	    					if (template.contains("\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u0009"))
+	    						throw new InvalidExternTemplate(node);
+	    					
+	    					print(template);
+	    					print('\n');
+	    				}
+	    			};
+	    		}
+	    	);
+	    print("\n");
+        
         /* Emit prototypes for constructors. */
         
 	    for (Constructor c : compiler.getConstructors())
@@ -812,16 +842,19 @@ public class CBackend extends Backend
 		String template = insn.getTemplate();
 		List<Variable> vars = insn.getVariables();
 		
-		for (int i=0; i<template.length(); i++)
+		if (!template.startsWith("#include"))
 		{
-			char c = template.charAt(i);
-			if (c < 10)
-				printvar(node, vars.get((int) c));
-			else
-				print(c);
+			for (int i=0; i<template.length(); i++)
+			{
+				char c = template.charAt(i);
+				if (c < 10)
+					printvar(node, vars.get((int) c));
+				else
+					print(c);
+			}
+			
+			print("\n");
 		}
-		
-		print("\n");
 	}
 	
 	@Override

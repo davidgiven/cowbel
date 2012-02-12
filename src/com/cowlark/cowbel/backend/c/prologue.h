@@ -18,6 +18,7 @@
 #include <stddef.h>
 #include <stdarg.h>
 #include <string.h>
+#include <locale.h>
 
 typedef int s_boolean_t;
 typedef int s_int_t;
@@ -61,6 +62,7 @@ static const char* s_string_cdata(s_string_t* s)
 
 	char* pout = outputbuffer;
 	s_string_traverse(s, s_string_cdata_cb, &pout);
+	*pout = '\0';
 
 	s->cdata = outputbuffer;
 	return outputbuffer;

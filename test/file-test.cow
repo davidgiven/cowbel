@@ -1,0 +1,75 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+#include "SimpleIO.ch"
+#include "File.ch"
+
+var file = File("testfile.dat");
+var i = file.create();
+if (i == 0)
+{
+	println("creating file");
+
+	var outs = file.getOutputStream();
+	for i = 0, 10
+		outs.writeByte(i);
+	file.close();
+}
+
+i = file.openReadOnly();
+if (i == -1)
+	Abort("failed to open file: "+i.toString());
+
+var ins = file.getInputStream();
+while (true)
+{
+	var c = ins.readByte();
+	if (c == -1)
+		break;
+		
+	println("c = "+c.toString());
+}
+file.close();
+file.remove();
+
+i = file.create();
+if (i == -1)
+	Abort("failed to create file: "+i.toString());
+
+{
+	var outs = file.getOutputStream();
+	var outw = OutputStreamWriter(outs);
+	outw.writeCodePoint(99);
+	outw.writeCodePoint(1234);
+	outw.writeCodePoint(5678);
+}
+file.close();
+
+i = file.openReadOnly();
+if (i == -1)
+	Abort("failed to create file: "+i.toString());
+
+{
+	var ins = file.getInputStream();
+	var inr = InputStreamReader(ins);
+	
+	while (true)
+	{
+		var c = inr.readCodePoint();
+		if (c == -1)
+			break;
+		println("c = "+c.toString());
+	}
+}
+
+file.close();
+file.remove();

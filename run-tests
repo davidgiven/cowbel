@@ -11,6 +11,7 @@
 # information.
 
 for f in \
+	test/file-test.cow \
 	test/operators-test.cow \
 	test/application-test.cow \
 	test/fizzbuzz.cow \
@@ -41,7 +42,7 @@ for f in \
 
 	(
 		if (./cowbel -q -I include -o out.c $f) then
-			if (gcc -Os out.c) then
+			if (gcc -Os out.c $(icu-config --ldflags)) then
 				if ! ./a.out; then
 					echo "Exited with $?"
 				fi
