@@ -1,0 +1,39 @@
+#!/bin/sh
+# $Id: mkdist 149 2008-11-03 18:51:28Z dtrg $
+# $HeadURL: https://wordgrinder.svn.sf.net/svnroot/wordgrinder/wordgrinder/mkdist $
+# $LastChangedDate: 2007-10-05 00:12:15 +0100 (Fri, 05 Oct 2007) $
+#
+# Script to build a distribution package.
+
+set -e
+
+PACKAGE=cowbel
+	
+if [ "$1" = "" ]; then
+	echo "Please specify a version number!"
+	exit 1
+fi
+
+if [ -d ../$PACKAGE-$1 ]; then
+	echo "I think you've already generated version $1."
+	exit 1
+fi
+
+mkdir ../$PACKAGE-$1
+cp -a --parents \
+	./COPYING.BSD \
+	./COPYING.CC0 \
+	./README \
+	./build.xml \
+	./cowbel \
+	./run-tests \
+	./src \
+	./include \
+	./test \
+	\
+	../$PACKAGE-$1
+
+(cd .. && tar cvaf $PACKAGE-$1.tar.bz2 $PACKAGE-$1) && rm -rf ../$PACKAGE-$1
+
+echo ""
+echo "Done --- but did you remember to update the version number in the README?"
