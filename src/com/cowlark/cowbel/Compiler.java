@@ -360,7 +360,7 @@ public class Compiler implements HasInterfaces
 		for (Node n : pdln)
 		{
 			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
-			IdentifierNode variablename = pdn.getVariableName();
+			IdentifierNode variablename = pdn.getIdentifier();
 			Type variabletype = pdn.getVariableTypeNode().getType();
 			
 			Variable v = new Variable(pdn, variablename, variabletype);

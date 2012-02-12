@@ -60,7 +60,7 @@ public class VarDeclParser extends Parser
 		for (Node n : pdln)
 		{
 			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
-			identifiers.add(pdn.getVariableName());
+			identifiers.add(pdn.getIdentifier());
 		}
 		
 		IdentifierListNode identifierspr = new IdentifierListNode(
