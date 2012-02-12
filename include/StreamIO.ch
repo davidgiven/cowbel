@@ -107,8 +107,6 @@ type Reader =
  
 function InputStreamReader(is: InputStream): Reader
 {
-	extern "#include <unicode/utf8.h>";
-	
 	return
 	{
 		implements Reader;
@@ -119,23 +117,21 @@ function InputStreamReader(is: InputStream): Reader
 			if (leadbyte == -1)
 				return -1;
 
-			extern 'char buffer[4];';
+			var trailingbytes = 0;
+			extern '${trailingbytes} = utf8_trailing_bytes[${leadbyte}];';
+			if (trailingbytes == -1)
+				return 65533;
+			
+			extern 'unsigned char buffer[4];';
 			extern 'buffer[0] = ${leadbyte};';
-			extern 'char* p = buffer+1;';
-			
-			var trailbytes = 0;
-			extern '${trailbytes} = U8_COUNT_TRAIL_BYTES(${leadbyte});';
-			
-			for i = 0, trailbytes
+			for i = 0, trailingbytes
 			{
-				var b = is.readByte();
-				if (b == -1)
-					return -1;
-					
-				extern '*p++ = ${b};';			
+				var c = is.readByte();
+				extern 'buffer[1+${i}] = ${c};';
 			}
 			
-			extern 'U8_GET_UNSAFE(buffer, 0, ${result});';
+			extern 'const unsigned char* p = buffer;';
+			extern '${result} = utf8_read(&p);';
 		}
 	};
 }
@@ -161,24 +157,22 @@ type Writer =
  
 function OutputStreamWriter(os: OutputStream): Writer
 {
-	extern "#include <unicode/utf8.h>";
-	
 	return
 	{
 		implements Writer;
 		
 		function writeCodePoint(codepoint: int)
 		{
-			extern 'char buffer[4];';
-			var offset = 0;
+			extern 'unsigned char buffer[4];';
+			extern 'unsigned char* p = buffer;';
+			extern 'utf8_write(&p, ${codepoint});';
+			var numbytes = 0;
+			extern '${numbytes} = p - buffer;';
 			
-			extern 'U8_APPEND_UNSAFE(buffer, ${offset}, ${codepoint});';
-			
-			for i = 0, offset
+			for i = 0, numbytes
 			{
 				var c = 0;
 				extern '${c} = buffer[${i}];';
-				
 				os.writeByte(c);
 			}
 		}
