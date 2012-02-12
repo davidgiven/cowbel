@@ -74,18 +74,6 @@ public class CompilerTimer implements CompilerListener
 	}
 	
 	@Override
-	public void onTypeCheckBegin()
-	{
-		reset();
-	}
-	
-	@Override
-	public void onTypeCheckEnd()
-	{
-		report("Type checking");
-	}
-	
-	@Override
 	public void onBasicBlockAnalysisBegin()
 	{
 		reset();
@@ -107,17 +95,5 @@ public class CompilerTimer implements CompilerListener
 	public void onCodeGenerationEnd()
 	{
 		report("Code generation");
-	}
-	
-	@Override
-	public void onDataflowAnalysisBegin()
-	{
-		reset();
-	}
-	
-	@Override
-	public void onDataflowAnalysisEnd()
-	{
-		report("Dataflow analysis");
 	}
 }

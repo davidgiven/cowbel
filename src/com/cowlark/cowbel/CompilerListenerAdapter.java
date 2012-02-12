@@ -29,16 +29,6 @@ public class CompilerListenerAdapter implements CompilerListener
 	}
 	
 	@Override
-	public void onTypeCheckBegin()
-	{
-	}
-	
-	@Override
-	public void onTypeCheckEnd()
-	{
-	}
-	
-	@Override
 	public void onBasicBlockAnalysisBegin()
 	{
 	}
@@ -55,16 +45,6 @@ public class CompilerListenerAdapter implements CompilerListener
 	
 	@Override
 	public void onCodeGenerationEnd()
-	{
-	}
-	
-	@Override
-	public void onDataflowAnalysisBegin()
-	{
-	}
-	
-	@Override
-	public void onDataflowAnalysisEnd()
 	{
 	}
 }
