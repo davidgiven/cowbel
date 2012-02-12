@@ -39,6 +39,16 @@ public class CompilerTimer implements CompilerListener
 		report("Preprocessing");
 	}
 	
+	public void onCCompilationBegin()
+	{
+		reset();
+	}
+	
+	public void onCCompilationEnd()
+	{
+		report("C compilation");
+	}
+	
 	@Override
 	public void onParseBegin()
 	{
