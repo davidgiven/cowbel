@@ -1,11 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!-- © 2012 David Given
+     This file is made available under the terms of the two-clause BSD
+     license. See the file COPYING.BSD in the distribution directory for the
+     full license text.
+ -->
+
 <project name="MyProject" default="dist" basedir=".">
 	<target name="compile">
-		<javac srcdir="src" destdir="bin" classpath="/usr/share/java/commons-io.jar:/usr/share/java/commons-cli.jar"/>
+		<mkdir dir="bin"/>
+		<javac srcdir="src" destdir="bin" classpath="/usr/share/java/commons-io.jar:/usr/share/java/commons-cli.jar:/usr/share/java/commons-lang3.jar" includeantruntime="false"/>
 		<copy todir="bin">
 			<fileset dir="src" excludes="**/*.java"/>
 		</copy>
 	</target>
 
 	<target name="dist" depends="compile">
+	</target>
+	
+	<target name="clean">
+		<delete dir="bin"/>
 	</target>
 </project>
