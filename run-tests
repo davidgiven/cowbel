@@ -41,11 +41,9 @@ for f in \
 	logfile=$f.log
 
 	(
-		if (./cowbel -q -I include -o out.c $f) then
-			if (gcc -Os out.c -lgc $(icu-config --ldflags)) then
-				if ! ./a.out; then
-					echo "Exited with $?"
-				fi
+		if (./cowbel -q -I include -o out -X "-Os" $f) then
+			if ! ./out; then
+				echo "Exited with $?"
 			fi
 		fi
 		exit 1
