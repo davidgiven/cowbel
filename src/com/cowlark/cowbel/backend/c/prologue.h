@@ -19,6 +19,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <locale.h>
+#include <gc.h>
 
 typedef int s_boolean_t;
 typedef int s_int_t;
@@ -58,7 +59,7 @@ static const char* s_string_cdata(s_string_t* s)
 	if (s->cdata)
 		return s->cdata;
 
-	char* outputbuffer = malloc(s->totallength + 1);
+	char* outputbuffer = GC_MALLOC_ATOMIC(s->totallength + 1);
 
 	char* pout = outputbuffer;
 	s_string_traverse(s, s_string_cdata_cb, &pout);
@@ -70,7 +71,7 @@ static const char* s_string_cdata(s_string_t* s)
 
 static s_string_t* s_create_string_constant(const char* data)
 {
-	s_string_t* s = malloc(sizeof(s_string_t));
+	s_string_t* s = GC_MALLOC(sizeof(s_string_t));
 	s->next = s->prev = NULL;
 	s->data = s->cdata = data;
 	s->seglength = s->totallength = strlen(data);
@@ -78,7 +79,7 @@ static s_string_t* s_create_string_constant(const char* data)
 }
 
 #define S_ALLOC_CONSTRUCTOR(type) \
-	((sizeof(type) > 0) ? ((type*) malloc(sizeof(type))) : NULL)
+	((sizeof(type) > 0) ? ((type*) GC_MALLOC(sizeof(type))) : NULL)
 
 static int s_argc;
 static s_string_t** s_argv;
@@ -117,10 +118,10 @@ static s_string_t s_false_label =
 
 static void S_METHOD_INT_TOSTRING(int value, s_string_t** result)
 {
-	s_string_t* s = (s_string_t*) malloc(sizeof(s_string_t));
+	s_string_t* s = (s_string_t*) GC_MALLOC(sizeof(s_string_t));
 	s->prev = s->next = NULL;
 
-	char* buffer = (char*) malloc(32);
+	char* buffer = (char*) GC_MALLOC_ATOMIC(32);
     sprintf(buffer, "%d", value);
 
     s->data = s->cdata = buffer;
@@ -146,10 +147,10 @@ static void S_METHOD_INT_TOSTRING(int value, s_string_t** result)
 
 static void S_METHOD_REAL_TOSTRING(s_real_t value, s_string_t** result)
 {
-	s_string_t* s = (s_string_t*) malloc(sizeof(s_string_t));
+	s_string_t* s = (s_string_t*) GC_MALLOC(sizeof(s_string_t));
 	s->prev = s->next = NULL;
 
-	char* buffer = (char*) malloc(32);
+	char* buffer = (char*) GC_MALLOC_ATOMIC(32);
     sprintf(buffer, "%f", value);
 
     s->data = s->cdata = buffer;
@@ -174,7 +175,7 @@ static void S_METHOD_STRING_PRINT(s_string_t* s)
 static void S_METHOD_STRING__ADD(s_string_t* left, s_string_t* right,
 		s_string_t** result)
 {
-	s_string_t* newstring = (s_string_t*) malloc(sizeof(s_string_t));
+	s_string_t* newstring = (s_string_t*) GC_MALLOC(sizeof(s_string_t));
 	newstring->prev = left;
 	newstring->next = right;
 	newstring->seglength = 0;
