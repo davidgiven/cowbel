@@ -125,12 +125,10 @@ public class TypeContext implements Comparable<TypeContext>
 				{
 					if (e.getValue() != null)
 						throw new MultipleDefinitionException(
-								e.getValue().getNode().getIdentifier(),
-									node.getIdentifier());
+								e.getValue().getNode(), node);
 					else
 						throw new MultipleDefinitionException(
-								e.getValue().getNode().getIdentifier(),
-									null);
+								e.getValue().getNode(),	null);
 				}
 			}
 		}

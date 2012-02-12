@@ -7,9 +7,11 @@
 package com.cowlark.cowbel.ast;
 
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.HasIdentifier;
 import com.cowlark.cowbel.parser.core.Location;
 
 public class TypeAssignmentNode extends AbstractStatementNode
+		implements HasIdentifier
 {
 	public TypeAssignmentNode(Location start, Location end)
     {
@@ -26,7 +28,8 @@ public class TypeAssignmentNode extends AbstractStatementNode
 		addChild(type);
     }
 
-	public IdentifierNode getIdentifier()
+	@Override
+    public IdentifierNode getIdentifier()
 	{
 		return (IdentifierNode) getChild(0);
 	}
