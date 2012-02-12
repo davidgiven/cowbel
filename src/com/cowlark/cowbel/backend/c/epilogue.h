@@ -16,6 +16,8 @@ int main(int argc, const char* argv[])
 {
 	int i;
 
+	setlocale(LC_ALL, "UTF-8");
+
 	s_argc = argc;
 	s_argv = malloc(sizeof(s_string_t*) * s_argc);
 	for (i = 0; i < argc; i++)
