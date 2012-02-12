@@ -7,9 +7,11 @@
 package com.cowlark.cowbel;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -17,6 +19,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import com.cowlark.cowbel.backend.Backend;
 import com.cowlark.cowbel.backend.c.CBackend;
 import com.cowlark.cowbel.errors.CompilationException;
@@ -27,8 +30,12 @@ import com.cowlark.cowbel.parser.core.Location;
 public class Main
 {
 	public static String OutputFile;
-	public static String Preprocessor = "cpp -undef -nostdinc";
+	public static String Preprocessor = "cpp -undef -nostdinc ${includes} ${inputfile}";
+	public static String CCompiler = "gcc -o ${outputfile} ${inputfile} -lgc ${options}";
+	public static String Includes = "";
+	public static String CompilerOptions = "";
 	public static boolean Quiet;
+	public static boolean EmitC;
 	public static boolean DumpAST;
 	public static boolean DumpIR;
 	public static boolean DumpConstructors;
@@ -44,7 +51,9 @@ public class Main
 	{
 		HelpFormatter hf = new HelpFormatter();
 		hf.printHelp("cowbel [<options>] <input files...>", options);
-		System.err.println("\nPreprocessor: " + Preprocessor);
+		System.err.println("");
+		System.err.println("Preprocessor: " + Preprocessor);
+		System.err.println("C compiler:   " + CCompiler);
 		System.exit(0);
 	}
 	
@@ -60,16 +69,25 @@ public class Main
 						"sets output file");
 		
 		options.addOption("p", "preprocessor", true,
-						"specifies preprocessor to use");
+						"specifies preprocessor command line to use");
 		
+		options.addOption("c", "compiler", true,
+						"specifies C compiler command line to use");
+
 		options.addOption("I", "include", true,
 						"adds include path");
 		
 		options.addOption("q", "quiet", false,
 						"don't show timing information");
 		
-		options.addOption("da", "dump-ast", false,
-						"dump AST to stdout");
+		options.addOption("C", "emit-c", false,
+						"don't try to compile the C file, just emit it");
+
+		options.addOption("X", "coption", true,
+						"add option to C compiler command line");
+		
+		options.addOption("da", "dump-annotated-ast", false,
+						"dump annotated AST to stdout");
 
 		options.addOption("di", "dump-ir", false,
 						"dump IR code to stdout");
@@ -96,6 +114,7 @@ public class Main
 				throw new ParseException("You must specify an output filename.");
 			
 			Quiet = cli.hasOption("q");
+			EmitC = cli.hasOption("C");
 			DumpAST = cli.hasOption("da");
 			DumpIR = cli.hasOption("di");
 			DumpConstructors = cli.hasOption("dc");
@@ -103,11 +122,18 @@ public class Main
 			
 			if (cli.hasOption("p"))
 				Preprocessor = cli.getOptionValue("p");
+			if (cli.hasOption("c"))
+				CCompiler = cli.getOptionValue("c");
 			
 			String[] includes = cli.getOptionValues("I");
 			if (includes != null)
 				for (String s : includes)
-					Preprocessor = Preprocessor + " -I " + s;
+					Includes = Includes + " -I " + s;
+			
+			String[] coptions = cli.getOptionValues("X");
+			if (coptions != null)
+				for (String s : coptions)
+					CompilerOptions = CompilerOptions + " " + s;
 		}
 		catch (ParseException e)
 		{
@@ -120,6 +146,73 @@ public class Main
 	private static Backend createBackend(Compiler compiler, OutputStream os)
 	{
 		return new CBackend(compiler, os);
+	}
+
+	private static String expandCommandLine(String template, String... vars)
+	{
+		HashMap<String, String> map = new HashMap<String, String>();
+		for (int i = 0; i < vars.length; i += 2)
+			map.put(vars[i], vars[i+1]);
+		
+		return StrSubstitutor.<String>replace(template, map, "${", "}");
+	}
+
+	private static String readSourceFile(String filename)
+	{
+		String cli = expandCommandLine(Preprocessor,
+				"inputfile", filename,
+				"includes", Includes);
+		
+		try
+		{
+			Process preprocessor = Runtime.getRuntime().exec(cli);
+			int result = preprocessor.waitFor();
+			String data = IOUtils.toString(preprocessor.getInputStream());
+			IOUtils.copy(preprocessor.getErrorStream(), System.err);
+			
+			if (result != 0)
+				abort("preprocessor failed");
+			
+			return data;
+		}
+		catch (IOException e)
+		{
+			abort("preprocessor failed");
+			throw null;
+		}
+		catch (InterruptedException e)
+		{
+			abort("preprocessor failed");
+			throw null;
+		}
+	}
+	
+	private static void compileOutputFile(String inputfilename, String outputfilename)
+	{
+		String cli = expandCommandLine(CCompiler,
+				"inputfile", inputfilename,
+				"outputfile", outputfilename,
+				"options", CompilerOptions);
+		
+		try
+		{
+			Process preprocessor = Runtime.getRuntime().exec(cli);
+			int result = preprocessor.waitFor();
+			IOUtils.copy(preprocessor.getErrorStream(), System.err);
+			
+			if (result != 0)
+				abort("compilation failed");
+		}
+		catch (IOException e)
+		{
+			abort("compilation failed");
+			throw null;
+		}
+		catch (InterruptedException e)
+		{
+			abort("compilation failed");
+			throw null;
+		}
 	}
 	
 	public static void main(String[] args)
@@ -139,18 +232,22 @@ public class Main
 			String filename = args[0];
 			
 			timer.onPreprocessBegin();
-			Process preprocessor = Runtime.getRuntime().exec(Preprocessor+" "+filename);
-			String data = IOUtils.toString(preprocessor.getInputStream());
-			IOUtils.copy(preprocessor.getErrorStream(), System.err);
-			int result = preprocessor.waitFor();
+			String data = readSourceFile(filename);
 			timer.onPreprocessEnd();
 			
-			if (result != 0)
-				System.exit(result);
-
 			Location loc = new Location(data, filename);
 			
-			FileOutputStream fos = new FileOutputStream(OutputFile);
+			String cfile;
+			if (EmitC)
+				cfile = OutputFile;
+			else
+			{
+				File f = File.createTempFile("cowbel", ".c");
+				f.deleteOnExit();
+				cfile = f.getAbsolutePath();
+			}
+			
+			FileOutputStream fos = new FileOutputStream(cfile);
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
 			
 			//backend.prologue();
@@ -172,6 +269,13 @@ public class Main
 			if (DumpIR)
 				c.dumpBasicBlocks();
 			
+			if (!EmitC)
+			{
+				timer.onCCompilationBegin();
+				compileOutputFile(cfile, OutputFile);
+				timer.onCCompilationEnd();
+			}
+			
 			System.exit(0);
 		}
 		catch (FailedParseException e)
@@ -191,11 +295,6 @@ public class Main
 		catch (IOException e)
 		{
 			System.err.println("I/O error: "+e.getMessage());
-			System.exit(1);
-		}
-		catch (InterruptedException e)
-		{
-			System.err.println("Failed to invoke preprocessor");
 			System.exit(1);
 		}
 	}
