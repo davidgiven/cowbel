@@ -24,8 +24,93 @@
 typedef int s_boolean_t;
 typedef int s_int_t;
 typedef double s_real_t;
-
 typedef struct s_string s_string_t;
+
+#define S_ALLOC_CONSTRUCTOR(type) \
+	((sizeof(type) > 0) ? ((type*) GC_MALLOC(sizeof(type))) : NULL)
+
+static int s_argc;
+static s_string_t** s_argv;
+
+/* -------------------------------------------------------------------- */
+/*                           STRING MANIPULATION                        */
+/* -------------------------------------------------------------------- */
+
+static const uint32_t utf8_read_offsets[4] =
+{
+    0x00000000UL, 0x00003080UL, 0x000E2080UL, 0x03C82080UL
+};
+
+static const char utf8_trailing_bytes[256] =
+{
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 0
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 1
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 2
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 3
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 4
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 5
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 6
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 7
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  // 8
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  // 9
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  // A
+    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  // B
+     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // C
+     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // D
+     2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  // E
+     3, 3, 3, 3, 3, 3, 3, 3,-1,-1,-1,-1,-1,-1,-1,-1,  // F
+};
+
+static int utf8_read(const unsigned char** srcp)
+{
+    const unsigned char* src = *srcp;
+	int nb = utf8_trailing_bytes[*src];
+
+	int ch = 0;
+	switch (nb)
+	{
+		/* these fall through deliberately */
+		case 3: ch += *src++; ch <<= 6;
+		case 2:	ch += *src++; ch <<= 6;
+		case 1:	ch += *src++; ch <<= 6;
+		case 0:	ch += *src++;
+	}
+
+	ch -= utf8_read_offsets[nb];
+	*srcp = src;
+	return ch;
+}
+
+static void utf8_write(unsigned char** destp, int ch)
+{
+	unsigned char* dest = *destp;
+
+	if (ch < 0x80)
+	{
+		*dest++ = (char) ch;
+	}
+	else if (ch < 0x800)
+	{
+		*dest++ = (ch >> 6) | 0xC0;
+		*dest++ = (ch & 0x3F) | 0x80;
+	}
+	else if (ch < 0x10000)
+	{
+		*dest++ = (ch >> 12) | 0xE0;
+		*dest++ = ((ch >> 6) & 0x3F) | 0x80;
+		*dest++ = (ch & 0x3F) | 0x80;
+	}
+	else
+	{
+		*dest++ = (ch >> 18) | 0xF0;
+		*dest++ = ((ch >> 12) & 0x3F) | 0x80;
+		*dest++ = ((ch >> 6) & 0x3F) | 0x80;
+		*dest++ = (ch & 0x3F) | 0x80;
+	}
+
+	*destp = dest;
+}
+
 struct s_string
 {
 	s_string_t* prev;
@@ -78,11 +163,10 @@ static s_string_t* s_create_string_constant(const char* data)
 	return s;
 }
 
-#define S_ALLOC_CONSTRUCTOR(type) \
-	((sizeof(type) > 0) ? ((type*) GC_MALLOC(sizeof(type))) : NULL)
+/* -------------------------------------------------------------------- */
+/*                                 METHODS                              */
+/* -------------------------------------------------------------------- */
 
-static int s_argc;
-static s_string_t** s_argv;
 
 /* Boolean methods */
 
