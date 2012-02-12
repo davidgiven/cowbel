@@ -11,6 +11,7 @@
 # information.
 
 for f in \
+	test/map-test.cow \
 	test/file-test.cow \
 	test/operators-test.cow \
 	test/application-test.cow \

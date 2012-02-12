@@ -1,0 +1,30 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+#include "SimpleIO.ch"
+#include "Map.ch"
+
+var map = Map<int, string>();
+
+map.put(12, "twelve");
+map.put(42, "forty-two");
+map.put(99, "twelve");
+map.put(-4, "minus four");
+
+map.remove(99);
+map.put(99, "ninety-nine");
+
+println(map.get(-4));
+println(map.get(42));
+println(map.get(99));
+println(map.contains(7).toString());
+println(map.contains(12).toString());
