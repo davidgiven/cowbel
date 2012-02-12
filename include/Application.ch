@@ -73,5 +73,11 @@ function AbortOutOfBounds()
  
 function AbortOperationNotSupported()
 	Abort("operation not supported");
-	 
+	
+/** Stops execution with an 'Invalid object state' error.
+ **/
+ 
+function AbortInvalidObjectState()
+	Abort("invalid object state");
+	
 #endif

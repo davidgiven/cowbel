@@ -13,6 +13,8 @@
 #ifndef COWBEL_MAYBE
 #define COWBEL_MAYBE
 
+#include "Application.ch"
+
 /** Represents a container that may or may not contain a single value.
  **
  ** These objects perform the same task as null pointers in other language.
@@ -47,7 +49,7 @@ function Maybe<T>(): Maybe<T>
 			return false;
 			
 		function get(): T
-			{} /* abort */
+			AbortInvalidObjectState();
 	};
 
 /** Construct an immutable Maybe with the specified value.
