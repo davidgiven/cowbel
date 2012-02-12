@@ -21,12 +21,14 @@
  
 type Map<K, V> =
 {
-	/** Inserts an item into the map.
+	/** Inserts an item into the map. If the item already exists, its value
+	 ** is replaced.
 	 **/
 	 
 	function put(key: K, value: V);
 	
-	/** Retrieves an item from the map.
+	/** Retrieves an item from the map. If the item does not exist, a runtime
+	 ** error occurs.
 	 **/
 	 
 	function get(key: K): V;
@@ -43,10 +45,17 @@ type Map<K, V> =
 };
 
 /** Creates a new map based on an AA tree.
+ ** 
+ ** Keys must be comparable with == and <.
  **/
  
 function Map<K, V>(): Map<K, V>
 {
+	/* This implementation was taken from here:
+	 *
+	 * http://www.eternallyconfuzzled.com/tuts/datastructures/jsw_tut_andersson.aspx
+	 */
+	 
 	type Node =
 	{
 			function level(): int;
@@ -163,7 +172,9 @@ function Map<K, V>(): Map<K, V>
 			root = _makenode(key, value);
 		else
 		{
-			if (root.key() < key)
+			if (root.key() == key)
+				root.setValue(value);
+			else if (root.key() < key)
 				root.setLeft(_insert(root.left(), key, value));
 			else
 				root.setRight(_insert(root.right(), key, value));
