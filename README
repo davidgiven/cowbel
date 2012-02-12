@@ -1,0 +1,147 @@
+                                 COWBEL V0.1
+                                 ===========
+
+                              © 2012 David Given
+                                 2012-02-13
+
+
+
+INTRODUCTION
+============
+
+cowbel is a minimalist but expressive statically typed programming language
+which compiles into real machine code via C. It has generics, interfaces, a
+garbage collector, non-nullable types, an object-oriented system based on
+interfaces and composition, and features a familiar Javascript-like syntax.
+
+The purpose of cowbel is to fit the niche where hard-core systems languages
+like C or C++ are too much work, but dynamic or virtual-machine languages
+like Python or Java are too heavyweight. cowbel programs compile into
+standalone executables with few dependencies that have comparable size and
+performance to C.
+
+
+
+INSTALLATION
+============
+
+In order to use cowbel, currently you need:
+
+ - a Unixish. There is nothing platform-specific in cowbel, but I wrote it on
+   Linux and that's what everything assumes. If you want it to work on
+   anything else you'll need to hack it.
+   
+ - Java 6 or above with the following Apache Commons modules:
+ 
+     IO:   http://commons.apache.org/io/
+     Lang: http://commons.apache.org/lang/
+     CLI:  http://commons.apache.org/cli/
+     
+ - The Boehm garbage collector:
+ 
+     http://www.hpl.hp.com/personal/Hans_Boehm/gc/
+     
+ - Ant 1.8.
+ - gcc.
+     
+If you have Debian, you've already got all these. Merely install these
+packages:
+
+  libgc-dev libcommons-io-java libcommons-lang3-java libcommons-cli-java
+  ant
+
+Once this is all set up, build it with this:
+
+  ant
+  
+Assuming this works, you can now invoke cowbel with the 'cowbel' shell script.
+
+  ./cowbel -Iinclude test/life.cow -o life
+  
+This should produce an executable called 'life' which you can run.
+
+  ./life
+  
+If it *didn't* work, most likely you'll need to edit the Java classpath
+because things on your system don't match mine. The classpath is stored in
+'build.xml' and 'cowbel' and should be trivial to modify.
+
+It's probably also a good idea to run the test suite, just to make sure
+everything works:
+
+  ./run-tests
+
+
+
+USAGE
+=====
+
+Cowbel is a programming language, and as such the manual is beyond the scope
+of this README. Please see the cowbel web site for more information:
+
+  http://cowbel.sourceforge.net
+  
+If you use cowbel, please join the mailing list. This will allow you
+to ask questions, hopefully receive answers, and get news about any
+new releases. You can subscribe or view the archives at the following page:
+
+  https://lists.sourceforge.net/lists/listinfo/cowbel-misc
+
+For reference, the distribution you're looking at right now contains:
+
+  src/        the Java source code to the cowbel compiler
+  build.xml   the antfile that builds the compiler
+  cowbel      a shell script that runs the compiler
+  include/    the cowbel standard library
+  test/       the test suite and example code
+  run-tests   a shell script that runs the test suite
+
+
+
+ISSUES
+======
+
+There's a whole bunch of stuff missing in cowbel. Most notably:
+
+ - complete type checking (some invalid programs will be accepted)
+ - dataflow analysis (undefined variables and missing return arguments are
+   not detected)
+ - complete coverage of primitive data types (strings only support three
+   methods, for example)
+ - object composition
+ - interface inheritence
+ 
+If you find anything else wrong, feel free to file a bug here:
+
+  https://sourceforge.net/p/cowbel/tickets/
+
+I like bug reports. I like them even better if they have a minimal test case
+attached!
+
+
+
+LICENSE
+=======
+
+Most of cowbel is available under the two-clause BSD license. Please see the
+COPYING.BSD file for the full text.
+
+Portions of cowbel, including the test suite and the runtime library, are
+Creative Commons Zero distributable. Please see the COPYING.CC0 file for more
+information. 
+
+
+
+REVISION HISTORY
+================
+
+Cowbel 0.1: 2012-02-13: Initial release.
+
+
+
+THE AUTHOR
+==========
+
+Cowbel was written by me, David Given. You may contact me at dg@cowlark.com,
+or visit my website at http://www.cowlark.com. There may or may not be
+anything interesting there.
