@@ -47,6 +47,42 @@ public abstract class PrimitiveMethod extends Method
     	registerPrimitiveMethod(new PrimitiveMethod()
 		{
             {
+    			setSignature("string.<.1", "string._lt");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(StringType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("string.>.1", "string._gt");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(StringType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("string.<=.1", "string._le");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(StringType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
+    			setSignature("string.>=.1", "string._ge");
+    			setOutputTypes(BooleanType.create());
+    			setInputTypes(StringType.create());
+            }
+		});
+    	
+    	registerPrimitiveMethod(new PrimitiveMethod()
+		{
+            {
     			setSignature("string.+.1", "string._add");
     			setOutputTypes(StringType.create());
     			setInputTypes(StringType.create());
