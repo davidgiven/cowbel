@@ -1,0 +1,32 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+#include "SimpleIO.ch"
+#include "Map.ch"
+
+var map = Map<int, string>();
+map.put(1, "one");
+map.put(2, "two");
+map.put(3, "three");
+map.put(4, "four");
+
+function lookup<K, V>(map: Map<K, V>, key: K)
+{
+	var value = map.get(key);
+	println("The value of " + key.toString() + " is " + value);
+}
+
+lookup<int, string>(map, 3);
+lookup<int, string>(map, 1);
+lookup<int, string>(map, 4);
+lookup<int, string>(map, 2);
+
