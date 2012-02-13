@@ -28,3 +28,8 @@ println(map.get(42));
 println(map.get(99));
 println(map.contains(7).toString());
 println(map.contains(12).toString());
+
+var map1 = Map<string, int>();
+map1.put("twelve", 12);
+map1.put("forty-two", 42);
+map1.put("minus four", -4);

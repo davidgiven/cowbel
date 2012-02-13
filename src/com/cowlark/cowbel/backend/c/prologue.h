@@ -163,6 +163,55 @@ static s_string_t* s_create_string_constant(const char* data)
 	return s;
 }
 
+static int s_string_cmp(s_string_t* left, s_string_t* right)
+{
+	if (left == right)
+		return 0;
+
+	int count = left->totallength;
+	if (right->totallength < count)
+		count = right->totallength;
+
+	int lseg = left->seglength;
+	const char* pleft = left->data;
+
+	int rseg = right->seglength;
+	const char* pright = right->data;
+
+	while (count--)
+	{
+		while (lseg == 0)
+		{
+			left = left->next;
+			lseg = left->seglength;
+			pleft = left->data;
+		}
+
+		while (rseg == 0)
+		{
+			right = right->next;
+			rseg = right->seglength;
+			pright = right->data;
+		}
+
+		int cleft = *(unsigned char*)pleft++;
+		int cright = *(unsigned char*)pright++;
+		if (cleft < cright)
+			return -1;
+		if (cleft > cright)
+			return 1;
+
+		lseg--;
+		rseg--;
+	}
+
+	if (left->totallength < right->totallength)
+		return -1;
+	if (left->totallength > right->totallength)
+		return 1;
+	return 0;
+}
+
 /* -------------------------------------------------------------------- */
 /*                                 METHODS                              */
 /* -------------------------------------------------------------------- */
@@ -268,61 +317,11 @@ static void S_METHOD_STRING__ADD(s_string_t* left, s_string_t* right,
 	*result = newstring;
 }
 
-static void S_METHOD_STRING__EQ(s_string_t* left, s_string_t* right,
-		s_boolean_t* result)
-{
-	int count;
-	const char* pleft = NULL;
-	int lseg = 0;
-	const char* pright = NULL;
-	int rseg = 0;
-
-	if (left == right)
-		goto success;
-
-	if (left->totallength != right->totallength)
-		goto fail;
-
-	count = left->totallength;
-
-	lseg = left->seglength;
-	pleft = left->data;
-
-	rseg = right->seglength;
-	pright = right->data;
-
-	while (count--)
-	{
-		while (lseg == 0)
-		{
-			left = left->next;
-			lseg = left->seglength;
-			pleft = left->data;
-		}
-
-		while (rseg == 0)
-		{
-			right = right->next;
-			rseg = right->seglength;
-			pright = right->data;
-		}
-
-		if (*pleft++ != *pright++)
-			goto fail;
-
-		lseg--;
-		rseg--;
-	}
-
-success:
-	*result = 1;
-	return;
-
-fail:
-	*result = 0;
-	return;
-}
-
-#define S_METHOD_STRING__NE(l, r) !S_METHOD_STRING__EQ(l, r)
+#define S_METHOD_STRING__EQ(l, r, z) (*z) = (s_string_cmp(l, r) == 0)
+#define S_METHOD_STRING__NE(l, r, z) (*z) = (s_string_cmp(l, r) != 0)
+#define S_METHOD_STRING__LT(l, r, z) (*z) = (s_string_cmp(l, r) < 0)
+#define S_METHOD_STRING__LE(l, r, z) (*z) = (s_string_cmp(l, r) <= 0)
+#define S_METHOD_STRING__GT(l, r, z) (*z) = (s_string_cmp(l, r) > 0)
+#define S_METHOD_STRING__GE(l, r, z) (*z) = (s_string_cmp(l, r) >= 0)
 
 /* END cowbel runtime library */
