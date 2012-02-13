@@ -1,0 +1,42 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+#include "SimpleIO.ch"
+#include "Array.ch"
+
+function append<T>(a1: Array<T>, a2: Array<T>): Array<T>
+{
+	var low1, high1 = a1.bounds();
+	var low2, high2 = a2.bounds();
+	var length1 = high1 - low1;
+	var length2 = high2 - low2;
+	var result = Array<T>(length1 + length2, 0);
+
+	var o = 0;
+	for i = low1, high1
+	{
+		result.set(o, a1.get(i));
+		o = o + 1;
+	}
+	for i = low2, high2
+	{
+		result.set(o, a2.get(i));
+		o = o + 1;
+	}
+
+	return result;
+}
+
+var a1 = Array<int>(6, 1);
+var a2 = Array<int>(3, 2);
+var a3 = append<int>(a1, a2);
+
