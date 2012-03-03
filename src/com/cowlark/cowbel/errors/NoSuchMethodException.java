@@ -8,27 +8,24 @@ package com.cowlark.cowbel.errors;
 
 import com.cowlark.cowbel.ast.IdentifierNode;
 import com.cowlark.cowbel.ast.Node;
-import com.cowlark.cowbel.types.Type;
 
 public class NoSuchMethodException extends CompilationException
 {
     private static final long serialVersionUID = -2280542063644019979L;
     
 	private Node _node;
-	private Type _type;
 	private IdentifierNode _id;
 	
-	public NoSuchMethodException(Node node, Type type, IdentifierNode id)
+	public NoSuchMethodException(Node node, IdentifierNode id)
     {
 		_node = node;
-		_type = type;
 		_id = id;
     }
 	
 	@Override
 	public String toString()
 	{
-		return "No such method '" + _id.getText() + "' on value of type " +
-			_type.getCanonicalTypeName() + " at " + _node.toString();
+		return "No such method '" + _id.getText() + "' at " +
+			_node.toString();
 	}
 }

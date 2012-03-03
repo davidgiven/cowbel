@@ -20,7 +20,7 @@ public class TypeAssignmentNode extends AbstractStatementNode
 	
 	public TypeAssignmentNode(Location start, Location end,
 			IdentifierNode identifier, IdentifierListNode typevars,
-			AbstractTypeNode type)
+			AbstractTypeExpressionNode type)
     {
 		super(start, end);
 		addChild(identifier);
@@ -39,9 +39,9 @@ public class TypeAssignmentNode extends AbstractStatementNode
 		return (IdentifierListNode) getChild(1);
 	}
 	
-	public AbstractTypeNode getTypeNode()
+	public AbstractTypeExpressionNode getTypeNode()
 	{
-		return (AbstractTypeNode) getChild(2);
+		return (AbstractTypeExpressionNode) getChild(2);
 	}
 	
 	@Override

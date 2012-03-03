@@ -12,6 +12,10 @@ import java.util.Set;
 import java.util.TreeSet;
 import com.cowlark.cowbel.ast.IdentifierNode;
 import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.core.Constructor;
+import com.cowlark.cowbel.core.Function;
+import com.cowlark.cowbel.core.Method;
+import com.cowlark.cowbel.core.TypeRef;
 import com.cowlark.cowbel.instructions.BooleanConstantInstruction;
 import com.cowlark.cowbel.instructions.ConstructInstruction;
 import com.cowlark.cowbel.instructions.CreateObjectReferenceInstruction;
@@ -27,9 +31,8 @@ import com.cowlark.cowbel.instructions.MethodCallInstruction;
 import com.cowlark.cowbel.instructions.RealConstantInstruction;
 import com.cowlark.cowbel.instructions.StringConstantInstruction;
 import com.cowlark.cowbel.instructions.VarCopyInstruction;
-import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.symbols.Variable;
-import com.cowlark.cowbel.types.Type;
+import com.cowlark.cowbel.types.AbstractConcreteType;
 
 public class BasicBlock implements Comparable<BasicBlock>
 {
@@ -70,7 +73,7 @@ public class BasicBlock implements Comparable<BasicBlock>
 	
 	public String getName()
 	{
-		return _function.getNode().getFunctionHeader().getFunctionName().getText()
+		return _function.getNode().getFunctionName().getText()
 			+ "." + _id;
 	}
 	
@@ -100,12 +103,14 @@ public class BasicBlock implements Comparable<BasicBlock>
 		next._sourceBlocks.add(this);
 	}
 	
-	protected Variable createTemporary(Node node, Type type)
+	protected Variable createTemporary(Node node, AbstractConcreteType ctype)
 	{
 		Constructor constructor = node.getScope().getConstructor();
+		TypeRef tr = new TypeRef(node);
+		tr.setConcreteType(ctype);
 		Variable var = new Variable(node,
 				IdentifierNode.createInternalIdentifier("temp"),
-				type);
+				tr);
 		var.setScope(node.getScope());
 		constructor.addVariable(var);
 		return var;

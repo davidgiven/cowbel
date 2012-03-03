@@ -6,8 +6,8 @@
 
 package com.cowlark.cowbel.instructions;
 
-import com.cowlark.cowbel.Constructor;
 import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.core.Constructor;
 
 public class ConstructInstruction extends Instruction
 {

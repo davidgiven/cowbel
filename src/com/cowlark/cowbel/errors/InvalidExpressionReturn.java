@@ -6,8 +6,8 @@
 
 package com.cowlark.cowbel.errors;
 
-import com.cowlark.cowbel.Function;
 import com.cowlark.cowbel.ast.ReturnStatementNode;
+import com.cowlark.cowbel.core.Function;
 
 public class InvalidExpressionReturn extends CompilationException
 {
@@ -28,6 +28,6 @@ public class InvalidExpressionReturn extends CompilationException
 		return "Using an inline expression with 'return' is only valid for " +
 			"functions which return exactly one expression, but the " +
 			"function at "+_function.getNode().locationAsString()+" returns " +
-			_function.getType().getOutputArgumentTypes().size();
+			_function.getNode().getOutputParametersNode().getNumberOfChildren();
 	}
 }

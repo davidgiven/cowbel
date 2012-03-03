@@ -15,7 +15,7 @@ public class RealConstantNode extends AbstractExpressionLiteralNode
 	
 	public RealConstantNode(Location start, Location end, double value)
     {
-        super(start, end);
+        super(start, end, "real");
         _value = value;
     }
 	

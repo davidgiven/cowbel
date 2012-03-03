@@ -9,10 +9,14 @@ package com.cowlark.cowbel;
 import com.cowlark.cowbel.ast.BlockScopeConstructorNode;
 import com.cowlark.cowbel.ast.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.RecursiveASTVisitor;
+import com.cowlark.cowbel.core.Function;
 import com.cowlark.cowbel.errors.CompilationException;
 
 public class AssignFunctionsToScopesVisitor extends RecursiveASTVisitor
 {
+	public static AssignFunctionsToScopesVisitor Instance =
+		new AssignFunctionsToScopesVisitor();
+	
 	@Override
 	public void visit(FunctionDefinitionNode node) throws CompilationException
 	{

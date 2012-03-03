@@ -7,28 +7,30 @@
 package com.cowlark.cowbel.errors;
 
 import com.cowlark.cowbel.ast.Node;
-import com.cowlark.cowbel.types.Type;
+import com.cowlark.cowbel.core.Interface;
+import com.cowlark.cowbel.core.TypeRef;
 
 public class TypesNotCompatibleException extends CompilationException
 {
     private static final long serialVersionUID = 1703271215661976233L;
     
     private Node _node;
-	private Type _type1;
-	private Type _type2;
+	private TypeRef _typeref;
+	private Interface _interf;
     
-	public TypesNotCompatibleException(Node node, Type type1, Type type2)
+	public TypesNotCompatibleException(Node node, TypeRef typeref,
+			Interface interf)
     {
 		_node = node;
-		_type1 = type1;
-		_type2 = type2;
+		_typeref = typeref;
+		_interf = interf;
     }
 	
 	@Override
 	public String getMessage()
 	{
-		return "Cannot unify type " + _type2.getCanonicalTypeName() +
-				" with " + _type1.getCanonicalTypeName() + " at " +
+		return "Type contraint " + _interf.getNameHint() + " cannot be " +
+			"satisfied at " +
 				_node.locationAsString();
 	}
 }

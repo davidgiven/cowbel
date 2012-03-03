@@ -9,20 +9,18 @@ package com.cowlark.cowbel.ast;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
-import com.cowlark.cowbel.TypeContext;
+import com.cowlark.cowbel.core.InterfaceContext;
 import com.cowlark.cowbel.errors.CompilationException;
-import com.cowlark.cowbel.interfaces.HasNode;
-import com.cowlark.cowbel.interfaces.HasScope;
+import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.Token;
 
-public abstract class Node extends Token implements Iterable<Node>, HasNode,
-		HasScope
+public abstract class Node extends Token implements IsNode
 {
-	private Vector<Node> _children = new Vector<Node>();
-	private Node _parent;
+	private Vector<IsNode> _children = new Vector<IsNode>();
+	private IsNode _parent;
 	private AbstractScopeConstructorNode _scope;
-	private TypeContext _typecontext;
+	private InterfaceContext _typecontext;
 	
 	public Node(Location start, Location end)
     {
@@ -35,56 +33,61 @@ public abstract class Node extends Token implements Iterable<Node>, HasNode,
 	    return this;
 	}
 	
-	public void addChild(Node child)
+	public void addChild(IsNode child)
 	{
 		_children.add(child);
 		child.setParent(this);
 	}
 	
-	public Node getChild(int i)
+	public IsNode getChild(int i)
 	{
 		return _children.get(i);
 	}
 
-	public void addChildren(Collection<? extends Node> children)
+	public void addChildren(Collection<? extends IsNode> children)
 	{
-		for (Node n : children)
+		for (IsNode n : children)
 			addChild(n);
 	}
 	
-	public void addChildren(Node... children)
+	public void addChildren(IsNode... children)
 	{
-		for (Node n : children)
+		for (IsNode n : children)
 			addChild(n);
 	}
 	
-	public int getNumberOfChildren()
+	@Override
+    public int getNumberOfChildren()
 	{
 		return _children.size();
 	}
 	
 	@Override
-    public Iterator<Node> iterator()
+    public Iterator<IsNode> iterator()
 	{
 		return _children.iterator();
 	}
 	
-	public void setParent(Node parent)
+	@Override
+    public void setParent(IsNode parent)
 	{
 		_parent = parent;
 	}
 	
-	public Node getParent()
+	@Override
+    public IsNode getParent()
 	{
 		return _parent;
 	}
 	
-	public String getNodeName()
+	@Override
+    public String getNodeName()
 	{
 		return getClass().getSimpleName();
 	}
 	
-	public String getShortDescription()
+	@Override
+    public String getShortDescription()
 	{
 		return "";
 	}
@@ -114,7 +117,7 @@ public abstract class Node extends Token implements Iterable<Node>, HasNode,
 	{
 		if (_scope == null)
 		{
-			Node n = this;
+			IsNode n = this;
 			
 			for (;;)
 			{
@@ -137,23 +140,27 @@ public abstract class Node extends Token implements Iterable<Node>, HasNode,
 		_scope = scope;
 	}
 	
-	public TypeContext getTypeContext()
+	@Override
+    public InterfaceContext getTypeContext()
 	{
 		if (_typecontext == null)
-			_typecontext = new TypeContext(this, getParent().getTypeContext());
+			_typecontext = getParent().getTypeContext();
 			
 		return _typecontext;
 	}
 	
-	public void setTypeContext(TypeContext typecontext)
+	@Override
+    public void setTypeContext(InterfaceContext typecontext)
 	{
 		_typecontext = typecontext;
 	}
 	
-	public boolean isLoopingNode()
+	@Override
+    public boolean isLoopingNode()
 	{
 		return false;
 	}
 	
-	public abstract void visit(ASTVisitor visitor) throws CompilationException;
+	@Override
+    public abstract void visit(ASTVisitor visitor) throws CompilationException;
 }

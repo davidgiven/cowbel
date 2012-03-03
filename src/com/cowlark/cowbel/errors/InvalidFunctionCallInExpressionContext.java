@@ -6,31 +6,23 @@
 
 package com.cowlark.cowbel.errors;
 
-import java.util.List;
-import com.cowlark.cowbel.ast.AbstractExpressionNode;
-import com.cowlark.cowbel.types.Type;
+import com.cowlark.cowbel.interfaces.IsExpressionNode;
 
 public class InvalidFunctionCallInExpressionContext extends CompilationException
 {
     private static final long serialVersionUID = 2219952398091478590L;
     
-	private AbstractExpressionNode _node;
-	private List<Type> _inputTypes;
-	private List<Type> _outputTypes;
+	private IsExpressionNode _node;
     
-	public InvalidFunctionCallInExpressionContext(AbstractExpressionNode node,
-			List<Type> inputTypes, List<Type> outputTypes)
+	public InvalidFunctionCallInExpressionContext(IsExpressionNode node)
     {
 		_node = node;
-		_inputTypes = inputTypes;
-		_outputTypes = outputTypes;
     }
 	
 	@Override
 	public String getMessage()
 	{
 		return "Function call at "+_node.locationAsString()+" must return " +
-				"exactly one value to be usable in an expression context " +
-				"(but actually returns " + _outputTypes.size() + ")";
+				"exactly one value to be usable in an expression context.";
 	}
 }

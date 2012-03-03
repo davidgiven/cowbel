@@ -6,8 +6,6 @@
 
 package com.cowlark.cowbel.ast;
 
-import com.cowlark.cowbel.CheckAndInferStatementTypesVisitor;
-import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
 public abstract class AbstractStatementNode extends Node
@@ -15,13 +13,5 @@ public abstract class AbstractStatementNode extends Node
 	public AbstractStatementNode(Location start, Location end)
     {
         super(start, end);
-    }
-	
-	private static ASTVisitor _check_and_infer_statement_types_visitor =
-		new CheckAndInferStatementTypesVisitor();
-	public void checkTypes() throws CompilationException
-	{
-		visit(_check_and_infer_statement_types_visitor);
-	}
-	
+    }	
 }

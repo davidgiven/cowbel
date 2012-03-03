@@ -7,12 +7,14 @@
 package com.cowlark.cowbel.ast;
 
 import java.util.Collection;
+import com.cowlark.cowbel.core.Interface;
+import com.cowlark.cowbel.core.InterfaceContext;
+import com.cowlark.cowbel.core.MethodTemplate;
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.parser.core.Location;
-import com.cowlark.cowbel.types.InterfaceType;
-import com.cowlark.cowbel.types.Type;
 
-public class InterfaceTypeNode extends AbstractTypeNode
+public class InterfaceTypeNode extends AbstractTypeExpressionNode
 {
 	public InterfaceTypeNode(Location start, Location end)
     {
@@ -27,9 +29,19 @@ public class InterfaceTypeNode extends AbstractTypeNode
     }
 		
 	@Override
-	public Type calculateType()
+	public Interface createInterface() throws CompilationException
 	{
-		return InterfaceType.create(this);
+		InterfaceContext tc = getTypeContext();
+		Interface type = new Interface(tc, this);
+		
+		for (IsNode n : this)
+		{
+			FunctionHeaderNode fhn = (FunctionHeaderNode) n;
+			MethodTemplate template = new MethodTemplate(tc, fhn, type);
+			type.addMethodTemplate(template);
+		}
+		
+		return type;
 	}
 	
 	@Override

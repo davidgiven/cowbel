@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -22,42 +23,47 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import com.cowlark.cowbel.backend.Backend;
 import com.cowlark.cowbel.backend.c.CBackend;
+import com.cowlark.cowbel.core.Compiler;
+import com.cowlark.cowbel.core.CompilerListener;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.FailedParseException;
 import com.cowlark.cowbel.parser.core.FailedParse;
 import com.cowlark.cowbel.parser.core.Location;
 
-public class Main
+public class Main implements CompilerListener
 {
-	public static String OutputFile;
-	public static String Preprocessor = "cpp -undef -nostdinc ${includes} ${inputfile}";
-	public static String CCompiler = "gcc -o ${outputfile} ${inputfile} -lgc ${options}";
-	public static String Includes = "";
-	public static String CompilerOptions = "";
-	public static boolean Quiet;
-	public static boolean EmitC;
-	public static boolean DumpAST;
-	public static boolean DumpIR;
-	public static boolean DumpConstructors;
-	public static boolean DumpInterfaces;
+	public String OutputFile;
+	public String Preprocessor = "cpp -undef -nostdinc ${includes} ${inputfile}";
+	public String CCompiler = "gcc -o ${outputfile} ${inputfile} -lgc ${options}";
+	public String Includes = "";
+	public String CompilerOptions = "";
+	public boolean Quiet;
+	public boolean EmitC;
+	public boolean DumpAST;
+	public String DumpTypeRef;
+	public boolean DumpIR;
+	public boolean DumpConstructors;
+	public boolean DumpConcreteTypes;
+	private long _clock;
+	private Compiler _compiler;
 	
-	private static void abort(String message)
+	private void abort(String message)
 	{
 		System.err.println(message);
 		System.exit(1);
 	}
 	
-	private static void help(Options options)
+	private void help(Options options)
 	{
 		HelpFormatter hf = new HelpFormatter();
 		hf.printHelp("cowbel [<options>] <input files...>", options);
 		System.err.println("");
 		System.err.println("Preprocessor: " + Preprocessor);
-		System.err.println("C compiler:   " + CCompiler);
+		System.err.println("C compiler:  " + CCompiler);
 		System.exit(0);
 	}
 	
-	private static CommandLine parseCommandLine(String[] args) 
+	private CommandLine parseCommandLine(String[] args) 
 	{
 		CommandLineParser parser = new GnuParser();
 		Options options = new Options();
@@ -89,6 +95,9 @@ public class Main
 		options.addOption("da", "dump-annotated-ast", false,
 						"dump annotated AST to stdout");
 
+		options.addOption("dt", "dump-typeref", true,
+						"dump typeref graph to named file");
+
 		options.addOption("di", "dump-ir", false,
 						"dump IR code to stdout");
 
@@ -115,10 +124,11 @@ public class Main
 			
 			Quiet = cli.hasOption("q");
 			EmitC = cli.hasOption("C");
+			DumpTypeRef = cli.getOptionValue("dt");
 			DumpAST = cli.hasOption("da");
 			DumpIR = cli.hasOption("di");
 			DumpConstructors = cli.hasOption("dc");
-			DumpInterfaces = cli.hasOption("dn");
+			DumpConcreteTypes = cli.hasOption("dn");
 			
 			if (cli.hasOption("p"))
 				Preprocessor = cli.getOptionValue("p");
@@ -143,12 +153,12 @@ public class Main
 		return cli;
 	}
 	
-	private static Backend createBackend(Compiler compiler, OutputStream os)
+	private Backend createBackend(Compiler compiler, OutputStream os)
 	{
 		return new CBackend(compiler, os);
 	}
 
-	private static String expandCommandLine(String template, String... vars)
+	private String expandCommandLine(String template, String... vars)
 	{
 		HashMap<String, String> map = new HashMap<String, String>();
 		for (int i = 0; i < vars.length; i += 2)
@@ -157,7 +167,7 @@ public class Main
 		return StrSubstitutor.<String>replace(template, map, "${", "}");
 	}
 
-	private static String readSourceFile(String filename)
+	private String readSourceFile(String filename)
 	{
 		String cli = expandCommandLine(Preprocessor,
 				"inputfile", filename,
@@ -187,7 +197,7 @@ public class Main
 		}
 	}
 	
-	private static void compileOutputFile(String inputfilename, String outputfilename)
+	private void compileOutputFile(String inputfilename, String outputfilename)
 	{
 		String cli = expandCommandLine(CCompiler,
 				"inputfile", inputfilename,
@@ -215,7 +225,126 @@ public class Main
 		}
 	}
 	
-	public static void main(String[] args)
+	private void resetTimer()
+	{
+		_clock = System.currentTimeMillis();
+	}
+	
+	private void reportTimer(String message)
+	{
+		long delta = System.currentTimeMillis() - _clock;
+	
+		if (!Quiet)
+			System.err.println(message + ": " + delta + "ms");
+	}
+	
+	public void onPreprocessBegin()
+	{
+		resetTimer();
+	}
+	
+	public void onPreprocessEnd()
+	{
+		reportTimer("Preprocessing");
+	}
+	
+	public void onCCompilationBegin()
+	{
+		resetTimer();
+	}
+	
+	public void onCCompilationEnd()
+	{
+		reportTimer("C compilation");
+	}
+	
+	@Override
+	public void onParseBegin()
+	{
+		resetTimer();
+	}
+	
+	@Override
+	public void onParseEnd()
+	{
+		reportTimer("Parsing");
+	}
+	
+	@Override
+	public void onSymbolTableAnalysisBegin()
+	{
+		resetTimer();
+	}
+	
+	@Override
+	public void onSymbolTableAnalysisEnd()
+	{
+		reportTimer("Symbol tables");
+		
+		if (DumpAST)
+			_compiler.dumpAnnotatedAST();
+	}
+	
+	@Override
+	public void onTypeInferenceBegin()
+	{
+		resetTimer();
+	}
+	
+	@Override
+	public void onTypeInferenceEnd()
+	{
+		reportTimer("Type inference");
+		
+		if (DumpTypeRef != null)
+		{
+			try
+			{
+				FileOutputStream fos = new FileOutputStream(DumpTypeRef);
+				BufferedOutputStream bos = new BufferedOutputStream(fos);
+				PrintWriter pw = new PrintWriter(bos);
+				_compiler.dumpTypeRefGraph(pw);
+				pw.flush();
+				fos.close();
+			}
+			catch (IOException e)
+			{
+				System.err.println("I/O error: "+e.getMessage());
+				System.exit(1);
+			}
+		}
+		
+		if (DumpConcreteTypes)
+		{
+			_compiler.dumpConcreteTypes();
+		}
+	}
+	
+	@Override
+	public void onBasicBlockAnalysisBegin()
+	{
+		resetTimer();
+	}
+	
+	@Override
+	public void onBasicBlockAnalysisEnd()
+	{
+		reportTimer("Basic block analysis");
+	}
+	
+	@Override
+	public void onCodeGenerationBegin()
+	{
+		resetTimer();
+	}
+	
+	@Override
+	public void onCodeGenerationEnd()
+	{
+		reportTimer("Code generation");
+	}
+
+	public void instanceMain(String[] args)
 	{
 		CommandLine cli = parseCommandLine(args);
 		args = cli.getArgs();
@@ -225,15 +354,13 @@ public class Main
 		if (args.length > 1)
 			abort("Sorry, only one input filename is supported currently.");
 		
-		CompilerTimer timer = new CompilerTimer(Quiet);
-		
 		try
 		{
 			String filename = args[0];
 			
-			timer.onPreprocessBegin();
+			onPreprocessBegin();
 			String data = readSourceFile(filename);
-			timer.onPreprocessEnd();
+			onPreprocessEnd();
 			
 			Location loc = new Location(data, filename);
 			
@@ -252,28 +379,24 @@ public class Main
 			
 			//backend.prologue();
 
-			Compiler c = new Compiler();
-			Backend backend = createBackend(c, bos);
-			c.setListener(timer);
-			c.setInput(loc);
-			c.setBackend(backend);
-			c.compile();
+			_compiler = new Compiler();
+			Backend backend = createBackend(_compiler, bos);
+			_compiler.setListener(this);
+			_compiler.setInput(loc);
+			_compiler.setBackend(backend);
+			_compiler.compile();
 			bos.close();
 			
-			if (DumpAST)
-				c.dumpAnnotatedAST();
 			if (DumpConstructors)
-				c.dumpConstructors();
-			if (DumpInterfaces)
-				c.dumpInterfaces();
+				_compiler.dumpConstructors();
 			if (DumpIR)
-				c.dumpBasicBlocks();
+				_compiler.dumpBasicBlocks();
 			
 			if (!EmitC)
 			{
-				timer.onCCompilationBegin();
+				onCCompilationBegin();
 				compileOutputFile(cfile, OutputFile);
-				timer.onCCompilationEnd();
+				onCCompilationEnd();
 			}
 			
 			System.exit(0);
@@ -297,5 +420,10 @@ public class Main
 			System.err.println("I/O error: "+e.getMessage());
 			System.exit(1);
 		}
+	}
+	
+	public static void main(String[] argv)
+	{
+		new Main().instanceMain(argv);
 	}
 }

@@ -6,7 +6,7 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.AbstractTypeNode;
+import com.cowlark.cowbel.ast.AbstractTypeExpressionNode;
 import com.cowlark.cowbel.ast.ImplementsStatementNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
@@ -29,6 +29,6 @@ public class ImplementsStatementParser extends Parser
 			return pr;
 
 		return new ImplementsStatementNode(location, pr.end(),
-				(AbstractTypeNode) typepr);
+				(AbstractTypeExpressionNode) typepr);
 	}
 }

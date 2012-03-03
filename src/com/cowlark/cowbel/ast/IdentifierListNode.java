@@ -6,12 +6,10 @@
 
 package com.cowlark.cowbel.ast;
 
-import java.util.ArrayList;
 import java.util.List;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.symbols.Symbol;
-import com.cowlark.cowbel.types.Type;
 
 public class IdentifierListNode extends Node
 {
@@ -65,19 +63,4 @@ public class IdentifierListNode extends Node
 	{
 		visitor.visit(this);
 	}
-	
-	private List<Type> _types;
-	public List<Type> calculateTypes() throws CompilationException
-	{
-		if (_types == null)
-		{
-			_types = new ArrayList<Type>();
-			
-			if (getNumberOfChildren() > 0)
-				for (Symbol s : _symbols)
-					_types.add(s.getType());
-		}
-		return _types;
-	}
-			
 }

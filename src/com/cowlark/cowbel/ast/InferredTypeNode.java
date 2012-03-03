@@ -6,22 +6,21 @@
 
 package com.cowlark.cowbel.ast;
 
+import com.cowlark.cowbel.core.Interface;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
-import com.cowlark.cowbel.types.InferredType;
-import com.cowlark.cowbel.types.Type;
 
-public class InferredTypeNode extends AbstractTypeNode
+public class InferredTypeNode extends AbstractTypeExpressionNode
 {
 	public InferredTypeNode(Location start, Location end)
     {
         super(start, end);
     }
-	
+
 	@Override
-	public Type calculateType()
+	public Interface createInterface() throws CompilationException
 	{
-		return InferredType.create();
+	    return null;
 	}
 	
 	@Override

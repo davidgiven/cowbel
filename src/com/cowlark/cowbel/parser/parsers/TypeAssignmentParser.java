@@ -6,7 +6,7 @@
 
 package com.cowlark.cowbel.parser.parsers;
 
-import com.cowlark.cowbel.ast.AbstractTypeNode;
+import com.cowlark.cowbel.ast.AbstractTypeExpressionNode;
 import com.cowlark.cowbel.ast.IdentifierListNode;
 import com.cowlark.cowbel.ast.IdentifierNode;
 import com.cowlark.cowbel.ast.TypeAssignmentNode;
@@ -45,6 +45,6 @@ public class TypeAssignmentParser extends Parser
 		return new TypeAssignmentNode(location, pr.end(),
 				(IdentifierNode) typenamepr,
 				(IdentifierListNode) typevarspr,
-				(AbstractTypeNode) typepr);
+				(AbstractTypeExpressionNode) typepr);
 	}
 }

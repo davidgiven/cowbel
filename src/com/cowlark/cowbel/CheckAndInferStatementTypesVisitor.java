@@ -37,6 +37,8 @@ import com.cowlark.cowbel.ast.VarAssignmentNode;
 import com.cowlark.cowbel.ast.VarDeclarationNode;
 import com.cowlark.cowbel.ast.VarReferenceNode;
 import com.cowlark.cowbel.ast.WhileStatementNode;
+import com.cowlark.cowbel.core.Function;
+import com.cowlark.cowbel.core.Utils;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.FunctionParameterMismatch;
 import com.cowlark.cowbel.errors.InvalidExpressionReturn;
@@ -47,7 +49,6 @@ import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.symbols.Symbol;
 import com.cowlark.cowbel.types.BooleanType;
 import com.cowlark.cowbel.types.FunctionType;
-import com.cowlark.cowbel.types.Type;
 
 public class CheckAndInferStatementTypesVisitor extends SimpleASTVisitor
 {
@@ -257,7 +258,7 @@ public class CheckAndInferStatementTypesVisitor extends SimpleASTVisitor
 	@Override
     public void visit(DirectFunctionCallStatementNode node) throws CompilationException
 	{
-		Function function = node.getFunction();
+		Function function = node.getCallable();
 		assert(function != null);
 		
 		validate_function_call(node, function);

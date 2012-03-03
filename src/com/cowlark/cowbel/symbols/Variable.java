@@ -6,19 +6,19 @@
 
 package com.cowlark.cowbel.symbols;
 
-import com.cowlark.cowbel.Constructor;
 import com.cowlark.cowbel.ast.IdentifierNode;
 import com.cowlark.cowbel.ast.Node;
-import com.cowlark.cowbel.types.Type;
+import com.cowlark.cowbel.core.Constructor;
+import com.cowlark.cowbel.core.TypeRef;
 
 public class Variable extends Symbol
 {
 	private boolean _isParameter = false;
 	private boolean _isOutputParameter = false;
 	
-	public Variable(Node node, IdentifierNode name, Type type)
+	public Variable(Node node, IdentifierNode name, TypeRef typeref)
 	{
-		super(node, name, type);
+		super(node, name, typeref);
 	}
 
 	public boolean isParameter()

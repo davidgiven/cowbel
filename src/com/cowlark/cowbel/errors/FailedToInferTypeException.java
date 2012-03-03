@@ -6,17 +6,17 @@
 
 package com.cowlark.cowbel.errors;
 
-import com.cowlark.cowbel.ast.Node;
-import com.cowlark.cowbel.types.Type;
+import com.cowlark.cowbel.interfaces.IsNode;
+import com.cowlark.cowbel.types.AbstractConcreteType;
 
 public class FailedToInferTypeException extends CompilationException
 {
     private static final long serialVersionUID = 1703271215661976233L;
     
-    private Node _node;
-	private Type _type;
+    private IsNode _node;
+	private AbstractConcreteType _type;
     
-	public FailedToInferTypeException(Node node, Type type)
+	public FailedToInferTypeException(IsNode node, AbstractConcreteType type)
     {
 		_node = node;
 		_type = type;

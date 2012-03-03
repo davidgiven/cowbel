@@ -6,14 +6,18 @@
 
 package com.cowlark.cowbel.ast;
 
+import com.cowlark.cowbel.core.TypeRef;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
 public abstract class AbstractExpressionLiteralNode extends AbstractExpressionNode
 {
-	public AbstractExpressionLiteralNode(Location start, Location end)
+	private String _implName;
+	
+	public AbstractExpressionLiteralNode(Location start, Location end, String impl)
     {
         super(start, end);
+        _implName = impl;
     }
 	
 	@Override
@@ -21,4 +25,16 @@ public abstract class AbstractExpressionLiteralNode extends AbstractExpressionNo
 	{
 		visitor.visit(this);
 	}
+		
+	@Override
+	public TypeRef getTypeRef()
+	{
+//		if (!hasTypeRef())
+//		{
+//			TypeRef tr = super.getTypeRef();
+//			tr.addParent(Compiler.Instance.getCanonicalPrimitiveTypeRef(_implName));
+//		}
+		return super.getTypeRef();
+	}
+
 }

@@ -26,6 +26,8 @@ import com.cowlark.cowbel.ast.RealConstantNode;
 import com.cowlark.cowbel.ast.SimpleASTVisitor;
 import com.cowlark.cowbel.ast.StringConstantNode;
 import com.cowlark.cowbel.ast.VarReferenceNode;
+import com.cowlark.cowbel.core.Function;
+import com.cowlark.cowbel.core.Utils;
 import com.cowlark.cowbel.errors.AttemptToCallNonFunctionTypeException;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.FunctionParameterMismatch;
@@ -33,13 +35,10 @@ import com.cowlark.cowbel.errors.InvalidFunctionCallInExpressionContext;
 import com.cowlark.cowbel.interfaces.HasInputs;
 import com.cowlark.cowbel.methods.Method;
 import com.cowlark.cowbel.symbols.Symbol;
-import com.cowlark.cowbel.types.BooleanType;
-import com.cowlark.cowbel.types.ClassType;
-import com.cowlark.cowbel.types.FunctionType;
-import com.cowlark.cowbel.types.IntegerType;
-import com.cowlark.cowbel.types.RealType;
-import com.cowlark.cowbel.types.StringType;
 import com.cowlark.cowbel.types.Type;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.BooleanType;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.RealType;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.StringType;
 
 public class CheckAndInferExpressionTypesVisitor extends SimpleASTVisitor
 {
@@ -140,7 +139,7 @@ public class CheckAndInferExpressionTypesVisitor extends SimpleASTVisitor
 	@Override
     public void visit(DirectFunctionCallExpressionNode node) throws CompilationException
 	{
-		Function function = node.getFunction();
+		Function function = node.getCallable();
 		assert(function != null);
 		
 		validate_function_call(node, function);

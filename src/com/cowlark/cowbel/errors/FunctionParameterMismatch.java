@@ -6,32 +6,20 @@
 
 package com.cowlark.cowbel.errors;
 
-import java.util.List;
-import com.cowlark.cowbel.Function;
-import com.cowlark.cowbel.ast.Node;
-import com.cowlark.cowbel.types.Type;
+import com.cowlark.cowbel.core.Callable;
+import com.cowlark.cowbel.interfaces.IsCallNode;
 
 public class FunctionParameterMismatch extends CompilationException
 {
     private static final long serialVersionUID = 2464239362015604667L;
     
-	private Node _node;
-    private Function _function; 
-	private List<Type> _functionoutput;
-	private List<Type> _calledoutput;
-	private List<Type> _functioninput;
-	private List<Type> _calledinput;
+	private IsCallNode _node;
+    private Callable _function; 
     
-	public FunctionParameterMismatch(Node node, Function function,
-			List<Type> functionoutput, List<Type> calledoutput,
-			List<Type> functioninput, List<Type> calledinput)
+	public FunctionParameterMismatch(IsCallNode node, Callable function)
     {
 		_node = node;
 		_function = function;
-		_functionoutput = functionoutput;
-		_calledoutput = calledoutput;
-		_functioninput = functioninput;
-		_calledinput = calledinput;
     }
 	
 	@Override

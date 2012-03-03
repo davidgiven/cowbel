@@ -189,7 +189,7 @@ public class ASTVisitor
 		visit((Node) node);
 	}
 
-	public void visit(TypeListNode node) throws CompilationException
+	public void visit(InterfaceListNode node) throws CompilationException
 	{
 		visit((Node) node);
 	}

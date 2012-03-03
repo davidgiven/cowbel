@@ -6,11 +6,10 @@
 
 package com.cowlark.cowbel.parser.core;
 
-public abstract class ParseResult implements Comparable<ParseResult>
+import com.cowlark.cowbel.utils.DeterministicObject;
+
+public abstract class ParseResult extends DeterministicObject<ParseResult>
 {
-	private static int _globalid = 0;
-	
-	private int _id = _globalid++;
 	private Location _start;
 	private Location _end;
 	
@@ -19,21 +18,6 @@ public abstract class ParseResult implements Comparable<ParseResult>
 		_start = start;
 		_end = end;
 	}
-	
-	@Override
-    public int compareTo(ParseResult o)
-	{
-		if (_id < o._id)
-			return -1;
-		if (_id > o._id)
-			return 1;
-		return 0;
-	}
-	
-	public int getId()
-    {
-	    return _id;
-    }
 	
 	abstract public boolean failed();
 	

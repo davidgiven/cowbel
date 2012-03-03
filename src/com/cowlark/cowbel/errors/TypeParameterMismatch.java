@@ -6,41 +6,28 @@
 
 package com.cowlark.cowbel.errors;
 
-import java.util.List;
 import com.cowlark.cowbel.ast.IdentifierListNode;
-import com.cowlark.cowbel.ast.Node;
-import com.cowlark.cowbel.ast.TypeListNode;
-import com.cowlark.cowbel.types.Type;
+import com.cowlark.cowbel.ast.InterfaceListNode;
+import com.cowlark.cowbel.interfaces.IsNode;
 
 public class TypeParameterMismatch extends CompilationException
 {
     private static final long serialVersionUID = 5677501661277120026L;
     
-	private Node _caller;
-    private Node _definition;
+	private IsNode _caller;
+    private IsNode _definition;
     private IdentifierListNode _ids;
-    private TypeListNode _types;
+    private InterfaceListNode _types;
     
-	public TypeParameterMismatch(Node caller,
-			Node definition,
+	public TypeParameterMismatch(IsNode caller,
+			IsNode definition,
 			IdentifierListNode ids,
-			TypeListNode types)
+			InterfaceListNode types)
     {
 		_caller = caller;
 		_definition = definition;
 		_ids = ids;
 		_types = types;
-    }
-	
-	public TypeParameterMismatch(Node caller,
-			Node definition,
-			IdentifierListNode ids,
-			List<Type> types)
-    {
-		_caller = caller;
-		_definition = definition;
-		_ids = ids;
-		//_types = types;
     }
 	
 	@Override

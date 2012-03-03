@@ -6,7 +6,7 @@
 
 package com.cowlark.cowbel.interfaces;
 
-import com.cowlark.cowbel.Label;
+import com.cowlark.cowbel.core.Label;
 
 public interface HasLabel
 {

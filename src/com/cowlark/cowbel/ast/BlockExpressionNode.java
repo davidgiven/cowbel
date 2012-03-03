@@ -7,9 +7,13 @@
 package com.cowlark.cowbel.ast;
 
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.HasConcreteType;
 import com.cowlark.cowbel.parser.core.Location;
+import com.cowlark.cowbel.types.AbstractConcreteType;
+import com.cowlark.cowbel.types.ObjectConcreteType;
 
 public class BlockExpressionNode extends AbstractExpressionNode
+		implements HasConcreteType
 {
 	public BlockExpressionNode(Location start, Location end)
 	{
@@ -32,5 +36,11 @@ public class BlockExpressionNode extends AbstractExpressionNode
 	public void visit(ASTVisitor visitor) throws CompilationException
 	{
 		visitor.visit(this);
+	}
+	
+	@Override
+	public AbstractConcreteType createConcreteType()
+	{
+		return new ObjectConcreteType(this);
 	}
 }

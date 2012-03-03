@@ -12,18 +12,20 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import com.cowlark.cowbel.BasicBlock;
-import com.cowlark.cowbel.Compiler;
-import com.cowlark.cowbel.Constructor;
-import com.cowlark.cowbel.Function;
 import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.ExternStatementNode;
 import com.cowlark.cowbel.ast.FunctionDefinitionNode;
+import com.cowlark.cowbel.ast.FunctionHeaderNode;
 import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.ast.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.ParameterDeclarationNode;
 import com.cowlark.cowbel.ast.RecursiveASTVisitor;
 import com.cowlark.cowbel.ast.StringConstantNode;
 import com.cowlark.cowbel.backend.Backend;
+import com.cowlark.cowbel.core.Compiler;
+import com.cowlark.cowbel.core.Constructor;
+import com.cowlark.cowbel.core.Function;
+import com.cowlark.cowbel.core.Method;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.InvalidExternTemplate;
 import com.cowlark.cowbel.instructions.BooleanConstantInstruction;
@@ -42,25 +44,23 @@ import com.cowlark.cowbel.instructions.MethodCallInstruction;
 import com.cowlark.cowbel.instructions.RealConstantInstruction;
 import com.cowlark.cowbel.instructions.StringConstantInstruction;
 import com.cowlark.cowbel.instructions.VarCopyInstruction;
-import com.cowlark.cowbel.methods.FunctionMethod;
-import com.cowlark.cowbel.methods.PrimitiveMethod;
-import com.cowlark.cowbel.methods.VirtualMethod;
+import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.symbols.Symbol;
 import com.cowlark.cowbel.symbols.Variable;
-import com.cowlark.cowbel.types.HasInterfaces;
-import com.cowlark.cowbel.types.InterfaceType;
-import com.cowlark.cowbel.types.Type;
+import com.cowlark.cowbel.types.AbstractConcreteType;
+import com.cowlark.cowbel.types.InterfaceConcreteType;
+import com.cowlark.cowbel.types.ObjectConcreteType;
 
 public class CBackend extends Backend
 {
 	private static Charset UTF8 = Charset.forName("utf-8");
 	
-	private HashMap<InterfaceType, String> _interfaceTypes =
-		new HashMap<InterfaceType, String>();
-	private HashMap<InterfaceType, String> _interfaceLabels =
-		new HashMap<InterfaceType, String>();
-	private HashMap<VirtualMethod, String> _methodLabels =
-		new HashMap<VirtualMethod, String>();
+	private HashMap<AbstractConcreteType, String> _typeTypes =
+		new HashMap<AbstractConcreteType, String>();
+	private HashMap<AbstractConcreteType, String> _typeLabels =
+		new HashMap<AbstractConcreteType, String>();
+	private HashMap<Method, String> _methodLabels =
+		new HashMap<Method, String>();
 	private HashMap<Constructor, String> _constructorTypes =
 		new HashMap<Constructor, String>();
 	private HashMap<Constructor, String> _constructorLabels =
@@ -69,8 +69,6 @@ public class CBackend extends Backend
 		new HashMap<Function, String>();
 	private HashMap<Symbol, String> _symbolLabels =
 		new HashMap<Symbol, String>();
-	private HashMap<Type, String> _typeLabels =
-		new HashMap<Type, String>();
 	private HashMap<BasicBlock, String> _bbLabels =
 		new HashMap<BasicBlock, String>();
 	private HashMap<StringConstantNode, String> _stringLabels =
@@ -78,7 +76,6 @@ public class CBackend extends Backend
 	
 	private boolean _inputparamsinvalid;
 	private int _funcid;
-	private CTypeNameBuilder _typeNameBuilder = new CTypeNameBuilder(this);
 	private String _returnvalue;
 	
 	public CBackend(Compiler compiler, OutputStream os)
@@ -126,27 +123,28 @@ public class CBackend extends Backend
 	    		}
 	    	);
 	    print("\n");
-        
-        /* Emit prototypes for constructors. */
-        
-	    for (Constructor c : compiler.getConstructors())
+
+	    /* Emit prototypes for interfaces, objects and constructors. */
+	    
+		for (InterfaceConcreteType t : InterfaceConcreteType.getAllInterfaceTypes())
+		{
+			print(ctypes(t));
+			print(";\n");
+		}
+		for (ObjectConcreteType t : ObjectConcreteType.getAllObjectTypes())
+		{
+			print(ctypes(t));
+			print(";\n");
+		}
+	    for (Constructor c : Constructor.getAllConstructors())
 	    {
 	    	print(ctype(c));
 	    	print(";\n");
 	    }
 	    
-        /* Emit prototypes for interfaces. */
-        
-	    for (InterfaceType i : compiler.getInterfaces())
-	    {
-	    	print(ctype(i));
-	    	print(";\n");
-	    }
-	    print("\n");
-	    
 	    /* Emit prototypes for functions. */
 	    
-	    for (Function f : compiler.getFunctions())
+	    for (Function f : Function.getAllFunctions())
 	    {
 	    	function_header(f);
 	    	print(";\n");
@@ -310,53 +308,43 @@ public class CBackend extends Backend
 	
 	private String ctype(Symbol symbol)
 	{
-		return ctype(symbol.getType());
+		return ctype(symbol.getTypeRef().getConcreteType());
 	}
 	
-	String ctype(Type type)
+	String ctypes(AbstractConcreteType type)
+	{
+		String s = _typeTypes.get(type);
+		if (s != null)
+			return s;
+		
+		s = "struct T" + _typeTypes.size() + "_" + type.toString();
+		_typeTypes.put(type, s);
+		return s;
+	}
+	
+	String ctype(AbstractConcreteType type)
+	{
+		return ctypes(type) + "*";
+	}
+	
+	String clabel(AbstractConcreteType type)
 	{
 		String s = _typeLabels.get(type);
 		if (s != null)
 			return s;
 		
-		s = _typeNameBuilder.buildName(type);
+		s = "t" + _typeLabels.size() + "_" + type.toString();
 		_typeLabels.put(type, s);
 		return s;
 	}
 	
-	String ctype(InterfaceType type)
-	{
-		String s = _interfaceTypes.get(type);
-		if (s != null)
-			return s;
-
-		s = "struct I" + _interfaceTypes.size() + "_" + type.getId() +
-			"_" + type.toString();
-		
-		_interfaceTypes.put(type, s);
-		return s;
-	}
-	
-	String clabel(InterfaceType type)
-	{
-		String s = _interfaceLabels.get(type);
-		if (s != null)
-			return s;
-
-		s = "i" + _interfaceTypes.size() + "_" + type.getId() +
-			"_" + type.toString();
-		
-		_interfaceLabels.put(type, s);
-		return s;
-	}
-	
-	String clabel(VirtualMethod method)
+	String clabel(Method method)
 	{
 		String s = _methodLabels.get(method);
 		if (s != null)
 			return s;
 
-		s = "m" + _methodLabels.size() + "_" + method.getId();
+		s = "m" + method.getId() + "_" + method.getName().getText();
 		
 		_methodLabels.put(method, s);
 		return s;
@@ -413,16 +401,34 @@ public class CBackend extends Backend
 	}
 	
 	@Override
-	public void visit(InterfaceType itype)
+	public void visit(InterfaceConcreteType ct)
 	{
-		print(ctype(itype));
+		print(ctypes(ct));
 		print("\n{\n");
 		print("\tvoid* o;\n");
 		
-		for (VirtualMethod m : itype.getMethods())
+		for (Method m : ct.getMethods())
 		{
 			print("\t");
 			method_header(m);
+			print(";\n");
+		}
+		
+		print("};\n\n");
+	}
+	
+	@Override
+	public void visit(ObjectConcreteType ct)
+	{
+		print(ctypes(ct));
+		print("\n{\n");
+		
+		for (InterfaceConcreteType t : ct.getDowncasts())
+		{
+			print("\t");
+			print(ctypes(t));
+			print(" ");
+			print(clabel(t));
 			print(";\n");
 		}
 		
@@ -453,37 +459,38 @@ public class CBackend extends Backend
 			print(";\n");
 		}
 		
-		for (InterfaceType i : constructor.getInterfaces())
+		for (ObjectConcreteType t : constructor.getObjects())
 		{
 			print("\t");
-			print(ctype(i));
+			print(ctypes(t));
 			print(" ");
-			print(clabel(i));
+			print(clabel(t));
 			print(";\n");
 		}
 		
 		print("};\n\n");
 	}
 	
-	private void method_header(VirtualMethod method)
+	private void method_header(Method method)
 	{
-		List<Type> intypes = method.getInputTypes();
-		List<Type> outtypes = method.getOutputTypes();
+		FunctionHeaderNode fhn = method.getNode();
+		ParameterDeclarationListNode inputs = fhn.getInputParametersNode();
+		ParameterDeclarationListNode outputs = fhn.getOutputParametersNode();
 		
 		print("void (*");
 		print(clabel(method));
 		print(")(void*");
 
-		for (Type t : intypes)
+		for (int i = 0; i < inputs.getNumberOfChildren(); i++)
 		{
 			print(", ");
-			print(ctype(t));
+			print(ctype(inputs.getParameter(i).getTypeRef().getConcreteType()));
 		}
 		
-		for (Type t : outtypes)
+		for (int i = 0; i < outputs.getNumberOfChildren(); i++)
 		{
 			print(", ");
-			print(ctype(t));
+			print(ctype(outputs.getParameter(i).getTypeRef().getConcreteType()));
 			print("*");
 		}
 		
@@ -492,9 +499,9 @@ public class CBackend extends Backend
 	
 	private void function_header(Function f)
 	{
-		FunctionDefinitionNode node = (FunctionDefinitionNode) f.getNode();
-		ParameterDeclarationListNode inparams = node.getFunctionHeader().getInputParametersNode();
-		ParameterDeclarationListNode outparams = node.getFunctionHeader().getOutputParametersNode();
+		FunctionHeaderNode node = f.getNode();
+		ParameterDeclarationListNode inparams = node.getInputParametersNode();
+		ParameterDeclarationListNode outparams = node.getOutputParametersNode();
 		
 		print("static void ");
 		print(clabel(f));
@@ -510,7 +517,7 @@ public class CBackend extends Backend
 			first = false;
 		}
 		
-		for (Node n : inparams)
+		for (IsNode n : inparams)
 		{
 			ParameterDeclarationNode p = (ParameterDeclarationNode) n;
 			Symbol symbol = p.getSymbol();
@@ -525,7 +532,7 @@ public class CBackend extends Backend
 			print(clabel(symbol));
 		}
 		
-		for (Node n : outparams)
+		for (IsNode n : outparams)
 		{
 			ParameterDeclarationNode p = (ParameterDeclarationNode) n;
 			Symbol symbol = p.getSymbol();
@@ -682,30 +689,37 @@ public class CBackend extends Backend
 			}
 		}
 		
-		/* Initialise any interfaces the constructor implements. */
+		/* Initialise any objects this constructor implements. */
 		
-		for (InterfaceType i : constructor.getInterfaces())
+		for (ObjectConcreteType oct : constructor.getObjects())
 		{
-			print("\t");
-			print(clabel(constructor));
-			print("->");
-			print(clabel(i));
-			print(".o = ");
-			print(clabel(constructor));
-			print(";\n");
-			
-			for (VirtualMethod vm : i.getMethods())
+			for (InterfaceConcreteType ict : oct.getDowncasts())
 			{
-				Function f = constructor.getFunctionForVirtualMethod(vm);
 				print("\t");
 				print(clabel(constructor));
 				print("->");
-				print(clabel(i));
+				print(clabel(oct));
 				print(".");
-				print(clabel(vm));
-				print(" = ");
-				print(clabel(f));
+				print(clabel(ict));
+				print(".o = ");
+				print(clabel(constructor));
 				print(";\n");
+				
+				for (Method m : ict.getMethods())
+				{
+					Function f = oct.getFunctionForMethod(m);
+					print("\t");
+					print(clabel(constructor));
+					print("->");
+					print(clabel(oct));
+					print(".");
+					print(clabel(ict));
+					print(".");
+					print(clabel(m));
+					print(" = ");
+					print(clabel(f));
+					print(";\n");
+				}
 			}
 		}
 		
@@ -761,45 +775,14 @@ public class CBackend extends Backend
 	}
 	
 	@Override
-	public void visit(MethodCallInstruction insn, PrimitiveMethod method)
+	public void visit(MethodCallInstruction insn)
 	{
-		Node node = insn.getNode();
-        
-        print("\tS_METHOD_");
-        String methodsig = method.getIdentifier();
-        print(methodsig.replace('.', '_').toUpperCase());
+		Method method = insn.getMethod();
+		Variable receiver = insn.getReceiver();
+		AbstractConcreteType ctype = receiver.getTypeRef().getConcreteType();
+		assert(ctype instanceof InterfaceConcreteType);
 
-        print("(");
-        printvar(node, insn.getReceiver());
-        
-		for (Variable var : insn.getInputVariables())
-		{
-			print(", ");
-			printvar(node, var);
-		}
-		
-		for (Variable var : insn.getOutputVariables())
-		{
-			print(", &");
-			printvar(node, var);
-		}
-		        
-        print(");\n");
-	}
-	
-	@Override
-	public void visit(MethodCallInstruction insn, FunctionMethod method)
-	{
-		Function function = method.getFunction();
-		function_call(insn, clabel(function),
-				clabel(function.getConstructor().getParentConstructor()));
-	}
-	
-	@Override
-	public void visit(MethodCallInstruction insn, VirtualMethod method)
-	{
-		Variable var = insn.getReceiver();
-		String lvalue = clvalue(insn.getNode(), var);
+		String lvalue = clvalue(insn.getNode(), receiver);
 		String callable = lvalue + "->" + clabel(method);
 		String constructor = lvalue + "->o";
 		function_call(insn, callable, constructor);
@@ -814,22 +797,20 @@ public class CBackend extends Backend
 		printvar(node, insn.getOutputVariable());
 		print(" = ");
 		
-		Type srctype = insn.getInputVariable().getType().getConcreteType();
-		Type desttype = insn.getOutputVariable().getType().getConcreteType();
+		AbstractConcreteType srctype = insn.getInputVariable().getTypeRef().getConcreteType();
+		AbstractConcreteType desttype = insn.getOutputVariable().getTypeRef().getConcreteType();
 		if (srctype.equals(desttype))
 			printvar(node, insn.getInputVariable());
 		else
 		{
-			if (desttype instanceof InterfaceType)
-			{
-				InterfaceType destitype = (InterfaceType) desttype;
-				assert(srctype instanceof HasInterfaces);
-				
-				print("&");
-				printvar(node, insn.getInputVariable());
-				print("->");
-				print(clabel(destitype));
-			}
+			assert(desttype instanceof InterfaceConcreteType);
+			
+			InterfaceConcreteType destitype = (InterfaceConcreteType) desttype;
+			
+			print("&");
+			printvar(node, insn.getInputVariable());
+			print("->");
+			print(clabel(destitype));
 		}
 		
 		print(";\n");
@@ -861,11 +842,15 @@ public class CBackend extends Backend
 	public void visit(CreateObjectReferenceInstruction insn)
 	{
 		Node node = insn.getNode();
+		Variable var = insn.getOutputVariable();
+		ObjectConcreteType ctype = (ObjectConcreteType) var.getTypeRef().getConcreteType();
 		
 		print("\t");
-		printvar(node, insn.getOutputVariable());
-		print(" = ");
+		printvar(node, var);
+		print(" = &");
 		print(clabel(insn.getConstructor()));
+		print("->");
+		print(clabel(ctype));
 		print(";\n");
 	}
 	

@@ -6,16 +6,19 @@
 
 package com.cowlark.cowbel.ast;
 
+import com.cowlark.cowbel.core.TypeRef;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.interfaces.HasIdentifier;
 import com.cowlark.cowbel.interfaces.HasSymbol;
+import com.cowlark.cowbel.interfaces.HasTypeRef;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.symbols.Symbol;
 
 public class ParameterDeclarationNode extends Node
-		implements HasSymbol, HasIdentifier
+		implements HasSymbol, HasIdentifier, HasTypeRef
 {
 	private Symbol _symbol;
+	private TypeRef _typeref;
 	
 	public ParameterDeclarationNode(Location start, Location end)
     {
@@ -23,7 +26,7 @@ public class ParameterDeclarationNode extends Node
     }
 
 	public ParameterDeclarationNode(Location start, Location end,
-			IdentifierNode name, AbstractTypeNode type)
+			IdentifierNode name, AbstractTypeExpressionNode type)
     {
 		super(start, end);
 		addChild(name);
@@ -36,9 +39,9 @@ public class ParameterDeclarationNode extends Node
 		return (IdentifierNode) getChild(0);
 	}
 	
-	public AbstractTypeNode getVariableTypeNode()
+	public AbstractTypeExpressionNode getVariableTypeNode()
 	{
-		return (AbstractTypeNode) getChild(1);
+		return (AbstractTypeExpressionNode) getChild(1);
 	}
 	
 	@Override
@@ -51,6 +54,14 @@ public class ParameterDeclarationNode extends Node
 	public void setSymbol(Symbol symbol)
 	{
 	    _symbol = symbol;
+	}
+	
+	@Override
+	public TypeRef getTypeRef()
+	{
+		if (_typeref == null)
+			_typeref = new TypeRef(this);
+		return _typeref;
 	}
 	
 	@Override

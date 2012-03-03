@@ -7,7 +7,7 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import java.util.LinkedList;
-import com.cowlark.cowbel.ast.TypeListNode;
+import com.cowlark.cowbel.ast.InterfaceListNode;
 import com.cowlark.cowbel.ast.TypeVariableNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
@@ -21,7 +21,7 @@ public class TypeListParser extends Parser
 		if (pr.failed())
 		{
 			/* Empty list */
-			return new TypeListNode(location, location);
+			return new InterfaceListNode(location, location);
 		}
 		
 		LinkedList<TypeVariableNode> args = new LinkedList<TypeVariableNode>();		
@@ -46,6 +46,6 @@ public class TypeListParser extends Parser
 			n = pr.end();
 		}
 
-		return new TypeListNode(location, n, args);
+		return new InterfaceListNode(location, n, args);
 	}
 }

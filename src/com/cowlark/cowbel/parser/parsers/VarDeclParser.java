@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import com.cowlark.cowbel.ast.AbstractStatementNode;
 import com.cowlark.cowbel.ast.IdentifierListNode;
 import com.cowlark.cowbel.ast.IdentifierNode;
-import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.ast.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.ParameterDeclarationNode;
 import com.cowlark.cowbel.ast.StatementListNode;
 import com.cowlark.cowbel.ast.VarDeclarationNode;
+import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -57,7 +57,7 @@ public class VarDeclParser extends Parser
 		
 		ParameterDeclarationListNode pdln = (ParameterDeclarationListNode) variablespr;
 		ArrayList<IdentifierNode> identifiers = new ArrayList<IdentifierNode>();
-		for (Node n : pdln)
+		for (IsNode n : pdln)
 		{
 			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
 			identifiers.add(pdn.getIdentifier());
