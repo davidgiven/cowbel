@@ -6,10 +6,7 @@
 
 package com.cowlark.cowbel.errors;
 
-import com.cowlark.cowbel.ast.ExpressionListNode;
 import com.cowlark.cowbel.ast.ExternStatementNode;
-import com.cowlark.cowbel.ast.IdentifierListNode;
-import com.cowlark.cowbel.ast.VarAssignmentNode;
 
 public class InvalidExternTemplate extends CompilationException
 {

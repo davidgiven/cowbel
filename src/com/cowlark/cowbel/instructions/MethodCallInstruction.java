@@ -8,7 +8,7 @@ package com.cowlark.cowbel.instructions;
 
 import java.util.List;
 import com.cowlark.cowbel.ast.Node;
-import com.cowlark.cowbel.methods.Method;
+import com.cowlark.cowbel.core.Method;
 import com.cowlark.cowbel.symbols.Variable;
 
 public class MethodCallInstruction extends Instruction
@@ -60,8 +60,10 @@ public class MethodCallInstruction extends Instruction
 	@Override
 	protected String getShortDescription()
 	{
-	    return _method.getName() + " receiver=" + _receiver.toString() +
-	    	" inputs=" + varlist(_invars) + " outputs=" + varlist(_outvars);
+	    return _method.getName().getText() +
+	    	" receiver=" + _receiver.toString() +
+	    	" inputs=" + varlist(_invars) +
+	    	" outputs=" + varlist(_outvars);
 	}
 	
 	@Override

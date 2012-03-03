@@ -12,10 +12,10 @@ import com.cowlark.cowbel.ast.IdentifierListNode;
 import com.cowlark.cowbel.ast.IdentifierNode;
 import com.cowlark.cowbel.ast.IndirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.IndirectFunctionCallStatementNode;
+import com.cowlark.cowbel.ast.InterfaceListNode;
 import com.cowlark.cowbel.ast.MethodCallExpressionNode;
 import com.cowlark.cowbel.ast.MethodCallStatementNode;
 import com.cowlark.cowbel.ast.Node;
-import com.cowlark.cowbel.ast.TypeListNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -57,7 +57,7 @@ public class MethodCallStatementParser extends Parser
 							identifierpr.start(), pr.end(),
 							(AbstractExpressionNode) seed,
 							(IdentifierNode) identifierpr,
-							(TypeListNode) typeargspr,
+							(InterfaceListNode) typeargspr,
 							(IdentifierListNode) variablespr,
 							(ExpressionListNode) argumentspr);
 				}
@@ -68,7 +68,7 @@ public class MethodCallStatementParser extends Parser
 						identifierpr.start(), argumentspr.end(),
 						(AbstractExpressionNode) seed,
 						(IdentifierNode) identifierpr,
-						(TypeListNode) typeargspr,
+						(InterfaceListNode) typeargspr,
 						(ExpressionListNode) argumentspr);
 				continue;
 			}

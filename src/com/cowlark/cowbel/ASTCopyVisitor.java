@@ -31,6 +31,7 @@ import com.cowlark.cowbel.ast.IndirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.IndirectFunctionCallStatementNode;
 import com.cowlark.cowbel.ast.InferredTypeNode;
 import com.cowlark.cowbel.ast.IntegerConstantNode;
+import com.cowlark.cowbel.ast.InterfaceListNode;
 import com.cowlark.cowbel.ast.InterfaceTypeNode;
 import com.cowlark.cowbel.ast.LabelStatementNode;
 import com.cowlark.cowbel.ast.MethodCallExpressionNode;
@@ -45,17 +46,25 @@ import com.cowlark.cowbel.ast.ReturnVoidStatementNode;
 import com.cowlark.cowbel.ast.StatementListNode;
 import com.cowlark.cowbel.ast.StringConstantNode;
 import com.cowlark.cowbel.ast.TypeAssignmentNode;
-import com.cowlark.cowbel.ast.TypeListNode;
 import com.cowlark.cowbel.ast.TypeVariableNode;
 import com.cowlark.cowbel.ast.VarAssignmentNode;
 import com.cowlark.cowbel.ast.VarDeclarationNode;
 import com.cowlark.cowbel.ast.VarReferenceNode;
 import com.cowlark.cowbel.ast.WhileStatementNode;
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.IsNode;
 
 public class ASTCopyVisitor extends RecursiveASTVisitor
 {
+	public static ASTCopyVisitor Instance =
+		new ASTCopyVisitor();
+	
 	private Node _result = null;
+	
+	public void reset()
+	{
+		_result = null;
+	}
 	
 	public Node getResult()
     {
@@ -311,9 +320,9 @@ public class ASTCopyVisitor extends RecursiveASTVisitor
 	}
 
 	@Override
-	public void visit(TypeListNode node) throws CompilationException
+	public void visit(InterfaceListNode node) throws CompilationException
 	{
-		_result = new TypeListNode(node.start(), node.end());
+		_result = new InterfaceListNode(node.start(), node.end());
 	    super.visit(node);
 	}
 	
@@ -373,7 +382,7 @@ public class ASTCopyVisitor extends RecursiveASTVisitor
 		Node result = _result;
 		assert(result != null);
 		
-		for (Node n : node)
+		for (IsNode n : node)
 		{
 			_result = null;
 			n.visit(this);

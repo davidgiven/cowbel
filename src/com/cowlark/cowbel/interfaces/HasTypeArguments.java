@@ -6,9 +6,9 @@
 
 package com.cowlark.cowbel.interfaces;
 
-import com.cowlark.cowbel.ast.TypeListNode;
+import com.cowlark.cowbel.ast.InterfaceListNode;
 
 public interface HasTypeArguments
 {
-	public TypeListNode getTypeArguments();
+	public InterfaceListNode getTypeArguments();
 }

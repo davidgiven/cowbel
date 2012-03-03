@@ -6,22 +6,17 @@
 
 package com.cowlark.cowbel.ast;
 
-import com.cowlark.cowbel.Function;
+import com.cowlark.cowbel.core.Callable;
 import com.cowlark.cowbel.errors.CompilationException;
-import com.cowlark.cowbel.interfaces.HasFunction;
-import com.cowlark.cowbel.interfaces.HasIdentifier;
-import com.cowlark.cowbel.interfaces.HasInputs;
-import com.cowlark.cowbel.interfaces.HasSymbol;
-import com.cowlark.cowbel.interfaces.HasTypeArguments;
+import com.cowlark.cowbel.interfaces.IsFunctionCallNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.symbols.Symbol;
 
 public class DirectFunctionCallExpressionNode extends AbstractExpressionNode
-		implements HasSymbol, HasIdentifier, HasInputs, HasTypeArguments,
-			HasFunction
+		implements IsFunctionCallNode
 {
 	private Symbol _symbol;
-	private Function _function;
+	private Callable _callable;
 	
 	public DirectFunctionCallExpressionNode(Location start, Location end)
     {
@@ -30,7 +25,7 @@ public class DirectFunctionCallExpressionNode extends AbstractExpressionNode
 	
 	public DirectFunctionCallExpressionNode(Location start, Location end,
 			IdentifierNode object,
-			TypeListNode types,
+			InterfaceListNode types,
 			ExpressionListNode arguments)
     {
 		super(start, end);
@@ -46,9 +41,9 @@ public class DirectFunctionCallExpressionNode extends AbstractExpressionNode
 	}
 	
 	@Override
-	public TypeListNode getTypeArguments()
+	public InterfaceListNode getTypeArguments()
 	{
-		return (TypeListNode) getChild(1);
+		return (InterfaceListNode) getChild(1);
 	}
 	
 	@Override
@@ -76,14 +71,14 @@ public class DirectFunctionCallExpressionNode extends AbstractExpressionNode
 	}
 	
 	@Override
-	public Function getFunction()
+	public Callable getCallable()
 	{
-	    return _function;
+	    return _callable;
 	}
 	
 	@Override
-	public void setFunction(Function function)
+	public void setCallable(Callable function)
 	{
-		_function = function;
+		_callable = function;
 	}
 }

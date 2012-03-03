@@ -7,7 +7,7 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import com.cowlark.cowbel.ast.IdentifierNode;
-import com.cowlark.cowbel.ast.TypeListNode;
+import com.cowlark.cowbel.ast.InterfaceListNode;
 import com.cowlark.cowbel.ast.TypeVariableNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
@@ -27,6 +27,6 @@ public class TypeVariableParser extends Parser
 
 		return new TypeVariableNode(location, typeassignmentspr.end(),
 				(IdentifierNode) identifierpr,
-				(TypeListNode) typeassignmentspr);
+				(InterfaceListNode) typeassignmentspr);
 	}
 }

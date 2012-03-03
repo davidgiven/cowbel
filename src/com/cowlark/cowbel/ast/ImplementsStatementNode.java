@@ -17,15 +17,15 @@ public class ImplementsStatementNode extends AbstractStatementNode
     }
 	
 	public ImplementsStatementNode(Location start, Location end,
-			AbstractTypeNode value)
+			AbstractTypeExpressionNode value)
     {
 		super(start, end);
 		addChild(value);
     }
 
-	public AbstractTypeNode getTypeNode()
+	public AbstractTypeExpressionNode getTypeNode()
 	{
-		return (AbstractTypeNode) getChild(0);
+		return (AbstractTypeExpressionNode) getChild(0);
 	}
 	
 	@Override

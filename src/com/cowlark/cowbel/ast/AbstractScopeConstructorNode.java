@@ -8,33 +8,25 @@ package com.cowlark.cowbel.ast;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import com.cowlark.cowbel.Compiler;
-import com.cowlark.cowbel.Constructor;
-import com.cowlark.cowbel.Function;
-import com.cowlark.cowbel.FunctionTemplate;
-import com.cowlark.cowbel.Label;
+import com.cowlark.cowbel.core.AbstractImplementation;
+import com.cowlark.cowbel.core.Callable;
+import com.cowlark.cowbel.core.Constructor;
+import com.cowlark.cowbel.core.Function;
+import com.cowlark.cowbel.core.FunctionTemplateSignature;
+import com.cowlark.cowbel.core.Implementation;
+import com.cowlark.cowbel.core.Label;
 import com.cowlark.cowbel.errors.AmbiguousVariableReference;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.IdentifierNotFound;
 import com.cowlark.cowbel.errors.MultipleDefinitionException;
-import com.cowlark.cowbel.interfaces.HasIdentifier;
-import com.cowlark.cowbel.interfaces.HasInputs;
-import com.cowlark.cowbel.interfaces.HasTypeArguments;
-import com.cowlark.cowbel.interfaces.IsMethod;
-import com.cowlark.cowbel.methods.FunctionMethod;
-import com.cowlark.cowbel.methods.Method;
-import com.cowlark.cowbel.methods.VirtualMethod;
+import com.cowlark.cowbel.interfaces.IsCallNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.symbols.Symbol;
-import com.cowlark.cowbel.types.HasInterfaces;
-import com.cowlark.cowbel.types.InterfaceType;
 
 public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
-		implements HasInterfaces
 {
 	public enum ScopeType
 	{
@@ -50,13 +42,10 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 	private TreeSet<AbstractScopeConstructorNode> _importedScopes = new TreeSet<AbstractScopeConstructorNode>();
 	private TreeSet<AbstractScopeConstructorNode> _exportedScopes = new TreeSet<AbstractScopeConstructorNode>();
 	private TreeSet<Symbol> _symbols = new TreeSet<Symbol>();
-	private TreeSet<Function> _functions = new TreeSet<Function>();
-	private TreeSet<FunctionTemplate> _functionTemplates = new TreeSet<FunctionTemplate>();
-	private TreeMap<VirtualMethod, Function> _virtualMethods = new TreeMap<VirtualMethod, Function>();
 	private TreeMap<String, Label> _labels = new TreeMap<String, Label>();
-	private TreeSet<InterfaceType> _interfaces = new TreeSet<InterfaceType>();
 	private Function _function;
 	private Constructor _constructor;
+	private Implementation _implementation;
 	private ScopeType _scopeType = ScopeType.TRIVIAL;
 	
 	public AbstractScopeConstructorNode(Location start, Location end)
@@ -111,14 +100,16 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 		_constructor = constructor;
 	}
 	
+	public Implementation getImplementation()
+    {
+		if (_implementation == null)
+			_implementation = new Implementation(this);
+	    return _implementation;
+    }
+	
 	public Set<Symbol> getSymbols()
 	{
 		return _symbols;
-	}
-	
-	public Set<FunctionTemplate> getFunctionTemplates()
-	{
-		return _functionTemplates;
 	}
 	
 	public Collection<Label> getLabels()
@@ -135,12 +126,6 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 	{
 		return _exportedScopes;
 	}
-	
-	@Override
-    public Collection<InterfaceType> getInterfaces()
-    {
-	    return Collections.unmodifiableCollection(_interfaces);
-    }
 	
 	@Override
 	public String getShortDescription()
@@ -241,17 +226,6 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 				System.out.println(e.toString());
 			}
 		}
-		
-		if (!_interfaces.isEmpty())
-		{
-			spaces(indent);
-			System.out.println("interfaces implemented here:");
-			for (InterfaceType i : _interfaces)
-			{
-				spaces(indent+1);
-				System.out.println(i.toString());
-			}
-		}
 	}
 	
 	private FunctionScopeConstructorNode _functionScope;
@@ -270,12 +244,6 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 		{
 			if (s.getIdentifier().getText().equals(symbolname))
 				throw new MultipleDefinitionException(s, symbol);
-		}
-		
-		for (FunctionTemplate ft : _functionTemplates)
-		{
-			if (ft.getName().equals(symbolname))
-				throw new MultipleDefinitionException(ft, symbol);
 		}
 		
 		_symbols.add(symbol);
@@ -316,107 +284,23 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 		throw new IdentifierNotFound(this, name);
 	}
 
-	public void addFunctionTemplate(FunctionTemplate template)
-			throws CompilationException
-	{
-		String name = template.getName();
-		for (Symbol s : _symbols)
-		{
-			if (s.getIdentifier().getText().equals(name))
-				throw new MultipleDefinitionException(s, template);
-		}
-		
-		String signature = template.getSignature();
-		for (FunctionTemplate ft : _functionTemplates)
-		{
-			if (ft.getSignature().equals(signature))
-				throw new MultipleDefinitionException(ft, template);
-		}
-		
-		_functionTemplates.add(template);
-	}
-	
 	/* Recurse all the way to the top. */
-	public <T extends Node & HasInputs & HasIdentifier & HasTypeArguments>
-		Function lookupFunction(T node)
+	public Callable lookupFunction(IsCallNode node)
 			throws CompilationException
 	{
-		StringBuilder sb = new StringBuilder();
-		sb.append(node.getIdentifier().getText());
-		sb.append("<");
-		sb.append(node.getTypeArguments().getNumberOfChildren());
-		sb.append(">(");
-		sb.append(node.getInputs().getNumberOfChildren());
-		sb.append(")");
-		String signature = sb.toString();
+		FunctionTemplateSignature signature = new FunctionTemplateSignature(node);
 
 		AbstractScopeConstructorNode scope = this;
 		while (scope != null)
 		{
-			for (FunctionTemplate ft : scope.getFunctionTemplates())
-			{
-				if (ft.getSignature().equals(signature))
-				{
-					Function function = ft.instantiate(node, node.getTypeArguments());
-					scope.addFunction(function);
-					return function;
-				}
-			}
-				
+			AbstractImplementation impl = scope.getImplementation();
+			Callable callable = impl.lookupMethod(signature, node);
+			if (callable != null)
+				return callable;
+			
 			scope = scope.getScope();
 		}
 				
-		return null;
-	}
-
-	/** Looks up a method on the specified scope and returns it. Used for
-	 * direct class calls only (*not* virtual calls via interfaces).
-	 * 
-	 * Currently just looks at the current scope. */
-
-	public <T extends Node & HasInputs & IsMethod & HasTypeArguments>
-		Method lookupMethod(T node)
-			throws CompilationException
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.append(node.getIdentifier().getText());
-		sb.append("<");
-		sb.append(node.getTypeArguments().getNumberOfChildren());
-		sb.append(">(");
-		sb.append(node.getInputs().getNumberOfChildren());
-		sb.append(")");
-		String signature = sb.toString();
-
-		for (FunctionTemplate ft : getFunctionTemplates())
-		{
-			if (ft.getSignature().equals(signature))
-			{
-				Function function = ft.instantiate(node,
-						node.getTypeArguments());
-				addFunction(function);
-				return new FunctionMethod(function);
-			}
-		}
-
-		return null;
-	}
-	
-	public Method lookupMethod(Node node, VirtualMethod method)
-			throws CompilationException
-	{
-		String signature = method.getName();
-	
-		for (FunctionTemplate ft : getFunctionTemplates())
-		{
-			if (ft.getSignature().equals(signature))
-			{
-				Function function = ft.instantiate(node,
-						method.getTypeAssignments());
-				addVirtualMethod(method, function);
-				return new FunctionMethod(function);
-			}
-		}
-	
 		return null;
 	}
 
@@ -437,6 +321,16 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 		}
 		
 		recursive_import(n, leaf);
+	}
+	
+	public void importScope(AbstractScopeConstructorNode symscope)
+	{
+		/* No need to import the current scope. */
+		
+		if (symscope == this)
+			return;
+		
+		recursive_import(symscope, this);
 	}
 	
 	public void importSymbol(Symbol symbol)
@@ -520,33 +414,5 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 		
 		Function f = s.getFunction();
 		return (f != _function);
-	}
-	
-	public void addInterface(InterfaceType itype) throws CompilationException
-	{
-		itype.addImplementation(this);
-		_interfaces.add(itype);
-		Compiler.Instance.addInterface(itype);
-	}
-	
-	public void addFunction(Function function)
-	{
-		_functions.add(function);
-	}
-	
-	public Collection<Function> getFunctions()
-	{
-		return Collections.unmodifiableCollection(_functions);
-	}
-	
-	public void addVirtualMethod(VirtualMethod method, Function function)
-	{
-		addFunction(function);
-		_virtualMethods.put(method, function);
-	}
-	
-	public Collection<Map.Entry<VirtualMethod, Function>> getVirtualMethods()
-	{
-		return Collections.unmodifiableCollection(_virtualMethods.entrySet());
 	}
 }

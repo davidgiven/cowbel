@@ -6,7 +6,7 @@
 
 package com.cowlark.cowbel.ast;
 
-import com.cowlark.cowbel.Label;
+import com.cowlark.cowbel.core.Label;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.interfaces.HasLabel;
 import com.cowlark.cowbel.parser.core.Location;

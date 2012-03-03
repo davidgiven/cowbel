@@ -6,17 +6,17 @@
 
 package com.cowlark.cowbel.errors;
 
-import com.cowlark.cowbel.TypeContext;
 import com.cowlark.cowbel.ast.TypeVariableNode;
+import com.cowlark.cowbel.core.InterfaceContext;
 
 public class TypeNotFound extends CompilationException
 {
     private static final long serialVersionUID = -2409430033855342682L;
     
-	private TypeContext _typecontext;
+	private InterfaceContext _typecontext;
     private TypeVariableNode _typevar;
     
-	public TypeNotFound(TypeContext typecontext, TypeVariableNode typevar)
+	public TypeNotFound(InterfaceContext typecontext, TypeVariableNode typevar)
     {
 		_typecontext = typecontext;
 		_typevar = typevar;

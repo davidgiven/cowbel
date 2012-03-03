@@ -15,7 +15,7 @@ public class IntegerConstantNode extends AbstractExpressionLiteralNode
 	
 	public IntegerConstantNode(Location start, Location end, long value)
     {
-        super(start, end);
+        super(start, end, "int");
         _value = value;
     }
 	

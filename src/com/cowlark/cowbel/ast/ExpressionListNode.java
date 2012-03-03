@@ -6,11 +6,9 @@
 
 package com.cowlark.cowbel.ast;
 
-import java.util.ArrayList;
 import java.util.List;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
-import com.cowlark.cowbel.types.Type;
 
 public class ExpressionListNode extends Node
 {
@@ -32,22 +30,6 @@ public class ExpressionListNode extends Node
 	    return (AbstractExpressionNode) getChild(i);
 	}
 	
-	private List<Type> _types;
-	public List<Type> calculateTypes() throws CompilationException
-	{
-		if (_types == null)
-		{
-			_types = new ArrayList<Type>();
-			for (Node n : this)
-			{
-				AbstractExpressionNode e = (AbstractExpressionNode) n; 
-				Type type = e.calculateType();
-				_types.add(type);
-			}
-		}
-		return _types;
-	}
-			
 	@Override
 	public void visit(ASTVisitor visitor) throws CompilationException
 	{

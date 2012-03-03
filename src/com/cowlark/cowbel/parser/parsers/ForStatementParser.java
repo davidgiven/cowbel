@@ -14,11 +14,11 @@ import com.cowlark.cowbel.ast.IdentifierListNode;
 import com.cowlark.cowbel.ast.IdentifierNode;
 import com.cowlark.cowbel.ast.InferredTypeNode;
 import com.cowlark.cowbel.ast.IntegerConstantNode;
+import com.cowlark.cowbel.ast.InterfaceListNode;
 import com.cowlark.cowbel.ast.MethodCallExpressionNode;
 import com.cowlark.cowbel.ast.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.ParameterDeclarationNode;
 import com.cowlark.cowbel.ast.StatementListNode;
-import com.cowlark.cowbel.ast.TypeListNode;
 import com.cowlark.cowbel.ast.VarAssignmentNode;
 import com.cowlark.cowbel.ast.VarDeclarationNode;
 import com.cowlark.cowbel.ast.VarReferenceNode;
@@ -113,7 +113,7 @@ public class ForStatementParser extends Parser
 						new VarReferenceNode(variablepr.start(), variablepr.end(),
 							loopcounter),
 						new IdentifierNode(comparisonmethodloc, comparisonmethodend),
-						new TypeListNode(comparisonmethodloc, comparisonmethodend),
+						new InterfaceListNode(comparisonmethodloc, comparisonmethodend),
 						new ExpressionListNode(maximumpr.start(), maximumpr.end(),
 							(AbstractExpressionNode) maximumpr)
 					),
@@ -142,7 +142,7 @@ public class ForStatementParser extends Parser
 								new VarReferenceNode(variablepr.start(), variablepr.end(),
 									loopcounter),
 								new IdentifierNode(incrementmethodloc, incrementmethodend),
-								new TypeListNode(incrementmethodloc, incrementmethodend),
+								new InterfaceListNode(incrementmethodloc, incrementmethodend),
 								new ExpressionListNode(steppr.start(), steppr.end(),
 									(AbstractExpressionNode) steppr)
 									)

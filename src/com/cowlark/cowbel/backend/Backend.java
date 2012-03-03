@@ -14,18 +14,16 @@ import java.util.Iterator;
 import java.util.TreeSet;
 import org.apache.commons.io.IOUtils;
 import com.cowlark.cowbel.BasicBlock;
-import com.cowlark.cowbel.Compiler;
-import com.cowlark.cowbel.Constructor;
-import com.cowlark.cowbel.Function;
+import com.cowlark.cowbel.core.Compiler;
+import com.cowlark.cowbel.core.Constructor;
+import com.cowlark.cowbel.core.Function;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.instructions.Instruction;
 import com.cowlark.cowbel.instructions.InstructionVisitor;
-import com.cowlark.cowbel.instructions.MethodCallInstruction;
-import com.cowlark.cowbel.methods.MethodVisitor;
-import com.cowlark.cowbel.types.InterfaceType;
+import com.cowlark.cowbel.types.InterfaceConcreteType;
+import com.cowlark.cowbel.types.ObjectConcreteType;
 
 public abstract class Backend extends InstructionVisitor
-		implements MethodVisitor
 {
 	private TreeSet<BasicBlock> _pending = new TreeSet<BasicBlock>();
 	private TreeSet<BasicBlock> _seen = new TreeSet<BasicBlock>();
@@ -75,11 +73,13 @@ public abstract class Backend extends InstructionVisitor
 	protected void print(char c)
 	{
 		_stream.print(c);
+		_stream.flush();
 	}
 	
 	protected <T> void print(T value)
 	{
 		_stream.print(value);
+		_stream.flush();
 	}
 	
 	public void prologue() throws CompilationException
@@ -127,18 +127,13 @@ public abstract class Backend extends InstructionVisitor
 		insn.visit(this);
 	}
 	
-	public abstract void visit(InterfaceType itype);
+	public abstract void visit(InterfaceConcreteType itype);
+	public abstract void visit(ObjectConcreteType itype);
 	public abstract void visit(Constructor constructor);
 	
 	@Override
 	public void visit(Instruction insn)
 	{
 		assert(false);
-	}
-	
-	@Override
-	public void visit(MethodCallInstruction insn)
-	{
-		insn.getMethod().visit(insn, this);
 	}
 }

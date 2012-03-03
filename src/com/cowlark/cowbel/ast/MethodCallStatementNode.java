@@ -6,18 +6,16 @@
 
 package com.cowlark.cowbel.ast;
 
+import com.cowlark.cowbel.core.Callable;
 import com.cowlark.cowbel.errors.CompilationException;
-import com.cowlark.cowbel.interfaces.HasInputs;
 import com.cowlark.cowbel.interfaces.HasOutputs;
-import com.cowlark.cowbel.interfaces.HasTypeArguments;
-import com.cowlark.cowbel.interfaces.IsMethod;
-import com.cowlark.cowbel.methods.Method;
+import com.cowlark.cowbel.interfaces.IsMethodCallNode;
 import com.cowlark.cowbel.parser.core.Location;
 
 public class MethodCallStatementNode extends AbstractStatementNode
-	implements IsMethod, HasInputs, HasOutputs, HasTypeArguments
+	implements IsMethodCallNode, HasOutputs
 {
-	private Method _method;
+	private Callable _callable;
 	
 	public MethodCallStatementNode(Location start, Location end)
     {
@@ -27,7 +25,7 @@ public class MethodCallStatementNode extends AbstractStatementNode
 	public MethodCallStatementNode(Location start, Location end,
 			AbstractExpressionNode object,
 			IdentifierNode method,
-			TypeListNode types,
+			InterfaceListNode types,
 			IdentifierListNode variables,
 			ExpressionListNode arguments)
     {
@@ -39,14 +37,16 @@ public class MethodCallStatementNode extends AbstractStatementNode
 		addChild(arguments);
     }
 	
-	public Method getMethod()
+	@Override
+    public Callable getCallable()
 	{
-		return _method;
+		return _callable;
 	}
 	
-	public void setMethod(Method method)
+	@Override
+    public void setCallable(Callable callable)
 	{
-		_method = method;
+		_callable = callable;
 	}
 	
 	@Override
@@ -62,9 +62,9 @@ public class MethodCallStatementNode extends AbstractStatementNode
 	}
 	
 	@Override
-	public TypeListNode getTypeArguments()
+	public InterfaceListNode getTypeArguments()
 	{
-		return (TypeListNode) getChild(2);
+		return (InterfaceListNode) getChild(2);
 	}
 	
 	@Override

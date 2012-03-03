@@ -15,7 +15,7 @@ public class BooleanConstantNode extends AbstractExpressionLiteralNode
 	
 	public BooleanConstantNode(Location start, Location end, boolean value)
     {
-        super(start, end);
+        super(start, end, "boolean");
         _value = value;
     }
 	

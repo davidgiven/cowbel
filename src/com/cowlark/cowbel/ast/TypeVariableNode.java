@@ -6,11 +6,14 @@
 
 package com.cowlark.cowbel.ast;
 
+import com.cowlark.cowbel.core.Interface;
+import com.cowlark.cowbel.core.InterfaceContext;
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.HasTypeArguments;
 import com.cowlark.cowbel.parser.core.Location;
-import com.cowlark.cowbel.types.Type;
 
-public class TypeVariableNode extends AbstractTypeNode
+public class TypeVariableNode extends AbstractTypeExpressionNode
+		implements HasTypeArguments
 {
 	public TypeVariableNode(Location start, Location end)
     {
@@ -18,7 +21,7 @@ public class TypeVariableNode extends AbstractTypeNode
     }
 	
 	public TypeVariableNode(Location start, Location end,
-			IdentifierNode node, TypeListNode typeassignments)
+			IdentifierNode node, InterfaceListNode typeassignments)
     {
         super(start, end);
         addChild(node);
@@ -30,15 +33,17 @@ public class TypeVariableNode extends AbstractTypeNode
 		return (IdentifierNode) getChild(0);
 	}
 	
-	public TypeListNode getTypeAssignments()
+	@Override
+    public InterfaceListNode getTypeArguments()
 	{
-		return (TypeListNode) getChild(1);
+		return (InterfaceListNode) getChild(1);
 	}
 	
 	@Override
-	public Type calculateType() throws CompilationException
+	public Interface createInterface() throws CompilationException
 	{
-		return getTypeContext().lookupType(this);
+		InterfaceContext tc = getTypeContext();
+		return tc.lookupType(this);
 	}
 	
 	@Override

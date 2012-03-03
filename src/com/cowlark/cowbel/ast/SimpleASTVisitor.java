@@ -7,13 +7,14 @@
 package com.cowlark.cowbel.ast;
 
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.IsNode;
 
 public class SimpleASTVisitor extends ASTVisitor
 {
 	@Override
 	public void visit(StatementListNode node) throws CompilationException
 	{
-		for (Node n : node)
+		for (IsNode n : node)
 			n.visit(this);
 	}
 	

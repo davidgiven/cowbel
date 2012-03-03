@@ -21,7 +21,6 @@ public class DummyExpressionNode extends AbstractExpressionNode
         super(start, end);
         addChild(child);
     }
-	
 
 	public AbstractExpressionNode getChild()
 	{

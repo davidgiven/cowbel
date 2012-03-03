@@ -7,13 +7,14 @@
 package com.cowlark.cowbel.ast;
 
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.IsNode;
 
 public class RecursiveASTVisitor extends ASTVisitor
 {
 	@Override
 	public void visit(Node node) throws CompilationException
 	{
-		for (Node n : node)
+		for (IsNode n : node)
 			n.visit(this);
 	}
 }

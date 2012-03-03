@@ -6,33 +6,30 @@
 
 package com.cowlark.cowbel.symbols;
 
-import com.cowlark.cowbel.Constructor;
 import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.IdentifierNode;
 import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.core.Constructor;
+import com.cowlark.cowbel.core.TypeRef;
 import com.cowlark.cowbel.interfaces.HasIdentifier;
 import com.cowlark.cowbel.interfaces.HasNode;
 import com.cowlark.cowbel.interfaces.HasScope;
-import com.cowlark.cowbel.interfaces.HasType;
-import com.cowlark.cowbel.types.Type;
+import com.cowlark.cowbel.interfaces.HasTypeRef;
+import com.cowlark.cowbel.utils.DeterministicObject;
 
-public abstract class Symbol implements Comparable<Symbol>, HasNode, HasScope,
-		HasIdentifier, HasType
+public abstract class Symbol extends DeterministicObject<Symbol>
+		implements HasNode, HasScope, HasIdentifier, HasTypeRef
 {
-	private static int _globalId = 0;
-	
-	private int _id = _globalId++;
-	
 	private Node _node;
 	private IdentifierNode _name;
-	private Type _type;
+	private TypeRef _typeref;
 	private AbstractScopeConstructorNode _scope;
 	
-	public Symbol(Node node, IdentifierNode name, Type type)
+	public Symbol(Node node, IdentifierNode name, TypeRef typeref)
 	{
 		_node = node;
 		_name = name;
-		_type = type;
+		_typeref = typeref;
 	}
 
 	@Override
@@ -48,32 +45,17 @@ public abstract class Symbol implements Comparable<Symbol>, HasNode, HasScope,
 	}
 	
 	@Override
-    public Type getType()
+	public TypeRef getTypeRef()
 	{
-		return _type;
-	}
-	
-	public void setType(Type type)
-	{
-		_type = type;
+	    return _typeref;
 	}
 	
 	@Override
 	public String toString()
 	{
-		return _name.getText() + ": " + _type.getCanonicalTypeName();
+		return _name.getText() + ": " + _typeref.toString();
 	}
 		
-	@Override
-	public int compareTo(Symbol other)
-	{
-		if (_id < other._id)
-			return -1;
-		if (_id > other._id)
-			return 1;
-		return 0;
-	}
-
 	public void setScope(AbstractScopeConstructorNode scope)
 	{
 		_scope = scope;

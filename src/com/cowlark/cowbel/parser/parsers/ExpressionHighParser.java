@@ -11,8 +11,8 @@ import com.cowlark.cowbel.ast.DirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.ExpressionListNode;
 import com.cowlark.cowbel.ast.IdentifierNode;
 import com.cowlark.cowbel.ast.IndirectFunctionCallExpressionNode;
+import com.cowlark.cowbel.ast.InterfaceListNode;
 import com.cowlark.cowbel.ast.MethodCallExpressionNode;
-import com.cowlark.cowbel.ast.TypeListNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
 
@@ -34,7 +34,7 @@ public class ExpressionHighParser extends Parser
 		
 		return new MethodCallExpressionNode(location, arguments.end(),
 				(AbstractExpressionNode) seed, (IdentifierNode) methodpr,
-				(TypeListNode) typeargspr,
+				(InterfaceListNode) typeargspr,
 				(ExpressionListNode) arguments);
 	}
 	
@@ -68,7 +68,7 @@ public class ExpressionHighParser extends Parser
 		
 		return new DirectFunctionCallExpressionNode(location, argumentspr.end(),
 				(IdentifierNode) identifierpr,
-				(TypeListNode) typeargspr,
+				(InterfaceListNode) typeargspr,
 				(ExpressionListNode) argumentspr);
 	}
 	

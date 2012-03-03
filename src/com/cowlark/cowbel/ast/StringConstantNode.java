@@ -15,7 +15,7 @@ public class StringConstantNode extends AbstractExpressionLiteralNode
 	
 	public StringConstantNode(Location start, Location end, String value)
     {
-        super(start, end);
+        super(start, end, "string");
         _value = value;
     }
 	
