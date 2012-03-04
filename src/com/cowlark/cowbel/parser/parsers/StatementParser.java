@@ -69,6 +69,10 @@ public class StatementParser extends Parser
 		if (pr13.success())
 			return pr13;
 		
+		ParseResult pr20 = TypeExternStatementParser.parse(location);
+		if (pr20.success())
+			return pr20;
+		
 		ParseResult pr17 = TypeAssignmentParser.parse(location);
 		if (pr17.success())
 			return pr17;
@@ -100,6 +104,7 @@ public class StatementParser extends Parser
 			return pr16;
 		
 		return combineParseErrors(pr1, pr2, pr3, pr4, pr5, pr6, pr7, pr8, pr9,
-				pr10, pr11, pr12, pr13, pr14, pr15, pr16, pr17, pr18, pr19);
+				pr10, pr11, pr12, pr13, pr14, pr15, pr16, pr17, pr18, pr19,
+				pr20);
 	}
 }

@@ -62,6 +62,8 @@ public abstract class Parser
 	public static InterfaceEntryParser InterfaceEntryParser = new InterfaceEntryParser();
 	public static ImplementsStatementParser ImplementsStatementParser = new ImplementsStatementParser();
 	public static ExternStatementParser ExternStatementParser = new ExternStatementParser();
+	public static TypeExternStatementParser TypeExternStatementParser = new TypeExternStatementParser();
+	public static ExternExpressionParser ExternExpressionParser = new ExternExpressionParser();
 	
 	public static Parser EOFParser = new EOFParser();
 	public static Parser DotParser = new TrivialParser(".");

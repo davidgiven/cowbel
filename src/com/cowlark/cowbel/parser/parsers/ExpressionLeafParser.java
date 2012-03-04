@@ -49,6 +49,10 @@ public class ExpressionLeafParser extends Parser
 			return new BlockExpressionNode(location, pr8.end(),
 					(BlockScopeConstructorNode) pr8);
 		
-		return combineParseErrors(pr1, pr2, pr3, pr5, pr6, pr7, pr8);
+		ParseResult pr9 = ExternExpressionParser.parse(location);
+		if (pr9.success())
+			return pr9;
+		
+		return combineParseErrors(pr1, pr2, pr3, pr5, pr6, pr7, pr8, pr9);
 	}
 }
