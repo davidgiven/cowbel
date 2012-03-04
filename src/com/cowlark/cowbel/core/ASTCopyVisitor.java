@@ -4,7 +4,7 @@
  * full license text.
  */
 
-package com.cowlark.cowbel;
+package com.cowlark.cowbel.core;
 
 import com.cowlark.cowbel.ast.BlockExpressionNode;
 import com.cowlark.cowbel.ast.BlockScopeConstructorNode;
@@ -17,6 +17,7 @@ import com.cowlark.cowbel.ast.DoWhileStatementNode;
 import com.cowlark.cowbel.ast.DummyExpressionNode;
 import com.cowlark.cowbel.ast.ExpressionListNode;
 import com.cowlark.cowbel.ast.ExpressionStatementNode;
+import com.cowlark.cowbel.ast.ExternExpressionNode;
 import com.cowlark.cowbel.ast.ExternStatementNode;
 import com.cowlark.cowbel.ast.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.FunctionHeaderNode;
@@ -46,6 +47,7 @@ import com.cowlark.cowbel.ast.ReturnVoidStatementNode;
 import com.cowlark.cowbel.ast.StatementListNode;
 import com.cowlark.cowbel.ast.StringConstantNode;
 import com.cowlark.cowbel.ast.TypeAssignmentNode;
+import com.cowlark.cowbel.ast.TypeExternNode;
 import com.cowlark.cowbel.ast.TypeVariableNode;
 import com.cowlark.cowbel.ast.VarAssignmentNode;
 import com.cowlark.cowbel.ast.VarDeclarationNode;
@@ -373,6 +375,20 @@ public class ASTCopyVisitor extends RecursiveASTVisitor
 	{
 	    _result = new ExternStatementNode(node.start(), node.end(),
 	    		node.getTemplate());
+	    super.visit(node);
+	}
+	
+	@Override
+	public void visit(TypeExternNode node) throws CompilationException
+	{
+		_result = new TypeExternNode(node.start(), node.end());
+	    super.visit(node);
+	}
+
+	@Override
+	public void visit(ExternExpressionNode node) throws CompilationException
+	{
+	    _result = new ExternExpressionNode(node.start(), node.end());
 	    super.visit(node);
 	}
 	

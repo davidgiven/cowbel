@@ -29,7 +29,7 @@ public class TypesNotCompatibleException extends CompilationException
 	@Override
 	public String getMessage()
 	{
-		return "Type contraint " + _interf.getNameHint() + " cannot be " +
+		return "Type constraint " + _interf.getNameHint() + " cannot be " +
 			"satisfied at " +
 				_node.locationAsString();
 	}

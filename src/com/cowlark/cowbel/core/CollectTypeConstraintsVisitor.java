@@ -13,6 +13,7 @@ import com.cowlark.cowbel.ast.DirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.DirectFunctionCallStatementNode;
 import com.cowlark.cowbel.ast.DummyExpressionNode;
 import com.cowlark.cowbel.ast.ExpressionListNode;
+import com.cowlark.cowbel.ast.ExternExpressionNode;
 import com.cowlark.cowbel.ast.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.FunctionHeaderNode;
 import com.cowlark.cowbel.ast.FunctionScopeConstructorNode;
@@ -30,6 +31,7 @@ import com.cowlark.cowbel.ast.VarReferenceNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.FunctionParameterMismatch;
 import com.cowlark.cowbel.interfaces.IsNode;
+import com.cowlark.cowbel.symbols.Variable;
 
 public class CollectTypeConstraintsVisitor extends RecursiveASTVisitor
 {
@@ -83,7 +85,7 @@ public class CollectTypeConstraintsVisitor extends RecursiveASTVisitor
 	public void visit(DummyExpressionNode node) throws CompilationException
 	{
 	    super.visit(node);
-		node.getTypeRef().addParent(node.getTypeRef());
+		node.getTypeRef().addParent(node.getChild().getTypeRef());
 	}
 	
 	@Override
@@ -160,6 +162,14 @@ public class CollectTypeConstraintsVisitor extends RecursiveASTVisitor
 	}
 	
 	@Override
+	public void visit(ExternExpressionNode node) throws CompilationException
+	{
+	    super.visit(node);
+	    
+	    node.getTypeRef().addParent(node.getExpression().getTypeRef());
+	}
+	
+	@Override
 	public void visit(FunctionScopeConstructorNode node)
 	        throws CompilationException
 	{
@@ -189,7 +199,8 @@ public class CollectTypeConstraintsVisitor extends RecursiveASTVisitor
 	{
 	    super.visit(node);
 
-	    TypeRef outputtype = node.getScope().getFunction().getOutputTypes().get(0);
-		outputtype.addParent(node.getValue().getTypeRef());
+	    FunctionHeaderNode fhn = node.getScope().getFunction().getDefinition().getFunctionHeader();
+	    Variable returnvar = (Variable) fhn.getOutputParametersNode().getParameter(0).getSymbol();
+	    returnvar.getTypeRef().addParent(node.getValue().getTypeRef());
 	}
 }

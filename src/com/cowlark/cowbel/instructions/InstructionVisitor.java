@@ -6,7 +6,7 @@
 
 package com.cowlark.cowbel.instructions;
 
-import com.cowlark.cowbel.BasicBlock;
+import com.cowlark.cowbel.core.BasicBlock;
 
 public class InstructionVisitor
 {

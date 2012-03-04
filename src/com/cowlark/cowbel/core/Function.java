@@ -8,8 +8,6 @@ package com.cowlark.cowbel.core;
 
 import java.util.Collection;
 import java.util.TreeSet;
-import com.cowlark.cowbel.BasicBlock;
-import com.cowlark.cowbel.BasicBlockBuilderVisitor;
 import com.cowlark.cowbel.ast.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.FunctionScopeConstructorNode;
 import com.cowlark.cowbel.errors.CompilationException;

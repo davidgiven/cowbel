@@ -6,7 +6,6 @@
 
 package com.cowlark.cowbel.core;
 
-import com.cowlark.cowbel.BasicBlock;
 import com.cowlark.cowbel.ast.IdentifierNode;
 import com.cowlark.cowbel.ast.LabelStatementNode;
 import com.cowlark.cowbel.ast.Node;

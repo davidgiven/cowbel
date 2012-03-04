@@ -6,7 +6,6 @@
 
 package com.cowlark.cowbel.core;
 
-import com.cowlark.cowbel.ASTCopyVisitor;
 import com.cowlark.cowbel.ast.FunctionHeaderNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.interfaces.IsCallNode;

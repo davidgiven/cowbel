@@ -6,7 +6,6 @@
 
 package com.cowlark.cowbel.core;
 
-import com.cowlark.cowbel.ASTCopyVisitor;
 import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.ast.TypeAssignmentNode;
 import com.cowlark.cowbel.errors.CompilationException;

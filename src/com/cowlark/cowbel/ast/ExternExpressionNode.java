@@ -6,7 +6,6 @@
 
 package com.cowlark.cowbel.ast;
 
-import com.cowlark.cowbel.core.TypeRef;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
