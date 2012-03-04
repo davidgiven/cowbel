@@ -227,5 +227,16 @@ public class ASTVisitor
 	public void visit(ExternStatementNode node) throws CompilationException
 	{
 		visit((Node) node);
-	}	
+	}
+	
+	public void visit(TypeExternNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+	
+	public void visit(ExternExpressionNode node) throws CompilationException
+	{
+		visit((Node) node);
+	}
+	
 }

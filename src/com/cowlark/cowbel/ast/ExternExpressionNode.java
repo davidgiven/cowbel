@@ -6,18 +6,28 @@
 
 package com.cowlark.cowbel.ast;
 
+import com.cowlark.cowbel.core.TypeRef;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 
-public abstract class AbstractExpressionLiteralNode extends AbstractExpressionNode
+public class ExternExpressionNode extends AbstractExpressionNode
 {
-	private String _implName;
-	
-	public AbstractExpressionLiteralNode(Location start, Location end, String impl)
+	public ExternExpressionNode(Location start, Location end)
     {
         super(start, end);
-        _implName = impl;
     }
+	
+	public ExternExpressionNode(Location start, Location end,
+			AbstractExpressionNode expr)
+    {
+        super(start, end);
+        addChild(expr);
+    }
+	
+	public AbstractExpressionNode getExpression()
+	{
+		return (AbstractExpressionNode) getChild(0);
+	}
 	
 	@Override
 	public void visit(ASTVisitor visitor) throws CompilationException
