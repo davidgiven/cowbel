@@ -16,6 +16,7 @@ public class Implementation extends AbstractImplementation
 		implements HasNode, HasMethods
 {
 	protected AbstractScopeConstructorNode _node;
+	private String _externType;
 
 	public Implementation(AbstractScopeConstructorNode node)
 	{
@@ -39,4 +40,16 @@ public class Implementation extends AbstractImplementation
 		
 		_templates.put(signature, template);
 	}
+	
+	public void addExternType(String externType)
+			throws CompilationException
+	{
+		assert(_externType == null);
+		_externType = externType;
+	}
+	
+	public String getExternType()
+    {
+	    return _externType;
+    }
 }

@@ -4,7 +4,7 @@
  * full license text.
  */
 
-package com.cowlark.cowbel;
+package com.cowlark.cowbel.core;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +12,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import com.cowlark.cowbel.ast.IdentifierNode;
 import com.cowlark.cowbel.ast.Node;
-import com.cowlark.cowbel.core.Constructor;
-import com.cowlark.cowbel.core.Function;
-import com.cowlark.cowbel.core.Method;
-import com.cowlark.cowbel.core.TypeRef;
 import com.cowlark.cowbel.instructions.BooleanConstantInstruction;
 import com.cowlark.cowbel.instructions.ConstructInstruction;
 import com.cowlark.cowbel.instructions.CreateObjectReferenceInstruction;

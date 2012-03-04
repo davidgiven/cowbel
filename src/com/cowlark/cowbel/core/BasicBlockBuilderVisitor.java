@@ -4,7 +4,7 @@
  * full license text.
  */
 
-package com.cowlark.cowbel;
+package com.cowlark.cowbel.core;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,6 +21,7 @@ import com.cowlark.cowbel.ast.DoWhileStatementNode;
 import com.cowlark.cowbel.ast.DummyExpressionNode;
 import com.cowlark.cowbel.ast.ExpressionListNode;
 import com.cowlark.cowbel.ast.ExpressionStatementNode;
+import com.cowlark.cowbel.ast.ExternExpressionNode;
 import com.cowlark.cowbel.ast.ExternStatementNode;
 import com.cowlark.cowbel.ast.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.FunctionHeaderNode;
@@ -42,15 +43,11 @@ import com.cowlark.cowbel.ast.ReturnVoidStatementNode;
 import com.cowlark.cowbel.ast.SimpleASTVisitor;
 import com.cowlark.cowbel.ast.StringConstantNode;
 import com.cowlark.cowbel.ast.TypeAssignmentNode;
+import com.cowlark.cowbel.ast.TypeExternNode;
 import com.cowlark.cowbel.ast.VarAssignmentNode;
 import com.cowlark.cowbel.ast.VarDeclarationNode;
 import com.cowlark.cowbel.ast.VarReferenceNode;
 import com.cowlark.cowbel.ast.WhileStatementNode;
-import com.cowlark.cowbel.core.Callable;
-import com.cowlark.cowbel.core.Function;
-import com.cowlark.cowbel.core.Label;
-import com.cowlark.cowbel.core.Method;
-import com.cowlark.cowbel.core.TypeRef;
 import com.cowlark.cowbel.errors.BreakOrContinueNotInLoopException;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.interfaces.HasTypeRef;
@@ -491,7 +488,7 @@ public class BasicBlockBuilderVisitor extends SimpleASTVisitor
 	@Override
 	public void visit(MethodCallExpressionNode node) throws CompilationException
 	{
-		Method method = (Method) node.getCallable();
+		Callable callable = node.getCallable();
 		ExpressionListNode arguments = node.getInputs();
 		int numinvars = arguments.getNumberOfChildren();
 		Vector<Variable> invars = new Vector<Variable>(numinvars);
@@ -506,8 +503,14 @@ public class BasicBlockBuilderVisitor extends SimpleASTVisitor
 		Variable receiver = _result;
 		
 		_result = _currentBB.createTemporary(node, type(node));
-		_currentBB.insnMethodCall(node, method, receiver,
-				invars, Collections.singletonList(_result));
+		List<Variable> outvars = Collections.singletonList(_result);
+		
+		if (callable instanceof Function)
+			_currentBB.insnDirectFunctionCall(node, (Function) callable, invars, outvars);
+		else if (callable instanceof Method)
+			_currentBB.insnMethodCall(node,	(Method) callable, receiver, invars, outvars);
+		else
+			assert(false);
 	}
 	
 	@Override
@@ -548,6 +551,17 @@ public class BasicBlockBuilderVisitor extends SimpleASTVisitor
 	{
 		_result = _currentBB.createTemporary(node, type(node));
 		_currentBB.insnRealConstant(node, node.getValue(), _result);
+	}
+	
+	@Override
+	public void visit(TypeExternNode node) throws CompilationException
+	{
+	}
+	
+	@Override
+	public void visit(ExternExpressionNode node) throws CompilationException
+	{
+		_result = _currentBB.createTemporary(node, type(node));
 	}
 	
 	@Override

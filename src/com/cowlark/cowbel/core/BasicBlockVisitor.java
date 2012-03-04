@@ -4,7 +4,7 @@
  * full license text.
  */
 
-package com.cowlark.cowbel;
+package com.cowlark.cowbel.core;
 
 public abstract class BasicBlockVisitor
 {

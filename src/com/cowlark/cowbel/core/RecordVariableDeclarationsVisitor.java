@@ -15,6 +15,7 @@ import com.cowlark.cowbel.ast.LabelStatementNode;
 import com.cowlark.cowbel.ast.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.ParameterDeclarationNode;
 import com.cowlark.cowbel.ast.RecursiveASTVisitor;
+import com.cowlark.cowbel.ast.TypeExternNode;
 import com.cowlark.cowbel.ast.VarDeclarationNode;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.interfaces.IsNode;
@@ -35,6 +36,12 @@ public class RecordVariableDeclarationsVisitor extends RecursiveASTVisitor
 		node.getScope().getImplementation().addMethodTemplate(ft);
 		
 		/* Don't recurse into child functions. */
+	}
+	
+	@Override
+	public void visit(TypeExternNode node) throws CompilationException
+	{
+		node.getScope().getImplementation().addExternType(node.getExternType().getValue());
 	}
 	
 	@Override

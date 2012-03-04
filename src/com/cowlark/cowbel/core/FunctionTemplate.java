@@ -8,7 +8,6 @@ package com.cowlark.cowbel.core;
 
 import java.util.Set;
 import java.util.TreeSet;
-import com.cowlark.cowbel.ASTCopyVisitor;
 import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.FunctionDefinitionNode;
 import com.cowlark.cowbel.errors.CompilationException;

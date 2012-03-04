@@ -14,7 +14,6 @@ import com.cowlark.cowbel.core.FunctionTemplateSignature;
 import com.cowlark.cowbel.core.Interface;
 import com.cowlark.cowbel.core.TypeRef;
 import com.cowlark.cowbel.errors.CompilationException;
-import com.cowlark.cowbel.errors.TypesNotCompatibleException;
 import com.cowlark.cowbel.interfaces.IsCallNode;
 import com.cowlark.cowbel.utils.DeterministicObject;
 
@@ -43,8 +42,8 @@ public abstract class AbstractConcreteType
 		
 		for (Interface interf : tr.getConstraints())
 		{
-			if (!supportedinterfaces.contains(interf))
-				throw new TypesNotCompatibleException(tr.getNode(), tr, interf);
+//			if (!supportedinterfaces.contains(interf))
+//				throw new TypesNotCompatibleException(tr.getNode(), tr, interf);
 		}
 	}
 	

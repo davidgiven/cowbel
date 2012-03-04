@@ -12,8 +12,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import com.cowlark.cowbel.ASTDumperVisitor;
 import com.cowlark.cowbel.AssignFunctionsToScopesVisitor;
-import com.cowlark.cowbel.BasicBlock;
-import com.cowlark.cowbel.BasicBlockVisitor;
 import com.cowlark.cowbel.ast.ASTVisitor;
 import com.cowlark.cowbel.ast.AbstractExpressionNode;
 import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
@@ -355,9 +353,15 @@ public class Compiler
 		{
 			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
 			IdentifierNode variablename = pdn.getIdentifier();
-			TypeRef typeref = pdn.getTypeRef();
 			
-			Variable v = new Variable(pdn, variablename, typeref);
+			TypeRef ptyperef = pdn.getTypeRef();
+			TypeRef vartyperef = new TypeRef(pdn);
+			if (isOutputParameter)
+				ptyperef.addParent(vartyperef);
+			else
+				ptyperef.addChild(vartyperef);
+			
+			Variable v = new Variable(pdn, variablename, vartyperef);
 			v.setParameter(true);
 			v.setOutputParameter(isOutputParameter);
 			v.setScope(body);

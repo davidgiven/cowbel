@@ -13,7 +13,7 @@ import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.TreeSet;
 import org.apache.commons.io.IOUtils;
-import com.cowlark.cowbel.BasicBlock;
+import com.cowlark.cowbel.core.BasicBlock;
 import com.cowlark.cowbel.core.Compiler;
 import com.cowlark.cowbel.core.Constructor;
 import com.cowlark.cowbel.core.Function;
