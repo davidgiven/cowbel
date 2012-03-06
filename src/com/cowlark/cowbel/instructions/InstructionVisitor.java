@@ -48,6 +48,11 @@ public class InstructionVisitor
 		visit((Instruction) insn);
 	}
 	
+	public void visit(ExternFunctionCallInstruction insn)
+	{
+		visit((Instruction) insn);
+	}
+		
 	public void visit(BooleanConstantInstruction insn)
 	{
 		visit((Instruction) insn);

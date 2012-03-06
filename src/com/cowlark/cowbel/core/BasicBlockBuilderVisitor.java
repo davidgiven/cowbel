@@ -54,6 +54,7 @@ import com.cowlark.cowbel.interfaces.HasTypeRef;
 import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.AbstractConcreteType;
+import com.cowlark.cowbel.types.ExternObjectConcreteType;
 
 public class BasicBlockBuilderVisitor extends SimpleASTVisitor
 {
@@ -114,7 +115,7 @@ public class BasicBlockBuilderVisitor extends SimpleASTVisitor
 	private void visit(AbstractScopeConstructorNode node) throws CompilationException
 	{
 		AbstractScopeConstructorNode parent = node.getScope();
-		if ((parent == null) || (node.getConstructor() != parent.getConstructor())) 
+		if ((parent == null) || (node.getConstructor() != parent.getConstructor()))
 			_currentBB.insnConstruct(node, node.getConstructor());
 		
 		node.getChild().visit(this);
@@ -412,6 +413,17 @@ public class BasicBlockBuilderVisitor extends SimpleASTVisitor
 		}
 	}
 	
+	private void methodcall(Node node, Callable callable,
+			Variable receiver, List<Variable> invars, List<Variable> outvars)
+				throws CompilationException
+	{
+		if (receiver.getTypeRef().getConcreteType() instanceof ExternObjectConcreteType)
+			_currentBB.insnExternFunctionCall(node,
+					(Function) callable, receiver, invars, outvars);
+		else
+			_currentBB.insnMethodCall(node,	callable, receiver, invars, outvars);
+	}
+	
 	@Override
 	public void visit(MethodCallStatementNode node)
 	        throws CompilationException
@@ -443,12 +455,7 @@ public class BasicBlockBuilderVisitor extends SimpleASTVisitor
 		node.getReceiver().visit(this);
 		Variable receiver = _result;
 		
-		if (callable instanceof Function)
-			_currentBB.insnDirectFunctionCall(node, (Function) callable, invars, outvars);
-		else if (callable instanceof Method)
-			_currentBB.insnMethodCall(node,	(Method) callable, receiver, invars, outvars);
-		else
-			assert(false);
+		methodcall(node, callable, receiver, invars, outvars);
 		
 		/* Copy (and type convert) the output results into their target
 		 * variables. */
@@ -505,12 +512,7 @@ public class BasicBlockBuilderVisitor extends SimpleASTVisitor
 		_result = _currentBB.createTemporary(node, type(node));
 		List<Variable> outvars = Collections.singletonList(_result);
 		
-		if (callable instanceof Function)
-			_currentBB.insnDirectFunctionCall(node, (Function) callable, invars, outvars);
-		else if (callable instanceof Method)
-			_currentBB.insnMethodCall(node,	(Method) callable, receiver, invars, outvars);
-		else
-			assert(false);
+		methodcall(node, callable, receiver, invars, outvars);
 	}
 	
 	@Override

@@ -20,6 +20,7 @@ import com.cowlark.cowbel.core.Function;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.instructions.Instruction;
 import com.cowlark.cowbel.instructions.InstructionVisitor;
+import com.cowlark.cowbel.types.ExternObjectConcreteType;
 import com.cowlark.cowbel.types.InterfaceConcreteType;
 import com.cowlark.cowbel.types.ObjectConcreteType;
 
@@ -129,6 +130,7 @@ public abstract class Backend extends InstructionVisitor
 	
 	public abstract void visit(InterfaceConcreteType itype);
 	public abstract void visit(ObjectConcreteType itype);
+	public abstract void visit(ExternObjectConcreteType itype);
 	public abstract void visit(Constructor constructor);
 	
 	@Override

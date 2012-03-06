@@ -148,7 +148,7 @@ public class InterfaceContext extends DeterministicObject<InterfaceContext>
 				throws CompilationException
 	{
 		InterfaceTemplate template = lookupTemplate(node);
-		return instantiateType(template, node);
+		return template.getInterfaceContext().instantiateType(template, node);
 	}
 	
 	public Interface lookupRawType(String name)

@@ -33,7 +33,7 @@ public abstract class AbstractConcreteType
 		_allConcreteTypes.add(this);
     }
 	
-	protected abstract Collection<Interface> getSupportedInterfaces();
+	public abstract Collection<Interface> getSupportedInterfaces();
 	
 	public void checkTypeConstraints(TypeRef tr)
 			throws CompilationException

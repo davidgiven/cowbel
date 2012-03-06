@@ -55,7 +55,7 @@ public class InterfaceConcreteType
     }
 	
 	@Override
-	protected Collection<Interface> getSupportedInterfaces()
+	public Collection<Interface> getSupportedInterfaces()
 	{
 		return _interfaces;
 	}

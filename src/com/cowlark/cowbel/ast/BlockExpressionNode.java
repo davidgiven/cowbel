@@ -6,10 +6,12 @@
 
 package com.cowlark.cowbel.ast;
 
+import com.cowlark.cowbel.core.Implementation;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.interfaces.HasConcreteType;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.types.AbstractConcreteType;
+import com.cowlark.cowbel.types.ExternObjectConcreteType;
 import com.cowlark.cowbel.types.ObjectConcreteType;
 
 public class BlockExpressionNode extends AbstractExpressionNode
@@ -41,6 +43,11 @@ public class BlockExpressionNode extends AbstractExpressionNode
 	@Override
 	public AbstractConcreteType createConcreteType()
 	{
-		return new ObjectConcreteType(this);
+		Implementation implementation = getBlock().getImplementation();
+		String externType = implementation.getExternType();
+		if (externType == null)
+			return new ObjectConcreteType(this);
+		else
+			return new ExternObjectConcreteType(this, externType);
 	}
 }

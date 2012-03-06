@@ -8,31 +8,31 @@ package com.cowlark.cowbel.instructions;
 
 import java.util.List;
 import com.cowlark.cowbel.ast.Node;
-import com.cowlark.cowbel.core.Callable;
+import com.cowlark.cowbel.core.Function;
 import com.cowlark.cowbel.symbols.Variable;
 
-public class MethodCallInstruction extends Instruction
+public class ExternFunctionCallInstruction extends Instruction
 		implements HasInputVariables, HasOutputVariables
 {
-	private Callable _callable;
+	private Function _function;
 	private Variable _receiver;
 	private List<Variable> _invars;
 	private List<Variable> _outvars;
 	
-	public MethodCallInstruction(Node node, Callable callable, 
+	public ExternFunctionCallInstruction(Node node, Function function, 
 			Variable receiver, List<Variable> invars, List<Variable> outvars)
     {
 		super(node);
-		_callable = callable;
+		_function = function;
 		_receiver = receiver;
 		_invars = invars;
 		_outvars = outvars;
     }
-	
-	public Callable getCallable()
-	{
-		return _callable;
-	}
+
+	public Function getFunction()
+    {
+	    return _function;
+    }
 	
 	public Variable getReceiver()
     {
@@ -54,13 +54,13 @@ public class MethodCallInstruction extends Instruction
 	@Override
 	protected String getInstructionName()
 	{
-	    return "MethodCall";
+	    return "ExternFunctionCall";
 	}
 	
 	@Override
 	protected String getShortDescription()
 	{
-	    return _callable.getName().getText() +
+	    return _function.getName().getText() +
 	    	" receiver=" + _receiver.toString() +
 	    	" inputs=" + varlist(_invars) +
 	    	" outputs=" + varlist(_outvars);

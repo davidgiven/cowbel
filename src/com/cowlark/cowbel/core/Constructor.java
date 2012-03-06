@@ -65,6 +65,8 @@ public class Constructor extends DeterministicObject<Constructor>
 		AbstractScopeConstructorNode parentscope = _node.getScope();
 		if (parentscope == null)
 			return null;
+		if (parentscope.getImplementation().isExtern())
+			return null;
 		return parentscope.getConstructor();
 	}
 	

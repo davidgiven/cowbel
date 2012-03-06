@@ -9,6 +9,7 @@ package com.cowlark.cowbel.core;
 import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.BlockExpressionNode;
 import com.cowlark.cowbel.ast.BlockScopeConstructorNode;
+import com.cowlark.cowbel.ast.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.FunctionScopeConstructorNode;
 import com.cowlark.cowbel.ast.RecursiveASTVisitor;
 import com.cowlark.cowbel.errors.CompilationException;
@@ -51,6 +52,12 @@ public class AssignConstructorsToScopesVisitor extends RecursiveASTVisitor
 		}
 		
 		node.setConstructor(constructor);
+	}
+	
+	@Override
+	public void visit(FunctionDefinitionNode node) throws CompilationException
+	{
+		/* Do not recurse into nested functions */
 	}
 	
 	@Override
