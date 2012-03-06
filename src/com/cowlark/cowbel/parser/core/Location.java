@@ -104,7 +104,6 @@ public class Location implements Comparable<Location>, CharSequence
 	
 	public int calculateLengthTo(Location other)
 	{
-		assert(other._filename.equals(_filename));
 		return other._offset - _offset;
 	}
 	
