@@ -52,4 +52,9 @@ public class Implementation extends AbstractImplementation
     {
 	    return _externType;
     }
+	
+	public boolean isExtern()
+	{
+		return (_externType != null);
+	}
 }

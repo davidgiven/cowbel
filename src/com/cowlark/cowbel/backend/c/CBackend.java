@@ -22,6 +22,7 @@ import com.cowlark.cowbel.ast.RecursiveASTVisitor;
 import com.cowlark.cowbel.ast.StringConstantNode;
 import com.cowlark.cowbel.backend.Backend;
 import com.cowlark.cowbel.core.BasicBlock;
+import com.cowlark.cowbel.core.Callable;
 import com.cowlark.cowbel.core.Compiler;
 import com.cowlark.cowbel.core.Constructor;
 import com.cowlark.cowbel.core.Function;
@@ -32,6 +33,7 @@ import com.cowlark.cowbel.instructions.BooleanConstantInstruction;
 import com.cowlark.cowbel.instructions.ConstructInstruction;
 import com.cowlark.cowbel.instructions.CreateObjectReferenceInstruction;
 import com.cowlark.cowbel.instructions.DirectFunctionCallInstruction;
+import com.cowlark.cowbel.instructions.ExternFunctionCallInstruction;
 import com.cowlark.cowbel.instructions.ExternInstruction;
 import com.cowlark.cowbel.instructions.FunctionExitInstruction;
 import com.cowlark.cowbel.instructions.GotoInstruction;
@@ -48,6 +50,7 @@ import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.symbols.Symbol;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.AbstractConcreteType;
+import com.cowlark.cowbel.types.ExternObjectConcreteType;
 import com.cowlark.cowbel.types.InterfaceConcreteType;
 import com.cowlark.cowbel.types.ObjectConcreteType;
 
@@ -311,20 +314,62 @@ public class CBackend extends Backend
 		return ctype(symbol.getTypeRef().getConcreteType());
 	}
 	
-	String ctypes(AbstractConcreteType type)
+	private String ctype(AbstractConcreteType t)
+	{
+		/* Order matters here */
+		if (t instanceof InterfaceConcreteType)
+			return ctype((InterfaceConcreteType) t);
+		else if (t instanceof ExternObjectConcreteType)
+			return ctype((ExternObjectConcreteType) t);
+		else if (t instanceof ObjectConcreteType)
+			return ctype((ObjectConcreteType) t);
+		else
+		{
+			assert(false);
+			throw null;
+		}
+	}
+	
+	String ctypes(InterfaceConcreteType type)
 	{
 		String s = _typeTypes.get(type);
 		if (s != null)
 			return s;
 		
-		s = "struct T" + _typeTypes.size() + "_" + type.toString();
+		String namehint = type.getSupportedInterfaces().iterator().next().getNameHint();
+		if (namehint == null)
+			namehint = "";
+		else
+			namehint = "_" + namehint;
+		
+	    s = "struct I" + type.getId() + namehint;
 		_typeTypes.put(type, s);
 		return s;
 	}
 	
-	String ctype(AbstractConcreteType type)
+	String ctype(InterfaceConcreteType type)
 	{
 		return ctypes(type) + "*";
+	}
+	
+	String ctypes(ObjectConcreteType type)
+	{
+		return ctype(type.getImplementation().getNode().getConstructor());
+	}
+	
+	String ctype(ObjectConcreteType type)
+	{
+		return ctypes(type) + "*";
+	}
+	
+	String ctypes(ExternObjectConcreteType type)
+	{
+		return type.getExternName();
+	}
+	
+	String ctype(ExternObjectConcreteType type)
+	{
+		return type.getExternName();
 	}
 	
 	String clabel(AbstractConcreteType type)
@@ -355,7 +400,7 @@ public class CBackend extends Backend
 		return "f" + _funcid++ + "_" + name;
 	}
 
-	/* Produces an lvalue to the constructor. */
+	/* Produces an lvalue to a constructor. */
 	
 	private String clvalue(Node node, Constructor c)
 	{
@@ -372,7 +417,7 @@ public class CBackend extends Backend
 		return sb.toString();
 	}
 	
-	/* Produces an lvalue to the variable's storage. */
+	/* Produces an lvalue to a variable's storage. */
 	
 	private String clvalue(Node node, Variable var)
 	{
@@ -420,19 +465,11 @@ public class CBackend extends Backend
 	@Override
 	public void visit(ObjectConcreteType ct)
 	{
-		print(ctypes(ct));
-		print("\n{\n");
-		
-		for (InterfaceConcreteType t : ct.getDowncasts())
-		{
-			print("\t");
-			print(ctypes(t));
-			print(" ");
-			print(clabel(t));
-			print(";\n");
-		}
-		
-		print("};\n\n");
+	}
+	
+	@Override
+	public void visit(ExternObjectConcreteType itype)
+	{
 	}
 	
 	@Override
@@ -461,11 +498,32 @@ public class CBackend extends Backend
 		
 		for (ObjectConcreteType t : constructor.getObjects())
 		{
-			print("\t");
-			print(ctypes(t));
-			print(" ");
-			print(clabel(t));
-			print(";\n");
+			if (t instanceof ExternObjectConcreteType)
+			{
+				ExternObjectConcreteType et = (ExternObjectConcreteType) t;
+				print("\t");
+				print(et.getExternName());
+				print(" ");
+				print(clabel(t));
+				print(";\n\n");
+			}
+			else
+			{
+				print("\tstruct {\n");
+				
+				for (InterfaceConcreteType i : t.getDowncasts())
+				{
+					print("\t\t");
+					print(ctypes(i));
+					print(" ");
+					print(clabel(i));
+					print(";\n");
+				}
+				
+				print("\t} ");
+				print(clabel(t));
+				print(";\n\n");
+			}
 		}
 		
 		print("};\n\n");
@@ -497,9 +555,18 @@ public class CBackend extends Backend
 		print(")");
 	}
 	
+	private String function_self(Function f)
+	{
+		AbstractScopeConstructorNode scope = f.getDefiningScope();
+		if (scope == null)
+			return null;
+		return scope.getImplementation().getExternType();
+	}
+	
 	private void function_header(Function f)
 	{
 		FunctionHeaderNode node = f.getNode();
+		String externType = function_self(f);
 		ParameterDeclarationListNode inparams = node.getInputParametersNode();
 		ParameterDeclarationListNode outparams = node.getOutputParametersNode();
 		
@@ -508,12 +575,21 @@ public class CBackend extends Backend
 		print("(");
 
 		boolean first = true;
-		Constructor constructor = f.getConstructor();
-		Constructor parent = constructor.getParentConstructor();
-		if (parent != null)
+		if (externType == null)
 		{
-			print("void* v");
-			print(clabel(parent));
+			Constructor constructor = f.getConstructor();
+			Constructor parent = constructor.getParentConstructor();
+			if (parent != null)
+			{
+				print("void* v");
+				print(clabel(parent));
+				first = false;
+			}
+		}
+		else
+		{
+			print(externType);
+			print(" self");
 			first = false;
 		}
 		
@@ -556,17 +632,21 @@ public class CBackend extends Backend
 		function_header(f);
 		print("\n{\n");
 		
-		Constructor constructor = f.getConstructor();
-		Constructor parent = constructor.getParentConstructor();
-		if (parent != null)
+		String externType = function_self(f);
+		if (externType == null)
 		{
-			print("\t");
-			print(ctype(parent));
-			print("* ");
-			print(clabel(parent));
-			print(" = v");
-			print(clabel(parent));
-			print(";\n");
+			Constructor constructor = f.getConstructor();
+			Constructor parent = constructor.getParentConstructor();
+			if (parent != null)
+			{
+				print("\t");
+				print(ctype(parent));
+				print("* ");
+				print(clabel(parent));
+				print(" = v");
+				print(clabel(parent));
+				print(";\n");
+			}
 		}
 		
 		_inputparamsinvalid = true;
@@ -642,8 +722,7 @@ public class CBackend extends Backend
 			print(ctype(constructor));
 			print("* ");
 			print(clabel(constructor));
-			print(" = ");
-			print(" &");
+			print(" = &");
 			print(id);
 			print(";\n");
 		}
@@ -770,22 +849,37 @@ public class CBackend extends Backend
 	{
 		Node node = insn.getNode();
 		Function function = insn.getFunction();
-		function_call(insn, clabel(function),
-				clvalue(node, function.getConstructor().getParentConstructor()));
+		Constructor parent = function.getConstructor().getParentConstructor();
+		function_call(insn, clabel(function), clvalue(node, parent));
+	}
+	
+	@Override
+	public void visit(ExternFunctionCallInstruction insn)
+	{
+		Node node = insn.getNode();
+		Function function = insn.getFunction();
+		Variable receiver = insn.getReceiver();
+		function_call(insn, clabel(function), clvalue(node, receiver));
 	}
 	
 	@Override
 	public void visit(MethodCallInstruction insn)
 	{
-		Method method = insn.getMethod();
+		Callable callable = insn.getCallable();
 		Variable receiver = insn.getReceiver();
 		AbstractConcreteType ctype = receiver.getTypeRef().getConcreteType();
-		assert(ctype instanceof InterfaceConcreteType);
-
+		
 		String lvalue = clvalue(insn.getNode(), receiver);
-		String callable = lvalue + "->" + clabel(method);
-		String constructor = lvalue + "->o";
-		function_call(insn, callable, constructor);
+		if (ctype instanceof InterfaceConcreteType)
+		{
+			String methodname = lvalue + "->" + clabel((Method) callable);
+			String constructor = lvalue + "->o";
+			function_call(insn, methodname, constructor);
+		}
+		else if (ctype instanceof ObjectConcreteType)
+		{
+			function_call(insn, clabel((Function) callable), lvalue);
+		}
 	}
 	
 	@Override
@@ -847,10 +941,15 @@ public class CBackend extends Backend
 		
 		print("\t");
 		printvar(node, var);
-		print(" = &");
-		print(clabel(insn.getConstructor()));
-		print("->");
-		print(clabel(ctype));
+		print(" = ");
+		if (ctype instanceof ExternObjectConcreteType)
+		{
+			print(clabel(insn.getConstructor()));
+			print("->");
+			print(clabel(ctype));
+		}
+		else
+			print(clabel(insn.getConstructor()));
 		print(";\n");
 	}
 	

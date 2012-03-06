@@ -16,6 +16,7 @@ import com.cowlark.cowbel.instructions.BooleanConstantInstruction;
 import com.cowlark.cowbel.instructions.ConstructInstruction;
 import com.cowlark.cowbel.instructions.CreateObjectReferenceInstruction;
 import com.cowlark.cowbel.instructions.DirectFunctionCallInstruction;
+import com.cowlark.cowbel.instructions.ExternFunctionCallInstruction;
 import com.cowlark.cowbel.instructions.ExternInstruction;
 import com.cowlark.cowbel.instructions.FunctionExitInstruction;
 import com.cowlark.cowbel.instructions.GotoInstruction;
@@ -161,10 +162,17 @@ public class BasicBlock implements Comparable<BasicBlock>
 				inargs, outargs));
 	}
 
-	public void insnMethodCall(Node node, Method method,
+	public void insnMethodCall(Node node, Callable callable,
 			Variable receiver, List<Variable> inargs, List<Variable> outargs)
 	{
-		addInstruction(new MethodCallInstruction(node, method, receiver,
+		addInstruction(new MethodCallInstruction(node, callable, receiver,
+				inargs, outargs));
+	}
+
+	public void insnExternFunctionCall(Node node, Function function,
+			Variable receiver, List<Variable> inargs, List<Variable> outargs)
+	{
+		addInstruction(new ExternFunctionCallInstruction(node, function, receiver,
 				inargs, outargs));
 	}
 

@@ -40,6 +40,7 @@ import com.cowlark.cowbel.parser.core.ParseResult;
 import com.cowlark.cowbel.parser.parsers.Parser;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.AbstractConcreteType;
+import com.cowlark.cowbel.types.ExternObjectConcreteType;
 import com.cowlark.cowbel.types.InterfaceConcreteType;
 import com.cowlark.cowbel.types.ObjectConcreteType;
 
@@ -203,6 +204,8 @@ public class Compiler
 		for (InterfaceConcreteType ctype : InterfaceConcreteType.getAllInterfaceTypes())
 			_backend.visit(ctype);
 		for (ObjectConcreteType ctype : ObjectConcreteType.getAllObjectTypes())
+			_backend.visit(ctype);
+		for (ExternObjectConcreteType ctype : ExternObjectConcreteType.getAllExternObjectTypes())
 			_backend.visit(ctype);
 		for (Constructor c : Constructor.getAllConstructors())
 			_backend.visit(c);

@@ -37,7 +37,14 @@ public class ObjectConcreteType
 	public ObjectConcreteType(BlockExpressionNode node)
     {
 		_implementation = node.getBlock().getImplementation();
-		_allObjectTypes.add(this);
+		
+		if (getClass().equals(ObjectConcreteType.class))
+			_allObjectTypes.add(this);
+    }
+	
+	public Implementation getImplementation()
+    {
+	    return _implementation;
     }
 	
 	public TreeSet<InterfaceConcreteType> getDowncasts()
@@ -46,7 +53,7 @@ public class ObjectConcreteType
     }
 	
 	@Override
-	protected Collection<Interface> getSupportedInterfaces()
+	public Collection<Interface> getSupportedInterfaces()
 	{
 		return _implementation.getInterfaces();
 	}

@@ -26,7 +26,7 @@ public class InferenceFailedConcreteType
     }
 
 	@Override
-	protected Collection<Interface> getSupportedInterfaces()
+	public Collection<Interface> getSupportedInterfaces()
 	{
 		return Collections.emptySet();
 	}
