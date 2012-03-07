@@ -13,8 +13,9 @@
 #ifndef COWBEL_STREAMIO
 #define COWBEL_STREAMIO
 
-#include "Application.ch"
-#include "Maybe.ch"
+#include <Stdlib.ch>
+#include <Application.ch>
+#include <Maybe.ch>
 
 /** Represents a simple, non-seekable input stream.
  **/

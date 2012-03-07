@@ -13,7 +13,8 @@
 #ifndef COWBEL_FILE
 #define COWBEL_FILE
 
-#include "StreamIO.ch"
+#include <Stdlib.ch>
+#include <StreamIO.ch>
 
 extern '#include <errno.h>';
 

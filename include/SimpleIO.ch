@@ -13,6 +13,8 @@
 #ifndef COWBEL_SIMPLEIO
 #define COWBEL_SIMPLEIO
 
+#include <Stdlib.ch>
+
 /** Prints a string to stdout.
  **/
  

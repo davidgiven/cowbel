@@ -13,7 +13,8 @@
 #ifndef COWBEL_APPLICATION
 #define COWBEL_APPLICATION
 
-#include "Array.ch"
+#include <Stdlib.ch>
+#include <Array.ch>
 
 /** Returns an immutable array of command line arguments.
  **/
@@ -25,12 +26,12 @@ function ApplicationArguments(): Array<string>
 		
 		function get(i: int): string
 		{
-			var argc: int = 0;
+			var argc = extern(int);
 			extern "${argc} = s_argc;";
 			if (i >= argc)
 				AbortOutOfBounds();
 			
-			var result: string = "";
+			var result = extern(string);
 			extern "${result} = s_argv[${i}];";
 			return result;
 		}
@@ -41,6 +42,7 @@ function ApplicationArguments(): Array<string>
 		function bounds(): (low: int, high: int)
 		{
 			low = 0;
+			high = extern(int);
 			extern "${high} = s_argc;";
 		}
 	};

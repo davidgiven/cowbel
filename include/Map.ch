@@ -13,6 +13,7 @@
 #ifndef COWBEL_MAP
 #define COWBEL_MAP
 
+#include <Stdlib.ch>
 #include <Application.ch>
 #include <Maybe.ch>
 
@@ -86,7 +87,7 @@ function Map<K, V>(): Map<K, V>
 			return sentinel;
 		function setRight(right: Node)
 			AbortInvalidObjectState();
-		function key(): K
+		function key(): (r: K)
 			AbortInvalidObjectState();
 		function setKey(key: K)
 			AbortInvalidObjectState();

@@ -13,7 +13,8 @@
 #ifndef COWBEL_ARRAY
 #define COWBEL_ARRAY
 
-#include "Application.ch"
+#include <Stdlib.ch>
+#include <Application.ch>
 
 /** Represents a mutable one-dimensional array.
  **/
@@ -43,7 +44,7 @@ type Array<T> =
  
 function Array<T>(size: int, initialiser: T): Array<T>
 {
-	var ptr: __extern = 0;
+	var ptr: __extern = extern(__extern);
 	extern "${ptr} = calloc(${size}, sizeof(${initialiser}));";
 	
 	return
@@ -61,6 +62,7 @@ function Array<T>(size: int, initialiser: T): Array<T>
 		function get(i: int): (result: T)
 		{
 			_boundscheck(i);
+			result = extern(initialiser);
 			extern "${result} = ((typeof(${result})*)${ptr})[${i}];";
 		}
 		
@@ -106,7 +108,7 @@ type Array2D<T> =
  
 function Array2D<T>(width: int, height: int, initialiser: T): Array2D<T>
 {
-	var ptr: __extern = 0;
+	var ptr: __extern = extern(__extern);
 	extern "${ptr} = calloc(${width}*${height}, sizeof(${initialiser}));";
 	
 	return
@@ -128,6 +130,7 @@ function Array2D<T>(width: int, height: int, initialiser: T): Array2D<T>
 		function get(x: int, y: int): (result: T)
 		{
 			_boundscheck(x, y);
+			result = extern(initialiser);
 			extern "${result} = ((typeof(${result})*)${ptr})[${x} + ${y}*${width}];";
 		}
 		
