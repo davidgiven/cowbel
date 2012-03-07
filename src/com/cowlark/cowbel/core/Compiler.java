@@ -442,15 +442,14 @@ public class Compiler
 							methods.add(c);
 					}
 					
-					assert(methods.size() <= 1);
-					
 					if (!methods.isEmpty())
 					{
-						Callable c = methods.first();
-						
-						c.wireTypesToCall(methodcall);
-						CollectTypeConstraintsVisitor.Instance.unhandledNodeIsHandled(methodcall);
-						_methodCallNodes.add(methodcall);
+						for (Callable c : methods)
+						{
+							c.wireTypesToCall(methodcall);
+							CollectTypeConstraintsVisitor.Instance.unhandledNodeIsHandled(methodcall);
+							_methodCallNodes.add(methodcall);
+						}
 						return true;
 					}
 				}
