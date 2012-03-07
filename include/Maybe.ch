@@ -13,7 +13,8 @@
 #ifndef COWBEL_MAYBE
 #define COWBEL_MAYBE
 
-#include "Application.ch"
+#include <Stdlib.ch>
+#include <Application.ch>
 
 /** Represents a container that may or may not contain a single value.
  **
