@@ -9,6 +9,7 @@ package com.cowlark.cowbel.core;
 import java.util.TreeSet;
 import com.cowlark.cowbel.ast.BlockExpressionNode;
 import com.cowlark.cowbel.ast.BlockScopeConstructorNode;
+import com.cowlark.cowbel.ast.BooleanConstantNode;
 import com.cowlark.cowbel.ast.DirectFunctionCallExpressionNode;
 import com.cowlark.cowbel.ast.DirectFunctionCallStatementNode;
 import com.cowlark.cowbel.ast.DummyExpressionNode;
@@ -39,6 +40,7 @@ public class CollectTypeConstraintsVisitor extends RecursiveASTVisitor
 		new CollectTypeConstraintsVisitor();
 	
 	private TreeSet<IsNode> _unhandledNodes = new TreeSet<IsNode>();
+	private TypeRef _booleanTypeRef = Compiler.Instance.getCanonicalPrimitiveTypeRef("boolean");
 	private TypeRef _intTypeRef = Compiler.Instance.getCanonicalPrimitiveTypeRef("int");
 	private TypeRef _realTypeRef = Compiler.Instance.getCanonicalPrimitiveTypeRef("real");
 	private TypeRef _stringTypeRef = Compiler.Instance.getCanonicalPrimitiveTypeRef("string");
@@ -62,6 +64,12 @@ public class CollectTypeConstraintsVisitor extends RecursiveASTVisitor
 	public void visit(IntegerConstantNode node) throws CompilationException
 	{
 		node.getTypeRef().addParent(_intTypeRef);
+	}
+	
+	@Override
+	public void visit(BooleanConstantNode node) throws CompilationException
+	{
+		node.getTypeRef().addParent(_booleanTypeRef);
 	}
 	
 	@Override
