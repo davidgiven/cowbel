@@ -178,6 +178,7 @@ public class Compiler
 		
 		_listener.onTypeInferenceBegin();
 		TypeInferenceEngine.undoCycles();
+		TypeInferenceEngine.propagateConstraints();
 		TypeInferenceEngine.assignConcreteTypes();
 		visit(AssignCallablesToMethods.Instance);
 		_listener.onTypeInferenceEnd();

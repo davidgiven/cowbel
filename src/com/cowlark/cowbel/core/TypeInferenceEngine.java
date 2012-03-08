@@ -8,14 +8,18 @@ package com.cowlark.cowbel.core;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import org.apache.commons.lang3.mutable.MutableInt;
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.errors.FailedToInferTypeException;
+import com.cowlark.cowbel.errors.MustHaveTypeConstraints;
 import com.cowlark.cowbel.interfaces.HasConcreteType;
 import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.types.AbstractConcreteType;
-import com.cowlark.cowbel.types.InferenceFailedConcreteType;
 import com.cowlark.cowbel.types.InterfaceConcreteType;
 
 /** Placeholder class containing useful methods used by the type inference
@@ -144,7 +148,95 @@ public abstract class TypeInferenceEngine
 			}
 		}
 	}
+
+	private static void recurseThroughConstraints(TypeRef tr)
+			throws CompilationException
+	{
+		Collection<Interface> parentConstraints = null;
+		switch (tr.getParents().size())
+		{
+			case 0:
+			{
+				/* No parents. This node must have an implementation, or bad
+				 * things happen. */
+
+				IsNode node = tr.getNode();
+				if (!(node instanceof HasConcreteType))
+					throw new FailedToInferTypeException(node, null);
+
+				Implementation implementation = tr.getImplementation();
+				assert(implementation != null);
+				
+				parentConstraints = implementation.getInterfaces();
+				break;
+			}
+			
+			case 1:
+			{
+				/* One parent. Inherit the parent's constraints. */
+				
+				TypeRef parent = tr.getParents().first();
+				recurseThroughConstraints(parent);
+				parentConstraints = parent.getConstraints();
+				break;
+			}
+			
+			default:
+			{
+				/* Many parent. Inherit the *common subset* of all the parent's
+				 * constraints. */
+				
+				/* Collect all constraints. */
+				
+				TreeMap<Interface, MutableInt> map = new TreeMap<Interface, MutableInt>();
+				for (TypeRef parent : tr.getParents())
+				{
+					recurseThroughConstraints(parent);
+					for (Interface c : parent.getConstraints())
+					{
+						MutableInt i = map.get(c);
+						if (i == null)
+						{
+							i = new MutableInt(1);
+							map.put(c, i);
+						}
+						else
+							i.increment();
+					}
+				}
+				
+				/* Constraints which appear fewer than n times, where n is the
+				 * number of parents, are not common. */
+				
+				Iterator<Map.Entry<Interface, MutableInt>> i = map.entrySet().iterator();
+				while (i.hasNext())
+				{
+					Map.Entry<Interface, MutableInt> e = i.next();
+					if (e.getValue().getValue() < tr.getParents().size())
+						i.remove();
+				}
+				
+				parentConstraints = map.keySet();
+			}
+		}
+		
+		if (tr.getConstraints().isEmpty())
+		{
+			for (Interface i : parentConstraints)
+				tr.addCastConstraint(i);
+		}
+	}
 	
+	public static void propagateConstraints()
+		throws CompilationException
+	{
+		/* Start at leaf nodes: those with no children. */
+		
+		for (TypeRef tr : TypeRef.getAllTypeRefs())
+			if (tr.getChildren().isEmpty())
+				recurseThroughConstraints(tr);
+	}	
+
 	private static void recurseThroughTypes(TypeRef tr)
 			throws CompilationException
 	{
@@ -164,8 +256,8 @@ public abstract class TypeInferenceEngine
 				IsNode node = tr.getNode();
 				if (!(node instanceof HasConcreteType))
 				{
-//					throw new FailedToInferTypeException(node, null);
-					ctype = new InferenceFailedConcreteType(node);
+					throw new FailedToInferTypeException(node, null);
+//					ctype = new InferenceFailedConcreteType(node);
 				}
 				else
 				{
@@ -212,7 +304,14 @@ public abstract class TypeInferenceEngine
 				{
 					/* This node *must* have constraints. */
 					
-					assert(!tr.getConstraints().isEmpty());
+					if (tr.getConstraints().isEmpty())
+					{
+						/* ...unless each parent type has the same set of
+						 * constraints, which lets us easily determine the
+						 * constraints this node should have. */
+						
+						throw new MustHaveTypeConstraints(tr.getNode(), tr);
+					}
 					
 					for (AbstractConcreteType ct : parenttypes)
 						ct.checkTypeConstraints(tr);
@@ -231,16 +330,11 @@ public abstract class TypeInferenceEngine
 	public static void assignConcreteTypes()
 			throws CompilationException
 	{
-		/* Find all leaf nodes: those with no children. */
+		/* Start at leaf nodes: those with no children. */
 		
 		TreeSet<TypeRef> leaves = new TreeSet<TypeRef>();
 		for (TypeRef tr : TypeRef.getAllTypeRefs())
 			if (tr.getChildren().isEmpty())
-				leaves.add(tr);
-		
-		/* Now recursively determine the concrete type of each leaf. */
-		
-		for (TypeRef tr : leaves)
-			recurseThroughTypes(tr);
+				recurseThroughTypes(tr);
 	}	
 }

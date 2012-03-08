@@ -904,6 +904,8 @@ public class CBackend extends Backend
 			print("&");
 			printvar(node, insn.getInputVariable());
 			print("->");
+			print(clabel(srctype));
+			print(".");
 			print(clabel(destitype));
 		}
 		
