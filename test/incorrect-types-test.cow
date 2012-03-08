@@ -1,0 +1,45 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+#include "SimpleIO.ch"
+
+type HasA =
+{
+	function doA();
+};
+
+type HasB =
+{
+	function doB();
+};
+
+var A =
+{
+	implements HasA;
+	function doA() println("A");
+};
+
+var B =
+{
+	implements HasB;
+	function doB() println("B");
+};
+
+var AB =
+{
+	implements HasA;
+	implements HasB;
+	function doA() println("A");
+	function doB() println("B");
+};
+
+var o1: HasB = A;
