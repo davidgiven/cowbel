@@ -17,6 +17,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.FailedToInferTypeException;
 import com.cowlark.cowbel.errors.MustHaveTypeConstraints;
+import com.cowlark.cowbel.errors.TypesNotCompatibleException;
 import com.cowlark.cowbel.interfaces.HasConcreteType;
 import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.types.AbstractConcreteType;
@@ -152,6 +153,7 @@ public abstract class TypeInferenceEngine
 	private static void recurseThroughConstraints(TypeRef tr)
 			throws CompilationException
 	{
+		IsNode node = tr.getNode();
 		Collection<Interface> parentConstraints = null;
 		switch (tr.getParents().size())
 		{
@@ -160,7 +162,6 @@ public abstract class TypeInferenceEngine
 				/* No parents. This node must have an implementation, or bad
 				 * things happen. */
 
-				IsNode node = tr.getNode();
 				if (!(node instanceof HasConcreteType))
 					throw new FailedToInferTypeException(node, null);
 
@@ -222,8 +223,23 @@ public abstract class TypeInferenceEngine
 		
 		if (tr.getConstraints().isEmpty())
 		{
+			/* The typeref has no constraints, so use the parent constraints
+			 * instead. */
+			
 			for (Interface i : parentConstraints)
 				tr.addCastConstraint(i);
+		}
+		else
+		{
+			/* Check that the typeref's constraints can be met by the parent
+			 * constraints. */
+			
+			for (Interface i : tr.getConstraints())
+			{
+				if (!parentConstraints.contains(i))
+					throw new TypesNotCompatibleException(node,
+							tr, i);
+			}
 		}
 	}
 	

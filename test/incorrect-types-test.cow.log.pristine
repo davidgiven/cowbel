@@ -1,0 +1,2 @@
+Compilation failed:
+com.cowlark.cowbel.errors.TypesNotCompatibleException: Type constraint HasB cannot be satisfied at test/incorrect-types-test.cow:45.4
