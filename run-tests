@@ -11,6 +11,7 @@
 # information.
 
 for f in \
+	test/set-test.cow \
 	test/inference-test.cow \
 	test/map-test.cow \
 	test/maps-example.cow \
