@@ -14,11 +14,14 @@ import com.cowlark.cowbel.core.FunctionTemplateSignature;
 import com.cowlark.cowbel.core.Interface;
 import com.cowlark.cowbel.core.TypeRef;
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.HasNode;
 import com.cowlark.cowbel.interfaces.IsCallNode;
+import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.utils.DeterministicObject;
 
 public abstract class AbstractConcreteType
 		extends DeterministicObject<AbstractConcreteType>
+		implements HasNode
 {
 	public static TreeSet<AbstractConcreteType> _allConcreteTypes =
 		new TreeSet<AbstractConcreteType>();
@@ -28,9 +31,18 @@ public abstract class AbstractConcreteType
 		return _allConcreteTypes;
 	}
 
-	public AbstractConcreteType()
+	private IsNode _node;
+	
+	public AbstractConcreteType(IsNode node)
     {	
+		_node = node;
 		_allConcreteTypes.add(this);
+    }
+	
+	@Override
+    public IsNode getNode()
+    {
+	    return _node;
     }
 	
 	public abstract Collection<Interface> getSupportedInterfaces();
@@ -53,7 +65,7 @@ public abstract class AbstractConcreteType
 	/** Informs this ACT that it must be downcastable to this interface. */
 	
 	public abstract void supportsInterface(InterfaceConcreteType ctype);
-	
+
 	/** Dumps this type to the specified stream. */
 	
 	public void dump(PrintStream ps)

@@ -6,9 +6,7 @@
 
 package com.cowlark.cowbel.interfaces;
 
-import com.cowlark.cowbel.ast.Node;
-
 public interface HasNode
 {
-	public Node getNode();
+	public IsNode getNode();
 }

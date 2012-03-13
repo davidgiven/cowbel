@@ -6,7 +6,9 @@
 
 package com.cowlark.cowbel.core;
 
+import com.cowlark.cowbel.errors.CompilationException;
+
 public abstract class BasicBlockVisitor
 {
-	public abstract void visit(BasicBlock bb);
+	public abstract void visit(BasicBlock bb) throws CompilationException;
 }

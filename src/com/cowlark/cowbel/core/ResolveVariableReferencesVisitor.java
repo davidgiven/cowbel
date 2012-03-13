@@ -20,6 +20,8 @@ import com.cowlark.cowbel.ast.RecursiveASTVisitor;
 import com.cowlark.cowbel.ast.VarAssignmentNode;
 import com.cowlark.cowbel.ast.VarReferenceNode;
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.errors.CouldNotFindMethod;
+import com.cowlark.cowbel.errors.IdentifierNotFound;
 import com.cowlark.cowbel.errors.WrongNumberOfExpressionsInMultipleAssignments;
 import com.cowlark.cowbel.interfaces.HasOutputs;
 import com.cowlark.cowbel.interfaces.IsFunctionCallNode;
@@ -65,8 +67,7 @@ public class ResolveVariableReferencesVisitor extends RecursiveASTVisitor
 		/* If that failed, treat it as a variable reference (doing an
 		 * indirect function call via a delegate). */
 		
-		assert(false);
-		throw null;
+		throw new IdentifierNotFound(scope, node.getIdentifier());
 //		Symbol symbol = scope.lookupVariable(in);
 //		node.setSymbol(symbol);
 //		scope.importSymbol(symbol);

@@ -7,16 +7,16 @@
 package com.cowlark.cowbel.symbols;
 
 import com.cowlark.cowbel.ast.IdentifierNode;
-import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.core.Constructor;
 import com.cowlark.cowbel.core.TypeRef;
+import com.cowlark.cowbel.interfaces.IsNode;
 
 public class Variable extends Symbol
 {
 	private boolean _isParameter = false;
 	private boolean _isOutputParameter = false;
 	
-	public Variable(Node node, IdentifierNode name, TypeRef typeref)
+	public Variable(IsNode node, IdentifierNode name, TypeRef typeref)
 	{
 		super(node, name, typeref);
 	}

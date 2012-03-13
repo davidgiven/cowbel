@@ -6,8 +6,9 @@
 
 package com.cowlark.cowbel.instructions;
 
-import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.core.BasicBlock;
+import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.symbols.Variable;
 
 public class IfInstruction extends Instruction
@@ -16,7 +17,7 @@ public class IfInstruction extends Instruction
 	private BasicBlock _positive;
 	private BasicBlock _negative;
 	
-	public IfInstruction(Node node, Variable condition,
+	public IfInstruction(IsNode node, Variable condition,
 			BasicBlock positive, BasicBlock negative)
     {
 		super(node);
@@ -53,7 +54,7 @@ public class IfInstruction extends Instruction
 	}
 	
 	@Override
-    public void visit(InstructionVisitor visitor)
+    public void visit(InstructionVisitor visitor) throws CompilationException
 	{
 		visitor.visit(this);
 	}

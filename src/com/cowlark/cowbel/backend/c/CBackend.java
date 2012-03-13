@@ -15,7 +15,6 @@ import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.ExternStatementNode;
 import com.cowlark.cowbel.ast.FunctionDefinitionNode;
 import com.cowlark.cowbel.ast.FunctionHeaderNode;
-import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.ast.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.ParameterDeclarationNode;
 import com.cowlark.cowbel.ast.RecursiveASTVisitor;
@@ -28,6 +27,7 @@ import com.cowlark.cowbel.core.Constructor;
 import com.cowlark.cowbel.core.Function;
 import com.cowlark.cowbel.core.Method;
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.errors.DowncastingExternsNotImplementedYet;
 import com.cowlark.cowbel.errors.InvalidExternTemplate;
 import com.cowlark.cowbel.instructions.BooleanConstantInstruction;
 import com.cowlark.cowbel.instructions.ConstructInstruction;
@@ -46,11 +46,14 @@ import com.cowlark.cowbel.instructions.MethodCallInstruction;
 import com.cowlark.cowbel.instructions.RealConstantInstruction;
 import com.cowlark.cowbel.instructions.StringConstantInstruction;
 import com.cowlark.cowbel.instructions.VarCopyInstruction;
+import com.cowlark.cowbel.interfaces.HasNode;
+import com.cowlark.cowbel.interfaces.HasTypeRef;
 import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.symbols.Symbol;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.AbstractConcreteType;
 import com.cowlark.cowbel.types.ExternObjectConcreteType;
+import com.cowlark.cowbel.types.InferenceFailedConcreteType;
 import com.cowlark.cowbel.types.InterfaceConcreteType;
 import com.cowlark.cowbel.types.ObjectConcreteType;
 
@@ -309,9 +312,9 @@ public class CBackend extends Backend
 		return s;
 	}
 	
-	private String ctype(Symbol symbol)
+	private String ctype(HasTypeRef htr)
 	{
-		return ctype(symbol.getTypeRef().getConcreteType());
+		return ctype(htr.getTypeRef().getConcreteType());
 	}
 	
 	private String ctype(AbstractConcreteType t)
@@ -323,6 +326,8 @@ public class CBackend extends Backend
 			return ctype((ExternObjectConcreteType) t);
 		else if (t instanceof ObjectConcreteType)
 			return ctype((ObjectConcreteType) t);
+		else if (t instanceof InferenceFailedConcreteType)
+			return "void*";
 		else
 		{
 			assert(false);
@@ -402,7 +407,7 @@ public class CBackend extends Backend
 
 	/* Produces an lvalue to a constructor. */
 	
-	private String clvalue(Node node, Constructor c)
+	private String clvalue(IsNode node, Constructor c)
 	{
 		StringBuilder sb = new StringBuilder();
 		Constructor current = node.getScope().getConstructor();
@@ -419,7 +424,7 @@ public class CBackend extends Backend
 	
 	/* Produces an lvalue to a variable's storage. */
 	
-	private String clvalue(Node node, Variable var)
+	private String clvalue(IsNode node, Variable var)
 	{
 		StringBuilder sb = new StringBuilder();
 		Constructor varcon = var.getConstructor();
@@ -440,7 +445,14 @@ public class CBackend extends Backend
 		return sb.toString();
 	}
 	
-	private void printvar(Node node, Variable var)
+	private void printloc(HasNode hn)
+	{
+		print("/* ");
+		print(hn.getNode().locationAsString());
+		print(" */\n");
+	}
+	
+	private void printvar(IsNode node, Variable var)
 	{
 		print(clvalue(node, var));
 	}
@@ -448,6 +460,7 @@ public class CBackend extends Backend
 	@Override
 	public void visit(InterfaceConcreteType ct)
 	{
+		printloc(ct);
 		print(ctypes(ct));
 		print("\n{\n");
 		print("\tvoid* o;\n");
@@ -475,6 +488,7 @@ public class CBackend extends Backend
 	@Override
 	public void visit(Constructor constructor)
 	{
+		printloc(constructor);
 		print(ctype(constructor));
 		print("\n{\n");
 		
@@ -627,8 +641,9 @@ public class CBackend extends Backend
 	}
 	
 	@Override
-	public void compileFunction(Function f)
+	public void compileFunction(Function f) throws CompilationException
 	{
+		printloc(f);
 		function_header(f);
 		print("\n{\n");
 		
@@ -658,6 +673,7 @@ public class CBackend extends Backend
 	
 	@Override
 	public void compileBasicBlock(BasicBlock bb)
+			throws CompilationException
 	{
 		print(clabel(bb));
 		print(":;\n");
@@ -681,7 +697,7 @@ public class CBackend extends Backend
 	@Override
 	public void visit(IfInstruction insn)
 	{
-		Node node = insn.getNode();
+		IsNode node = insn.getNode();
 		
 		print("\tif (");
 		printvar(node, insn.getCondition());
@@ -822,7 +838,7 @@ public class CBackend extends Backend
 	private <T extends Instruction & HasInputVariables & HasOutputVariables>
 		void function_call(T insn, String callable, String constructor)
 	{
-		Node node = insn.getNode();
+		IsNode node = insn.getNode();
 		
 		print("\t");
 		print(callable);
@@ -847,7 +863,7 @@ public class CBackend extends Backend
 	@Override
 	public void visit(DirectFunctionCallInstruction insn)
 	{
-		Node node = insn.getNode();
+		IsNode node = insn.getNode();
 		Function function = insn.getFunction();
 		Constructor parent = function.getConstructor().getParentConstructor();
 		function_call(insn, clabel(function), clvalue(node, parent));
@@ -856,7 +872,7 @@ public class CBackend extends Backend
 	@Override
 	public void visit(ExternFunctionCallInstruction insn)
 	{
-		Node node = insn.getNode();
+		IsNode node = insn.getNode();
 		Function function = insn.getFunction();
 		Variable receiver = insn.getReceiver();
 		function_call(insn, clabel(function), clvalue(node, receiver));
@@ -884,8 +900,9 @@ public class CBackend extends Backend
 	
 	@Override
 	public void visit(VarCopyInstruction insn)
+			throws CompilationException
 	{
-		Node node = insn.getNode();
+		IsNode node = insn.getNode();
 		
 		print("\t");
 		printvar(node, insn.getOutputVariable());
@@ -897,6 +914,9 @@ public class CBackend extends Backend
 			printvar(node, insn.getInputVariable());
 		else
 		{
+			if (srctype instanceof ExternObjectConcreteType)
+				throw new DowncastingExternsNotImplementedYet(node, srctype);
+			
 			assert(desttype instanceof InterfaceConcreteType);
 			
 			InterfaceConcreteType destitype = (InterfaceConcreteType) desttype;
@@ -915,7 +935,7 @@ public class CBackend extends Backend
 	@Override
 	public void visit(ExternInstruction insn)
 	{
-		Node node = insn.getNode();
+		IsNode node = insn.getNode();
 		String template = insn.getTemplate();
 		List<Variable> vars = insn.getVariables();
 		
@@ -937,7 +957,7 @@ public class CBackend extends Backend
 	@Override
 	public void visit(CreateObjectReferenceInstruction insn)
 	{
-		Node node = insn.getNode();
+		IsNode node = insn.getNode();
 		Variable var = insn.getOutputVariable();
 		ObjectConcreteType ctype = (ObjectConcreteType) var.getTypeRef().getConcreteType();
 		
@@ -958,7 +978,7 @@ public class CBackend extends Backend
 	@Override
 	public void visit(IntegerConstantInstruction insn)
 	{
-		Node node = insn.getNode();
+		IsNode node = insn.getNode();
 		
 		print("\t");
 		printvar(node, insn.getOutputVariable());
@@ -970,7 +990,7 @@ public class CBackend extends Backend
 	@Override
 	public void visit(RealConstantInstruction insn)
 	{
-		Node node = insn.getNode();
+		IsNode node = insn.getNode();
 		
 		print("\t");
 		printvar(node, insn.getOutputVariable());
@@ -982,7 +1002,7 @@ public class CBackend extends Backend
 	@Override
 	public void visit(StringConstantInstruction insn)
 	{
-		Node node = insn.getNode();
+		IsNode node = insn.getNode();
 		
 		print("\t");
 		printvar(node, insn.getOutputVariable());
@@ -994,7 +1014,7 @@ public class CBackend extends Backend
 	@Override
 	public void visit(BooleanConstantInstruction insn)
 	{
-		Node node = insn.getNode();
+		IsNode node = insn.getNode();
 		
 		print("\t");
 		printvar(node, insn.getOutputVariable());

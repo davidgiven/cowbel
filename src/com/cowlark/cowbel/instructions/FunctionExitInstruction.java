@@ -6,11 +6,12 @@
 
 package com.cowlark.cowbel.instructions;
 
-import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.IsNode;
 
 public class FunctionExitInstruction extends Instruction
 {
-	public FunctionExitInstruction(Node node)
+	public FunctionExitInstruction(IsNode node)
     {
 		super(node);
     }
@@ -22,7 +23,7 @@ public class FunctionExitInstruction extends Instruction
 	}
 	
 	@Override
-    public void visit(InstructionVisitor visitor)
+    public void visit(InstructionVisitor visitor) throws CompilationException
 	{
 		visitor.visit(this);
 	}

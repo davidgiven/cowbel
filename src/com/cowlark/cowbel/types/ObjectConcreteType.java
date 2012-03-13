@@ -36,6 +36,7 @@ public class ObjectConcreteType
 	
 	public ObjectConcreteType(BlockExpressionNode node)
     {
+		super(node);
 		_implementation = node.getBlock().getImplementation();
 		
 		if (getClass().equals(ObjectConcreteType.class))

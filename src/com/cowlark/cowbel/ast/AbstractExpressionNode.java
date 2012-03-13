@@ -36,7 +36,23 @@ public abstract class AbstractExpressionNode extends Node
 	public TypeRef getTypeRef()
 	{
 		if (_typeref == null)
-			_typeref = new TypeRef(this);
+			setTypeRef(new TypeRef(this));
 		return _typeref;
+	}
+	
+	@Override
+    public void setTypeRef(TypeRef typeref)
+    {
+	    _typeref = typeref;
+	    typeref.addUse(this);
+    }
+
+	@Override
+	public void aliasTypeRef(TypeRef tr)
+	{
+		if (_typeref != null)
+			_typeref.alias(tr);
+		else
+			setTypeRef(tr);
 	}
 }

@@ -7,16 +7,16 @@
 package com.cowlark.cowbel.errors;
 
 import com.cowlark.cowbel.ast.IdentifierNode;
-import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.interfaces.HasIdentifier;
 import com.cowlark.cowbel.interfaces.HasNode;
+import com.cowlark.cowbel.interfaces.IsNode;
 
 public class MultipleDefinitionException extends CompilationException
 {
     private static final long serialVersionUID = 5324462605948584281L;
 
-    private Node _old;
-    private Node _current;
+    private IsNode _old;
+    private IsNode _current;
     
 	public MultipleDefinitionException(HasNode old, HasNode current)
     {

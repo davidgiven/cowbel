@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import com.cowlark.cowbel.ast.IdentifierNode;
-import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.instructions.BooleanConstantInstruction;
 import com.cowlark.cowbel.instructions.ConstructInstruction;
 import com.cowlark.cowbel.instructions.CreateObjectReferenceInstruction;
@@ -28,6 +28,7 @@ import com.cowlark.cowbel.instructions.MethodCallInstruction;
 import com.cowlark.cowbel.instructions.RealConstantInstruction;
 import com.cowlark.cowbel.instructions.StringConstantInstruction;
 import com.cowlark.cowbel.instructions.VarCopyInstruction;
+import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.AbstractConcreteType;
 
@@ -100,7 +101,7 @@ public class BasicBlock implements Comparable<BasicBlock>
 		next._sourceBlocks.add(this);
 	}
 	
-	protected Variable createTemporary(Node node, AbstractConcreteType ctype)
+	protected Variable createTemporary(IsNode node, AbstractConcreteType ctype)
 	{
 		Constructor constructor = node.getScope().getConstructor();
 		TypeRef tr = new TypeRef(node);
@@ -124,30 +125,30 @@ public class BasicBlock implements Comparable<BasicBlock>
 			_instructions.add(insn);
 	}
 	
-	public void visit(InstructionVisitor visitor)
+	public void visit(InstructionVisitor visitor) throws CompilationException
 	{
 		visitor.visit(this);
 		for (Instruction insn : _instructions)
 			insn.visit(visitor);
 	}
 	
-	public void insnFunctionExit(Node node)
+	public void insnFunctionExit(IsNode node)
 	{
 		addInstruction(new FunctionExitInstruction(node));
 	}
 	
-	public void insnConstruct(Node node, Constructor constructor)
+	public void insnConstruct(IsNode node, Constructor constructor)
 	{
 		addInstruction(new ConstructInstruction(node, constructor));
 	}
 		
-	public void insnGoto(Node node, BasicBlock target)
+	public void insnGoto(IsNode node, BasicBlock target)
 	{
 		addInstruction(new GotoInstruction(node, target));
 		jumpsTo(target);
 	}
 	
-	public void insnIf(Node node, Variable condition,
+	public void insnIf(IsNode node, Variable condition,
 			BasicBlock positive, BasicBlock negative)
 	{
 		addInstruction(new IfInstruction(node, condition, positive, negative));
@@ -155,60 +156,60 @@ public class BasicBlock implements Comparable<BasicBlock>
 		jumpsTo(negative);
 	}
 	
-	public void insnDirectFunctionCall(Node node, Function function,
+	public void insnDirectFunctionCall(IsNode node, Function function,
 			List<Variable> inargs, List<Variable> outargs)
 	{
 		addInstruction(new DirectFunctionCallInstruction(node, function,
 				inargs, outargs));
 	}
 
-	public void insnMethodCall(Node node, Callable callable,
+	public void insnMethodCall(IsNode node, Callable callable,
 			Variable receiver, List<Variable> inargs, List<Variable> outargs)
 	{
 		addInstruction(new MethodCallInstruction(node, callable, receiver,
 				inargs, outargs));
 	}
 
-	public void insnExternFunctionCall(Node node, Function function,
+	public void insnExternFunctionCall(IsNode node, Function function,
 			Variable receiver, List<Variable> inargs, List<Variable> outargs)
 	{
 		addInstruction(new ExternFunctionCallInstruction(node, function, receiver,
 				inargs, outargs));
 	}
 
-	public void insnBooleanConstant(Node node, boolean value, Variable var)
+	public void insnBooleanConstant(IsNode node, boolean value, Variable var)
 	{
 		addInstruction(new BooleanConstantInstruction(node, value, var));
 	}
 
-	public void insnStringConstant(Node node, String value, Variable var)
+	public void insnStringConstant(IsNode node, String value, Variable var)
 	{
 		addInstruction(new StringConstantInstruction(node, value, var));
 	}
 
-	public void insnIntegerConstant(Node node, long value, Variable var)
+	public void insnIntegerConstant(IsNode node, long value, Variable var)
 	{
 		addInstruction(new IntegerConstantInstruction(node, value, var));
 	}
 	
-	public void insnRealConstant(Node node, double value, Variable var)
+	public void insnRealConstant(IsNode node, double value, Variable var)
 	{
 		addInstruction(new RealConstantInstruction(node, value, var));
 	}
 	
-	public void insnVarCopy(Node node, Variable invar, Variable outvar)
+	public void insnVarCopy(IsNode node, Variable invar, Variable outvar)
 	{
 		addInstruction(new VarCopyInstruction(node, invar, outvar));
 	}
 	
-	public void insnCreateObjectReference(Node node, Constructor constructor,
+	public void insnCreateObjectReference(IsNode node, Constructor constructor,
 			Variable outvar)
 	{
 		addInstruction(new CreateObjectReferenceInstruction(node,
 				constructor, outvar));
 	}
 	
-	public void insnExtern(Node node, String template, List<Variable> vars)
+	public void insnExtern(IsNode node, String template, List<Variable> vars)
 	{
 		addInstruction(new ExternInstruction(node, template, vars));
 	}

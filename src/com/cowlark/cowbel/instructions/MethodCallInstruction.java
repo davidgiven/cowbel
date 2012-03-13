@@ -7,8 +7,9 @@
 package com.cowlark.cowbel.instructions;
 
 import java.util.List;
-import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.core.Callable;
+import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.symbols.Variable;
 
 public class MethodCallInstruction extends Instruction
@@ -19,7 +20,7 @@ public class MethodCallInstruction extends Instruction
 	private List<Variable> _invars;
 	private List<Variable> _outvars;
 	
-	public MethodCallInstruction(Node node, Callable callable, 
+	public MethodCallInstruction(IsNode node, Callable callable, 
 			Variable receiver, List<Variable> invars, List<Variable> outvars)
     {
 		super(node);
@@ -67,7 +68,7 @@ public class MethodCallInstruction extends Instruction
 	}
 	
 	@Override
-    public void visit(InstructionVisitor visitor)
+    public void visit(InstructionVisitor visitor) throws CompilationException
 	{
 		visitor.visit(this);
 	}

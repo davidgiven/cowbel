@@ -6,8 +6,9 @@
 
 package com.cowlark.cowbel.instructions;
 
-import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.core.Constructor;
+import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.symbols.Variable;
 
 public class CreateObjectReferenceInstruction extends Instruction
@@ -15,7 +16,7 @@ public class CreateObjectReferenceInstruction extends Instruction
 	private Constructor _constructor;
 	private Variable _outvar;
 	
-	public CreateObjectReferenceInstruction(Node node,
+	public CreateObjectReferenceInstruction(IsNode node,
 			Constructor constructor, Variable outvar)
     {
 		super(node);
@@ -46,7 +47,7 @@ public class CreateObjectReferenceInstruction extends Instruction
 	}
 	
 	@Override
-    public void visit(InstructionVisitor visitor)
+    public void visit(InstructionVisitor visitor) throws CompilationException
 	{
 		visitor.visit(this);
 	}

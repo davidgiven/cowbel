@@ -35,6 +35,11 @@ public class ExternStatementNode extends AbstractStatementNode
 		return _template;
 	}
 	
+	public VarReferenceNode getVarReference(int i)
+	{
+		return (VarReferenceNode) getChild(i);
+	}
+	
 	@Override
 	public void visit(ASTVisitor visitor) throws CompilationException
 	{

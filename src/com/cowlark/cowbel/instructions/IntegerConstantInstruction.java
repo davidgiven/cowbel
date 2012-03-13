@@ -6,7 +6,8 @@
 
 package com.cowlark.cowbel.instructions;
 
-import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.symbols.Variable;
 
 public class IntegerConstantInstruction extends Instruction
@@ -14,7 +15,7 @@ public class IntegerConstantInstruction extends Instruction
 	private long _value;
 	private Variable _outvar;
 	
-	public IntegerConstantInstruction(Node node, long value, Variable outvar)
+	public IntegerConstantInstruction(IsNode node, long value, Variable outvar)
     {
 		super(node);
 		_value = value;
@@ -44,7 +45,7 @@ public class IntegerConstantInstruction extends Instruction
 	}
 	
 	@Override
-    public void visit(InstructionVisitor visitor)
+    public void visit(InstructionVisitor visitor) throws CompilationException
 	{
 		visitor.visit(this);
 	}

@@ -6,7 +6,8 @@
 
 package com.cowlark.cowbel.instructions;
 
-import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.symbols.Variable;
 
 public class VarCopyInstruction extends Instruction
@@ -14,7 +15,7 @@ public class VarCopyInstruction extends Instruction
 	private Variable _invar;
 	private Variable _outvar;
 	
-	public VarCopyInstruction(Node node, Variable invar, Variable outvar)
+	public VarCopyInstruction(IsNode node, Variable invar, Variable outvar)
     {
 		super(node);
 		_invar = invar;
@@ -44,7 +45,7 @@ public class VarCopyInstruction extends Instruction
 	}
 	
 	@Override
-    public void visit(InstructionVisitor visitor)
+    public void visit(InstructionVisitor visitor) throws CompilationException
 	{
 		visitor.visit(this);
 	}

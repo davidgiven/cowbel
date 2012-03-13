@@ -7,26 +7,27 @@
 package com.cowlark.cowbel.instructions;
 
 import java.util.List;
-import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.interfaces.HasNode;
+import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.symbols.Variable;
 
 public abstract class Instruction implements HasNode
 {
-	private Node _node;
+	private IsNode _node;
 	
-	public Instruction(Node node)
+	public Instruction(IsNode node)
     {
 		_node = node;
     }
 	
 	@Override
-    public Node getNode()
+    public IsNode getNode()
     {
 	    return _node;
     }
 	
-	public void setNode(Node node)
+	public void setNode(IsNode node)
     {
 	    _node = node;
     }
@@ -64,7 +65,7 @@ public abstract class Instruction implements HasNode
 		return sb.toString();
 	}
 	
-	public void visit(InstructionVisitor visitor)
+	public void visit(InstructionVisitor visitor) throws CompilationException
 	{
 		visitor.visit(this);
 	}

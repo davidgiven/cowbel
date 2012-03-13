@@ -29,8 +29,6 @@ public class Callable extends DeterministicObject<Callable>
 	private FunctionSignature _signature;
 	private FunctionHeaderNode _node;
 	private AbstractScopeConstructorNode _scope;
-	private Vector<TypeRef> _inputTypes;
-	private Vector<TypeRef> _outputTypes;
 	
 	public Callable(FunctionSignature signature, FunctionHeaderNode node)
 		throws CompilationException
@@ -38,14 +36,11 @@ public class Callable extends DeterministicObject<Callable>
 		_signature = signature;
 		_node = node;
 		
-		_inputTypes = new Vector<TypeRef>();
-		copyTypeRefs(node.getInputParametersNode(), _inputTypes);
-		
-		_outputTypes = new Vector<TypeRef>();
-		copyTypeRefs(node.getOutputParametersNode(), _outputTypes);
+		copyTypeRefs(node.getInputParametersNode());
+		copyTypeRefs(node.getOutputParametersNode());
     }
 	
-	private void copyTypeRefs(ParameterDeclarationListNode pdln, Vector<TypeRef> list)
+	private void copyTypeRefs(ParameterDeclarationListNode pdln)
 		throws CompilationException
 	{
 		for (IsNode n : pdln)
@@ -53,7 +48,6 @@ public class Callable extends DeterministicObject<Callable>
 			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
 			TypeRef typeref = pdn.getTypeRef();
 			typeref.addCastConstraint(pdn.getVariableTypeNode().getInterface());
-			list.add(typeref);
 		}
 	}
 	
@@ -83,16 +77,6 @@ public class Callable extends DeterministicObject<Callable>
 	public void setScope(AbstractScopeConstructorNode scope)
     {
 	    _scope = scope;
-    }
-	
-	public List<TypeRef> getInputTypes()
-	{
-		return _inputTypes;
-	}
-	
-	public List<TypeRef> getOutputTypes()
-    {
-	    return _outputTypes;
     }
 	
 	public AbstractScopeConstructorNode getDefiningScope()
