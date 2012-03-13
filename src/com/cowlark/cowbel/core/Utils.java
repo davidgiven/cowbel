@@ -145,4 +145,41 @@ public class Utils
 		
 		return true;
 	}
+	
+	/** Iterate through the code points of a string. */
+	
+	public static Iterable<Integer> codePoints(final String s)
+	{
+		return new Iterable<Integer>()
+		{
+			@Override
+            public Iterator<Integer> iterator()
+			{
+				return new Iterator<Integer>()
+				{
+					int nextIndex = 0;
+					
+					@Override
+                    public boolean hasNext()
+					{
+						return nextIndex < s.length();
+					}
+					
+					@Override
+                    public Integer next()
+					{
+						int result = s.codePointAt(nextIndex);
+						nextIndex += Character.charCount(result);
+						return result;
+					}
+					
+					@Override
+                    public void remove()
+					{
+						throw new UnsupportedOperationException();
+					}
+				};
+			}
+		};
+	}
 }
