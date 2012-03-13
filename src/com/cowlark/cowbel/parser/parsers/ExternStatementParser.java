@@ -48,15 +48,12 @@ public class ExternStatementParser extends Parser
 						idnode.start(), idnode.end(), idnode);
 				vars.add(varnode);
 				
-			    return String.valueOf((char) number);
+				return String.valueOf(Character.toChars(number + 0x100000));
 			}
 		};
 
 		StrSubstitutor sub = new StrSubstitutor(lookerupper, "${", "}", (char)0);
 		String template = sub.replace(((StringConstantNode) stringpr).getValue());
-		
-		if (vars.size() >= 10)
-			return new TooManyExterns(location);
 		
 		return new ExternStatementNode(location, pr.end(),
 				template,

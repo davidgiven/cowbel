@@ -26,6 +26,7 @@ import com.cowlark.cowbel.core.Compiler;
 import com.cowlark.cowbel.core.Constructor;
 import com.cowlark.cowbel.core.Function;
 import com.cowlark.cowbel.core.Method;
+import com.cowlark.cowbel.core.Utils;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.errors.DowncastingExternsNotImplementedYet;
 import com.cowlark.cowbel.errors.InvalidExternTemplate;
@@ -945,13 +946,15 @@ public class CBackend extends Backend
 		
 		if (!template.startsWith("#include"))
 		{
-			for (int i=0; i<template.length(); i++)
+			for (int i : Utils.codePoints(template))
 			{
-				char c = template.charAt(i);
-				if (c < 10)
-					printvar(node, vars.get((int) c));
+				if (i >= 0x100000)
+				{
+					i -= 0x100000;
+					printvar(node, vars.get(i));
+				}
 				else
-					print(c);
+					print(String.valueOf(Character.toChars(i)));
 			}
 			
 			print("\n");
