@@ -73,7 +73,7 @@ type File =
  
 function File(path: string): File
 {
-	var fp: __extern = 0;
+	var fp: __extern = extern(__extern);
 	var open: boolean = false;
 	var inputstream = Maybe<InputStream>();
 	var outputstream = Maybe<OutputStream>();
@@ -85,7 +85,10 @@ function File(path: string): File
 			implements InputStream;
 			
 			function readByte(): (result: int)
+			{
+				result = extern(int);
 				extern '${result} = fgetc((FILE*) ${fp});';
+			}
 		};
 	}
 	
@@ -115,6 +118,7 @@ function File(path: string): File
 		
 		function remove(): (result: int)
 		{
+			result = extern(int);
 			if (open)
 				AbortInvalidObjectState();
 			extern 'errno = 0; remove(s_string_cdata(${path})); ${result} = errno;';
@@ -122,6 +126,7 @@ function File(path: string): File
 				
 		function close(): (result: int)
 		{
+			result = extern(int);
 			if (!open)
 				AbortInvalidObjectState();
 			if (outputstream.valid())
@@ -132,8 +137,10 @@ function File(path: string): File
 		
 		function create(): (result: int)
 		{
+			result = extern(int);
 			if (open)
 				AbortInvalidObjectState();
+				
 			extern '#include <sys/types.h>';
 			extern '#include <sys/stat.h>';
 			extern '#include <fcntl.h>';
@@ -153,6 +160,7 @@ function File(path: string): File
 		
 		function openReadOnly(): (result: int)
 		{
+			result = extern(int);
 			if (open)
 				AbortInvalidObjectState();
 			
@@ -169,6 +177,7 @@ function File(path: string): File
 		
 		function openWriteOnly(): (result: int)
 		{
+			result = extern(int);
 			if (open)
 				AbortInvalidFile();
 			
@@ -185,6 +194,7 @@ function File(path: string): File
 		
 		function openReadWrite(): (result: int)
 		{
+			result = extern(int);
 			if (open)
 				AbortInvalidFile();
 			
