@@ -186,7 +186,9 @@ public class CBackend extends Backend
 
 	    					print((int) b);
 	    				}
-	    				print("};\n");
+	    				if (!first)
+	    					print(", ");
+	    				print("0};\n");
 	    				
 	    				print("static s_string_t ");
 	    				print(clabel(node));
@@ -196,7 +198,9 @@ public class CBackend extends Backend
 	    				print(bytes.length);
 	    				print(", ");
 	    				print(bytes.length);
-	    				print(", NULL};\n");
+	    				print(", ");
+	    				print(id);
+	    				print("};\n");
 	    			}
 	    		}
 	    	);
