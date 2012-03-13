@@ -37,14 +37,13 @@ public class Utils
 		for (int i = 0; i < header.getNumberOfChildren(); i++)
 		{
 			AbstractExpressionNode n = (AbstractExpressionNode) callnodes.getChild(i);
-			TypeRef tr = header.getParameter(i).getTypeRef();
-			tr.addParent(n.getTypeRef());
+			header.getParameter(i).aliasTypeRef(n.getTypeRef());
 		}
 		
 		return true;
 	}
 	
-	/** Attach type constraints for a function header argument list.
+	/** Wire input types for two headers together.
 	 */
 	
 	static boolean attachInputTypeConstraints(IsNode node,
@@ -56,14 +55,13 @@ public class Utils
 		for (int i = 0; i < child.getNumberOfChildren(); i++)
 		{
 			ParameterDeclarationNode pdn = parent.getParameter(i);
-			TypeRef tr = child.getParameter(i).getTypeRef();
-			tr.addParent(pdn.getTypeRef());
+			pdn.aliasTypeRef(child.getParameter(i).getTypeRef());
 		}
 		
 		return true;
 	}
 	
-	/** Attach type constraints for a function or method input argument list.
+	/** Wire output types of a call to a header.
 	 */
 	
 	static boolean attachOutputTypeConstraints(IsNode node,
@@ -84,26 +82,23 @@ public class Utils
 		return true;
 	}
 	
-	/** Attach type constraints for a function header argument list.
+	/** Wire the output types for two headers together.
 	 */
 	
 	static boolean attachOutputTypeConstraints(IsNode node,
 			ParameterDeclarationListNode callee, ParameterDeclarationListNode caller)
 	{
-		if (callee.getNumberOfChildren() < caller.getNumberOfChildren())
+		if (callee.getNumberOfChildren() != caller.getNumberOfChildren())
 			return false;
 		
 		for (int i = 0; i < caller.getNumberOfChildren(); i++)
-		{
-			caller.getParameter(i).getTypeRef()
-				.addParent(callee.getParameter(i).getTypeRef());
-		}
+			caller.getParameter(i).aliasTypeRef(callee.getParameter(i).getTypeRef());
 		
 		return true;
 	}
 	
-	/** Attach type constraints for a function or method which returns a
-	 * single value.
+	/** Wire output types of a call to a header, for a call that returns
+	 * a signle argument.
 	 */
 	
 	static boolean attachSingleOutputTypeConstraint(IsExpressionNode node,

@@ -8,32 +8,33 @@ package com.cowlark.cowbel.symbols;
 
 import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.IdentifierNode;
-import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.core.Constructor;
 import com.cowlark.cowbel.core.TypeRef;
 import com.cowlark.cowbel.interfaces.HasIdentifier;
 import com.cowlark.cowbel.interfaces.HasNode;
 import com.cowlark.cowbel.interfaces.HasScope;
 import com.cowlark.cowbel.interfaces.HasTypeRef;
+import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.utils.DeterministicObject;
 
 public abstract class Symbol extends DeterministicObject<Symbol>
 		implements HasNode, HasScope, HasIdentifier, HasTypeRef
 {
-	private Node _node;
+	private IsNode _node;
 	private IdentifierNode _name;
 	private TypeRef _typeref;
 	private AbstractScopeConstructorNode _scope;
 	
-	public Symbol(Node node, IdentifierNode name, TypeRef typeref)
+	public Symbol(IsNode node, IdentifierNode name, TypeRef typeref)
 	{
 		_node = node;
 		_name = name;
 		_typeref = typeref;
+		_typeref.addUse(this);
 	}
 
 	@Override
-    public Node getNode()
+    public IsNode getNode()
 	{
 		return _node;
 	}
@@ -47,7 +48,25 @@ public abstract class Symbol extends DeterministicObject<Symbol>
 	@Override
 	public TypeRef getTypeRef()
 	{
-	    return _typeref;
+		if (_typeref == null)
+			setTypeRef(new TypeRef(_node));
+		return _typeref;
+	}
+	
+	@Override
+    public void setTypeRef(TypeRef typeref)
+    {
+	    _typeref = typeref;
+	    typeref.addUse(this);
+    }
+
+	@Override
+	public void aliasTypeRef(TypeRef tr)
+	{
+		if (_typeref != null)
+			_typeref.alias(tr);
+		else
+			setTypeRef(tr);
 	}
 	
 	@Override

@@ -51,6 +51,7 @@ import com.cowlark.cowbel.ast.WhileStatementNode;
 import com.cowlark.cowbel.errors.BreakOrContinueNotInLoopException;
 import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.interfaces.HasTypeRef;
+import com.cowlark.cowbel.interfaces.IsMethodCallNode;
 import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.AbstractConcreteType;
@@ -77,7 +78,7 @@ public class BasicBlockBuilderVisitor extends SimpleASTVisitor
 		return _currentBB;
 	}
 	
-	private Variable cast(Node node, Variable value, AbstractConcreteType targettype)
+	private Variable cast(IsNode node, Variable value, AbstractConcreteType targettype)
 	{
 		AbstractConcreteType srctype = type(value);
 		
@@ -384,14 +385,14 @@ public class BasicBlockBuilderVisitor extends SimpleASTVisitor
 		{
 			arguments.getExpression(i).visit(this);
 			_result = cast(node, _result,
-					type(realinputs.getParameter(i)));
+					type(realinputs.getParameter(i).getSymbol()));
 			invars.add(_result);
 		}
 
 		for (int i = 0; i < numrealouttypes; i++)
 		{
 			Variable v = _currentBB.createTemporary(node,
-					type(realoutputs.getParameter(i)));
+					type(realoutputs.getParameter(i).getSymbol()));
 			outvars.add(v);
 		}
 		
@@ -413,13 +414,15 @@ public class BasicBlockBuilderVisitor extends SimpleASTVisitor
 		}
 	}
 	
-	private void methodcall(Node node, Callable callable,
+	private void methodcall(IsMethodCallNode node, Callable callable,
 			Variable receiver, List<Variable> invars, List<Variable> outvars)
 				throws CompilationException
 	{
 		if (receiver.getTypeRef().getConcreteType() instanceof ExternObjectConcreteType)
+		{
 			_currentBB.insnExternFunctionCall(node,
 					(Function) callable, receiver, invars, outvars);
+		}
 		else
 			_currentBB.insnMethodCall(node,	callable, receiver, invars, outvars);
 	}
@@ -443,6 +446,8 @@ public class BasicBlockBuilderVisitor extends SimpleASTVisitor
 		for (int i = 0; i < numinvars; i++)
 		{
 			arguments.getExpression(i).visit(this);
+			_result = cast(node, _result,
+					type(realinputs.getParameter(i)));
 			invars.add(_result);
 		}
 

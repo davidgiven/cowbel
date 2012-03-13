@@ -7,7 +7,8 @@
 package com.cowlark.cowbel.instructions;
 
 import java.util.List;
-import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.symbols.Variable;
 
 public class ExternInstruction extends Instruction
@@ -15,7 +16,7 @@ public class ExternInstruction extends Instruction
 	private String _template;
 	private List<Variable> _variables;
 	
-	public ExternInstruction(Node node, String template, List<Variable> variables)
+	public ExternInstruction(IsNode node, String template, List<Variable> variables)
     {
 		super(node);
 		_template = template;
@@ -45,7 +46,7 @@ public class ExternInstruction extends Instruction
 	}
 	
 	@Override
-    public void visit(InstructionVisitor visitor)
+    public void visit(InstructionVisitor visitor) throws CompilationException
 	{
 		visitor.visit(this);
 	}

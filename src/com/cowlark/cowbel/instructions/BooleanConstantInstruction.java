@@ -6,7 +6,8 @@
 
 package com.cowlark.cowbel.instructions;
 
-import com.cowlark.cowbel.ast.Node;
+import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.symbols.Variable;
 
 public class BooleanConstantInstruction extends Instruction
@@ -14,7 +15,7 @@ public class BooleanConstantInstruction extends Instruction
 	private boolean _value;
 	private Variable _outvar;
 	
-	public BooleanConstantInstruction(Node node, boolean value, Variable outvar)
+	public BooleanConstantInstruction(IsNode node, boolean value, Variable outvar)
     {
 		super(node);
 		_value = value;
@@ -45,6 +46,7 @@ public class BooleanConstantInstruction extends Instruction
 	
 	@Override
     public void visit(InstructionVisitor visitor)
+			throws CompilationException
 	{
 		visitor.visit(this);
 	}

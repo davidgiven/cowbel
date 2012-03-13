@@ -92,6 +92,7 @@ public abstract class Backend extends InstructionVisitor
 	}
 	
 	public void compileFunction(Function f)
+			throws CompilationException
 	{
 		_pending.add(f.getEntryBB());
 		_seen.add(f.getEntryBB());
@@ -115,6 +116,7 @@ public abstract class Backend extends InstructionVisitor
 	}
 	
 	public void compileBasicBlock(BasicBlock bb)
+			throws CompilationException
 	{
 		_currentbb = bb;
 		_iterator = bb.getInstructions().iterator();
@@ -123,6 +125,7 @@ public abstract class Backend extends InstructionVisitor
 	}
 	
 	protected void compileFromIterator()
+			throws CompilationException
 	{
 		Instruction insn = _iterator.next();
 		insn.visit(this);

@@ -11,4 +11,6 @@ import com.cowlark.cowbel.core.TypeRef;
 public interface HasTypeRef
 {
 	public TypeRef getTypeRef();
+	public void setTypeRef(TypeRef tr);
+	public void aliasTypeRef(TypeRef tr);
 }

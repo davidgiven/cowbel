@@ -17,6 +17,7 @@ import com.cowlark.cowbel.core.Constructor;
 import com.cowlark.cowbel.core.Function;
 import com.cowlark.cowbel.core.FunctionTemplateSignature;
 import com.cowlark.cowbel.core.Implementation;
+import com.cowlark.cowbel.core.InterfaceContext;
 import com.cowlark.cowbel.core.Label;
 import com.cowlark.cowbel.errors.AmbiguousVariableReference;
 import com.cowlark.cowbel.errors.CompilationException;
@@ -47,6 +48,7 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 	private Constructor _constructor;
 	private Implementation _implementation;
 	private ScopeType _scopeType = ScopeType.TRIVIAL;
+	private InterfaceContext _context;
 	
 	public AbstractScopeConstructorNode(Location start, Location end)
     {
@@ -414,5 +416,19 @@ public abstract class AbstractScopeConstructorNode extends AbstractStatementNode
 		
 		Function f = s.getFunction();
 		return (f != _function);
+	}
+
+	@Override
+	public InterfaceContext getTypeContext()
+	{
+		if (_context == null)
+			_context = new InterfaceContext(this, getParent().getTypeContext());
+	    return _context;
+	}
+	
+	@Override
+	public void setTypeContext(InterfaceContext typecontext)
+	{
+		_context = typecontext;
 	}
 }

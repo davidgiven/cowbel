@@ -6,14 +6,15 @@
 
 package com.cowlark.cowbel.instructions;
 
-import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.core.BasicBlock;
+import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.IsNode;
 
 public class GotoInstruction extends Instruction
 {
 	private BasicBlock _target;
 	
-	public GotoInstruction(Node node, BasicBlock target)
+	public GotoInstruction(IsNode node, BasicBlock target)
 	{
 		super(node);
 		_target = target;
@@ -37,7 +38,7 @@ public class GotoInstruction extends Instruction
 	}	
 	
 	@Override
-    public void visit(InstructionVisitor visitor)
+    public void visit(InstructionVisitor visitor) throws CompilationException
 	{
 		visitor.visit(this);
 	}

@@ -25,8 +25,8 @@ import com.cowlark.cowbel.ast.ParameterDeclarationListNode;
 import com.cowlark.cowbel.ast.ParameterDeclarationNode;
 import com.cowlark.cowbel.backend.Backend;
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.errors.CouldNotFindMethod;
 import com.cowlark.cowbel.errors.FailedParseException;
-import com.cowlark.cowbel.errors.FailedToInferTypeException;
 import com.cowlark.cowbel.instructions.Instruction;
 import com.cowlark.cowbel.instructions.InstructionVisitor;
 import com.cowlark.cowbel.interfaces.HasMethods;
@@ -160,7 +160,7 @@ public class Compiler
 					 * so throw an error. */
 					
 					IsMethod m = (IsMethod) CollectTypeConstraintsVisitor.Instance.getUnhandledNodes().first();
-					throw new FailedToInferTypeException(m.getReceiver(), null);
+					throw new CouldNotFindMethod(m);
 				}
 				
 				/* We've processed all pending function instantiations. Now
@@ -218,7 +218,7 @@ public class Compiler
 		_listener.onCodeGenerationEnd();
 	}
 
-	public void visit(BasicBlockVisitor visitor)
+	public void visit(BasicBlockVisitor visitor) throws CompilationException
 	{
 		TreeSet<BasicBlock> pending = new TreeSet<BasicBlock>();
 		TreeSet<BasicBlock> seen = new TreeSet<BasicBlock>();
@@ -258,12 +258,13 @@ public class Compiler
 		
 		@Override
 		public void visit(BasicBlock bb)
+				throws CompilationException
 		{
 			bb.visit(_visitor);
 		}
 	}
 	
-	public void visit(InstructionVisitor visitor)
+	public void visit(InstructionVisitor visitor) throws CompilationException
 	{
 		BasicBlockToInstructionAdapter adapter = new BasicBlockToInstructionAdapter(visitor);
 		visit(adapter);
@@ -358,12 +359,13 @@ public class Compiler
 			ParameterDeclarationNode pdn = (ParameterDeclarationNode) n;
 			IdentifierNode variablename = pdn.getIdentifier();
 			
-			TypeRef ptyperef = pdn.getTypeRef();
+//			TypeRef ptyperef = pdn.getTypeRef();
 			TypeRef vartyperef = new TypeRef(pdn);
-			if (isOutputParameter)
-				ptyperef.addParent(vartyperef);
-			else
-				ptyperef.addChild(vartyperef);
+			pdn.aliasTypeRef(vartyperef);
+//			if (isOutputParameter)
+//				ptyperef.addParent(vartyperef);
+//			else
+//				ptyperef.addChild(vartyperef);
 			
 			Variable v = new Variable(pdn, variablename, vartyperef);
 			v.setParameter(true);

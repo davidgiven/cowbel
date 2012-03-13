@@ -27,23 +27,18 @@ public class InterfaceConcreteType
 		return _allInterfaceTypes;
 	}
 
-	private IsNode _node;
 	private Collection<Interface> _interfaces;
 	private TreeSet<Method> _methods =
 		new TreeSet<Method>();
-	private Collection<AbstractConcreteType> _parents;
+	private TreeSet<AbstractConcreteType> _parents =
+		new TreeSet<AbstractConcreteType>();
 	private TreeSet<InterfaceConcreteType> _downcasts =
 		new TreeSet<InterfaceConcreteType>();
 	
-	public InterfaceConcreteType(IsNode node, Collection<Interface> interfaces,
-			Collection<AbstractConcreteType> parents)
+	public InterfaceConcreteType(IsNode node, Collection<Interface> interfaces)
     {
-		_node = node;
+		super(node);
 		_interfaces = interfaces;
-		_parents = parents;
-		
-		for (AbstractConcreteType c : parents)
-			c.supportsInterface(this);
 		
 		for (Interface i : interfaces)
 		{
@@ -64,6 +59,18 @@ public class InterfaceConcreteType
     {
 	    return _methods;
     }
+	
+	public void addParents(Collection<AbstractConcreteType> parents)
+	{
+		for (AbstractConcreteType ctype : parents)
+		{
+			if (!_parents.contains(ctype))
+			{
+				_parents.add(ctype);
+				ctype.supportsInterface(this);
+			}
+		}
+	}
 	
 	@Override
 	public Callable getCallable(FunctionTemplateSignature fts, IsCallNode node)

@@ -12,17 +12,16 @@ import com.cowlark.cowbel.core.Callable;
 import com.cowlark.cowbel.core.FunctionTemplateSignature;
 import com.cowlark.cowbel.core.Interface;
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.errors.FailedToInferTypeException;
 import com.cowlark.cowbel.interfaces.IsCallNode;
 import com.cowlark.cowbel.interfaces.IsNode;
 
 public class InferenceFailedConcreteType
 		extends AbstractConcreteType
 {
-	private IsNode _node;
-	
 	public InferenceFailedConcreteType(IsNode node)
     {
-		_node = node;
+		super(node);
     }
 
 	@Override
@@ -35,7 +34,7 @@ public class InferenceFailedConcreteType
 	public Callable getCallable(FunctionTemplateSignature fts, IsCallNode node)
 	        throws CompilationException
 	{
-	    return null;
+	    throw new FailedToInferTypeException(node, this);
 	}
 	
 	@Override

@@ -8,19 +8,21 @@ package com.cowlark.cowbel.core;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import org.apache.commons.lang3.mutable.MutableInt;
 import com.cowlark.cowbel.errors.CompilationException;
-import com.cowlark.cowbel.errors.FailedToInferTypeException;
 import com.cowlark.cowbel.errors.MustHaveTypeConstraints;
 import com.cowlark.cowbel.errors.TypesNotCompatibleException;
 import com.cowlark.cowbel.interfaces.HasConcreteType;
 import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.types.AbstractConcreteType;
+import com.cowlark.cowbel.types.InferenceFailedConcreteType;
 import com.cowlark.cowbel.types.InterfaceConcreteType;
 
 /** Placeholder class containing useful methods used by the type inference
@@ -29,6 +31,9 @@ import com.cowlark.cowbel.types.InterfaceConcreteType;
 
 public abstract class TypeInferenceEngine
 {
+	private static TreeMap<ConcreteTypeSignature, InterfaceConcreteType> 
+		_interfaces = new TreeMap<ConcreteTypeSignature, InterfaceConcreteType>();
+	
 	/** Detect any cycles in the TypeRef graph using Tarjan's Strongly
 	 * Connected Components algorithm. */
 	
@@ -154,21 +159,23 @@ public abstract class TypeInferenceEngine
 			throws CompilationException
 	{
 		IsNode node = tr.getNode();
-		Collection<Interface> parentConstraints = null;
+		Collection<Interface> parentConstraints = Collections.emptySet();
 		switch (tr.getParents().size())
 		{
 			case 0:
 			{
-				/* No parents. This node must have an implementation, or bad
-				 * things happen. */
+				/* No parents. If this node has no implementation, then this
+				 * is either a type inference error or an EmptyConcreteType;
+				 * either way, we don't care at this point. Otherwise, our
+				 * constraints match the implementation's. */
 
-				if (!(node instanceof HasConcreteType))
-					throw new FailedToInferTypeException(node, null);
-
-				Implementation implementation = tr.getImplementation();
-				assert(implementation != null);
-				
-				parentConstraints = implementation.getInterfaces();
+				if (node instanceof HasConcreteType)
+				{
+					Implementation implementation = tr.getImplementation();
+					assert(implementation != null);
+					
+					parentConstraints = implementation.getInterfaces();
+				}
 				break;
 			}
 			
@@ -190,19 +197,25 @@ public abstract class TypeInferenceEngine
 				/* Collect all constraints. */
 				
 				TreeMap<Interface, MutableInt> map = new TreeMap<Interface, MutableInt>();
+				int importantParents = 0;
 				for (TypeRef parent : tr.getParents())
 				{
 					recurseThroughConstraints(parent);
-					for (Interface c : parent.getConstraints())
+					Collection<Interface> pc = parent.getConstraints();
+					if (!pc.isEmpty())
 					{
-						MutableInt i = map.get(c);
-						if (i == null)
+						importantParents++;
+						for (Interface c : pc)
 						{
-							i = new MutableInt(1);
-							map.put(c, i);
+							MutableInt i = map.get(c);
+							if (i == null)
+							{
+								i = new MutableInt(1);
+								map.put(c, i);
+							}
+							else
+								i.increment();
 						}
-						else
-							i.increment();
 					}
 				}
 				
@@ -213,7 +226,7 @@ public abstract class TypeInferenceEngine
 				while (i.hasNext())
 				{
 					Map.Entry<Interface, MutableInt> e = i.next();
-					if (e.getValue().getValue() < tr.getParents().size())
+					if (e.getValue().getValue() < importantParents)
 						i.remove();
 				}
 				
@@ -221,24 +234,27 @@ public abstract class TypeInferenceEngine
 			}
 		}
 		
-		if (tr.getConstraints().isEmpty())
+		if (!parentConstraints.isEmpty())
 		{
-			/* The typeref has no constraints, so use the parent constraints
-			 * instead. */
-			
-			for (Interface i : parentConstraints)
-				tr.addCastConstraint(i);
-		}
-		else
-		{
-			/* Check that the typeref's constraints can be met by the parent
-			 * constraints. */
-			
-			for (Interface i : tr.getConstraints())
+			if (tr.getConstraints().isEmpty())
 			{
-				if (!parentConstraints.contains(i))
-					throw new TypesNotCompatibleException(node,
-							tr, i);
+				/* The typeref has no constraints, so use the parent constraints
+				 * instead. */
+				
+				for (Interface i : parentConstraints)
+					tr.addCastConstraint(i);
+			}
+			else
+			{
+				/* Check that the typeref's constraints can be met by the parent
+				 * constraints. */
+				
+				for (Interface i : tr.getConstraints())
+				{
+					if (!parentConstraints.contains(i))
+						throw new TypesNotCompatibleException(node,
+								tr, i);
+				}
 			}
 		}
 	}
@@ -253,6 +269,19 @@ public abstract class TypeInferenceEngine
 				recurseThroughConstraints(tr);
 	}	
 
+	private static void undoFailedInferences(TypeRef tr,
+			AbstractConcreteType ctype)
+	{
+		for (TypeRef parent : tr.getParents())
+		{
+			if (parent.getConcreteType() instanceof InferenceFailedConcreteType)
+			{
+				parent.setConcreteType(ctype);
+				undoFailedInferences(parent, ctype);
+			}
+		}
+	}
+	
 	private static void recurseThroughTypes(TypeRef tr)
 			throws CompilationException
 	{
@@ -272,8 +301,7 @@ public abstract class TypeInferenceEngine
 				IsNode node = tr.getNode();
 				if (!(node instanceof HasConcreteType))
 				{
-					throw new FailedToInferTypeException(node, null);
-//					ctype = new InferenceFailedConcreteType(node);
+					ctype = new InferenceFailedConcreteType(node);
 				}
 				else
 				{
@@ -306,35 +334,73 @@ public abstract class TypeInferenceEngine
 				{
 					recurseThroughTypes(parent);
 					AbstractConcreteType ct = parent.getConcreteType();
-					parenttypes.add(ct);
+					if (!(ct instanceof InferenceFailedConcreteType))
+						parenttypes.add(ct);
 				}
 				
 				/* If parenttypes now contains exactly one item, then they
 				 * all have the same concrete type. */
 				
-				if (parenttypes.size() == 1)
+				switch (parenttypes.size())
 				{
-					ctype = parenttypes.first();
-				}
-				else
-				{
-					/* This node *must* have constraints. */
-					
-					if (tr.getConstraints().isEmpty())
-					{
-						/* ...unless each parent type has the same set of
-						 * constraints, which lets us easily determine the
-						 * constraints this node should have. */
+					case 0:
+						/* Whoops! Our parent(s) must all be
+						 * InferenceFailedConcreteTypes. Therefore we must be
+						 * too. */
 						
-						throw new MustHaveTypeConstraints(tr.getNode(), tr);
+						ctype = tr.getParents().first().getConcreteType();
+						break;
+						
+					case 1:
+						/* One unique parent type in our parents, therefore
+						 * that must be our type. */
+						
+						ctype = parenttypes.first();
+						break;
+						
+					default:
+					{
+						/* Multiple unique parent types. This node must have
+						 * constraints. */
+						
+						if (tr.getConstraints().isEmpty())
+						{
+							/* ...unless each parent type has the same set of
+							 * constraints, which lets us easily determine the
+							 * constraints this node should have. */
+							
+							throw new MustHaveTypeConstraints(tr.getNode(), tr);
+						}
+						
+						for (AbstractConcreteType ct : parenttypes)
+							ct.checkTypeConstraints(tr);
+						
+						ConcreteTypeSignature sig = new ConcreteTypeSignature(parenttypes);
+						InterfaceConcreteType i = _interfaces.get(sig);
+						if (i == null)
+						{
+							i = new InterfaceConcreteType(tr.getNode(),
+									tr.getConstraints());
+							_interfaces.put(sig, i);
+						}
+						i.addParents(parenttypes);
+						ctype = i;
+						
+						break;
 					}
-					
-					for (AbstractConcreteType ct : parenttypes)
-						ct.checkTypeConstraints(tr);
-					
-					ctype = new InterfaceConcreteType(tr.getNode(),
-							tr.getConstraints(), parenttypes);
 				}
+				
+				/* We now know this node's concrete type (subject to type
+				 * constraint issues). But! If we aren't a
+				 * InferenceFailedConcreteType, but some of our parents *are*,
+				 * then we need to push our type the wrong direction up the
+				 * inference graph and force those parents to be our type.
+				 */
+				
+				if (!(ctype instanceof InferenceFailedConcreteType))
+					undoFailedInferences(tr, ctype);
+				
+				break;
 			}
 		}
 

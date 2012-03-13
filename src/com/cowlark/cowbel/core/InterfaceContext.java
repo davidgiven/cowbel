@@ -147,30 +147,35 @@ public class InterfaceContext extends DeterministicObject<InterfaceContext>
 	public Interface lookupType(TypeVariableNode node)
 				throws CompilationException
 	{
-		/* If this type node has no type assignments, first check to see if
-		 * there's a type already instantiated for it. (Needed for inflated
-		 * type arguments, which have no template attached to them.)
-		 */
+		TypeSignature signature = new TypeSignature(node.getIdentifier());
+		TypeTemplateSignature templatesignature = new TypeTemplateSignature(node);
 		
-		if (node.getTypeArguments().getNumberOfChildren() == 0)
+		InterfaceContext context = this;
+		do
 		{
-			TypeSignature signature = new TypeSignature(node.getIdentifier());
-			
-			InterfaceContext context = this;
-			do
-			{
+			/* If this type node has no type assignments, first check to see if
+			 * there's a type already instantiated for it. (Needed for inflated
+			 * type arguments, which have no template attached to them.)
+			 */
+		
+			if (node.getTypeArguments().getNumberOfChildren() == 0)
+			{	
 				Interface i = context._instantiatedTemplates.get(signature);
 				if (i != null)
 					return i;
-				context = context.getParent();
 			}
-			while (context != null);
-		}
 
-		/* Otherwise look for a template and inflate it. */
+			/* No simple type available; look for a template. */
+			
+			InterfaceTemplate template = context._interfaceTemplates.get(templatesignature);
+			if (template != null)
+				return template.getInterfaceContext().instantiateType(template, node);
+
+			context = context.getParent();
+		}
+		while (context != null);
 		
-		InterfaceTemplate template = lookupTemplate(node);
-		return template.getInterfaceContext().instantiateType(template, node);
+		throw new TypeNotFound(this, node);
 	}
 	
 	public Interface lookupRawType(String name)

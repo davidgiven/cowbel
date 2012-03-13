@@ -11,9 +11,10 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.interfaces.HasMethods;
 import com.cowlark.cowbel.interfaces.HasNode;
+import com.cowlark.cowbel.interfaces.HasTypeRef;
+import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.types.AbstractConcreteType;
 import com.cowlark.cowbel.utils.DeterministicObject;
 
@@ -32,7 +33,10 @@ public class TypeRef extends DeterministicObject<TypeRef>
 		return _allTypeRefs;
 	}
 	
-	private Node _node;
+	private IsNode _node;
+	
+	/** This typeref is used here. */
+	private TreeSet<HasTypeRef> _uses = new TreeSet<HasTypeRef>();
 	
 	/** We are of this type. */
 	private AbstractConcreteType _type;
@@ -54,14 +58,19 @@ public class TypeRef extends DeterministicObject<TypeRef>
 	int index = -1;
 	int lowlink = -1;
 	
-	public TypeRef(Node node)
+	public TypeRef(IsNode node)
     {
 		_node = node;
 		_allTypeRefs.add(this);
     }
 	
+	public void addUse(HasTypeRef use)
+	{
+		_uses.add(use);
+	}
+	
 	@Override
-	public Node getNode()
+	public IsNode getNode()
 	{
 	    return _node;
 	}
@@ -90,7 +99,6 @@ public class TypeRef extends DeterministicObject<TypeRef>
 	
 	public TypeRef setConcreteType(AbstractConcreteType type)
 	{
-		assert(_type == null);
 		_type = type;
 		
 		return this;
@@ -166,7 +174,11 @@ public class TypeRef extends DeterministicObject<TypeRef>
 		processed.add(this);
 		
 		if (_implementation != null)
+		{
 			accumulator.add(_implementation);
+			accumulator.addAll(_implementation.getInterfaces());
+			return;
+		}
 
 		if (_constraints != null)
 		{
@@ -193,5 +205,13 @@ public class TypeRef extends DeterministicObject<TypeRef>
 		collect_method_providers(accumulator, processed);
 		
 		return accumulator;
+	}
+	
+	/** This typeref is declared to be an alias of another. */
+	
+	public void alias(TypeRef other)
+	{
+		this.addParent(other);
+		other.addParent(this);
 	}
 }

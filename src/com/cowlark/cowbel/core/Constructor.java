@@ -11,11 +11,13 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
+import com.cowlark.cowbel.interfaces.HasNode;
 import com.cowlark.cowbel.symbols.Variable;
 import com.cowlark.cowbel.types.ObjectConcreteType;
 import com.cowlark.cowbel.utils.DeterministicObject;
 
 public class Constructor extends DeterministicObject<Constructor>
+		implements HasNode
 {
 	private static TreeSet<Constructor> _allConstructors =
 		new TreeSet<Constructor>();
@@ -38,7 +40,8 @@ public class Constructor extends DeterministicObject<Constructor>
 		_allConstructors.add(this);
 	}
 	
-	public AbstractScopeConstructorNode getNode()
+	@Override
+    public AbstractScopeConstructorNode getNode()
 	{
 		return _node;
 	}

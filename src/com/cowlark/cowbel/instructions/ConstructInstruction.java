@@ -6,14 +6,15 @@
 
 package com.cowlark.cowbel.instructions;
 
-import com.cowlark.cowbel.ast.Node;
 import com.cowlark.cowbel.core.Constructor;
+import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.interfaces.IsNode;
 
 public class ConstructInstruction extends Instruction
 {
 	private Constructor _constructor;
 	
-	public ConstructInstruction(Node node, Constructor constructor)
+	public ConstructInstruction(IsNode node, Constructor constructor)
     {
 		super(node);
 		_constructor = constructor;
@@ -37,7 +38,7 @@ public class ConstructInstruction extends Instruction
 	}
 	
 	@Override
-    public void visit(InstructionVisitor visitor)
+    public void visit(InstructionVisitor visitor) throws CompilationException
 	{
 		visitor.visit(this);
 	}
