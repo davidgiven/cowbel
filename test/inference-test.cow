@@ -1,0 +1,59 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+#include "SimpleIO.ch"
+#include "Application.ch"
+
+/*
+type HasString =
+{
+ function toString(): string;
+};
+
+var o1 =
+{
+	implements HasString;
+	
+	function toString(): string
+		return "one";
+};
+
+var o2 =
+{
+	implements HasString;
+	
+ function toString(): string
+  return "two";
+};
+
+var o3: HasString = o1;
+
+function get(o: HasString)
+{
+	o.toString();
+}
+
+o2.toString();
+get(o3);
+o1.toString();
+*/
+
+var args = ApplicationArguments();
+var low, high = args.bounds();
+
+for i = low, high
+{
+	print("arg ");
+	print(i.toString());
+	print(" = ");
+	println(args.get(i));
+}

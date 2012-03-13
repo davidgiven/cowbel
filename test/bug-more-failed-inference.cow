@@ -1,0 +1,53 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+#include "SimpleIO.ch"
+#include "Application.ch"
+
+type Node =
+{
+	function setRight(right: Node);
+	function getNode(): Node;
+};
+
+var o1: Node =
+{
+	implements Node;	
+	function setRight(right: Node) {}
+	function getNode(): Node { return o1; }
+};
+
+var o2: Node =
+{
+	implements Node;	
+	function setRight(right: Node) {}
+	function getNode(): Node { return o2; }
+};
+
+/*
+function f1(root: Node): Node
+{
+	root = o2;
+	root.setRight(o1);
+	
+	return root;
+}
+*/
+
+function f2(): (o: Node)
+{
+	//o = o1.getNode();
+	o = o2.getNode();
+}
+
+//f1(o1);
+f2();

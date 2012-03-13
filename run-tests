@@ -11,15 +11,22 @@
 # information.
 
 for f in \
-	test/maps-example.cow \
-	test/generics-example.cow \
+	test/inference-test.cow \
 	test/map-test.cow \
+	test/maps-example.cow \
+	test/mandelbrot.cow \
 	test/file-test.cow \
+	test/failed-inference-test.cow \
+	test/bug-more-failed-inference.cow \
+	test/generics-test.cow \
+	test/extern-test.cow \
+	test/incorrect-types-test.cow \
+	test/disjoint-types-test.cow \
+	test/generics-example.cow \
 	test/operators-test.cow \
 	test/application-test.cow \
 	test/fizzbuzz.cow \
 	test/99-bottles.cow \
-	test/mandelbrot.cow \
 	test/real-test.cow \
 	test/array-test.cow \
 	test/assignment-test.cow \
@@ -27,8 +34,6 @@ for f in \
 	test/bug-function-scopes.cow \
 	test/bug-inherited-stack-frame.cow \
 	test/deep-upvalues-test.cow \
-	test/extern-test.cow \
-	test/generics-test.cow \
 	test/integer-test.cow \
 	test/interfaces-test.cow \
 	test/life.cow \
@@ -50,7 +55,7 @@ for f in \
 			fi
 		fi
 		exit 1
-	) 2>&1 > $logfile
+	) > $logfile 2>&1
 
 	if ! cmp --quiet $logfile $logfile.pristine; then 		
 		echo FAILED

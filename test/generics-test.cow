@@ -10,8 +10,11 @@
  * information.
  */
 
+#include <Stdlib.ch>
+
 function notypeparams(): int
 {
+	return 0;
 }
 
 function onetypeparam<T>(value: T): T
@@ -21,6 +24,7 @@ function onetypeparam<T>(value: T): T
 
 function twotypeparams<T1, T2>(): int
 {
+	return 0;
 }
 
 /* Direct calls */

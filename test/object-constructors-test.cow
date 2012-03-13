@@ -10,6 +10,8 @@
  * information.
  */
 
+#include <Stdlib.ch>
+
 var o = {
 	function testfunc<T>(in: T): T
 	{

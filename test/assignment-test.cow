@@ -10,6 +10,8 @@
  * information.
  */
 
+#include <Stdlib.ch>
+
 function zeroreturn()
 {
 }
