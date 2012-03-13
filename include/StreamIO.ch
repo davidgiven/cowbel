@@ -172,7 +172,7 @@ function OutputStreamWriter(os: OutputStream): Writer
 			
 			for i = 0, numbytes
 			{
-				var c = 0;
+				var c = extern(int);
 				extern '${c} = buffer[${i}];';
 				os.writeByte(c);
 			}
