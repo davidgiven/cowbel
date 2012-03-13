@@ -10,39 +10,8 @@
  * information.
  */
 
-type Maybe =
-{
-	function get(): int;
-	function valid(): boolean;
-};
-
-function Maybe<T>(): Maybe
-{
-	return
-	{
-		implements Maybe;
-		
-		function get(): T
-		{ }
-		
-		function valid(): boolean
-			return false;
-	};
-}
-
-function Maybe<T>(value: T): Maybe
-{
-	return
-	{
-		implements Maybe;
-		
-		function get(): T
-			return value;
-		
-		function valid(): boolean
-			return true;
-	};
-}
+#include <Stdlib.ch>
+#include <Maybe.ch>
 
 var null = Maybe<int>();
 var one = Maybe<int>(1);

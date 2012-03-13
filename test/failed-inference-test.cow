@@ -10,21 +10,37 @@
  * information.
  */
 
-#include <Stdlib.ch>
+#include <SimpleIO.ch>
+#include <Application.ch>
 
-function leaf()
+type HasA =
 {
-}
+	function doA(): int;
+};
 
-function usage1()
+var o1 =
 {
-	leaf();
-}
+	implements HasA;
+	
+	function doA(): int
+	{
+		Abort("failed");
+	}
+};
 
-function usage2()
+var o2 =
 {
-	leaf();
-}
+	implements HasA;
+	
+	function doA(): int
+	{
+		return 0;
+	}
+};
 
-usage1();
-usage2();
+var o = o2;
+o = o1;
+
+println("start");
+var i = o.doA() + 1;
+println("end");

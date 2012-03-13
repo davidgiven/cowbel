@@ -1,0 +1,2 @@
+Compilation failed:
+com.cowlark.cowbel.errors.MustHaveTypeConstraints: The symbol at test/disjoint-types-test.cow:51.4 is being assigned to from constructors with incompatible interfaces.

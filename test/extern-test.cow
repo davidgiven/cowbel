@@ -21,7 +21,7 @@ type Array<T> =
 
 function Array<T>(size: int, initialiser: T): Array<T>
 {
-	var ptr: __extern = 0;
+	var ptr: __extern = extern(__extern);
 	extern "${ptr} = calloc(${size}, sizeof(${initialiser}));";
 	
 	return
@@ -30,6 +30,7 @@ function Array<T>(size: int, initialiser: T): Array<T>
 		
 		function get(i: int): (result: T)
 		{
+			result = initialiser;
 			extern "${result} = ((typeof(${result})*)${ptr})[${i}];";
 		}
 		
