@@ -225,30 +225,6 @@ static s_string_t s_true_label =
 static s_string_t s_false_label =
 	{ NULL, NULL, "false", 5, 5, NULL };
 
-#define S_METHOD_BOOLEAN__EQ(a, b, z) (*z) = (a) == (b)
-#define S_METHOD_BOOLEAN__NE(a, b, z) (*z) = (a) != (b)
-#define S_METHOD_BOOLEAN__NOT(b, z) (*z) = !(b)
-#define S_METHOD_BOOLEAN__AND(a, b, z) (*z) = (a) & (b)
-#define S_METHOD_BOOLEAN__OR(a, b, z) (*z) = (a) | (b)
-#define S_METHOD_BOOLEAN__XOR(a, b, z) (*z) = (a) ^ (b)
-#define S_METHOD_BOOLEAN_TOSTRING(a, z) (*z) = (a) ? &s_true_label : &s_false_label
-
-/* Integer methods */
-
-#define S_METHOD_INT__ADD(a, b, z) (*z) = (a) + (b)
-#define S_METHOD_INT__SUB(a, b, z) (*z) = (a) - (b)
-#define S_METHOD_INT__MULTIPLY(a, b, z) (*z) = (a) * (b)
-#define S_METHOD_INT__DIVIDE(a, b, z) (*z) = (a) / (b)
-#define S_METHOD_INT__MODULUS(a, b, z) (*z) = (a) % (b)
-#define S_METHOD_INT__EQ(a, b, z) (*z) = (a) == (b)
-#define S_METHOD_INT__NE(a, b, z) (*z) = (a) != (b)
-#define S_METHOD_INT__GE(a, b, z) (*z) = (a) >= (b)
-#define S_METHOD_INT__GT(a, b, z) (*z) = (a) > (b)
-#define S_METHOD_INT__LE(a, b, z) (*z) = (a) <= (b)
-#define S_METHOD_INT__LT(a, b, z) (*z) = (a) < (b)
-#define S_METHOD_INT__SHL(a, b, z) (*z) = (a) << (b)
-#define S_METHOD_INT__SHR(a, b, z) (*z) = (a) >> (b)
-
 static void S_METHOD_INT_TOSTRING(int value, s_string_t** result)
 {
 	s_string_t* s = (s_string_t*) GC_MALLOC(sizeof(s_string_t));
@@ -261,22 +237,6 @@ static void S_METHOD_INT_TOSTRING(int value, s_string_t** result)
     s->seglength = s->totallength = strlen(buffer);
     *result = s;
 }
-
-#define S_METHOD_INT_TOREAL(a, z) (*z) = (s_real_t)a
-
-
-/* Real methods */
-
-#define S_METHOD_REAL__ADD(a, b, z) (*z) = (a) + (b)
-#define S_METHOD_REAL__SUB(a, b, z) (*z) = (a) - (b)
-#define S_METHOD_REAL__MULTIPLY(a, b, z) (*z) = (a) * (b)
-#define S_METHOD_REAL__DIVIDE(a, b, z) (*z) = (a) / (b)
-#define S_METHOD_REAL__EQ(a, b, z) (*z) = (a) == (b)
-#define S_METHOD_REAL__NE(a, b, z) (*z) = (a) != (b)
-#define S_METHOD_REAL__GE(a, b, z) (*z) = (a) >= (b)
-#define S_METHOD_REAL__GT(a, b, z) (*z) = (a) > (b)
-#define S_METHOD_REAL__LE(a, b, z) (*z) = (a) <= (b)
-#define S_METHOD_REAL__LT(a, b, z) (*z) = (a) < (b)
 
 static void S_METHOD_REAL_TOSTRING(s_real_t value, s_string_t** result)
 {
@@ -316,12 +276,5 @@ static void S_METHOD_STRING__ADD(s_string_t* left, s_string_t* right,
 	newstring->data = newstring->cdata = NULL;
 	*result = newstring;
 }
-
-#define S_METHOD_STRING__EQ(l, r, z) (*z) = (s_string_cmp(l, r) == 0)
-#define S_METHOD_STRING__NE(l, r, z) (*z) = (s_string_cmp(l, r) != 0)
-#define S_METHOD_STRING__LT(l, r, z) (*z) = (s_string_cmp(l, r) < 0)
-#define S_METHOD_STRING__LE(l, r, z) (*z) = (s_string_cmp(l, r) <= 0)
-#define S_METHOD_STRING__GT(l, r, z) (*z) = (s_string_cmp(l, r) > 0)
-#define S_METHOD_STRING__GE(l, r, z) (*z) = (s_string_cmp(l, r) >= 0)
 
 /* END cowbel runtime library */
