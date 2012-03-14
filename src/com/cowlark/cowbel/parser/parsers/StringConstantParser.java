@@ -7,6 +7,7 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import com.cowlark.cowbel.ast.StringConstantNode;
+import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.MutableLocation;
 import com.cowlark.cowbel.parser.core.ParseResult;
@@ -15,21 +16,18 @@ import com.cowlark.cowbel.parser.errors.InvalidCharacterInStringConstant;
 
 public class StringConstantParser extends Parser
 {
-	@Override
-	protected ParseResult parseImpl(Location location)
+	private CharSequence readStringConstant(MutableLocation location)
 	{
 		int delimiter = location.codepointAtOffset(0);
-		if ((delimiter != '"') && (delimiter != '\''))
-			return new ExpectedStringConstant(location);
+		assert((delimiter == '"') || (delimiter == '\''));
 		
 		StringBuilder sb = new StringBuilder();
-		MutableLocation end = new MutableLocation(location);
-		end.advance();
+		location.advance();
 		
 		for (;;)
 		{
-			int c = end.codepointAtOffset(0);
-			end.advance();
+			int c = location.codepointAtOffset(0);
+			location.advance();
 			
 			if (c == delimiter)
 				break;
@@ -38,8 +36,8 @@ public class StringConstantParser extends Parser
 			{
 				case '\\':
 				{
-					c = end.codepointAtOffset(0);
-					end.advance();
+					c = location.codepointAtOffset(0);
+					location.advance();
 
 					switch (c)
 					{
@@ -58,7 +56,7 @@ public class StringConstantParser extends Parser
 							break;
 							
 						default:
-							return new InvalidCharacterInStringConstant(end);
+							return null;
 					}
 					break;
 				}
@@ -66,13 +64,40 @@ public class StringConstantParser extends Parser
 				case -1:
 				case '\n':
 				case '\r':
-					return new InvalidCharacterInStringConstant(end);
+					return null;
 					
 				default:
 					sb.appendCodePoint(c);
 			}
 		}
 		
+		return sb;
+	}
+	
+	@Override
+	protected ParseResult parseImpl(Location location)
+	{
+		int delimiter = location.codepointAtOffset(0);
+		if ((delimiter != '"') && (delimiter != '\''))
+			return new ExpectedStringConstant(location);
+		
+		StringBuilder sb = new StringBuilder();
+		MutableLocation end = new MutableLocation(location);
+		
+		for (;;)
+		{
+			CharSequence s = readStringConstant(end);
+			if (s == null)
+				return new InvalidCharacterInStringConstant(end);
+			
+			sb.append(s);
+			
+			whitespace(end);
+			int d = end.codepointAtOffset(0);
+			if ((d != '"') && (d != '\''))
+				break;
+		}
+			
 		return new StringConstantNode(location, end, sb.toString());
 	}
 }

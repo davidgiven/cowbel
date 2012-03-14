@@ -183,7 +183,7 @@ public abstract class Parser
 		loc.setFilename(match.group(2));
 	}
 	
-	private void whitespace(MutableLocation loc)
+	protected void whitespace(MutableLocation loc)
 	{
 		for (;;)
 		{
