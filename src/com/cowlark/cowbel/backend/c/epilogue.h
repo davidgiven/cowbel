@@ -16,10 +16,12 @@ int main(int argc, const char* argv[])
 {
 	int i;
 
+#if defined COWBEL_USE_GC
 	GC_INIT();
+#endif
 
 	s_argc = argc;
-	s_argv = malloc(sizeof(s_string_t*) * s_argc);
+	s_argv = S_ALLOC_GC(sizeof(s_string_t*) * s_argc);
 	for (i = 0; i < argc; i++)
 		s_argv[i] = s_create_string_constant(argv[i]);
 
