@@ -25,12 +25,12 @@ type Buffer =
 	/** Returns the value at a particular index.
 	 **/
 	 
-	function get(i: int): T;
+	function get(i: int): int;
 	
 	/** Sets the value at a particular index.
 	 **/
 	 
-	function set(i: int, value: T);
+	function set(i: int, value: int);
 	
 	/** Returns the bounds of the array as [low, high); low is always zero.
 	 **/
@@ -78,7 +78,7 @@ function Buffer(size: int): Buffer
 		function get(i: int): (result: int)
 		{
 			_boundscheck(i);
-			result = extern(initialiser);
+			result = extern(int);
 			extern "${result} = ((uint8_t*)${ptr})[${i}];";
 		}
 		
@@ -130,6 +130,63 @@ function Buffer(size: int): Buffer
 		{
 			result = extern(string);
 			extern '${result} = s_create_string_val(${ptr}, ${size});';
+		}
+	};
+}
+
+/** Creates an immutable Buffer pointing at the UTF-8 bytes of a string. */
+
+function BufferFromString(value: string): Buffer
+{
+	var size = extern(int);
+	var ptr = extern(__extern);
+	extern '${size} = ${value}->totallength;';
+	extern '${ptr} = (void*) s_string_cdata(${value});';
+	
+	return
+	{
+		implements Array<int>;
+		implements Buffer;
+
+		function _boundscheck(i: int)
+		{
+			if (i < 0)
+				AbortOutOfBounds();
+			else if (i >= size)
+				AbortOutOfBounds(); 
+		}
+				
+		function get(i: int): (result: int)
+		{
+			_boundscheck(i);
+			result = extern(int);
+			extern "${result} = ((uint8_t*)${ptr})[${i}];";
+		}
+		
+		function set(i: int, value: int)
+		{
+			AbortOperationNotSupported();
+		}
+		
+		function bounds(): (low: int, high: int)
+		{
+			low = 0;
+			high = size;
+		}
+		
+		function resize(newsize: int)
+		{
+			AbortOperationNotSupported();
+		}
+		
+		function append(value: int)
+		{
+			AbortOperationNotSupported();
+		}
+		
+		function toString(): (result: string)
+		{
+			return value;
 		}
 	};
 }

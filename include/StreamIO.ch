@@ -16,12 +16,18 @@
 #include <Stdlib.ch>
 #include <Application.ch>
 #include <Maybe.ch>
+#include <Buffer.ch>
 
 /** Represents a simple, non-seekable input stream.
  **/
 
 type InputStream =
 {
+	/** Returns true if there is nothing left to read on this stream.
+	 **/
+	 
+	function isEOF(): boolean;
+	
 	/** Reads a byte from the stream. Returns -1 on EOF.
 	 **/
 	 
@@ -53,8 +59,17 @@ function Stdin(): InputStream
 	{
 		implements InputStream;
 		
+		function isEOF(): (result: boolean)
+		{
+			result = extern(boolean);
+			extern '${result} = feof(stdin);';
+		}
+		
 		function readByte(): (result: int)
+		{
+			result = extern(int);
 			extern '${result} = fgetc(stdin);';
+		}
 	};
 }
 
@@ -97,10 +112,21 @@ function Stderr(): OutputStream
  
 type Reader =
 {
+	/** Returns true if there is nothing left to read.
+	 **/
+	
+	function isEOF(): boolean;
+	
 	/** Reads the next Unicode code point. Returns -1 on EOF.
 	 **/
 	 
 	function readCodePoint(): int;
+	
+	/** Reads in a line of text, terminated by a \n or an EOF. \r characters
+	 ** are ignored.
+	 **/
+	 
+	function readString(): string;
 };
 
 /** Creates new Reader which reads from the specified InputStream.
@@ -112,6 +138,9 @@ function InputStreamReader(is: InputStream): Reader
 	{
 		implements Reader;
 		
+		function isEOF(): boolean
+			return is.isEOF();
+			
 		function readCodePoint(): (result: int)
 		{
 			var leadbyte = is.readByte();
@@ -134,6 +163,25 @@ function InputStreamReader(is: InputStream): Reader
 			extern 'const unsigned char* p = buffer;';
 			extern '${result} = utf8_read(&p);';
 		}
+		
+		function readString(): string
+		{
+			var buffer = Buffer(0);
+			
+			while (true)
+			{
+				var c = is.readByte();
+				if (c == -1)
+					break;
+				if (c == 10)
+					break;
+				if (c == 13)
+					continue;
+				buffer.append(c);
+			}
+			
+			return buffer.toString();
+		}
 	};
 }
 
@@ -146,6 +194,11 @@ type Writer =
 	 **/
 	 
 	function writeCodePoint(i: int);
+	
+	/** Writes a string.
+	 **/
+	
+	function writeString(s: string);
 	
 	/** Flushes any pending output.
 	 **/
@@ -174,6 +227,17 @@ function OutputStreamWriter(os: OutputStream): Writer
 			{
 				var c = extern(int);
 				extern '${c} = buffer[${i}];';
+				os.writeByte(c);
+			}
+		}
+		
+		function writeString(s: string)
+		{
+			var buffer = BufferFromString(s);
+			var lo, hi = buffer.bounds();
+			for i = lo, hi
+			{
+				var c = buffer.get(i);
 				os.writeByte(c);
 			}
 		}
