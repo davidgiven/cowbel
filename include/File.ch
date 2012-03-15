@@ -84,6 +84,12 @@ function File(path: string): File
 		{
 			implements InputStream;
 			
+			function isEOF(): (result: boolean)
+			{
+				result = extern(boolean);
+				extern '${result} = feof((FILE*) ${fp});';
+			}
+			
 			function readByte(): (result: int)
 			{
 				result = extern(int);

@@ -51,6 +51,7 @@ if (i == -1)
 	outw.writeCodePoint(99);
 	outw.writeCodePoint(1234);
 	outw.writeCodePoint(5678);
+	outw.writeString("fnord\n");
 }
 file.close();
 
@@ -61,14 +62,9 @@ if (i == -1)
 {
 	var ins = file.getInputStream();
 	var inr = InputStreamReader(ins);
+	var s = inr.readString();
 	
-	while (true)
-	{
-		var c = inr.readCodePoint();
-		if (c == -1)
-			break;
-		println("c = "+c.toString());
-	}
+	println("read <"+s+">");
 }
 
 file.close();
