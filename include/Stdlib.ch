@@ -216,11 +216,18 @@ var boolean = {
 };
 
 type __extern = {
+	function isNull(): boolean;
 };
 
 var __extern = {
 	type extern "void*";
 	implements __extern;
+	
+	function isNull(): (result: boolean)
+	{
+		result = extern(boolean);
+		extern '${result} = !self;';
+	}
 };
 
 /** This nasty hack provides an easy way to import a C constant. Use it like
