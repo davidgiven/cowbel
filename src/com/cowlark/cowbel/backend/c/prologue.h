@@ -19,15 +19,26 @@
 #include <stdarg.h>
 #include <string.h>
 #include <locale.h>
-#include <gc.h>
 
 typedef int s_boolean_t;
 typedef int s_int_t;
 typedef double s_real_t;
 typedef struct s_string s_string_t;
 
+#if defined COWBEL_USE_GC
+#include <gc.h>
+#define S_ALLOC_GC(length) 	GC_MALLOC(length)
+#define S_ALLOC_DATA(length) GC_MALLOC_ATOMIC(length)
+#define S_REALLOC_DATA(ptr, newlength) GC_REALLOC(ptr, newlength)
+#else
+#define S_ALLOC_GC(length) 	malloc(length)
+#define S_ALLOC_DATA(length) malloc(length)
+#define S_REALLOC_DATA(ptr, newlength) realloc(ptr, newlength)
+#endif
+
+
 #define S_ALLOC_CONSTRUCTOR(type) \
-	((sizeof(type) > 0) ? ((type*) GC_MALLOC(sizeof(type))) : NULL)
+	((sizeof(type) > 0) ? ((type*) S_ALLOC_GC(sizeof(type))) : NULL)
 
 static int s_argc;
 static s_string_t** s_argv;
@@ -144,7 +155,7 @@ static const char* s_string_cdata(s_string_t* s)
 	if (s->cdata)
 		return s->cdata;
 
-	char* outputbuffer = GC_MALLOC_ATOMIC(s->totallength + 1);
+	char* outputbuffer = S_ALLOC_DATA(s->totallength + 1);
 
 	char* pout = outputbuffer;
 	s_string_traverse(s, s_string_cdata_cb, &pout);
@@ -156,10 +167,23 @@ static const char* s_string_cdata(s_string_t* s)
 
 static s_string_t* s_create_string_constant(const char* data)
 {
-	s_string_t* s = GC_MALLOC(sizeof(s_string_t));
+	s_string_t* s = S_ALLOC_GC(sizeof(s_string_t));
 	s->next = s->prev = NULL;
 	s->data = s->cdata = data;
 	s->seglength = s->totallength = strlen(data);
+	return s;
+}
+
+static s_string_t* s_create_string_val(const char* src, int length)
+{
+	s_string_t* s = S_ALLOC_GC(sizeof(s_string_t));
+	char* data = S_ALLOC_DATA(length);
+	memcpy(data, src, length);
+
+	s->next = s->prev = NULL;
+	s->data = data;
+	s->cdata = NULL;
+	s->seglength = s->totallength = length;
 	return s;
 }
 
@@ -227,10 +251,10 @@ static s_string_t s_false_label =
 
 static void S_METHOD_INT_TOSTRING(int value, s_string_t** result)
 {
-	s_string_t* s = (s_string_t*) GC_MALLOC(sizeof(s_string_t));
+	s_string_t* s = (s_string_t*) S_ALLOC_GC(sizeof(s_string_t));
 	s->prev = s->next = NULL;
 
-	char* buffer = (char*) GC_MALLOC_ATOMIC(32);
+	char* buffer = (char*) S_ALLOC_DATA(32);
     sprintf(buffer, "%d", value);
 
     s->data = s->cdata = buffer;
@@ -240,10 +264,10 @@ static void S_METHOD_INT_TOSTRING(int value, s_string_t** result)
 
 static void S_METHOD_REAL_TOSTRING(s_real_t value, s_string_t** result)
 {
-	s_string_t* s = (s_string_t*) GC_MALLOC(sizeof(s_string_t));
+	s_string_t* s = (s_string_t*) S_ALLOC_GC(sizeof(s_string_t));
 	s->prev = s->next = NULL;
 
-	char* buffer = (char*) GC_MALLOC_ATOMIC(32);
+	char* buffer = (char*) S_ALLOC_DATA(32);
     sprintf(buffer, "%f", value);
 
     s->data = s->cdata = buffer;
@@ -268,7 +292,7 @@ static void S_METHOD_STRING_PRINT(s_string_t* s)
 static void S_METHOD_STRING__ADD(s_string_t* left, s_string_t* right,
 		s_string_t** result)
 {
-	s_string_t* newstring = (s_string_t*) GC_MALLOC(sizeof(s_string_t));
+	s_string_t* newstring = (s_string_t*) S_ALLOC_GC(sizeof(s_string_t));
 	newstring->prev = left;
 	newstring->next = right;
 	newstring->seglength = 0;

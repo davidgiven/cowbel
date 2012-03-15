@@ -82,4 +82,10 @@ function AbortOperationNotSupported()
 function AbortInvalidObjectState()
 	Abort("invalid object state");
 	
+/** Stops execution with an 'Out of memory' error.
+ **/
+ 
+function AbortOutOfMemory()
+	Abort("out of memory");
+	
 #endif
