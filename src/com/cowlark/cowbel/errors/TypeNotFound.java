@@ -25,7 +25,7 @@ public class TypeNotFound extends CompilationException
 	@Override
 	public String getMessage()
 	{
-		return "Type '" + _typevar.getText() + "' not found in scope at " +
-			_typecontext.getNode().locationAsString();
+		return "Type '" + _typevar.getText() + "' not found at " +
+			_typevar.locationAsString();
 	}
 }
