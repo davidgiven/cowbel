@@ -11,6 +11,7 @@
 # information.
 
 for f in \
+	test/pcre-test.cow \
 	test/buffer-test.cow \
 	test/set-test.cow \
 	test/inference-test.cow \
@@ -51,7 +52,7 @@ for f in \
 	logfile=$f.log
 
 	(
-		if (./cowbel -q -I include -o out -X "-Os" $f) then
+		if (./cowbel -q -I include -o out -X-Os -X-lpcre $f) then
 			if ! ./out; then
 				echo "Exited with $?"
 			fi
