@@ -1,0 +1,25 @@
+/* cowbel test suite
+ *
+ * Written in 2012 by David Given.
+ *
+ * To the extent possible under law, the author has dedicated all copyright
+ * and related and neighboring rights to this software to the public domain
+ * worldwide. This software is distributed without any warranty.
+ *
+ * Please see the file COPYING.CC0 in the distribution package for more
+ * information.
+ */
+
+#include "PCRE.ch"
+
+function test(regex: string, data: string)
+{
+	var pattern = PCRE.Compile(regex);
+	var match = pattern.match(data);
+	println("matches: "+match.captures().toString());
+	println("capture 0: "+match.capture(0));
+	println("capture 1: "+match.capture(1));
+}
+
+test("^one (.*) three$", "one two three");
+test("^one (.*) three$", "one two four");
