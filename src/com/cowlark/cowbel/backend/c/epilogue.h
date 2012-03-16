@@ -23,7 +23,7 @@ int main(int argc, const char* argv[])
 	s_argc = argc;
 	s_argv = S_ALLOC_GC(sizeof(s_string_t*) * s_argc);
 	for (i = 0; i < argc; i++)
-		s_argv[i] = s_create_string_constant(argv[i]);
+		s_argv[i] = s_create_string_constant(argv[i], 0);
 
 	cowbel_main();
 	return 0;

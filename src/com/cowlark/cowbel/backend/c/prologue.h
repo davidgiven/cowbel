@@ -165,12 +165,15 @@ static const char* s_string_cdata(s_string_t* s)
 	return outputbuffer;
 }
 
-static s_string_t* s_create_string_constant(const char* data)
+static s_string_t* s_create_string_constant(const char* data, int len)
 {
+	if (len == 0)
+		len = strlen(data);
+
 	s_string_t* s = S_ALLOC_GC(sizeof(s_string_t));
 	s->next = s->prev = NULL;
 	s->data = s->cdata = data;
-	s->seglength = s->totallength = strlen(data);
+	s->seglength = s->totallength = len;
 	return s;
 }
 
