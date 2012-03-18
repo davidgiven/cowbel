@@ -158,6 +158,9 @@ public abstract class TypeInferenceEngine
 	private static void recurseThroughConstraints(TypeRef tr)
 			throws CompilationException
 	{
+		if (tr.areConstraintsValidated())
+			return;
+		
 		IsNode node = tr.getNode();
 		Collection<Interface> parentConstraints = Collections.emptySet();
 		switch (tr.getParents().size())
@@ -257,6 +260,8 @@ public abstract class TypeInferenceEngine
 				}
 			}
 		}
+		
+		tr.setConstraintsValidated(true);
 	}
 	
 	public static void propagateConstraints()
