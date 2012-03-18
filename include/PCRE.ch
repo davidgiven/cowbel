@@ -92,6 +92,8 @@ var PCRE =
 				
 				var num_captures = extern(int);
 				extern '${num_captures} = pcre_exec((pcre*)${pattern}, (pcre_extra*)${extra}, (const char*)${sdata}, ${s}->totallength, 0, 0, (int*)${ovector}, ${ovectorsize});';
+				if (num_captures < 0)
+					num_captures = 0;
 
 				var captures = Array<string>(num_captures, "");
 				for i = 0, num_captures
