@@ -53,6 +53,9 @@ public class TypeRef extends DeterministicObject<TypeRef>
 	/** This node must be downcastable from these interfaces. */
 	private TreeSet<Interface> _constraints;
 	
+	/** Have the constraints on this node been validated? */
+	private boolean _constraintsValidated = false;
+	
 	/** Used by the type inference engine. */
 	
 	int index = -1;
@@ -90,6 +93,16 @@ public class TypeRef extends DeterministicObject<TypeRef>
 		if (_constraints == null)
 			return Collections.<Interface>emptyList();
 	    return _constraints;
+    }
+
+	public boolean areConstraintsValidated()
+    {
+	    return _constraintsValidated;
+    }
+	
+	public void setConstraintsValidated(boolean constraintsValidated)
+    {
+	    _constraintsValidated = constraintsValidated;
     }
 	
     public AbstractConcreteType getConcreteType()
