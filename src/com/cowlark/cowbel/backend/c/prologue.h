@@ -25,6 +25,8 @@ typedef int s_int_t;
 typedef double s_real_t;
 typedef struct s_string s_string_t;
 
+#define COWBEL_USE_GC
+
 #if defined COWBEL_USE_GC
 #include <gc.h>
 #define S_ALLOC_GC(length) 	GC_MALLOC(length)
