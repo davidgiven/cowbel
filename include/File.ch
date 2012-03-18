@@ -218,4 +218,7 @@ function File(path: string): File
 	};
 }
 
+function AbortInvalidFile()
+	Abort("invalid operation on File object");
+	
 #endif
