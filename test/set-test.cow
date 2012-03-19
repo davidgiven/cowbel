@@ -13,7 +13,7 @@
 #include "SimpleIO.ch"
 #include "Set.ch"
 
-var set = Set<int>();
+var set = Set.New<int>();
 set.add(1);
 set.add(2);
 set.add(-9);

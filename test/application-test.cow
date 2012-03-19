@@ -13,11 +13,11 @@
 #include "SimpleIO.ch"
 #include "Application.ch"
 
-var argv = ApplicationArguments();
+var argv = Application.Arguments();
 var argvlow, argvhigh = argv.bounds();
 for i = argvlow, argvhigh
 {
 	println(i.toString() + " " + argv.get(i));
 }
 
-Exit(12);
+Application.Exit(12);

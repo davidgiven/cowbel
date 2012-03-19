@@ -11,6 +11,7 @@
 # information.
 
 for f in \
+	test/file-test.cow \
 	test/pcre-test.cow \
 	test/buffer-test.cow \
 	test/set-test.cow \
@@ -18,7 +19,6 @@ for f in \
 	test/map-test.cow \
 	test/maps-example.cow \
 	test/mandelbrot.cow \
-	test/file-test.cow \
 	test/failed-inference-test.cow \
 	test/bug-more-failed-inference.cow \
 	test/generics-test.cow \

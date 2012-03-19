@@ -50,7 +50,7 @@ function Maybe<T>(): Maybe<T>
 			return false;
 			
 		function get(): T
-			AbortInvalidObjectState();
+			Application.AbortInvalidObjectState();
 	};
 
 /** Construct an immutable Maybe with the specified value.

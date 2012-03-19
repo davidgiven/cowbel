@@ -166,7 +166,7 @@ function InputStreamReader(is: InputStream): Reader
 		
 		function readString(): string
 		{
-			var buffer = Buffer(0);
+			var buffer = Buffer.New(0);
 			
 			while (true)
 			{
@@ -233,7 +233,7 @@ function OutputStreamWriter(os: OutputStream): Writer
 		
 		function writeString(s: string)
 		{
-			var buffer = BufferFromString(s);
+			var buffer = Buffer.NewFromString(s);
 			var lo, hi = buffer.bounds();
 			for i = lo, hi
 			{

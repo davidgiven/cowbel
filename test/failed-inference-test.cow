@@ -24,7 +24,7 @@ var o1 =
 	
 	function doA(): int
 	{
-		Abort("failed");
+		Application.Abort("failed");
 	}
 };
 

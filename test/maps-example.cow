@@ -13,7 +13,7 @@
 #include "SimpleIO.ch"
 #include "Map.ch"
 
-var map = Map<int, string>();
+var map = Map.New<int, string>();
 map.put(1, "one");
 map.put(2, "two");
 map.put(3, "three");
