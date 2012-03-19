@@ -47,7 +47,7 @@ get(o3);
 o1.toString();
 */
 
-var args = ApplicationArguments();
+var args = Application.Arguments();
 var low, high = args.bounds();
 
 for i = low, high

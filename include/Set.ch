@@ -38,34 +38,37 @@ type Set<V> =
 	function remove(value: V);
 };
 
-/** Creates a new set.
- ** 
- ** Values must be comparable with == and <.
- **/
- 
-function Set<V>(): Set<V>
+var Set =
 {
-	var map = Map<V, boolean>();
-	
-	return
+	/** Creates a new set.
+	 ** 
+	 ** Values must be comparable with == and <.
+	 **/
+	 
+	function New<V>(): Set<V>
 	{
-		implements Set<V>;
+		var map = Map.New<V, boolean>();
 		
-		function add(value: V)
+		return
 		{
-			map.put(value, true);
-		}
-		
-		function contains(value: V): boolean
-		{
-			return map.contains(value);
-		}
-		
-		function remove(value: V)
-		{
-			map.remove(value);
-		}
-	};
-}
+			implements Set<V>;
+			
+			function add(value: V)
+			{
+				map.put(value, true);
+			}
+			
+			function contains(value: V): boolean
+			{
+				return map.contains(value);
+			}
+			
+			function remove(value: V)
+			{
+				map.remove(value);
+			}
+		};
+	}
+};
 
 #endif

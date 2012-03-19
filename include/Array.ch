@@ -54,9 +54,9 @@ function Array<T>(size: int, initialiser: T): Array<T>
 		function _boundscheck(i: int)
 		{
 			if (i < 0)
-				AbortOutOfBounds();
+				Application.AbortOutOfBounds();
 			else if (i >= size)
-				AbortOutOfBounds(); 
+				Application.AbortOutOfBounds(); 
 		}
 				
 		function get(i: int): (result: T)
@@ -118,13 +118,13 @@ function Array2D<T>(width: int, height: int, initialiser: T): Array2D<T>
 		function _boundscheck(x: int, y: int)
 		{
 			if (x < 0)
-				AbortOutOfBounds();
+				Application.AbortOutOfBounds();
 			if (x >= width)
-				AbortOutOfBounds();
+				Application.AbortOutOfBounds();
 			if (y < 0)
-				AbortOutOfBounds();
+				Application.AbortOutOfBounds();
 			if (y >= height)
-				AbortOutOfBounds();
+				Application.AbortOutOfBounds();
 		}
 				
 		function get(x: int, y: int): (result: T)

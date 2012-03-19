@@ -13,7 +13,7 @@
 #include "SimpleIO.ch"
 #include "Buffer.ch"
 
-var b = Buffer(0);
+var b = Buffer.New(0);
 b.append(65);
 b.append(66);
 b.append(67);

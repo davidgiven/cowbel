@@ -13,23 +13,24 @@
 #include "SimpleIO.ch"
 #include "File.ch"
 
-var file = File("testfile.dat");
-var i = file.create();
-if (i == 0)
+function teste(e: int)
 {
-	println("creating file");
-
-	var outs = file.getOutputStream();
-	for i = 0, 10
-		outs.writeByte(i);
-	file.close();
+	if (e != 0)
+		Application.Abort("errno "+e.toString());
 }
 
-i = file.openReadOnly();
-if (i == -1)
-	Abort("failed to open file: "+i.toString());
+println("creating file");
+var file, e = File.Open("testfile.dat", "w+");
+teste(e);
+var outs = File.OutputStream(file, 0);
+for i = 0, 10
+	outs.writeByte(i);
+file.close();
 
-var ins = file.getInputStream();
+println("reading back file");
+file, e = File.Open("testfile.dat", "r");
+teste(e);
+var ins = File.InputStream(file, 0);
 while (true)
 {
 	var c = ins.readByte();
@@ -39,33 +40,35 @@ while (true)
 	println("c = "+c.toString());
 }
 file.close();
-file.remove();
 
-i = file.create();
-if (i == -1)
-	Abort("failed to create file: "+i.toString());
+println("removing file");
+File.Remove("testfile.dat");
 
+println("recreating file");
+file, e = File.Open("testfile.dat", "w+");
+teste(e);
 {
-	var outs = file.getOutputStream();
+	var outs = File.OutputStream(file, 0);
 	var outw = OutputStreamWriter(outs);
 	outw.writeCodePoint(99);
 	outw.writeCodePoint(1234);
 	outw.writeCodePoint(5678);
 	outw.writeString("fnord\n");
+	file.close();
 }
-file.close();
 
-i = file.openReadOnly();
-if (i == -1)
-	Abort("failed to create file: "+i.toString());
-
+println("reading back file");
+file, e = File.Open("testfile.dat", "r");
+teste(e);
 {
-	var ins = file.getInputStream();
+	var ins = File.InputStream(file, 0);
 	var inr = InputStreamReader(ins);
 	var s = inr.readString();
 	
 	println("read <"+s+">");
 }
-
 file.close();
-file.remove();
+
+println("removing file, again");
+File.Remove("testfile.dat");
+

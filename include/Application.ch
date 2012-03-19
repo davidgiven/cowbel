@@ -16,76 +16,79 @@
 #include <Stdlib.ch>
 #include <Array.ch>
 
-/** Returns an immutable array of command line arguments.
- **/
-
-function ApplicationArguments(): Array<string>
-	return
-	{
-		implements Array<string>;
-		
-		function get(i: int): string
+var Application =
+{
+	/** Returns an immutable array of command line arguments.
+	 **/
+	
+	function Arguments(): Array<string>
+		return
 		{
-			var argc = extern(int);
-			extern "${argc} = s_argc;";
-			if (i >= argc)
-				AbortOutOfBounds();
+			implements Array<string>;
 			
-			var result = extern(string);
-			extern "${result} = s_argv[${i}];";
-			return result;
-		}
+			function get(i: int): string
+			{
+				var argc = extern(int);
+				extern "${argc} = s_argc;";
+				if (i >= argc)
+					AbortOutOfBounds();
+				
+				var result = extern(string);
+				extern "${result} = s_argv[${i}];";
+				return result;
+			}
+			
+			function set(i: int, value: string)
+				AbortOperationNotSupported();
+			
+			function bounds(): (low: int, high: int)
+			{
+				low = 0;
+				high = extern(int);
+				extern "${high} = s_argc;";
+			}
+		};
+
+	/** Stops execution.
+	 **/
+	 
+	function Exit(result: int)
+	{
+		extern 'exit(${result});';
+	}
+
+	/** Stops execution with a runtime error.
+	 **/
 		
-		function set(i: int, value: string)
-			AbortOperationNotSupported();
+	function Abort(message: string)
+	{
+		extern 'fprintf(stderr, "Runtime error: %s\\n", s_string_cdata(${message}));';
+		extern 'exit(1);'; 
+	}
+
+	/** Stops execution with an 'Out of bounds access' error.
+	 **/
+	 
+	function AbortOutOfBounds()
+	 	Abort("out of bounds access");
+	 	
+	/** Stops execution with an 'Operation not supported' error.
+	 **/
+	 
+	function AbortOperationNotSupported()
+		Abort("operation not supported");
 		
-		function bounds(): (low: int, high: int)
-		{
-			low = 0;
-			high = extern(int);
-			extern "${high} = s_argc;";
-		}
-	};
-
-/** Stops execution.
- **/
- 
-function Exit(result: int)
-{
-	extern 'exit(${result});';
-}
-
-/** Stops execution with a runtime error.
- **/
-	
-function Abort(message: string)
-{
-	extern 'fprintf(stderr, "Runtime error: %s\\n", s_string_cdata(${message}));';
-	extern 'exit(1);'; 
-}
-
-/** Stops execution with an 'Out of bounds access' error.
- **/
- 
-function AbortOutOfBounds()
- 	Abort("out of bounds access");
- 	
-/** Stops execution with an 'Operation not supported' error.
- **/
- 
-function AbortOperationNotSupported()
-	Abort("operation not supported");
-	
-/** Stops execution with an 'Invalid object state' error.
- **/
- 
-function AbortInvalidObjectState()
-	Abort("invalid object state");
-	
-/** Stops execution with an 'Out of memory' error.
- **/
- 
-function AbortOutOfMemory()
-	Abort("out of memory");
+	/** Stops execution with an 'Invalid object state' error.
+	 **/
+	 
+	function AbortInvalidObjectState()
+		Abort("invalid object state");
+		
+	/** Stops execution with an 'Out of memory' error.
+	 **/
+	 
+	function AbortOutOfMemory()
+		Abort("out of memory");
+};
 	
 #endif

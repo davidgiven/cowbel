@@ -67,7 +67,7 @@ var PCRE =
 		{
 			var error = extern(string);
 			extern '${error} = s_create_string_constant((const char*) ${errore}, 0);';
-			Abort("PCRE compilation error: " + error + " at offset " + offset.toString());
+			Application.Abort("PCRE compilation error: " + error + " at offset " + offset.toString());
 		}
 		
 		extern '${extra} = pcre_study((pcre*)${pattern}, 0, (const char**)&${errore});';
@@ -85,7 +85,7 @@ var PCRE =
 				var ovectorsize = (capturecount+1) * 3;
 				extern '${ovector} = S_ALLOC_DATA(${ovectorsize} * sizeof(int));';
 				if (ovector.isNull())
-					AbortOutOfMemory();
+					Application.AbortOutOfMemory();
 				
 				var sdata = extern(__extern);
 				extern '${sdata} = (void*)s_string_cdata(${s});';

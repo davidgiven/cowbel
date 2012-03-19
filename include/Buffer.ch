@@ -51,144 +51,147 @@ type Buffer =
 	function toString(): string;
 };
 
-/** Creates a 0-based one-dimensional array of bytes.
- **
- ** All entries in the array are initialised to 0.
- **/
- 
-function Buffer(size: int): Buffer
+var Buffer =
 {
-	var capacity = size;
-	var ptr: __extern = extern(__extern);
-	extern "${ptr} = S_ALLOC_DATA(${size});";
-	
-	return
+	/** Creates a 0-based one-dimensional array of bytes.
+	 **
+	 ** All entries in the array are initialised to 0.
+	 **/
+	 
+	function New(size: int): Buffer
 	{
-		implements Array<int>;
-		implements Buffer;
-
-		function _boundscheck(i: int)
-		{
-			if (i < 0)
-				AbortOutOfBounds();
-			else if (i >= size)
-				AbortOutOfBounds(); 
-		}
-				
-		function get(i: int): (result: int)
-		{
-			_boundscheck(i);
-			result = extern(int);
-			extern "${result} = ((uint8_t*)${ptr})[${i}];";
-		}
+		var capacity = size;
+		var ptr: __extern = extern(__extern);
+		extern "${ptr} = S_ALLOC_DATA(${size});";
 		
-		function set(i: int, value: int)
+		return
 		{
-			_boundscheck(i);
-			extern "((uint8_t*)${ptr})[${i}] = ${value};";
-		}
-		
-		function bounds(): (low: int, high: int)
-		{
-			low = 0;
-			high = size;
-		}
-		
-		function resize(newsize: int)
-		{
-			if (newsize <= capacity)
+			implements Array<int>;
+			implements Buffer;
+	
+			function _boundscheck(i: int)
 			{
-				size = newsize;
-				return;
+				if (i < 0)
+					Application.AbortOutOfBounds();
+				else if (i >= size)
+					Application.AbortOutOfBounds(); 
 			}
-
-			var newcapacity = capacity + 1;
-			while (newcapacity < newsize)
-				newcapacity = newcapacity * 2;
+					
+			function get(i: int): (result: int)
+			{
+				_boundscheck(i);
+				result = extern(int);
+				extern "${result} = ((uint8_t*)${ptr})[${i}];";
+			}
 			
-			var newptr: __extern = extern(__extern);
-			extern '${newptr} = S_REALLOC_DATA(${ptr}, ${newcapacity});';
-			if (newptr.isNull())
-				AbortOutOfMemory();
+			function set(i: int, value: int)
+			{
+				_boundscheck(i);
+				extern "((uint8_t*)${ptr})[${i}] = ${value};";
+			}
 			
-			var delta = newcapacity - capacity;
-			extern 'memset(${newptr} + ${capacity}, 0, ${delta});';
+			function bounds(): (low: int, high: int)
+			{
+				low = 0;
+				high = size;
+			}
 			
-			ptr = newptr;
-			capacity = newcapacity;
-			size = newsize;
-		}
-		
-		function append(value: int)
-		{
-			var o = size;
-			resize(size+1);
-			set(o, value);
-		}
-		
-		function toString(): (result: string)
-		{
-			result = extern(string);
-			extern '${result} = s_create_string_val(${ptr}, ${size});';
-		}
-	};
-}
-
-/** Creates an immutable Buffer pointing at the UTF-8 bytes of a string. */
-
-function BufferFromString(value: string): Buffer
-{
-	var size = extern(int);
-	var ptr = extern(__extern);
-	extern '${size} = ${value}->totallength;';
-	extern '${ptr} = (void*) s_string_cdata(${value});';
+			function resize(newsize: int)
+			{
+				if (newsize <= capacity)
+				{
+					size = newsize;
+					return;
+				}
 	
-	return
-	{
-		implements Array<int>;
-		implements Buffer;
-
-		function _boundscheck(i: int)
-		{
-			if (i < 0)
-				AbortOutOfBounds();
-			else if (i >= size)
-				AbortOutOfBounds(); 
-		}
+				var newcapacity = capacity + 1;
+				while (newcapacity < newsize)
+					newcapacity = newcapacity * 2;
 				
-		function get(i: int): (result: int)
-		{
-			_boundscheck(i);
-			result = extern(int);
-			extern "${result} = ((uint8_t*)${ptr})[${i}];";
-		}
+				var newptr: __extern = extern(__extern);
+				extern '${newptr} = S_REALLOC_DATA(${ptr}, ${newcapacity});';
+				if (newptr.isNull())
+					Application.AbortOutOfMemory();
+				
+				var delta = newcapacity - capacity;
+				extern 'memset(${newptr} + ${capacity}, 0, ${delta});';
+				
+				ptr = newptr;
+				capacity = newcapacity;
+				size = newsize;
+			}
+			
+			function append(value: int)
+			{
+				var o = size;
+				resize(size+1);
+				set(o, value);
+			}
+			
+			function toString(): (result: string)
+			{
+				result = extern(string);
+				extern '${result} = s_create_string_val(${ptr}, ${size});';
+			}
+		};
+	}
+	
+	/** Creates an immutable Buffer pointing at the UTF-8 bytes of a string. */
+	
+	function NewFromString(value: string): Buffer
+	{
+		var size = extern(int);
+		var ptr = extern(__extern);
+		extern '${size} = ${value}->totallength;';
+		extern '${ptr} = (void*) s_string_cdata(${value});';
 		
-		function set(i: int, value: int)
+		return
 		{
-			AbortOperationNotSupported();
-		}
-		
-		function bounds(): (low: int, high: int)
-		{
-			low = 0;
-			high = size;
-		}
-		
-		function resize(newsize: int)
-		{
-			AbortOperationNotSupported();
-		}
-		
-		function append(value: int)
-		{
-			AbortOperationNotSupported();
-		}
-		
-		function toString(): (result: string)
-		{
-			return value;
-		}
-	};
-}
+			implements Array<int>;
+			implements Buffer;
+	
+			function _boundscheck(i: int)
+			{
+				if (i < 0)
+					Application.AbortOutOfBounds();
+				else if (i >= size)
+					Application.AbortOutOfBounds(); 
+			}
+					
+			function get(i: int): (result: int)
+			{
+				_boundscheck(i);
+				result = extern(int);
+				extern "${result} = ((uint8_t*)${ptr})[${i}];";
+			}
+			
+			function set(i: int, value: int)
+			{
+				Application.AbortOperationNotSupported();
+			}
+			
+			function bounds(): (low: int, high: int)
+			{
+				low = 0;
+				high = size;
+			}
+			
+			function resize(newsize: int)
+			{
+				Application.AbortOperationNotSupported();
+			}
+			
+			function append(value: int)
+			{
+				Application.AbortOperationNotSupported();
+			}
+			
+			function toString(): (result: string)
+			{
+				return value;
+			}
+		};
+	}
+};
 
 #endif
