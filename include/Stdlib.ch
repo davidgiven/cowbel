@@ -230,15 +230,4 @@ var __extern = {
 	}
 };
 
-/** This nasty hack provides an easy way to import a C constant. Use it like
- * this:
- *
- * IMPORT_CONST(INT_MAX, int)
- *
- * (no trailing semicolon)
- */
-#define IMPORT_CONST(n, t) \
-	var n = extern(t); \
-	extern "${" #n "} = " #n ";";
-		
 #endif
