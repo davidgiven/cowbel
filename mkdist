@@ -30,6 +30,7 @@ cp -a --parents \
 	./src \
 	./include \
 	./test \
+	./samples \
 	\
 	../$PACKAGE-$1
 

@@ -71,6 +71,9 @@ everything works:
 
   ./run-tests
 
+You can find some slightly less trivial sample programs in the 'samples'
+directory. (Feel like submitting some? Let me know!)
+
 
 
 USAGE
