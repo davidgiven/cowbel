@@ -28,6 +28,15 @@ type int = {
 	function / (o: int): int;
 	function % (o: int): int;
 	
+	function ~ (): int;
+	function & (o: int): int;
+	function | (o: int): int;
+	function ^ (o: int): int;
+
+	function << (o: int): int;
+	function >> (o: int): int;
+	function >>> (o: int): int;
+		
 	function == (o: int): boolean;
 	function != (o: int): boolean;
 	function < (o: int): boolean;
@@ -109,7 +118,28 @@ var int = {
  
 	function % (o: int): (r: int)
  		{ r=extern(int); extern "${r} = self % ${o};"; }
- 
+
+	function << (o: int): (r: int)
+		{ r=extern(int); extern "${r} = self << ${o};"; }
+		
+	function >> (o: int): (r: int)
+		{ r=extern(int); extern "${r} = self >> ${o};"; }
+		
+	function >>> (o: int): (r: int)
+		{ r=extern(int); extern "${r} = (unsigned)self >> (unsigned)${o};"; }
+		 
+	function ~ (): (r: int)
+		{ r=extern(int); extern "${r} = ^self;"; }
+		
+	function & (o: int): (r: int)
+		{ r=extern(int); extern "${r} = self & ${o};"; }
+		
+	function | (o: int): (r: int)
+		{ r=extern(int); extern "${r} = self | ${o};"; }
+		
+	function ^ (o: int): (r: int)
+		{ r=extern(int); extern "${r} = self ^ ${o};"; }
+		 
 	function == (o: int): (r: boolean)
  		{ r=extern(boolean); extern "${r} = self == ${o};"; }
  
