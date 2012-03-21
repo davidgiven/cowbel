@@ -39,6 +39,12 @@ function test(i1: int, i2: int)
 	testresulti("*", i1, i2, (i1 * i2));
 	testresulti("/", i1, i2, (i1 / i2));
 	testresulti("%", i1, i2, (i1 % i2));
+	testresulti("&", i1, i2, (i1 & i2));
+	testresulti("|", i1, i2, (i1 | i2));
+	testresulti("^", i1, i2, (i1 ^ i2));
+	testresulti("<<", i1, i2, (i1 << i2));
+	testresulti(">>", i1, i2, (i1 >> i2));
+	testresulti(">>>", i1, i2, (i1 >>> i2));
 }
 
 function testm(i1: int, i2: int)
@@ -47,6 +53,8 @@ function testm(i1: int, i2: int)
 	test(i2, i1);
 }
 
+testm(1234, 3);
+testm(-1234, 3);
 testm(1234, 1234);
 testm(1234, 78);
 testm(-1234, 78);
