@@ -19,7 +19,7 @@ function append<T>(a1: Array<T>, a2: Array<T>): Array<T>
 	var low2, high2 = a2.bounds();
 	var length1 = high1 - low1;
 	var length2 = high2 - low2;
-	var result = Array<T>(length1 + length2, 0);
+	var result = Array.New<T>(length1 + length2, 0);
 
 	var o = 0;
 	for i = low1, high1
@@ -36,7 +36,7 @@ function append<T>(a1: Array<T>, a2: Array<T>): Array<T>
 	return result;
 }
 
-var a1 = Array<int>(6, 1);
-var a2 = Array<int>(3, 2);
+var a1 = Array.New<int>(6, 1);
+var a2 = Array.New<int>(3, 2);
 var a3 = append<int>(a1, a2);
 

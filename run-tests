@@ -11,6 +11,8 @@
 # information.
 
 for f in \
+	test/integer-test.cow \
+	test/sort-test.cow \
 	test/file-test.cow \
 	test/pcre-test.cow \
 	test/buffer-test.cow \
@@ -37,7 +39,6 @@ for f in \
 	test/bug-function-scopes.cow \
 	test/bug-inherited-stack-frame.cow \
 	test/deep-upvalues-test.cow \
-	test/integer-test.cow \
 	test/interfaces-test.cow \
 	test/life.cow \
 	test/linked-list-test.cow \

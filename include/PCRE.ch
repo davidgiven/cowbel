@@ -95,7 +95,7 @@ var PCRE =
 				if (num_captures < 0)
 					num_captures = 0;
 
-				var captures = Array<string>(num_captures, "");
+				var captures = Array.New<string>(num_captures, "");
 				for i = 0, num_captures
 				{
 					var startoffset = extern(int);
