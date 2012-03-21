@@ -15,7 +15,7 @@
 
 function test()
 {
-	var i = Array<int>(4, 7);
+	var i = Array.New<int>(4, 7);
 	var min, length = i.bounds();
 	println("i.length() = " + length.toString());
 	
@@ -52,10 +52,10 @@ function dump_matrix(matrix: Array<Array<int>>)
 
 function multitest()
 {
-	var array = Array<Array<int>>(4, Array<int>(0, 0));
+	var array = Array.New<Array<int>>(4, Array.New<int>(0, 0));
 	
 	for i = 0, 4
-		array.set(i, Array<int>(4, 0));
+		array.set(i, Array.New<int>(4, 0));
 	
 	dump_matrix(array);
 	

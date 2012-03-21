@@ -16,8 +16,8 @@
 var width = 10;
 var height = 10;
 
-var buffera = Array2D<int>(width, height, 0);
-var bufferb = Array2D<int>(width, height, 0);
+var buffera = Array.New2D<int>(width, height, 0);
+var bufferb = Array.New2D<int>(width, height, 0);
 var front = buffera;
 var back = bufferb;
 
