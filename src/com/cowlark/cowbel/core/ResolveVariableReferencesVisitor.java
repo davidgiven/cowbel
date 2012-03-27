@@ -20,7 +20,6 @@ import com.cowlark.cowbel.ast.RecursiveASTVisitor;
 import com.cowlark.cowbel.ast.VarAssignmentNode;
 import com.cowlark.cowbel.ast.VarReferenceNode;
 import com.cowlark.cowbel.errors.CompilationException;
-import com.cowlark.cowbel.errors.CouldNotFindMethod;
 import com.cowlark.cowbel.errors.IdentifierNotFound;
 import com.cowlark.cowbel.errors.WrongNumberOfExpressionsInMultipleAssignments;
 import com.cowlark.cowbel.interfaces.HasOutputs;

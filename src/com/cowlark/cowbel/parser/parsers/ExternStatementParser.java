@@ -16,7 +16,6 @@ import com.cowlark.cowbel.ast.StringConstantNode;
 import com.cowlark.cowbel.ast.VarReferenceNode;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.ParseResult;
-import com.cowlark.cowbel.parser.errors.TooManyExterns;
 
 public class ExternStatementParser extends Parser
 {
