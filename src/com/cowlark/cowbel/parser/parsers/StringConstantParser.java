@@ -7,7 +7,6 @@
 package com.cowlark.cowbel.parser.parsers;
 
 import com.cowlark.cowbel.ast.StringConstantNode;
-import com.cowlark.cowbel.errors.CompilationException;
 import com.cowlark.cowbel.parser.core.Location;
 import com.cowlark.cowbel.parser.core.MutableLocation;
 import com.cowlark.cowbel.parser.core.ParseResult;

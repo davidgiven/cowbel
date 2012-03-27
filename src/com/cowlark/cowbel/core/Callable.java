@@ -6,8 +6,6 @@
 
 package com.cowlark.cowbel.core;
 
-import java.util.List;
-import java.util.Vector;
 import com.cowlark.cowbel.ast.AbstractScopeConstructorNode;
 import com.cowlark.cowbel.ast.FunctionHeaderNode;
 import com.cowlark.cowbel.ast.IdentifierNode;

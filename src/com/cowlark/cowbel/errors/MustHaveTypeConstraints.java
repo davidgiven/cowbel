@@ -6,8 +6,6 @@
 
 package com.cowlark.cowbel.errors;
 
-import com.cowlark.cowbel.ast.IdentifierListNode;
-import com.cowlark.cowbel.ast.InterfaceListNode;
 import com.cowlark.cowbel.core.TypeRef;
 import com.cowlark.cowbel.interfaces.IsNode;
 
