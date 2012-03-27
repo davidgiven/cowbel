@@ -99,7 +99,7 @@ public class ClassifyScopeKindsVisitor extends RecursiveASTVisitor
 	public void visit(FunctionDefinitionNode node) throws CompilationException
 	{
 		AbstractScopeConstructorNode scope = node.getScope();
-		scope.setScopeType(ScopeType.PERSISTENT);
+		make_significant_persistent(scope);
 		/* don't recurse */
 	}
 }
