@@ -20,7 +20,7 @@
  * and unboxing isn't support yet; don't try to implement these in your own
  * code. It won't work. */
   
-type int = {
+type int = extern {
 	function - (): int;
 	function + (o: int): int;
 	function - (o: int): int;
@@ -48,7 +48,7 @@ type int = {
 	function toReal(): real;
 };
 
-type real = {
+type real = extern {
 	function - (): real;
 	function + (o: real): real;
 	function - (o: real): real;
@@ -65,7 +65,7 @@ type real = {
 	function toString(): string;
 };
 
-type string = {
+type string = extern {
 	function + (o: string): string;
 	
 	function == (o: string): boolean;
@@ -76,7 +76,7 @@ type string = {
 	function >= (o: string): boolean;
 };
 
-type boolean = {
+type boolean = extern {
 	function == (o: boolean): boolean;
 	function != (o: boolean): boolean;
 	
@@ -88,7 +88,7 @@ type boolean = {
 	function toString(): string;
 };
 
-type __extern = {
+type __extern = extern {
 	function isNull(): boolean;
 };
 
@@ -99,7 +99,7 @@ type __extern = {
  
 var int = {
 	type extern "s_int_t";
-	implements int;
+	implements extern int;
 	
 	function - (): (r: int)
  		{ r=extern(int); extern "${r} = -self;"; }
@@ -167,7 +167,7 @@ var int = {
 
 var real = {
 	type extern "s_real_t";
-	implements real;
+	implements extern real;
 	
 	function - (): (r: real)
  		{ r=extern(real); extern "${r} = -self;"; }
@@ -208,7 +208,7 @@ var real = {
 
 var string = {
 	type extern "s_string_t*";
-	implements string;
+	implements extern string;
 	
 	function + (o: string): (r: string)
 		{ r = extern(string); extern "S_METHOD_STRING__ADD(self, ${o}, &${r});"; }
@@ -234,7 +234,7 @@ var string = {
 
 var boolean = {
 	type extern "s_boolean_t";
-	implements boolean;
+	implements extern boolean;
 	
 	function == (o: boolean): (r: boolean)
 		{ r = extern(boolean); extern "${r} = self == ${o};"; }
@@ -260,7 +260,7 @@ var boolean = {
 
 var __extern = {
 	type extern "void*";
-	implements __extern;
+	implements extern __extern;
 	
 	function isNull(): (result: boolean)
 	{

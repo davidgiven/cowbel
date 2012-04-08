@@ -16,23 +16,32 @@ import com.cowlark.cowbel.parser.core.Location;
 
 public class InterfaceTypeNode extends AbstractTypeExpressionNode
 {
-	public InterfaceTypeNode(Location start, Location end)
+	private boolean _isextern;
+	
+	public InterfaceTypeNode(Location start, Location end, boolean isextern)
     {
         super(start, end);
+        _isextern = isextern;
     }
 	
 	public InterfaceTypeNode(Location start, Location end,
-			Collection<FunctionHeaderNode> entries)
+			Collection<FunctionHeaderNode> entries, boolean isextern)
     {
         super(start, end);
         addChildren(entries);
+        _isextern = isextern;
     }
-		
+	
+	public boolean isExtern()
+    {
+	    return _isextern;
+    }
+	
 	@Override
 	public Interface createInterface() throws CompilationException
 	{
 		InterfaceContext tc = getTypeContext();
-		Interface type = new Interface(tc, this);
+		Interface type = new Interface(tc, this, _isextern);
 		
 		for (IsNode n : this)
 		{

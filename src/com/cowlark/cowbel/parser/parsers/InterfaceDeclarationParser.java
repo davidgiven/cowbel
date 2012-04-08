@@ -17,12 +17,23 @@ public class InterfaceDeclarationParser extends Parser
 	@Override
 	protected ParseResult parseImpl(Location location)
 	{
-		ParseResult pr = OpenBraceParser.parse(location);
+		boolean isextern = false;
+		Location n;
+		ParseResult pr = ExternTokenParser.parse(location);
+		if (pr.success())
+		{
+			n = pr.end();
+			isextern = true;
+		}
+		else
+			n = location;
+		
+		pr = OpenBraceParser.parse(n);
 		if (pr.failed())
 			return pr;
 		
 		ArrayList<FunctionHeaderNode> statements = new ArrayList<FunctionHeaderNode>();
-		Location n = pr.end();
+		n = pr.end();
 		for (;;)
 		{
 			pr = CloseBraceParser.parse(n);
@@ -40,6 +51,6 @@ public class InterfaceDeclarationParser extends Parser
 			n = pr.end();
 		}
 		
-		return new InterfaceTypeNode(location, n, statements);
+		return new InterfaceTypeNode(location, n, statements, isextern);
 	}
 }

@@ -11,22 +11,32 @@ import com.cowlark.cowbel.parser.core.Location;
 
 public class ImplementsStatementNode extends AbstractStatementNode
 {
-	public ImplementsStatementNode(Location start, Location end)
+	private boolean _isExtern;
+	
+	public ImplementsStatementNode(Location start, Location end,
+			boolean isextern)
     {
 		super(start, end);
+		_isExtern = isextern;
     }
 	
 	public ImplementsStatementNode(Location start, Location end,
-			AbstractTypeExpressionNode value)
+			AbstractTypeExpressionNode value, boolean isextern)
     {
 		super(start, end);
 		addChild(value);
+		_isExtern = isextern;
     }
 
 	public AbstractTypeExpressionNode getTypeNode()
 	{
 		return (AbstractTypeExpressionNode) getChild(0);
 	}
+	
+	public boolean isExtern()
+    {
+	    return _isExtern;
+    }
 	
 	@Override
 	public void visit(ASTVisitor visitor) throws CompilationException

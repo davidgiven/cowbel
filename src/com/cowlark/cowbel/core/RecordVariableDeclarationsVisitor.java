@@ -18,6 +18,7 @@ import com.cowlark.cowbel.ast.RecursiveASTVisitor;
 import com.cowlark.cowbel.ast.TypeExternNode;
 import com.cowlark.cowbel.ast.VarDeclarationNode;
 import com.cowlark.cowbel.errors.CompilationException;
+import com.cowlark.cowbel.errors.InterfaceIsMagic;
 import com.cowlark.cowbel.interfaces.IsNode;
 import com.cowlark.cowbel.symbols.Variable;
 
@@ -88,6 +89,9 @@ public class RecordVariableDeclarationsVisitor extends RecursiveASTVisitor
 		Implementation implementation = node.getScope().getImplementation();
 		AbstractTypeExpressionNode typenode = node.getTypeNode();
 		Interface interf = typenode.getInterface();
+		
+		if (interf.isExtern() && !node.isExtern())
+			throw new InterfaceIsMagic(node, interf);
 		
 		implementation.addInterface(interf);
 		interf.addImplementation(implementation);

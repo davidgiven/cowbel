@@ -20,7 +20,18 @@ public class ImplementsStatementParser extends Parser
 		if (pr.failed())
 			return pr;
 		
-		ParseResult typepr = TypeParser.parse(pr.end());
+		boolean isextern = false;
+		Location n;
+		ParseResult externpr = ExternTokenParser.parse(pr.end());
+		if (externpr.success())
+		{
+			n = externpr.end();
+			isextern = true;
+		}
+		else
+			n = pr.end();
+		
+		ParseResult typepr = TypeParser.parse(n);
 		if (typepr.failed())
 			return typepr;
 		
@@ -29,6 +40,6 @@ public class ImplementsStatementParser extends Parser
 			return pr;
 
 		return new ImplementsStatementNode(location, pr.end(),
-				(AbstractTypeExpressionNode) typepr);
+				(AbstractTypeExpressionNode) typepr, isextern);
 	}
 }

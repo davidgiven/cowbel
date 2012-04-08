@@ -359,14 +359,16 @@ public class ASTCopyVisitor extends RecursiveASTVisitor
 	@Override
 	public void visit(InterfaceTypeNode node) throws CompilationException
 	{
-	    _result = new InterfaceTypeNode(node.start(), node.end());
+	    _result = new InterfaceTypeNode(node.start(), node.end(),
+	    		node.isExtern());
 	    super.visit(node);
 	}
 	
 	@Override
     public void visit(ImplementsStatementNode node) throws CompilationException
 	{
-		_result = new ImplementsStatementNode(node.start(), node.end());
+		_result = new ImplementsStatementNode(node.start(), node.end(),
+				node.isExtern());
 		super.visit(node);
 	};
 	
