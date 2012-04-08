@@ -11,12 +11,9 @@ import com.cowlark.cowbel.parser.core.Location;
 
 public abstract class AbstractExpressionLiteralNode extends AbstractExpressionNode
 {
-	private String _implName;
-	
-	public AbstractExpressionLiteralNode(Location start, Location end, String impl)
+	public AbstractExpressionLiteralNode(Location start, Location end)
     {
         super(start, end);
-        _implName = impl;
     }
 	
 	@Override

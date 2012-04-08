@@ -418,7 +418,6 @@ public abstract class TypeInferenceEngine
 	{
 		/* Start at leaf nodes: those with no children. */
 		
-		TreeSet<TypeRef> leaves = new TreeSet<TypeRef>();
 		for (TypeRef tr : TypeRef.getAllTypeRefs())
 			if (tr.getChildren().isEmpty())
 				recurseThroughTypes(tr);
