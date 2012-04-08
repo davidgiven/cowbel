@@ -11,6 +11,7 @@
 # information.
 
 for f in \
+	test/magic-test.cow \
 	test/integer-test.cow \
 	test/sort-test.cow \
 	test/file-test.cow \

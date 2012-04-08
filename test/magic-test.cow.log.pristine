@@ -1,0 +1,2 @@
+Compilation failed:
+com.cowlark.cowbel.errors.InterfaceIsMagic: The interface 'int' is magic and cannot be implemented at test/magic-test.cow:16.1

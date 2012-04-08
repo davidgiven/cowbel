@@ -39,11 +39,14 @@ public class Interface extends DeterministicObject<Interface>
 		new TreeMap<FunctionSignature, Method>();
 	private TreeSet<Implementation> _implementations =
 		new TreeSet<Implementation>();
+	private boolean _isExtern;
 	
-	public Interface(InterfaceContext context, AbstractTypeExpressionNode node)
+	public Interface(InterfaceContext context, AbstractTypeExpressionNode node,
+			boolean isextern)
 	{
 		_context = context;
 		_node = node;
+		_isExtern = isextern;
 		
 		_allInterfaces.add(this);
 	}
@@ -79,6 +82,11 @@ public class Interface extends DeterministicObject<Interface>
 	public Collection<Method> getMethods()
     {
 	    return _methods.values();
+    }
+	
+	public boolean isExtern()
+    {
+	    return _isExtern;
     }
 	
 	public void addMethodTemplate(MethodTemplate template)
