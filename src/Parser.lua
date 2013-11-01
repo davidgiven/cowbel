@@ -67,9 +67,13 @@ for _, v in pairs(keywords) do
 end
 name = ws * name
 
+local function parseerror(e, pos)
+	error("parse failure: "..e.." at "..pos)
+end
+
 local function X(c, e)
 	return c + function(s, i)
-		error("parse failure: "..e.." at "..i)
+		parseerror(e, i)
 	end
 end
 
@@ -99,11 +103,15 @@ end
 
 local grammar = P(
 	{
-		"scopeconstructor";
+		"statements";
 
 		["statement"] = V("simplestmt") + V("compoundstmt"),
+		["statements"] = V("statement")^0,
+
 		["simplestmt"] =
 			(
+				V("singleassignmentstmt") +
+				V("storestmt") +
 				V("expressionstmt") +
 				V("qualifiedvar") +
 				V("var") +
@@ -150,14 +158,45 @@ local grammar = P(
 		["constint"] = astnode("constint", int),
 		["ref"] = astnode("ref", name),
 
-		-- Statements
+		-- Function definitions
 	
-		["functionstmt"] = astnode(
+		["functionstmt"] =
+			V("function_mm") +
+			V("function_mv"),
+
+		["function_mm"] = astnode(
 				"functionstmt",
-				K("function") * X(name, "expected identifier")
+				K("function") * X(V("ref"), "expected identifier")
 					* V("parameterlist")
-					* XO(":") * V("parameterlist")
-					* V("scopeconstructor")
+					* O(":") * V("parameterlist")
+					* V("statement")
+			),
+
+		["function_mv"] = astnode(
+				"functionstmt",
+				K("function") * X(V("ref"), "expected identifier")
+					* V("parameterlist")
+					* astnode("parameterlist")
+					* V("statement")
+			),
+
+		-- Useful stuff
+
+		["valuelist"] = astnode(
+				"values",
+				Ct(V("expression") * (O(",") * V("expression"))^0)
+			),
+
+		-- Miscellaneous statements
+
+		["singleassignmentstmt"] = astnode(
+				"assign",
+				V("ref") * O("=") * V("expression")
+			),
+
+		["storestmt"] = astnode(
+				"store",
+				V("expression") * O("[") * V("valuelist") * XO("]") * XO("=") * V("expression")
 			),
 
 		["var"] = astnode(
@@ -202,7 +241,7 @@ local grammar = P(
 
 		["scopeconstructor"] = astnode(
 				"scopeconstructor",
-				O("{") * V("statement")^0 * XO("}")
+				O("{") * V("statements") * XO("}")
 			)
 	}
 )
