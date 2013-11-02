@@ -70,7 +70,7 @@ end
 print(outputfile)
 
 local data = Utils.LoadFile(inputfile)
-local result = Parser.Parse(data)
+local result = Parser.Parse(inputfile, data)
 print(result)
 pretty(result)
 

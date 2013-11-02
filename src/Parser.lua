@@ -29,9 +29,17 @@ local keywords =
 		"var",
 	}
 
-local newlinemap = {}
+local filename
+local lineno
+local filepos
+local newlinemap
+
 local function newline(s, pos)
-	newlinemap[pos] = true
+	if not newlinemap[pos] then
+		newlinemap[pos] = true
+		lineno = lineno + 1
+		filepos = pos
+	end
 	return pos
 end
 
@@ -88,16 +96,20 @@ local function XK(o)
 	return X(K(o), "missing '"..o.."'")
 end
 
+local function getpos(s, pos)
+	return pos, filename..":"..lineno.."."..(pos-filepos+1)
+end
+
 local function astnode(t, c)
 	if c then
 		return Ct(
 			Cg(Cc(t), "type") *
-			Cg(Cp(), "pos") *
+			Cg(getpos, "pos") *
 			c)
 	else
 		return Ct(
 			Cg(Cc(t), "type") *
-			Cg(Cp(), "pos"))
+			Cg(getpos, "pos"))
 	end
 end
 
@@ -247,7 +259,11 @@ local grammar = P(
 )
 
 return {
-	Parse = function(data)
+	Parse = function(f, data)
+		filename = f
+		lineno = 1
+		filepos = 1
+		newlinemap = {}
 		return grammar:match(data)
 	end
 }
