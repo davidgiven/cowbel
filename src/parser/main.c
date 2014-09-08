@@ -20,6 +20,16 @@ json_t* simple_token(token_t* token, const char* kind)
 	return t;
 }
 
+json_t* composite_token(json_t* proto, const char* kind)
+{
+	json_t* t = json_object();
+	json_object_set(t, "type", json_string(kind));
+	json_object_set(t, "filename", json_object_get(proto, "filename"));
+	json_object_set(t, "lineno", json_object_get(proto, "lineno"));
+	json_object_set(t, "column", json_object_get(proto, "column"));
+	return t;
+}
+
 int main(int argc, const char* argv[])
 {
 	yyscan_t scanner;
