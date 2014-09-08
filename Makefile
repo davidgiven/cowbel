@@ -7,6 +7,7 @@ FLEX = flex
 OBJ = .obj
 
 override CFLAGS += \
+	-g \
 	--std=gnu99 \
 	-ffunction-sections \
 	-fdata-sections
@@ -95,8 +96,8 @@ $(call yfile, src/parser/grammar.y)
 $(call lfile, src/parser/lexer.l)
 endef
 
-cflags := -Ilib/include -I$(OBJ)/parser/src/parser
-ldflags := -lgc
+cflags := -Ilib/include -Isrc/parser -I$(OBJ)/parser/src/parser
+ldflags := -ljansson
 objdir := $(OBJ)/parser
 objs :=
 exe := bin/parser
