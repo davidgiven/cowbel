@@ -17,6 +17,7 @@ extern int current_lineno;
 extern int current_column;
 
 extern json_t* simple_token(token_t* token, const char* kind);
+extern json_t* composite_token(json_t* proto, const char* kind);
 
 #endif
 
