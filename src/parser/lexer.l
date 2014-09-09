@@ -30,8 +30,14 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\]+
 
 	";"                        { return SEMICOLON; }
 	"."                        { return DOT; }
+	","                        { return COMMA; }
 	"("                        { return OPEN_PARENTHESIS; }
 	")"                        { return CLOSE_PARENTHESIS; }
+
+	":="                       { return ASSIGN; }
+	"var"                      { return VAR; }
+	"if"                       { return IF; }
+	"else"                     { return ELSE; }
 
 	{OPERATOR}+                { return OPERATOR; }
 	[0-9]+                     { return INTEGER; }
@@ -40,7 +46,6 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\]+
 	[Nn][Aa][Nn]               { return REAL; }
 	[-+][Ii][Nn][Ff]           { return REAL; }
 	{IDSTART}{IDCONTINUED}*    { return IDENTIFIER; }
-
 
 	[ \t\r]                    {}
 	\n                         {}
