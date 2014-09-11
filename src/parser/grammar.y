@@ -18,7 +18,7 @@ start ::= statements(IN) .
 	}
 
 %left DOT .
-%left OPERATOR .
+%left OPERATOR LEFT_ANGLE RIGHT_ANGLE .
 %left IF .
 %left ELSE .
 
@@ -71,14 +71,21 @@ expression(RESULT) ::= real(IN) .                    { RESULT = IN; }
 expression(RESULT) ::= OPEN_PARENTHESIS expression(IN) CLOSE_PARENTHESIS .  { RESULT = IN; }
 
 expression(RESULT) ::= expression(LEFT) DOT methodname(OP)
+			bracketed_typenames(TYPES)
 			OPEN_PARENTHESIS optional_values(RIGHT) CLOSE_PARENTHESIS .
 	{
 		RESULT = composite_token(OP, "call");
 		json_object_set(RESULT, "method", OP);
+		json_object_set(RESULT, "types", TYPES);
 		json_object_set(RESULT, "left", LEFT);
 		json_object_set(RESULT, "right", RIGHT);
 	}
 
+/* This is a foul hack. Because < and > are both delimiters (for type lists)
+ * *and* operators, but because the lexer isn't state-sensitive, we have to
+ * reproduce the operator rule for all three cases. We can't abstract
+ * OPERATOR out into a separate rule because Lemon won't let us specify a
+ * precedence for rules, only terminals. */
 expression(RESULT) ::= expression(LEFT) OPERATOR(OP) expression(RIGHT) .
 	{
 		RESULT = simple_token(&OP, "call");
@@ -89,6 +96,31 @@ expression(RESULT) ::= expression(LEFT) OPERATOR(OP) expression(RIGHT) .
 		json_array_append(args, RIGHT);
 		json_object_set(RESULT, "right", args);
 	}
+expression(RESULT) ::= expression(LEFT) LEFT_ANGLE(OP) expression(RIGHT) .
+	{
+		RESULT = simple_token(&OP, "call");
+		json_object_set(RESULT, "method", OP.value);
+		json_object_set(RESULT, "left", LEFT);
+
+		json_t* args = json_array();
+		json_array_append(args, RIGHT);
+		json_object_set(RESULT, "right", args);
+	}
+expression(RESULT) ::= expression(LEFT) RIGHT_ANGLE(OP) expression(RIGHT) .
+	{
+		RESULT = simple_token(&OP, "call");
+		json_object_set(RESULT, "method", OP.value);
+		json_object_set(RESULT, "left", LEFT);
+
+		json_t* args = json_array();
+		json_array_append(args, RIGHT);
+		json_object_set(RESULT, "right", args);
+	}
+
+/* --- Type expressions -------------------------------------------------- */
+
+%type typename {json_t*}
+typename(RESULT) ::= identifier(IN) .                { RESULT = IN; }
 
 /* --- Lists of values --------------------------------------------------- */
 
@@ -123,6 +155,27 @@ identifiers(RESULT) ::= identifiers(LEFT) COMMA identifier(ID) .
 	{
 		RESULT = LEFT;
 		json_array_append(RESULT, ID);
+	}
+
+/* --- Lists of type names ----------------------------------------------- */
+
+%type optional_typenames {json_t*}
+optional_typenames(RESULT) ::= .                 { RESULT = json_array(); }
+optional_typenames(RESULT) ::= typenames(IN) .   { RESULT = IN; }
+
+%type typenames {json_t*}
+typenames(RESULT) ::= typename(IN) .             { RESULT = json_array_single(IN); }
+typenames(RESULT) ::= typenames(LEFT) COMMA typename(RIGHT) .
+	{
+		RESULT = LEFT;
+		json_array_append(RESULT, RIGHT);
+	}
+
+%type bracketed_typenames {json_t*}
+bracketed_typenames(RESULT) ::= .                { RESULT = json_array(); }
+bracketed_typenames(RESULT) ::= LEFT_ANGLE optional_typenames(IN) RIGHT_ANGLE .
+	{
+		RESULT = IN;
 	}
 
 /* --- Bits of statement ------------------------------------------------- */

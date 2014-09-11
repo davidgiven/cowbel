@@ -5,6 +5,7 @@
 extern void* ParseAlloc(void* (*allocProc)(size_t));
 extern void Parse(void*, int, token_t);
 extern void* ParseFree(void*, void(*freeProc)(void*));
+extern void ParseTrace(FILE *TraceFILE, char *zTracePrompt);
 
 json_t* current_filename;
 int current_lineno;
@@ -30,6 +31,13 @@ json_t* composite_token(json_t* proto, const char* kind)
 	return t;
 }
 
+json_t* json_array_single(json_t* item)
+{
+	json_t* t = json_array();
+	json_array_append(t, item);
+	return t;
+}
+
 int main(int argc, const char* argv[])
 {
 	yyscan_t scanner;
@@ -42,6 +50,7 @@ int main(int argc, const char* argv[])
 	current_column = 1;
 
 	void* parser = ParseAlloc(malloc);
+	//ParseTrace(stdout, ":");
 
 	int token;
 	token_t tokeninfo;
