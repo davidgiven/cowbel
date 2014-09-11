@@ -33,6 +33,8 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\]+
 	","                        { return COMMA; }
 	"("                        { return OPEN_PARENTHESIS; }
 	")"                        { return CLOSE_PARENTHESIS; }
+	"<"                        { return LEFT_ANGLE; }
+	">"                        { return RIGHT_ANGLE; }
 
 	":="                       { return ASSIGN; }
 	"var"                      { return VAR; }
