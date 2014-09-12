@@ -14,7 +14,7 @@ override CFLAGS += \
 
 override LDFLAGS += \
 
-all: bin/parser
+all: bin/parser parser-tests
 
 clean::
 	@echo CLEAN
@@ -104,4 +104,5 @@ exe := bin/parser
 $(eval $(build-parser))
 $(eval $(clink))
 
+include test/parser/build.mk
 -include $(DEPENDS)
