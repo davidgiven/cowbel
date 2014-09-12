@@ -10,6 +10,7 @@ extern void ParseTrace(FILE *TraceFILE, char *zTracePrompt);
 json_t* current_filename;
 int current_lineno;
 int current_column;
+bool syntax_error;
 
 json_t* simple_token(token_t* token, const char* kind)
 {
@@ -48,6 +49,7 @@ int main(int argc, const char* argv[])
 	current_filename = json_string("<stdin>");
 	current_lineno = 1;
 	current_column = 1;
+	syntax_error = false;
 
 	void* parser = ParseAlloc(malloc);
 	//ParseTrace(stdout, ":");
@@ -72,6 +74,6 @@ int main(int argc, const char* argv[])
 	ParseFree(parser, free);
 	yylex_destroy(scanner);
 
-	return 0;
+	return syntax_error ? 1 : 0;
 }
 

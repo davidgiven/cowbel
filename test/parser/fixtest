@@ -1,0 +1,3 @@
+#!/bin/sh
+bin/parser < test/parser/$1.cow | aeson-pretty > test/parser/$1.clean
+
