@@ -12,9 +12,11 @@
 		current_lineno, current_column);
 }
 
-start ::= statements(IN) .
+start ::= optional_statements(IN) .
 	{
-		json_dumpf(IN, stdout, JSON_INDENT(2));
+		json_t* p = composite_token(IN, "object");
+		json_object_set(p, "statements", IN);
+		json_dumpf(p, stdout, JSON_INDENT(2));
 	}
 
 %left DOT .
@@ -191,6 +193,10 @@ multiassign(RESULT) ::= identifiers(LEFT) ASSIGN(T) values(RIGHT) .
 	}
 
 /* --- Statements -------------------------------------------------------- */
+
+%type optional_statements {json_t*}
+optional_statements(RESULT) ::= .                { RESULT = json_array(); }
+optional_statements(RESULT) ::= statements(IN) . { RESULT = IN; }
 
 %type statements {json_t*}
 statements(RESULT) ::= statement(IN) .
