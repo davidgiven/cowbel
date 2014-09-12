@@ -10,6 +10,7 @@
 	fprintf(stderr, "Parse error at %s:%d.%d\n",
 		json_string_value(current_filename),
 		current_lineno, current_column);
+	syntax_error = true;
 }
 
 start ::= optional_statements(IN) .
@@ -20,7 +21,8 @@ start ::= optional_statements(IN) .
 	}
 
 %left DOT .
-%left OPERATOR LEFT_ANGLE RIGHT_ANGLE .
+%left PREFIX .
+%left INFIX OPERATOR .
 %left IF .
 %left ELSE .
 
@@ -39,6 +41,16 @@ operator(RESULT) ::= OPERATOR(T) .
 		RESULT = simple_token(&T, "identifier");
 		json_object_set(RESULT, "value", T.value);
 	}
+operator(RESULT) ::= LEFT_ANGLE(T) .
+	{
+		RESULT = simple_token(&T, "identifier");
+		json_object_set(RESULT, "value", json_string("<"));
+	}
+operator(RESULT) ::= RIGHT_ANGLE(T) .
+	{
+		RESULT = simple_token(&T, "identifier");
+		json_object_set(RESULT, "value", json_string(">"));
+	}
 
 %type integer {json_t*}
 integer(RESULT) ::= INTEGER(T) .
@@ -52,7 +64,7 @@ integer(RESULT) ::= INTEGER(T) .
 %type real {json_t*}
 real(RESULT) ::= REAL(T) .
 	{
-		long value = strtod(json_string_value(T.value), NULL);
+		double value = strtod(json_string_value(T.value), NULL);
 
 		RESULT = simple_token(&T, "real");
 		json_object_set(RESULT, "value", json_real(value));
@@ -66,58 +78,48 @@ methodname(RESULT) ::= operator(IN) .                { RESULT = IN; }
 
 /* --- Value expressions ------------------------------------------------- */
 
-%type expression {json_t*}
-expression(RESULT) ::= identifier(IN) .              { RESULT = IN; }
-expression(RESULT) ::= integer(IN) .                 { RESULT = IN; }
-expression(RESULT) ::= real(IN) .                    { RESULT = IN; }
-expression(RESULT) ::= OPEN_PARENTHESIS expression(IN) CLOSE_PARENTHESIS .  { RESULT = IN; }
+%type expression_0 {json_t*}
+expression_0(RESULT) ::= identifier(IN) .            { RESULT = IN; }
+expression_0(RESULT) ::= integer(IN) .               { RESULT = IN; }
+expression_0(RESULT) ::= real(IN) .                  { RESULT = IN; }
+expression_0(RESULT) ::= OPEN_PARENTHESIS expression(IN) CLOSE_PARENTHESIS .
+                                                     { RESULT = IN; }
 
-expression(RESULT) ::= expression(LEFT) DOT methodname(OP)
+%type expression_1 {json_t*}
+expression_1(RESULT) ::= expression_0(IN) .          { RESULT = IN; }
+expression_1(RESULT) ::= expression_0(LEFT) DOT methodname(OP)
 			bracketed_typenames(TYPES)
 			OPEN_PARENTHESIS optional_values(RIGHT) CLOSE_PARENTHESIS .
 	{
 		RESULT = composite_token(OP, "call");
 		json_object_set(RESULT, "method", OP);
 		json_object_set(RESULT, "types", TYPES);
-		json_object_set(RESULT, "left", LEFT);
-		json_object_set(RESULT, "right", RIGHT);
+		json_object_set(RESULT, "receiver", LEFT);
+		json_object_set(RESULT, "parameters", RIGHT);
 	}
 
-/* This is a foul hack. Because < and > are both delimiters (for type lists)
- * *and* operators, but because the lexer isn't state-sensitive, we have to
- * reproduce the operator rule for all three cases. We can't abstract
- * OPERATOR out into a separate rule because Lemon won't let us specify a
- * precedence for rules, only terminals. */
-expression(RESULT) ::= expression(LEFT) OPERATOR(OP) expression(RIGHT) .
+%type expression_2 {json_t*}
+expression_2(RESULT) ::= expression_1(IN) .           { RESULT = IN; }
+expression_2(RESULT) ::= operator(OP) expression_1(LEFT) .
 	{
-		RESULT = simple_token(&OP, "call");
-		json_object_set(RESULT, "method", OP.value);
-		json_object_set(RESULT, "left", LEFT);
-
-		json_t* args = json_array();
-		json_array_append(args, RIGHT);
-		json_object_set(RESULT, "right", args);
+		RESULT = composite_token(OP, "call");
+		json_object_set(RESULT, "method", json_object_get(OP, "value"));
+		json_object_set(RESULT, "receiver", LEFT);
+		json_object_set(RESULT, "parameters", json_array());
 	}
-expression(RESULT) ::= expression(LEFT) LEFT_ANGLE(OP) expression(RIGHT) .
+
+%type expression_3 {json_t*}
+expression_3(RESULT) ::= expression_2(IN) .           { RESULT = IN; }
+expression_3(RESULT) ::= expression_3(LEFT) operator(OP) expression_2(RIGHT) .
 	{
-		RESULT = simple_token(&OP, "call");
-		json_object_set(RESULT, "method", OP.value);
-		json_object_set(RESULT, "left", LEFT);
-
-		json_t* args = json_array();
-		json_array_append(args, RIGHT);
-		json_object_set(RESULT, "right", args);
+		RESULT = composite_token(OP, "call");
+		json_object_set(RESULT, "method", json_object_get(OP, "value"));
+		json_object_set(RESULT, "receiver", LEFT);
+		json_object_set(RESULT, "parameters", json_array_single(RIGHT));
 	}
-expression(RESULT) ::= expression(LEFT) RIGHT_ANGLE(OP) expression(RIGHT) .
-	{
-		RESULT = simple_token(&OP, "call");
-		json_object_set(RESULT, "method", OP.value);
-		json_object_set(RESULT, "left", LEFT);
 
-		json_t* args = json_array();
-		json_array_append(args, RIGHT);
-		json_object_set(RESULT, "right", args);
-	}
+%type expression {json_t*}
+expression(RESULT) ::= expression_3(IN) .             { RESULT = IN; }
 
 /* --- Type expressions -------------------------------------------------- */
 
@@ -188,8 +190,8 @@ bracketed_typenames(RESULT) ::= LEFT_ANGLE optional_typenames(IN) RIGHT_ANGLE .
 multiassign(RESULT) ::= identifiers(LEFT) ASSIGN(T) values(RIGHT) .
 	{
 		RESULT = simple_token(&T, "assign");
-		json_object_set(RESULT, "left", LEFT);
-		json_object_set(RESULT, "right", RIGHT);
+		json_object_set(RESULT, "names", LEFT);
+		json_object_set(RESULT, "values", RIGHT);
 	}
 
 /* --- Statements -------------------------------------------------------- */
@@ -211,11 +213,6 @@ statements(RESULT) ::= statements(LEFT) statement(RIGHT) .
 	}
 
 %type statement {json_t*}
-statement(RESULT) ::= expression(IN) SEMICOLON .
-	{
-		RESULT = composite_token(IN, "expression");
-		json_object_set(RESULT, "left", IN);
-	}
 statement(RESULT) ::= multiassign(LEFT) SEMICOLON .
 	{
 		RESULT = LEFT;
@@ -223,16 +220,18 @@ statement(RESULT) ::= multiassign(LEFT) SEMICOLON .
 statement(RESULT) ::= VAR(T) multiassign(LEFT) SEMICOLON .
 	{
 		RESULT = simple_token(&T, "declare");
-		json_object_set(RESULT, "left", LEFT);
+		json_object_set(RESULT, "assignment", LEFT);
 	}
-statement(RESULT) ::= IF(T) expression(LEFT) statement(IFTRUE) ELSE statement(IFFALSE) .
+statement(RESULT) ::= IF(T) OPEN_PARENTHESIS expression(LEFT) CLOSE_PARENTHESIS
+			statement(IFTRUE) ELSE statement(IFFALSE) .
 	{
 		RESULT = simple_token(&T, "ifelse");
 		json_object_set(RESULT, "condition", LEFT);
 		json_object_set(RESULT, "iftrue", IFTRUE);
 		json_object_set(RESULT, "iffalse", IFFALSE);
 	}
-statement(RESULT) ::= IF(T) expression(LEFT) statement(IFTRUE) .
+statement(RESULT) ::= IF(T) OPEN_PARENTHESIS expression(LEFT) CLOSE_PARENTHESIS
+			statement(IFTRUE) .
 	{
 		RESULT = simple_token(&T, "ifelse");
 		json_object_set(RESULT, "condition", LEFT);

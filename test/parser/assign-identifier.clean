@@ -1,0 +1,29 @@
+{
+    "type": "object",
+    "statements": [
+        {
+            "values": [
+                {
+                    "value": "j",
+                    "lineno": 1,
+                    "type": "identifier",
+                    "column": 5,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "i",
+                    "lineno": 1,
+                    "type": "identifier",
+                    "column": 0,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 1,
+            "type": "assign",
+            "column": 2,
+            "filename": "\u003cstdin\u003e"
+        }
+    ]
+}

@@ -20,7 +20,7 @@
 IDSTART            [A-Za-z_$]
 IDCONTINUED        {IDSTART}|[0-9]
 IDENTIFIER         {IDSTART}{IDCONTINUED}*
-OPERATOR           [-!#$%^&*_+=:<>/?|\\]+
+OPERATOR           [-!#$%^&*_+=:<>/?|\\.,]+
 
 %%
 
@@ -50,15 +50,14 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\]+
 	{IDSTART}{IDCONTINUED}*    { return IDENTIFIER; }
 
 	[ \t\r]                    {}
-	\n                         {}
 }
 <COMMENT>{
 	"*/"                       { BEGIN(INITIAL); }
 	[^*\n]*                    {}
 	"*"                        {}
-	\n                         {}
 }
 
+\n                             {}
 .                              { printf("Bad char <%s>!\n", yytext); }
 
 %%
