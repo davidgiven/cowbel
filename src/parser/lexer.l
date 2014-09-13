@@ -55,6 +55,7 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\.,]+
 	"return"                   { return RETURN; }
 	"function"                 { return FUNCTION; }
 	"overriding"               { return OVERRIDING; }
+	"interface"                { return INTERFACE; }
 
 	{OPERATOR}+                { return OPERATOR; }
 	[0-9]+                     { return INTEGER; }

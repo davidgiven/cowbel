@@ -485,7 +485,7 @@
                     }
                 ],
                 "lineno": 13,
-                "type": "object",
+                "type": "block",
                 "column": 14,
                 "filename": "\u003cstdin\u003e"
             },

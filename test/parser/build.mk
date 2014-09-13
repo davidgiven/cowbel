@@ -21,6 +21,7 @@ $(eval $(call parser-test,object))
 $(eval $(call parser-test,short-circuit))
 $(eval $(call parser-test,simple-statements))
 $(eval $(call parser-test,function))
+$(eval $(call parser-test,object-interface))
 
 .PHONY: parser-tests $(tests)
 parser-tests: $(tests)
