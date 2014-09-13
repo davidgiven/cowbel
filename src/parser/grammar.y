@@ -40,12 +40,12 @@ operator(RESULT) ::= OPERATOR(T) .
 		RESULT = simple_token(&T, "identifier");
 		json_object_set(RESULT, "value", T.value);
 	}
-operator(RESULT) ::= LEFT_ANGLE(T) .
+operator(RESULT) ::= OPEN_ANGLE(T) .
 	{
 		RESULT = simple_token(&T, "identifier");
 		json_object_set(RESULT, "value", json_string("<"));
 	}
-operator(RESULT) ::= RIGHT_ANGLE(T) .
+operator(RESULT) ::= CLOSE_ANGLE(T) .
 	{
 		RESULT = simple_token(&T, "identifier");
 		json_object_set(RESULT, "value", json_string(">"));
@@ -209,7 +209,51 @@ typenames(RESULT) ::= typenames(LEFT) COMMA typename(RIGHT) .
 
 %type bracketed_typenames {json_t*}
 bracketed_typenames(RESULT) ::= .                { RESULT = json_array(); }
-bracketed_typenames(RESULT) ::= LEFT_ANGLE optional_typenames(IN) RIGHT_ANGLE .
+bracketed_typenames(RESULT) ::= OPEN_ANGLE optional_typenames(IN) CLOSE_ANGLE .
+	{
+		RESULT = IN;
+	}
+
+/* --- Function parameters ----------------------------------------------- */
+
+%type type_parameters {json_t*}
+type_parameters(RESULT) ::= identifier(RIGHT) .  { RESULT = json_array_single(RIGHT); }
+type_parameters(RESULT) ::= type_parameters(LEFT) COMMA identifier(RIGHT) .
+	{
+		RESULT = LEFT;
+		json_array_append(LEFT, RIGHT);
+	}
+
+%type bracketed_type_parameters {json_t*}
+bracketed_type_parameters(RESULT) ::= .          { RESULT = json_array(); }
+bracketed_type_parameters(RESULT) ::= OPEN_ANGLE CLOSE_ANGLE . { RESULT = json_array(); }
+bracketed_type_parameters(RESULT) ::= OPEN_ANGLE type_parameters(IN) CLOSE_ANGLE .
+	{
+		RESULT = IN;
+	}
+
+%type var_parameter {json_t*}
+var_parameter(RESULT) ::= identifier(ID) COLON typename(TYPE) .
+	{
+		RESULT = composite_token(ID, "parameter");
+		json_object_set(RESULT, "identifier", ID);
+		json_object_set(RESULT, "type", TYPE);
+	}
+
+%type var_parameters {json_t*}
+var_parameters(RESULT) ::= var_parameter(LEFT) . { RESULT = json_array_single(LEFT); }
+var_parameters(RESULT) ::= var_parameters(LEFT) COMMA var_parameter(RIGHT) .
+	{
+		RESULT = LEFT;
+		json_array_append(LEFT, RIGHT);
+	}
+
+%type bracketed_var_parameters {json_t*}
+bracketed_var_parameters(RESULT) ::= .          { RESULT = json_array(); }
+bracketed_var_parameters(RESULT) ::= OPEN_PARENTHESIS CLOSE_PARENTHESIS .
+												{ RESULT = json_array(); }
+bracketed_var_parameters(RESULT) ::= OPEN_PARENTHESIS var_parameters(IN)
+		CLOSE_PARENTHESIS .
 	{
 		RESULT = IN;
 	}
@@ -324,3 +368,25 @@ statement(RESULT) ::= DO(T) statement(BODY) WHILE
 		json_object_set(RESULT, "body", BODY);
 	}
 
+/* Function definition */
+
+%type is_overriding {bool}
+is_overriding(RESULT) ::= .                           { RESULT = false; }
+is_overriding(RESULT) ::= OVERRIDING .                { RESULT = true; }
+
+%type return_types {json_t*}
+return_types(RESULT) ::= .                            { RESULT = json_array(); }
+return_types(RESULT) ::= COLON bracketed_var_parameters(IN) . { RESULT = IN; }
+
+statement(RESULT) ::= FUNCTION(T) is_overriding(OVERRIDING) methodname(NAME)
+			bracketed_type_parameters(TYPES) bracketed_var_parameters(INS)
+			return_types(OUTS) statement(BODY) .
+	{
+		RESULT = simple_token(&T, "function");
+		json_object_set(RESULT, "overriding", OVERRIDING ? json_true() : json_false());
+		json_object_set(RESULT, "identifier", NAME);
+		json_object_set(RESULT, "typeparams", TYPES);
+		json_object_set(RESULT, "inparams", INS);
+		json_object_set(RESULT, "outparams", OUTS);
+		json_object_set(RESULT, "body", BODY);
+	}
