@@ -96,6 +96,11 @@ expression_0(RESULT) ::= real(IN) .                  { RESULT = IN; }
 expression_0(RESULT) ::= boolean(IN) .               { RESULT = IN; }
 expression_0(RESULT) ::= OPEN_PARENTHESIS expression(IN) CLOSE_PARENTHESIS .
                                                      { RESULT = IN; }
+expression_0(RESULT) ::= OPEN_BRACE(T) optional_statements(BODY) CLOSE_BRACE .
+	{
+		RESULT = simple_token(&T, "block");
+		json_object_set(RESULT, "body", BODY);
+	}
 
 %type expression_1 {json_t*}
 expression_1(RESULT) ::= expression_0(IN) .          { RESULT = IN; }
@@ -308,7 +313,7 @@ statement(RESULT) ::= RETURN(T) expression(VAL) SEMICOLON .
 
 statement(RESULT) ::= OPEN_BRACE(T) optional_statements(BODY) CLOSE_BRACE .
 	{
-		RESULT = simple_token(&T, "object");
+		RESULT = simple_token(&T, "block");
 		json_object_set(RESULT, "body", BODY);
 	}
 
@@ -389,4 +394,19 @@ statement(RESULT) ::= FUNCTION(T) is_overriding(OVERRIDING) methodname(NAME)
 		json_object_set(RESULT, "inparams", INS);
 		json_object_set(RESULT, "outparams", OUTS);
 		json_object_set(RESULT, "body", BODY);
+	}
+
+/* Object implements interface */
+
+%type delegates {json_t*}
+delegates(RESULT) ::= .                               { RESULT = NULL; }
+delegates(RESULT) ::= OPEN_PARENTHESIS expression(IN) CLOSE_PARENTHESIS .
+                                                      { RESULT = IN; }
+
+statement(RESULT) ::= INTERFACE(T) typename(TYPE) delegates(DELEGATES) SEMICOLON .
+	{
+		RESULT = simple_token(&T, "delegates");
+		json_object_set(RESULT, "interface", TYPE);
+		if (DELEGATES)
+			json_object_set(RESULT, "delegates", DELEGATES);
 	}

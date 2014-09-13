@@ -1,0 +1,70 @@
+{
+    "type": "object",
+    "statements": [
+        {
+            "body": [
+                {
+                    "lineno": 2,
+                    "interface": {
+                        "value": "HasFnord",
+                        "lineno": 2,
+                        "type": "identifier",
+                        "column": 12,
+                        "filename": "\u003cstdin\u003e"
+                    },
+                    "type": "delegates",
+                    "column": 2,
+                    "filename": "\u003cstdin\u003e"
+                },
+                {
+                    "delegates": {
+                        "value": "prototype",
+                        "lineno": 3,
+                        "type": "identifier",
+                        "column": 22,
+                        "filename": "\u003cstdin\u003e"
+                    },
+                    "lineno": 3,
+                    "interface": {
+                        "value": "HasFnord",
+                        "lineno": 3,
+                        "type": "identifier",
+                        "column": 12,
+                        "filename": "\u003cstdin\u003e"
+                    },
+                    "type": "delegates",
+                    "column": 2,
+                    "filename": "\u003cstdin\u003e"
+                },
+                {
+                    "typeparams": [],
+                    "body": {
+                        "body": [],
+                        "lineno": 5,
+                        "type": "block",
+                        "column": 17,
+                        "filename": "\u003cstdin\u003e"
+                    },
+                    "identifier": {
+                        "value": "Fnord",
+                        "lineno": 5,
+                        "type": "identifier",
+                        "column": 11,
+                        "filename": "\u003cstdin\u003e"
+                    },
+                    "inparams": [],
+                    "overriding": false,
+                    "lineno": 5,
+                    "outparams": [],
+                    "type": "function",
+                    "column": 2,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 1,
+            "type": "block",
+            "column": 0,
+            "filename": "\u003cstdin\u003e"
+        }
+    ]
+}

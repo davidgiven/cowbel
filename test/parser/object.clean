@@ -4,7 +4,7 @@
         {
             "body": [],
             "lineno": 1,
-            "type": "object",
+            "type": "block",
             "column": 0,
             "filename": "\u003cstdin\u003e"
         },
@@ -36,7 +36,7 @@
                 }
             ],
             "lineno": 2,
-            "type": "object",
+            "type": "block",
             "column": 1,
             "filename": "\u003cstdin\u003e"
         },
@@ -80,7 +80,7 @@
                     }
                 ],
                 "lineno": 3,
-                "type": "object",
+                "type": "block",
                 "column": 11,
                 "filename": "\u003cstdin\u003e"
             }
@@ -90,14 +90,189 @@
                 {
                     "body": [],
                     "lineno": 4,
-                    "type": "object",
+                    "type": "block",
                     "column": 2,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
             "lineno": 4,
-            "type": "object",
+            "type": "block",
             "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "body": [],
+                    "lineno": 6,
+                    "type": "block",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "o",
+                    "lineno": 6,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 6,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "body": [
+                        {
+                            "values": [
+                                {
+                                    "value": 1,
+                                    "lineno": 7,
+                                    "type": "integer",
+                                    "column": 12,
+                                    "filename": "\u003cstdin\u003e"
+                                }
+                            ],
+                            "names": [
+                                {
+                                    "value": "i",
+                                    "lineno": 7,
+                                    "type": "identifier",
+                                    "column": 7,
+                                    "filename": "\u003cstdin\u003e"
+                                }
+                            ],
+                            "lineno": 7,
+                            "type": "assign",
+                            "column": 9,
+                            "filename": "\u003cstdin\u003e"
+                        }
+                    ],
+                    "lineno": 7,
+                    "type": "block",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "o",
+                    "lineno": 7,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 7,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "body": [
+                        {
+                            "lineno": 8,
+                            "type": "ifelse",
+                            "condition": {
+                                "value": true,
+                                "lineno": 8,
+                                "type": "boolean",
+                                "column": 11,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "column": 7,
+                            "filename": "\u003cstdin\u003e",
+                            "iftrue": {
+                                "body": [
+                                    {
+                                        "values": [
+                                            {
+                                                "value": 2,
+                                                "lineno": 8,
+                                                "type": "integer",
+                                                "column": 23,
+                                                "filename": "\u003cstdin\u003e"
+                                            }
+                                        ],
+                                        "names": [
+                                            {
+                                                "value": "i",
+                                                "lineno": 8,
+                                                "type": "identifier",
+                                                "column": 18,
+                                                "filename": "\u003cstdin\u003e"
+                                            }
+                                        ],
+                                        "lineno": 8,
+                                        "type": "assign",
+                                        "column": 20,
+                                        "filename": "\u003cstdin\u003e"
+                                    }
+                                ],
+                                "lineno": 8,
+                                "type": "block",
+                                "column": 17,
+                                "filename": "\u003cstdin\u003e"
+                            }
+                        }
+                    ],
+                    "lineno": 8,
+                    "type": "block",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "o",
+                    "lineno": 8,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 8,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "body": [
+                        {
+                            "body": [],
+                            "lineno": 9,
+                            "type": "block",
+                            "column": 7,
+                            "filename": "\u003cstdin\u003e"
+                        }
+                    ],
+                    "lineno": 9,
+                    "type": "block",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "o",
+                    "lineno": 9,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 9,
+            "type": "assign",
+            "column": 3,
             "filename": "\u003cstdin\u003e"
         }
     ]

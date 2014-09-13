@@ -1,0 +1,7 @@
+{
+	interface HasFnord;
+	interface HasFnord (prototype);
+
+	function Fnord {}
+}
+
