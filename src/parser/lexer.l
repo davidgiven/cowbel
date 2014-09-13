@@ -40,6 +40,9 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\.,]+
 	"var"                      { return VAR; }
 	"if"                       { return IF; }
 	"else"                     { return ELSE; }
+	"while"                    { return WHILE; }
+	"true"                     { return TRUE; }
+	"false"                    { return FALSE; }
 
 	{OPERATOR}+                { return OPERATOR; }
 	[0-9]+                     { return INTEGER; }
