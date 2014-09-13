@@ -70,6 +70,18 @@ real(RESULT) ::= REAL(T) .
 		json_object_set(RESULT, "value", json_real(value));
 	}
 
+%type boolean {json_t*}
+boolean(RESULT) ::= TRUE(T) .
+	{
+		RESULT = simple_token(&T, "boolean");
+		json_object_set(RESULT, "value", json_true());
+	}
+boolean(RESULT) ::= FALSE(T) .
+	{
+		RESULT = simple_token(&T, "boolean");
+		json_object_set(RESULT, "value", json_false());
+	}
+
 /* --- Utilities --------------------------------------------------------- */
 
 %type methodname {json_t*}
@@ -82,6 +94,7 @@ methodname(RESULT) ::= operator(IN) .                { RESULT = IN; }
 expression_0(RESULT) ::= identifier(IN) .            { RESULT = IN; }
 expression_0(RESULT) ::= integer(IN) .               { RESULT = IN; }
 expression_0(RESULT) ::= real(IN) .                  { RESULT = IN; }
+expression_0(RESULT) ::= boolean(IN) .               { RESULT = IN; }
 expression_0(RESULT) ::= OPEN_PARENTHESIS expression(IN) CLOSE_PARENTHESIS .
                                                      { RESULT = IN; }
 
@@ -237,3 +250,11 @@ statement(RESULT) ::= IF(T) OPEN_PARENTHESIS expression(LEFT) CLOSE_PARENTHESIS
 		json_object_set(RESULT, "condition", LEFT);
 		json_object_set(RESULT, "iftrue", IFTRUE);
 	}
+statement(RESULT) ::= WHILE(T) OPEN_PARENTHESIS expression(COND) CLOSE_PARENTHESIS
+			statement(BODY) .
+	{
+		RESULT = simple_token(&T, "while");
+		json_object_set(RESULT, "condition", COND);
+		json_object_set(RESULT, "body", BODY);
+	}
+

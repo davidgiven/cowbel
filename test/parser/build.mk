@@ -10,11 +10,13 @@ endef
 tests :=
 # No space after the comma here; make can't cope
 $(eval $(call parser-test,empty))
+$(eval $(call parser-test,assign-boolean))
 $(eval $(call parser-test,assign-real))
 $(eval $(call parser-test,assign-integer))
 $(eval $(call parser-test,assign-identifier))
 $(eval $(call parser-test,infix))
 $(eval $(call parser-test,prefix))
+$(eval $(call parser-test,while))
 
 .PHONY: parser-tests $(tests)
 parser-tests: $(tests)
