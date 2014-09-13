@@ -43,6 +43,7 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\.,]+
 	"while"                    { return WHILE; }
 	"true"                     { return TRUE; }
 	"false"                    { return FALSE; }
+	"do"                       { return DO; }
 
 	{OPERATOR}+                { return OPERATOR; }
 	[0-9]+                     { return INTEGER; }

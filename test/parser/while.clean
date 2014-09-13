@@ -5,26 +5,10 @@
             "body": {
                 "values": [
                     {
-                        "receiver": {
-                            "value": "i",
-                            "lineno": 1,
-                            "type": "identifier",
-                            "column": 17,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "method": "+",
+                        "value": 1,
                         "lineno": 1,
-                        "parameters": [
-                            {
-                                "value": 1,
-                                "lineno": 1,
-                                "type": "integer",
-                                "column": 21,
-                                "filename": "\u003cstdin\u003e"
-                            }
-                        ],
-                        "type": "call",
-                        "column": 19,
+                        "type": "integer",
+                        "column": 18,
                         "filename": "\u003cstdin\u003e"
                     }
                 ],
@@ -33,21 +17,21 @@
                         "value": "i",
                         "lineno": 1,
                         "type": "identifier",
-                        "column": 12,
+                        "column": 13,
                         "filename": "\u003cstdin\u003e"
                     }
                 ],
                 "lineno": 1,
                 "type": "assign",
-                "column": 14,
+                "column": 15,
                 "filename": "\u003cstdin\u003e"
             },
             "lineno": 1,
             "type": "while",
             "condition": {
-                "value": "foo",
+                "value": true,
                 "lineno": 1,
-                "type": "identifier",
+                "type": "boolean",
                 "column": 7,
                 "filename": "\u003cstdin\u003e"
             },
@@ -58,26 +42,10 @@
             "body": {
                 "values": [
                     {
-                        "receiver": {
-                            "value": "i",
-                            "lineno": 2,
-                            "type": "identifier",
-                            "column": 19,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "method": "+",
+                        "value": 1,
                         "lineno": 2,
-                        "parameters": [
-                            {
-                                "value": 1,
-                                "lineno": 2,
-                                "type": "integer",
-                                "column": 23,
-                                "filename": "\u003cstdin\u003e"
-                            }
-                        ],
-                        "type": "call",
-                        "column": 21,
+                        "type": "integer",
+                        "column": 9,
                         "filename": "\u003cstdin\u003e"
                     }
                 ],
@@ -86,22 +54,22 @@
                         "value": "i",
                         "lineno": 2,
                         "type": "identifier",
-                        "column": 14,
+                        "column": 4,
                         "filename": "\u003cstdin\u003e"
                     }
                 ],
                 "lineno": 2,
                 "type": "assign",
-                "column": 16,
+                "column": 6,
                 "filename": "\u003cstdin\u003e"
             },
             "lineno": 2,
-            "type": "while",
+            "type": "dowhile",
             "condition": {
-                "value": true,
+                "value": false,
                 "lineno": 2,
                 "type": "boolean",
-                "column": 8,
+                "column": 19,
                 "filename": "\u003cstdin\u003e"
             },
             "column": 1,
