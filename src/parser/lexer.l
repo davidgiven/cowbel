@@ -46,6 +46,9 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\.,]+
 	"true"                     { return TRUE; }
 	"false"                    { return FALSE; }
 	"do"                       { return DO; }
+	"and"                      { return AND; }
+	"or"                       { return OR; }
+	"not"                      { return NOT; }
 
 	{OPERATOR}+                { return OPERATOR; }
 	[0-9]+                     { return INTEGER; }

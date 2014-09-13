@@ -20,9 +20,8 @@ start ::= optional_statements(IN) .
 		json_dumpf(p, stdout, JSON_INDENT(2));
 	}
 
-%left DOT .
-%left PREFIX .
-%left INFIX OPERATOR .
+%left OR .
+%left AND .
 %left IF .
 %left ELSE .
 
@@ -131,8 +130,28 @@ expression_3(RESULT) ::= expression_3(LEFT) operator(OP) expression_2(RIGHT) .
 		json_object_set(RESULT, "parameters", json_array_single(RIGHT));
 	}
 
+%type expression_4 {json_t*}
+expression_4(RESULT) ::= expression_3(IN) .           { RESULT = IN; }
+expression_4(RESULT) ::= expression_4(LEFT) OR(OP) expression_4(RIGHT) .
+	{
+		RESULT = simple_token(&OP, "or");
+		json_object_set(RESULT, "left", LEFT);
+		json_object_set(RESULT, "right", RIGHT);
+	}
+expression_4(RESULT) ::= expression_4(LEFT) AND(OP) expression_4(RIGHT) .
+	{
+		RESULT = simple_token(&OP, "and");
+		json_object_set(RESULT, "left", LEFT);
+		json_object_set(RESULT, "right", RIGHT);
+	}
+expression_4(RESULT) ::= NOT(OP) expression_3(LEFT) .
+	{
+		RESULT = simple_token(&OP, "not");
+		json_object_set(RESULT, "left", LEFT);
+	}
+
 %type expression {json_t*}
-expression(RESULT) ::= expression_3(IN) .             { RESULT = IN; }
+expression(RESULT) ::= expression_4(IN) .             { RESULT = IN; }
 
 /* --- Type expressions -------------------------------------------------- */
 
