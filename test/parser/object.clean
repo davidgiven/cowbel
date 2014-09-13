@@ -1,0 +1,104 @@
+{
+    "type": "object",
+    "statements": [
+        {
+            "body": [],
+            "lineno": 1,
+            "type": "object",
+            "column": 0,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "body": [
+                {
+                    "values": [
+                        {
+                            "value": 1,
+                            "lineno": 2,
+                            "type": "integer",
+                            "column": 7,
+                            "filename": "\u003cstdin\u003e"
+                        }
+                    ],
+                    "names": [
+                        {
+                            "value": "i",
+                            "lineno": 2,
+                            "type": "identifier",
+                            "column": 2,
+                            "filename": "\u003cstdin\u003e"
+                        }
+                    ],
+                    "lineno": 2,
+                    "type": "assign",
+                    "column": 4,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 2,
+            "type": "object",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "lineno": 3,
+            "type": "ifelse",
+            "condition": {
+                "value": true,
+                "lineno": 3,
+                "type": "boolean",
+                "column": 5,
+                "filename": "\u003cstdin\u003e"
+            },
+            "column": 1,
+            "filename": "\u003cstdin\u003e",
+            "iftrue": {
+                "body": [
+                    {
+                        "values": [
+                            {
+                                "value": 2,
+                                "lineno": 3,
+                                "type": "integer",
+                                "column": 17,
+                                "filename": "\u003cstdin\u003e"
+                            }
+                        ],
+                        "names": [
+                            {
+                                "value": "i",
+                                "lineno": 3,
+                                "type": "identifier",
+                                "column": 12,
+                                "filename": "\u003cstdin\u003e"
+                            }
+                        ],
+                        "lineno": 3,
+                        "type": "assign",
+                        "column": 14,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "lineno": 3,
+                "type": "object",
+                "column": 11,
+                "filename": "\u003cstdin\u003e"
+            }
+        },
+        {
+            "body": [
+                {
+                    "body": [],
+                    "lineno": 4,
+                    "type": "object",
+                    "column": 2,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 4,
+            "type": "object",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        }
+    ]
+}
