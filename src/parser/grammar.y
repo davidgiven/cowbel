@@ -257,4 +257,11 @@ statement(RESULT) ::= WHILE(T) OPEN_PARENTHESIS expression(COND) CLOSE_PARENTHES
 		json_object_set(RESULT, "condition", COND);
 		json_object_set(RESULT, "body", BODY);
 	}
+statement(RESULT) ::= DO(T) statement(BODY) WHILE
+			OPEN_PARENTHESIS expression(COND) CLOSE_PARENTHESIS SEMICOLON .
+	{
+		RESULT = simple_token(&T, "dowhile");
+		json_object_set(RESULT, "condition", COND);
+		json_object_set(RESULT, "body", BODY);
+	}
 
