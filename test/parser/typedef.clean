@@ -1,0 +1,422 @@
+{
+    "type": "object",
+    "statements": [
+        {
+            "typeparams": [],
+            "body": {
+                "identifier": {
+                    "value": "Z",
+                    "lineno": 1,
+                    "type": "identifier",
+                    "column": 10,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "typeargs": [],
+                "lineno": 1,
+                "type": "typeref",
+                "column": 10,
+                "filename": "\u003cstdin\u003e"
+            },
+            "identifier": {
+                "value": "T",
+                "lineno": 1,
+                "type": "identifier",
+                "column": 5,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 1,
+            "type": "typedef",
+            "column": 0,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "typeparams": [
+                {
+                    "value": "A",
+                    "lineno": 2,
+                    "type": "identifier",
+                    "column": 8,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "body": {
+                "identifier": {
+                    "value": "Z",
+                    "lineno": 2,
+                    "type": "identifier",
+                    "column": 14,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "typeargs": [],
+                "lineno": 2,
+                "type": "typeref",
+                "column": 14,
+                "filename": "\u003cstdin\u003e"
+            },
+            "identifier": {
+                "value": "T",
+                "lineno": 2,
+                "type": "identifier",
+                "column": 6,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 2,
+            "type": "typedef",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "typeparams": [],
+            "body": {
+                "identifier": {
+                    "value": "Z",
+                    "lineno": 3,
+                    "type": "identifier",
+                    "column": 11,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "typeargs": [
+                    {
+                        "identifier": {
+                            "value": "A",
+                            "lineno": 3,
+                            "type": "identifier",
+                            "column": 13,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "typeargs": [],
+                        "lineno": 3,
+                        "type": "typeref",
+                        "column": 13,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "lineno": 3,
+                "type": "typeref",
+                "column": 11,
+                "filename": "\u003cstdin\u003e"
+            },
+            "identifier": {
+                "value": "T",
+                "lineno": 3,
+                "type": "identifier",
+                "column": 6,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 3,
+            "type": "typedef",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "typeparams": [
+                {
+                    "value": "A",
+                    "lineno": 4,
+                    "type": "identifier",
+                    "column": 8,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "body": {
+                "identifier": {
+                    "value": "Z",
+                    "lineno": 4,
+                    "type": "identifier",
+                    "column": 14,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "typeargs": [
+                    {
+                        "identifier": {
+                            "value": "A",
+                            "lineno": 4,
+                            "type": "identifier",
+                            "column": 16,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "typeargs": [],
+                        "lineno": 4,
+                        "type": "typeref",
+                        "column": 16,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "lineno": 4,
+                "type": "typeref",
+                "column": 14,
+                "filename": "\u003cstdin\u003e"
+            },
+            "identifier": {
+                "value": "T",
+                "lineno": 4,
+                "type": "identifier",
+                "column": 6,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 4,
+            "type": "typedef",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "typeparams": [],
+            "body": {
+                "body": [],
+                "lineno": 6,
+                "type": "interfacedef",
+                "column": 11,
+                "filename": "\u003cstdin\u003e"
+            },
+            "identifier": {
+                "value": "T",
+                "lineno": 6,
+                "type": "identifier",
+                "column": 6,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 6,
+            "type": "typedef",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "typeparams": [],
+            "body": {
+                "body": [
+                    {
+                        "lineno": 8,
+                        "interface": {
+                            "identifier": {
+                                "value": "Z",
+                                "lineno": 8,
+                                "type": "identifier",
+                                "column": 12,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [],
+                            "lineno": 8,
+                            "type": "typeref",
+                            "column": 12,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "type": "typeimplements",
+                        "column": 2,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "lineno": 7,
+                "type": "interfacedef",
+                "column": 11,
+                "filename": "\u003cstdin\u003e"
+            },
+            "identifier": {
+                "value": "T",
+                "lineno": 7,
+                "type": "identifier",
+                "column": 6,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 7,
+            "type": "typedef",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "typeparams": [],
+            "body": {
+                "body": [
+                    {
+                        "functionspec": {
+                            "typeparams": [],
+                            "identifier": {
+                                "value": "Fnord",
+                                "lineno": 11,
+                                "type": "identifier",
+                                "column": 11,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "inparams": [],
+                            "overriding": false,
+                            "lineno": 11,
+                            "outparams": [],
+                            "type": "function",
+                            "column": 2,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "lineno": 11,
+                        "type": "functiondef",
+                        "column": 2,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "lineno": 10,
+                "type": "interfacedef",
+                "column": 11,
+                "filename": "\u003cstdin\u003e"
+            },
+            "identifier": {
+                "value": "T",
+                "lineno": 10,
+                "type": "identifier",
+                "column": 6,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 10,
+            "type": "typedef",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "typeparams": [],
+            "body": {
+                "body": [
+                    {
+                        "lineno": 14,
+                        "interface": {
+                            "identifier": {
+                                "value": "Z",
+                                "lineno": 14,
+                                "type": "identifier",
+                                "column": 12,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [],
+                            "lineno": 14,
+                            "type": "typeref",
+                            "column": 12,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "type": "typeimplements",
+                        "column": 2,
+                        "filename": "\u003cstdin\u003e"
+                    },
+                    {
+                        "functionspec": {
+                            "typeparams": [],
+                            "identifier": {
+                                "value": "Fnord",
+                                "lineno": 15,
+                                "type": "identifier",
+                                "column": 11,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "inparams": [],
+                            "overriding": false,
+                            "lineno": 15,
+                            "outparams": [],
+                            "type": "function",
+                            "column": 2,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "lineno": 15,
+                        "type": "functiondef",
+                        "column": 2,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "lineno": 13,
+                "type": "interfacedef",
+                "column": 11,
+                "filename": "\u003cstdin\u003e"
+            },
+            "identifier": {
+                "value": "T",
+                "lineno": 13,
+                "type": "identifier",
+                "column": 6,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 13,
+            "type": "typedef",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "typeparams": [
+                {
+                    "value": "Q",
+                    "lineno": 17,
+                    "type": "identifier",
+                    "column": 8,
+                    "filename": "\u003cstdin\u003e"
+                },
+                {
+                    "value": "W",
+                    "lineno": 17,
+                    "type": "identifier",
+                    "column": 11,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "body": {
+                "body": [
+                    {
+                        "lineno": 18,
+                        "interface": {
+                            "identifier": {
+                                "value": "Z",
+                                "lineno": 18,
+                                "type": "identifier",
+                                "column": 12,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [
+                                {
+                                    "identifier": {
+                                        "value": "Q",
+                                        "lineno": 18,
+                                        "type": "identifier",
+                                        "column": 14,
+                                        "filename": "\u003cstdin\u003e"
+                                    },
+                                    "typeargs": [],
+                                    "lineno": 18,
+                                    "type": "typeref",
+                                    "column": 14,
+                                    "filename": "\u003cstdin\u003e"
+                                },
+                                {
+                                    "identifier": {
+                                        "value": "W",
+                                        "lineno": 18,
+                                        "type": "identifier",
+                                        "column": 17,
+                                        "filename": "\u003cstdin\u003e"
+                                    },
+                                    "typeargs": [],
+                                    "lineno": 18,
+                                    "type": "typeref",
+                                    "column": 17,
+                                    "filename": "\u003cstdin\u003e"
+                                }
+                            ],
+                            "lineno": 18,
+                            "type": "typeref",
+                            "column": 12,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "type": "typeimplements",
+                        "column": 2,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "lineno": 17,
+                "type": "interfacedef",
+                "column": 17,
+                "filename": "\u003cstdin\u003e"
+            },
+            "identifier": {
+                "value": "T",
+                "lineno": 17,
+                "type": "identifier",
+                "column": 6,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 17,
+            "type": "typedef",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        }
+    ]
+}

@@ -105,7 +105,7 @@ expression_0(RESULT) ::= OPEN_BRACE(T) optional_statements(BODY) CLOSE_BRACE .
 %type expression_1 {json_t*}
 expression_1(RESULT) ::= expression_0(IN) .          { RESULT = IN; }
 expression_1(RESULT) ::= expression_0(LEFT) DOT methodname(OP)
-			bracketed_typenames(TYPES)
+			bracketed_typerefs(TYPES)
 			OPEN_PARENTHESIS optional_values(RIGHT) CLOSE_PARENTHESIS .
 	{
 		RESULT = composite_token(OP, "call");
@@ -158,11 +158,6 @@ expression_4(RESULT) ::= NOT(OP) expression_3(LEFT) .
 %type expression {json_t*}
 expression(RESULT) ::= expression_4(IN) .             { RESULT = IN; }
 
-/* --- Type expressions -------------------------------------------------- */
-
-%type typename {json_t*}
-typename(RESULT) ::= identifier(IN) .                { RESULT = IN; }
-
 /* --- Lists of values --------------------------------------------------- */
 
 %type optional_values {json_t*}
@@ -200,23 +195,61 @@ identifiers(RESULT) ::= identifiers(LEFT) COMMA identifier(ID) .
 
 /* --- Lists of type names ----------------------------------------------- */
 
-%type optional_typenames {json_t*}
-optional_typenames(RESULT) ::= .                 { RESULT = json_array(); }
-optional_typenames(RESULT) ::= typenames(IN) .   { RESULT = IN; }
+%type optional_typerefs {json_t*}
+optional_typerefs(RESULT) ::= .                 { RESULT = json_array(); }
+optional_typerefs(RESULT) ::= typerefs(IN) .   { RESULT = IN; }
 
-%type typenames {json_t*}
-typenames(RESULT) ::= typename(IN) .             { RESULT = json_array_single(IN); }
-typenames(RESULT) ::= typenames(LEFT) COMMA typename(RIGHT) .
+%type typerefs {json_t*}
+typerefs(RESULT) ::= typeref(IN) .             { RESULT = json_array_single(IN); }
+typerefs(RESULT) ::= typerefs(LEFT) COMMA typeref(RIGHT) .
 	{
 		RESULT = LEFT;
 		json_array_append(RESULT, RIGHT);
 	}
 
-%type bracketed_typenames {json_t*}
-bracketed_typenames(RESULT) ::= .                { RESULT = json_array(); }
-bracketed_typenames(RESULT) ::= OPEN_ANGLE optional_typenames(IN) CLOSE_ANGLE .
+%type bracketed_typerefs {json_t*}
+bracketed_typerefs(RESULT) ::= .                { RESULT = json_array(); }
+bracketed_typerefs(RESULT) ::= OPEN_ANGLE optional_typerefs(IN) CLOSE_ANGLE .
 	{
 		RESULT = IN;
+	}
+
+/* --- Type expressions -------------------------------------------------- */
+
+%type typeref {json_t*}
+typeref(RESULT) ::= identifier(ID) bracketed_typerefs(TYPES) .
+	{
+		RESULT = composite_token(ID, "typeref");
+		json_object_set(RESULT, "identifier", ID);
+		json_object_set(RESULT, "typeargs", TYPES);
+	}
+
+%type typestatements {json_t*}
+typestatements(RESULT) ::= .                     { RESULT = json_array(); }
+typestatements(RESULT) ::= typestatements(LEFT) typestatement(RIGHT) .
+	{
+		RESULT = LEFT;
+		json_array_append(RESULT, RIGHT);
+	}
+
+%type typestatement {json_t*}
+typestatement(RESULT) ::= INTERFACE(T) typeref(TYPE) SEMICOLON .
+	{
+		RESULT = simple_token(&T, "typeimplements");
+		json_object_set(RESULT, "interface", TYPE);
+	}
+typestatement(RESULT) ::= functionspec(FUNC) SEMICOLON .
+	{
+		RESULT = composite_token(FUNC, "functiondef");
+		json_object_set(RESULT, "functionspec", FUNC);
+	}
+
+%type typespec {json_t*}
+typespec(RESULT) ::= typeref(IN) .               { RESULT = IN; }
+typespec(RESULT) ::= OPEN_BRACE(T) typestatements(STMTS) CLOSE_BRACE .
+	{
+		RESULT = simple_token(&T, "interfacedef");
+		json_object_set(RESULT, "body", STMTS);
 	}
 
 /* --- Function parameters ----------------------------------------------- */
@@ -238,7 +271,7 @@ bracketed_type_parameters(RESULT) ::= OPEN_ANGLE type_parameters(IN) CLOSE_ANGLE
 	}
 
 %type var_parameter {json_t*}
-var_parameter(RESULT) ::= identifier(ID) COLON typename(TYPE) .
+var_parameter(RESULT) ::= identifier(ID) COLON typeref(TYPE) .
 	{
 		RESULT = composite_token(ID, "parameter");
 		json_object_set(RESULT, "identifier", ID);
@@ -273,6 +306,19 @@ multiassign(RESULT) ::= identifiers(LEFT) ASSIGN(T) values(RIGHT) .
 		RESULT = simple_token(&T, "assign");
 		json_object_set(RESULT, "names", LEFT);
 		json_object_set(RESULT, "values", RIGHT);
+	}
+
+%type functionspec {json_t*}
+functionspec(RESULT) ::= FUNCTION(T) is_overriding(OVERRIDING) methodname(NAME)
+			bracketed_type_parameters(TYPES) bracketed_var_parameters(INS)
+			return_types(OUTS) .
+	{
+		RESULT = simple_token(&T, "function");
+		json_object_set(RESULT, "overriding", OVERRIDING ? json_true() : json_false());
+		json_object_set(RESULT, "identifier", NAME);
+		json_object_set(RESULT, "typeparams", TYPES);
+		json_object_set(RESULT, "inparams", INS);
+		json_object_set(RESULT, "outparams", OUTS);
 	}
 
 /* --- Statements -------------------------------------------------------- */
@@ -383,16 +429,10 @@ is_overriding(RESULT) ::= OVERRIDING .                { RESULT = true; }
 return_types(RESULT) ::= .                            { RESULT = json_array(); }
 return_types(RESULT) ::= COLON bracketed_var_parameters(IN) . { RESULT = IN; }
 
-statement(RESULT) ::= FUNCTION(T) is_overriding(OVERRIDING) methodname(NAME)
-			bracketed_type_parameters(TYPES) bracketed_var_parameters(INS)
-			return_types(OUTS) statement(BODY) .
+statement(RESULT) ::= functionspec(FUNC) statement(BODY) .
 	{
-		RESULT = simple_token(&T, "function");
-		json_object_set(RESULT, "overriding", OVERRIDING ? json_true() : json_false());
-		json_object_set(RESULT, "identifier", NAME);
-		json_object_set(RESULT, "typeparams", TYPES);
-		json_object_set(RESULT, "inparams", INS);
-		json_object_set(RESULT, "outparams", OUTS);
+		RESULT = composite_token(FUNC, "function");
+		json_object_set(RESULT, "functionspec", FUNC);
 		json_object_set(RESULT, "body", BODY);
 	}
 
@@ -403,10 +443,22 @@ delegates(RESULT) ::= .                               { RESULT = NULL; }
 delegates(RESULT) ::= OPEN_PARENTHESIS expression(IN) CLOSE_PARENTHESIS .
                                                       { RESULT = IN; }
 
-statement(RESULT) ::= INTERFACE(T) typename(TYPE) delegates(DELEGATES) SEMICOLON .
+statement(RESULT) ::= INTERFACE(T) typeref(TYPE) delegates(DELEGATES) SEMICOLON .
 	{
-		RESULT = simple_token(&T, "delegates");
+		RESULT = simple_token(&T, "objectimplements");
 		json_object_set(RESULT, "interface", TYPE);
 		if (DELEGATES)
 			json_object_set(RESULT, "delegates", DELEGATES);
 	}
+
+/* Type definition */
+
+statement(RESULT) ::= TYPE(T) identifier(ID) bracketed_type_parameters(TYPES)
+		ASSIGN typespec(TYPESPEC) SEMICOLON .
+	{
+		RESULT = simple_token(&T, "typedef");
+		json_object_set(RESULT, "identifier", ID);
+		json_object_set(RESULT, "typeparams", TYPES);
+		json_object_set(RESULT, "body", TYPESPEC);
+	}
+
