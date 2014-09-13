@@ -6,13 +6,20 @@
                 {
                     "lineno": 2,
                     "interface": {
-                        "value": "HasFnord",
+                        "identifier": {
+                            "value": "HasFnord",
+                            "lineno": 2,
+                            "type": "identifier",
+                            "column": 12,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "typeargs": [],
                         "lineno": 2,
-                        "type": "identifier",
+                        "type": "typeref",
                         "column": 12,
                         "filename": "\u003cstdin\u003e"
                     },
-                    "type": "delegates",
+                    "type": "objectimplements",
                     "column": 2,
                     "filename": "\u003cstdin\u003e"
                 },
@@ -26,18 +33,24 @@
                     },
                     "lineno": 3,
                     "interface": {
-                        "value": "HasFnord",
+                        "identifier": {
+                            "value": "HasFnord",
+                            "lineno": 3,
+                            "type": "identifier",
+                            "column": 12,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "typeargs": [],
                         "lineno": 3,
-                        "type": "identifier",
+                        "type": "typeref",
                         "column": 12,
                         "filename": "\u003cstdin\u003e"
                     },
-                    "type": "delegates",
+                    "type": "objectimplements",
                     "column": 2,
                     "filename": "\u003cstdin\u003e"
                 },
                 {
-                    "typeparams": [],
                     "body": {
                         "body": [],
                         "lineno": 5,
@@ -45,17 +58,24 @@
                         "column": 17,
                         "filename": "\u003cstdin\u003e"
                     },
-                    "identifier": {
-                        "value": "Fnord",
+                    "functionspec": {
+                        "typeparams": [],
+                        "identifier": {
+                            "value": "Fnord",
+                            "lineno": 5,
+                            "type": "identifier",
+                            "column": 11,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "inparams": [],
+                        "overriding": false,
                         "lineno": 5,
-                        "type": "identifier",
-                        "column": 11,
+                        "outparams": [],
+                        "type": "function",
+                        "column": 2,
                         "filename": "\u003cstdin\u003e"
                     },
-                    "inparams": [],
-                    "overriding": false,
                     "lineno": 5,
-                    "outparams": [],
                     "type": "function",
                     "column": 2,
                     "filename": "\u003cstdin\u003e"
