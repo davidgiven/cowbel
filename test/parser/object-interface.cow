@@ -1,6 +1,6 @@
 {
-	interface HasFnord;
-	interface HasFnord (prototype);
+	implements HasFnord;
+	implements HasFnord (prototype);
 
 	function Fnord {}
 }

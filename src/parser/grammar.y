@@ -233,7 +233,7 @@ typestatements(RESULT) ::= typestatements(LEFT) typestatement(RIGHT) .
 	}
 
 %type typestatement {json_t*}
-typestatement(RESULT) ::= INTERFACE(T) typeref(TYPE) SEMICOLON .
+typestatement(RESULT) ::= IMPLEMENTS(T) typeref(TYPE) SEMICOLON .
 	{
 		RESULT = simple_token(&T, "typeimplements");
 		json_object_set(RESULT, "interface", TYPE);
@@ -443,7 +443,7 @@ delegates(RESULT) ::= .                               { RESULT = NULL; }
 delegates(RESULT) ::= OPEN_PARENTHESIS expression(IN) CLOSE_PARENTHESIS .
                                                       { RESULT = IN; }
 
-statement(RESULT) ::= INTERFACE(T) typeref(TYPE) delegates(DELEGATES) SEMICOLON .
+statement(RESULT) ::= IMPLEMENTS(T) typeref(TYPE) delegates(DELEGATES) SEMICOLON .
 	{
 		RESULT = simple_token(&T, "objectimplements");
 		json_object_set(RESULT, "interface", TYPE);

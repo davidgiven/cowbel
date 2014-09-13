@@ -5,16 +5,16 @@ type T<A> := Z<A>;
 
 type T := {};
 type T := {
-	interface Z;
+	implements Z;
 };
 type T := {
 	function Fnord;
 };
 type T := {
-	interface Z;
+	implements Z;
 	function Fnord;
 };
 type T<Q, W> := {
-	interface Z<Q, W>;
+	implements Z<Q, W>;
 };
 
