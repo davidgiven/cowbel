@@ -10,13 +10,13 @@
                             "value": "HasFnord",
                             "lineno": 2,
                             "type": "identifier",
-                            "column": 12,
+                            "column": 13,
                             "filename": "\u003cstdin\u003e"
                         },
                         "typeargs": [],
                         "lineno": 2,
                         "type": "typeref",
-                        "column": 12,
+                        "column": 13,
                         "filename": "\u003cstdin\u003e"
                     },
                     "type": "objectimplements",
@@ -28,7 +28,7 @@
                         "value": "prototype",
                         "lineno": 3,
                         "type": "identifier",
-                        "column": 22,
+                        "column": 23,
                         "filename": "\u003cstdin\u003e"
                     },
                     "lineno": 3,
@@ -37,13 +37,13 @@
                             "value": "HasFnord",
                             "lineno": 3,
                             "type": "identifier",
-                            "column": 12,
+                            "column": 13,
                             "filename": "\u003cstdin\u003e"
                         },
                         "typeargs": [],
                         "lineno": 3,
                         "type": "typeref",
-                        "column": 12,
+                        "column": 13,
                         "filename": "\u003cstdin\u003e"
                     },
                     "type": "objectimplements",
