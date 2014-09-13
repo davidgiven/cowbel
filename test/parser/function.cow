@@ -1,0 +1,16 @@
+function foo return;
+function foo() return;
+function foo(a: integer) return;
+function foo(a: integer, b: integer) return;
+function foo< > return;
+function foo<A> return;
+function foo<A, B> return;
+function foo: () return;
+function foo: (a: integer) return;
+function foo: (a: integer, b: integer) return;
+function foo(a: integer, b: integer): (c: integer, d: integer) return;
+
+function foo {
+	return;
+}
+

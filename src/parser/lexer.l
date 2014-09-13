@@ -29,14 +29,15 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\.,]+
 	[//[^\n]*]                 {}
 
 	";"                        { return SEMICOLON; }
+	":"                        { return COLON; }
 	"."                        { return DOT; }
 	","                        { return COMMA; }
 	"("                        { return OPEN_PARENTHESIS; }
 	")"                        { return CLOSE_PARENTHESIS; }
 	"{"                        { return OPEN_BRACE; }
 	"}"                        { return CLOSE_BRACE; }
-	"<"                        { return LEFT_ANGLE; }
-	">"                        { return RIGHT_ANGLE; }
+	"<"                        { return OPEN_ANGLE; }
+	">"                        { return CLOSE_ANGLE; }
 
 	":="                       { return ASSIGN; }
 	"var"                      { return VAR; }
@@ -52,6 +53,8 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\.,]+
 	"break"                    { return BREAK; }
 	"continue"                 { return CONTINUE; }
 	"return"                   { return RETURN; }
+	"function"                 { return FUNCTION; }
+	"overriding"               { return OVERRIDING; }
 
 	{OPERATOR}+                { return OPERATOR; }
 	[0-9]+                     { return INTEGER; }
@@ -61,15 +64,15 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\.,]+
 	[-+][Ii][Nn][Ff]           { return REAL; }
 	{IDSTART}{IDCONTINUED}*    { return IDENTIFIER; }
 
-	[ \t\r]                    {}
+	[ \t\r\n]                  {}
 }
 <COMMENT>{
 	"*/"                       { BEGIN(INITIAL); }
 	[^*\n]*                    {}
 	"*"                        {}
+	"\n"                       {}
 }
 
-\n                             {}
 .                              { printf("Bad char <%s>!\n", yytext); }
 
 %%
