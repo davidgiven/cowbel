@@ -226,6 +226,11 @@ statements(RESULT) ::= statements(LEFT) statement(RIGHT) .
 	}
 
 %type statement {json_t*}
+statement(RESULT) ::= OPEN_BRACE(T) optional_statements(BODY) CLOSE_BRACE .
+	{
+		RESULT = simple_token(&T, "object");
+		json_object_set(RESULT, "body", BODY);
+	}
 statement(RESULT) ::= multiassign(LEFT) SEMICOLON .
 	{
 		RESULT = LEFT;

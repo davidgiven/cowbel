@@ -17,6 +17,7 @@ $(eval $(call parser-test,assign-identifier))
 $(eval $(call parser-test,infix))
 $(eval $(call parser-test,prefix))
 $(eval $(call parser-test,while))
+$(eval $(call parser-test,object))
 
 .PHONY: parser-tests $(tests)
 parser-tests: $(tests)
