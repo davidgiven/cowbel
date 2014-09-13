@@ -49,6 +49,9 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\.,]+
 	"and"                      { return AND; }
 	"or"                       { return OR; }
 	"not"                      { return NOT; }
+	"break"                    { return BREAK; }
+	"continue"                 { return CONTINUE; }
+	"return"                   { return RETURN; }
 
 	{OPERATOR}+                { return OPERATOR; }
 	[0-9]+                     { return INTEGER; }

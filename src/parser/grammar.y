@@ -245,20 +245,46 @@ statements(RESULT) ::= statements(LEFT) statement(RIGHT) .
 	}
 
 %type statement {json_t*}
+
+/* Single-token statements */
+
+statement(RESULT) ::= BREAK(T) SEMICOLON .     { RESULT = simple_token(&T, "break"); }
+statement(RESULT) ::= CONTINUE(T) SEMICOLON .  { RESULT = simple_token(&T, "continue"); }
+statement(RESULT) ::= RETURN(T) SEMICOLON .    { RESULT = simple_token(&T, "return"); }
+
+/* Return with a single value */
+
+statement(RESULT) ::= RETURN(T) expression(VAL) SEMICOLON .
+	{
+		RESULT = simple_token(&T, "return");
+		json_object_set(RESULT, "value", VAL);
+	}
+
+/* Constructor */
+
 statement(RESULT) ::= OPEN_BRACE(T) optional_statements(BODY) CLOSE_BRACE .
 	{
 		RESULT = simple_token(&T, "object");
 		json_object_set(RESULT, "body", BODY);
 	}
+
+/* Assignment */
+
 statement(RESULT) ::= multiassign(LEFT) SEMICOLON .
 	{
 		RESULT = LEFT;
 	}
+
+/* Variable declaratio and assignment */
+
 statement(RESULT) ::= VAR(T) multiassign(LEFT) SEMICOLON .
 	{
 		RESULT = simple_token(&T, "declare");
 		json_object_set(RESULT, "assignment", LEFT);
 	}
+
+/* if...else */
+
 statement(RESULT) ::= IF(T) OPEN_PARENTHESIS expression(LEFT) CLOSE_PARENTHESIS
 			statement(IFTRUE) ELSE statement(IFFALSE) .
 	{
@@ -267,6 +293,9 @@ statement(RESULT) ::= IF(T) OPEN_PARENTHESIS expression(LEFT) CLOSE_PARENTHESIS
 		json_object_set(RESULT, "iftrue", IFTRUE);
 		json_object_set(RESULT, "iffalse", IFFALSE);
 	}
+
+/* if without else */
+
 statement(RESULT) ::= IF(T) OPEN_PARENTHESIS expression(LEFT) CLOSE_PARENTHESIS
 			statement(IFTRUE) .
 	{
@@ -274,6 +303,9 @@ statement(RESULT) ::= IF(T) OPEN_PARENTHESIS expression(LEFT) CLOSE_PARENTHESIS
 		json_object_set(RESULT, "condition", LEFT);
 		json_object_set(RESULT, "iftrue", IFTRUE);
 	}
+
+/* while {} */
+
 statement(RESULT) ::= WHILE(T) OPEN_PARENTHESIS expression(COND) CLOSE_PARENTHESIS
 			statement(BODY) .
 	{
@@ -281,6 +313,9 @@ statement(RESULT) ::= WHILE(T) OPEN_PARENTHESIS expression(COND) CLOSE_PARENTHES
 		json_object_set(RESULT, "condition", COND);
 		json_object_set(RESULT, "body", BODY);
 	}
+
+/* do ... while */
+
 statement(RESULT) ::= DO(T) statement(BODY) WHILE
 			OPEN_PARENTHESIS expression(COND) CLOSE_PARENTHESIS SEMICOLON .
 	{
