@@ -8,13 +8,13 @@
                     "value": "Z",
                     "lineno": 1,
                     "type": "identifier",
-                    "column": 10,
+                    "column": 9,
                     "filename": "\u003cstdin\u003e"
                 },
                 "typeargs": [],
                 "lineno": 1,
                 "type": "typeref",
-                "column": 10,
+                "column": 9,
                 "filename": "\u003cstdin\u003e"
             },
             "identifier": {
@@ -44,13 +44,13 @@
                     "value": "Z",
                     "lineno": 2,
                     "type": "identifier",
-                    "column": 14,
+                    "column": 13,
                     "filename": "\u003cstdin\u003e"
                 },
                 "typeargs": [],
                 "lineno": 2,
                 "type": "typeref",
-                "column": 14,
+                "column": 13,
                 "filename": "\u003cstdin\u003e"
             },
             "identifier": {
@@ -72,7 +72,7 @@
                     "value": "Z",
                     "lineno": 3,
                     "type": "identifier",
-                    "column": 11,
+                    "column": 10,
                     "filename": "\u003cstdin\u003e"
                 },
                 "typeargs": [
@@ -81,19 +81,19 @@
                             "value": "A",
                             "lineno": 3,
                             "type": "identifier",
-                            "column": 13,
+                            "column": 12,
                             "filename": "\u003cstdin\u003e"
                         },
                         "typeargs": [],
                         "lineno": 3,
                         "type": "typeref",
-                        "column": 13,
+                        "column": 12,
                         "filename": "\u003cstdin\u003e"
                     }
                 ],
                 "lineno": 3,
                 "type": "typeref",
-                "column": 11,
+                "column": 10,
                 "filename": "\u003cstdin\u003e"
             },
             "identifier": {
@@ -123,7 +123,7 @@
                     "value": "Z",
                     "lineno": 4,
                     "type": "identifier",
-                    "column": 14,
+                    "column": 13,
                     "filename": "\u003cstdin\u003e"
                 },
                 "typeargs": [
@@ -132,19 +132,19 @@
                             "value": "A",
                             "lineno": 4,
                             "type": "identifier",
-                            "column": 16,
+                            "column": 15,
                             "filename": "\u003cstdin\u003e"
                         },
                         "typeargs": [],
                         "lineno": 4,
                         "type": "typeref",
-                        "column": 16,
+                        "column": 15,
                         "filename": "\u003cstdin\u003e"
                     }
                 ],
                 "lineno": 4,
                 "type": "typeref",
-                "column": 14,
+                "column": 13,
                 "filename": "\u003cstdin\u003e"
             },
             "identifier": {
@@ -165,7 +165,7 @@
                 "body": [],
                 "lineno": 6,
                 "type": "interfacedef",
-                "column": 11,
+                "column": 10,
                 "filename": "\u003cstdin\u003e"
             },
             "identifier": {
@@ -207,7 +207,7 @@
                 ],
                 "lineno": 7,
                 "type": "interfacedef",
-                "column": 11,
+                "column": 10,
                 "filename": "\u003cstdin\u003e"
             },
             "identifier": {
@@ -252,7 +252,7 @@
                 ],
                 "lineno": 10,
                 "type": "interfacedef",
-                "column": 11,
+                "column": 10,
                 "filename": "\u003cstdin\u003e"
             },
             "identifier": {
@@ -317,7 +317,7 @@
                 ],
                 "lineno": 13,
                 "type": "interfacedef",
-                "column": 11,
+                "column": 10,
                 "filename": "\u003cstdin\u003e"
             },
             "identifier": {
@@ -403,7 +403,7 @@
                 ],
                 "lineno": 17,
                 "type": "interfacedef",
-                "column": 17,
+                "column": 16,
                 "filename": "\u003cstdin\u003e"
             },
             "identifier": {

@@ -36,10 +36,7 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\.,]+
 	")"                        { return CLOSE_PARENTHESIS; }
 	"{"                        { return OPEN_BRACE; }
 	"}"                        { return CLOSE_BRACE; }
-	"<"                        { return OPEN_ANGLE; }
-	">"                        { return CLOSE_ANGLE; }
 
-	":="                       { return ASSIGN; }
 	"var"                      { return VAR; }
 	"if"                       { return IF; }
 	"else"                     { return ELSE; }
@@ -58,7 +55,14 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\.,]+
 	"implements"               { return IMPLEMENTS; }
 	"type"                     { return TYPE; }
 
+	/* =, < and > are special; if they occur *on their own* they're
+	 * specific tokens. Otherwise they're just part of OPERATOR. */
+	[=<>]{OPERATOR}+           { return OPERATOR; }
+	"="                        { return ASSIGN; }
+	"<"                        { return OPEN_ANGLE; }
+	">"                        { return CLOSE_ANGLE; }
 	{OPERATOR}+                { return OPERATOR; }
+
 	[0-9]+                     { return INTEGER; }
 	0x[0-9a-fA-F]+           { return INTEGER; }
 	[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)? { return REAL; }

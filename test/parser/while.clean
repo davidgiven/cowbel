@@ -8,7 +8,7 @@
                         "value": 1,
                         "lineno": 1,
                         "type": "integer",
-                        "column": 18,
+                        "column": 17,
                         "filename": "\u003cstdin\u003e"
                     }
                 ],
@@ -45,7 +45,7 @@
                         "value": 1,
                         "lineno": 2,
                         "type": "integer",
-                        "column": 9,
+                        "column": 8,
                         "filename": "\u003cstdin\u003e"
                     }
                 ],
@@ -69,7 +69,7 @@
                 "value": false,
                 "lineno": 2,
                 "type": "boolean",
-                "column": 19,
+                "column": 18,
                 "filename": "\u003cstdin\u003e"
             },
             "column": 1,

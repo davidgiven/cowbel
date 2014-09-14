@@ -8,7 +8,7 @@
                         "value": 1,
                         "lineno": 1,
                         "type": "integer",
-                        "column": 5,
+                        "column": 4,
                         "filename": "\u003cstdin\u003e"
                     },
                     "lineno": 1,
@@ -16,11 +16,11 @@
                         "value": 2,
                         "lineno": 1,
                         "type": "integer",
-                        "column": 11,
+                        "column": 10,
                         "filename": "\u003cstdin\u003e"
                     },
                     "type": "and",
-                    "column": 7,
+                    "column": 6,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
@@ -46,7 +46,7 @@
                             "value": 1,
                             "lineno": 2,
                             "type": "integer",
-                            "column": 6,
+                            "column": 5,
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 2,
@@ -54,11 +54,11 @@
                             "value": 2,
                             "lineno": 2,
                             "type": "integer",
-                            "column": 12,
+                            "column": 11,
                             "filename": "\u003cstdin\u003e"
                         },
                         "type": "and",
-                        "column": 8,
+                        "column": 7,
                         "filename": "\u003cstdin\u003e"
                     },
                     "lineno": 2,
@@ -66,11 +66,11 @@
                         "value": 3,
                         "lineno": 2,
                         "type": "integer",
-                        "column": 18,
+                        "column": 17,
                         "filename": "\u003cstdin\u003e"
                     },
                     "type": "and",
-                    "column": 14,
+                    "column": 13,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
@@ -95,7 +95,7 @@
                         "value": 1,
                         "lineno": 3,
                         "type": "integer",
-                        "column": 6,
+                        "column": 5,
                         "filename": "\u003cstdin\u003e"
                     },
                     "lineno": 3,
@@ -103,11 +103,11 @@
                         "value": 2,
                         "lineno": 3,
                         "type": "integer",
-                        "column": 11,
+                        "column": 10,
                         "filename": "\u003cstdin\u003e"
                     },
                     "type": "or",
-                    "column": 8,
+                    "column": 7,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
@@ -133,7 +133,7 @@
                             "value": 1,
                             "lineno": 4,
                             "type": "integer",
-                            "column": 6,
+                            "column": 5,
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 4,
@@ -141,11 +141,11 @@
                             "value": 2,
                             "lineno": 4,
                             "type": "integer",
-                            "column": 11,
+                            "column": 10,
                             "filename": "\u003cstdin\u003e"
                         },
                         "type": "or",
-                        "column": 8,
+                        "column": 7,
                         "filename": "\u003cstdin\u003e"
                     },
                     "lineno": 4,
@@ -153,11 +153,11 @@
                         "value": 3,
                         "lineno": 4,
                         "type": "integer",
-                        "column": 16,
+                        "column": 15,
                         "filename": "\u003cstdin\u003e"
                     },
                     "type": "or",
-                    "column": 13,
+                    "column": 12,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
@@ -183,7 +183,7 @@
                             "value": 1,
                             "lineno": 5,
                             "type": "integer",
-                            "column": 6,
+                            "column": 5,
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 5,
@@ -191,11 +191,11 @@
                             "value": 2,
                             "lineno": 5,
                             "type": "integer",
-                            "column": 12,
+                            "column": 11,
                             "filename": "\u003cstdin\u003e"
                         },
                         "type": "and",
-                        "column": 8,
+                        "column": 7,
                         "filename": "\u003cstdin\u003e"
                     },
                     "lineno": 5,
@@ -203,11 +203,11 @@
                         "value": 3,
                         "lineno": 5,
                         "type": "integer",
-                        "column": 17,
+                        "column": 16,
                         "filename": "\u003cstdin\u003e"
                     },
                     "type": "or",
-                    "column": 14,
+                    "column": 13,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
@@ -232,7 +232,7 @@
                         "value": 1,
                         "lineno": 6,
                         "type": "integer",
-                        "column": 6,
+                        "column": 5,
                         "filename": "\u003cstdin\u003e"
                     },
                     "lineno": 6,
@@ -241,7 +241,7 @@
                             "value": 2,
                             "lineno": 6,
                             "type": "integer",
-                            "column": 11,
+                            "column": 10,
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 6,
@@ -249,15 +249,15 @@
                             "value": 3,
                             "lineno": 6,
                             "type": "integer",
-                            "column": 17,
+                            "column": 16,
                             "filename": "\u003cstdin\u003e"
                         },
                         "type": "and",
-                        "column": 13,
+                        "column": 12,
                         "filename": "\u003cstdin\u003e"
                     },
                     "type": "or",
-                    "column": 8,
+                    "column": 7,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
@@ -282,12 +282,12 @@
                         "value": 1,
                         "lineno": 7,
                         "type": "integer",
-                        "column": 10,
+                        "column": 9,
                         "filename": "\u003cstdin\u003e"
                     },
                     "lineno": 7,
                     "type": "not",
-                    "column": 6,
+                    "column": 5,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
@@ -313,12 +313,12 @@
                             "value": 1,
                             "lineno": 8,
                             "type": "integer",
-                            "column": 10,
+                            "column": 9,
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 8,
                         "type": "not",
-                        "column": 6,
+                        "column": 5,
                         "filename": "\u003cstdin\u003e"
                     },
                     "lineno": 8,
@@ -326,11 +326,11 @@
                         "value": 2,
                         "lineno": 8,
                         "type": "integer",
-                        "column": 16,
+                        "column": 15,
                         "filename": "\u003cstdin\u003e"
                     },
                     "type": "and",
-                    "column": 12,
+                    "column": 11,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
