@@ -6,36 +6,36 @@
                 "values": [
                     {
                         "value": 1,
-                        "lineno": 1,
+                        "lineno": 13,
                         "type": "integer",
-                        "column": 17,
+                        "column": 18,
                         "filename": "\u003cstdin\u003e"
                     }
                 ],
                 "names": [
                     {
                         "value": "i",
-                        "lineno": 1,
+                        "lineno": 13,
                         "type": "identifier",
-                        "column": 13,
+                        "column": 14,
                         "filename": "\u003cstdin\u003e"
                     }
                 ],
-                "lineno": 1,
+                "lineno": 13,
                 "type": "assign",
-                "column": 15,
+                "column": 16,
                 "filename": "\u003cstdin\u003e"
             },
-            "lineno": 1,
+            "lineno": 13,
             "type": "while",
             "condition": {
                 "value": true,
-                "lineno": 1,
+                "lineno": 13,
                 "type": "boolean",
-                "column": 7,
+                "column": 8,
                 "filename": "\u003cstdin\u003e"
             },
-            "column": 0,
+            "column": 1,
             "filename": "\u003cstdin\u003e"
         },
         {
@@ -43,7 +43,7 @@
                 "values": [
                     {
                         "value": 1,
-                        "lineno": 2,
+                        "lineno": 14,
                         "type": "integer",
                         "column": 8,
                         "filename": "\u003cstdin\u003e"
@@ -52,22 +52,22 @@
                 "names": [
                     {
                         "value": "i",
-                        "lineno": 2,
+                        "lineno": 14,
                         "type": "identifier",
                         "column": 4,
                         "filename": "\u003cstdin\u003e"
                     }
                 ],
-                "lineno": 2,
+                "lineno": 14,
                 "type": "assign",
                 "column": 6,
                 "filename": "\u003cstdin\u003e"
             },
-            "lineno": 2,
+            "lineno": 14,
             "type": "dowhile",
             "condition": {
                 "value": false,
-                "lineno": 2,
+                "lineno": 14,
                 "type": "boolean",
                 "column": 18,
                 "filename": "\u003cstdin\u003e"

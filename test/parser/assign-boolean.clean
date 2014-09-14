@@ -5,31 +5,7 @@
             "values": [
                 {
                     "value": true,
-                    "lineno": 1,
-                    "type": "boolean",
-                    "column": 4,
-                    "filename": "\u003cstdin\u003e"
-                }
-            ],
-            "names": [
-                {
-                    "value": "i",
-                    "lineno": 1,
-                    "type": "identifier",
-                    "column": 0,
-                    "filename": "\u003cstdin\u003e"
-                }
-            ],
-            "lineno": 1,
-            "type": "assign",
-            "column": 2,
-            "filename": "\u003cstdin\u003e"
-        },
-        {
-            "values": [
-                {
-                    "value": false,
-                    "lineno": 2,
+                    "lineno": 13,
                     "type": "boolean",
                     "column": 5,
                     "filename": "\u003cstdin\u003e"
@@ -38,13 +14,37 @@
             "names": [
                 {
                     "value": "i",
-                    "lineno": 2,
+                    "lineno": 13,
                     "type": "identifier",
                     "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
-            "lineno": 2,
+            "lineno": 13,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "value": false,
+                    "lineno": 14,
+                    "type": "boolean",
+                    "column": 5,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "i",
+                    "lineno": 14,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 14,
             "type": "assign",
             "column": 3,
             "filename": "\u003cstdin\u003e"

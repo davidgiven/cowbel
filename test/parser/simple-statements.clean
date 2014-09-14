@@ -2,19 +2,19 @@
     "type": "object",
     "statements": [
         {
-            "lineno": 1,
+            "lineno": 13,
             "type": "break",
-            "column": 0,
+            "column": 1,
             "filename": "\u003cstdin\u003e"
         },
         {
-            "lineno": 2,
+            "lineno": 14,
             "type": "continue",
             "column": 1,
             "filename": "\u003cstdin\u003e"
         },
         {
-            "lineno": 3,
+            "lineno": 15,
             "type": "return",
             "column": 1,
             "filename": "\u003cstdin\u003e"
@@ -22,12 +22,12 @@
         {
             "value": {
                 "value": 1,
-                "lineno": 4,
+                "lineno": 16,
                 "type": "integer",
                 "column": 8,
                 "filename": "\u003cstdin\u003e"
             },
-            "lineno": 4,
+            "lineno": 16,
             "type": "return",
             "column": 1,
             "filename": "\u003cstdin\u003e"

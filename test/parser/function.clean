@@ -3,624 +3,8 @@
     "statements": [
         {
             "body": {
-                "lineno": 1,
-                "type": "return",
-                "column": 13,
-                "filename": "\u003cstdin\u003e"
-            },
-            "functionspec": {
-                "typeparams": [],
-                "identifier": {
-                    "value": "foo",
-                    "lineno": 1,
-                    "type": "identifier",
-                    "column": 9,
-                    "filename": "\u003cstdin\u003e"
-                },
-                "inparams": [],
-                "overriding": false,
-                "lineno": 1,
-                "outparams": [],
-                "type": "function",
-                "column": 0,
-                "filename": "\u003cstdin\u003e"
-            },
-            "lineno": 1,
-            "type": "function",
-            "column": 0,
-            "filename": "\u003cstdin\u003e"
-        },
-        {
-            "body": {
-                "lineno": 2,
-                "type": "return",
-                "column": 16,
-                "filename": "\u003cstdin\u003e"
-            },
-            "functionspec": {
-                "typeparams": [],
-                "identifier": {
-                    "value": "foo",
-                    "lineno": 2,
-                    "type": "identifier",
-                    "column": 10,
-                    "filename": "\u003cstdin\u003e"
-                },
-                "inparams": [],
-                "overriding": false,
-                "lineno": 2,
-                "outparams": [],
-                "type": "function",
-                "column": 1,
-                "filename": "\u003cstdin\u003e"
-            },
-            "lineno": 2,
-            "type": "function",
-            "column": 1,
-            "filename": "\u003cstdin\u003e"
-        },
-        {
-            "body": {
-                "lineno": 3,
-                "type": "return",
-                "column": 26,
-                "filename": "\u003cstdin\u003e"
-            },
-            "functionspec": {
-                "typeparams": [],
-                "identifier": {
-                    "value": "foo",
-                    "lineno": 3,
-                    "type": "identifier",
-                    "column": 10,
-                    "filename": "\u003cstdin\u003e"
-                },
-                "inparams": [
-                    {
-                        "identifier": {
-                            "value": "a",
-                            "lineno": 3,
-                            "type": "identifier",
-                            "column": 14,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "lineno": 3,
-                        "type": {
-                            "identifier": {
-                                "value": "integer",
-                                "lineno": 3,
-                                "type": "identifier",
-                                "column": 17,
-                                "filename": "\u003cstdin\u003e"
-                            },
-                            "typeargs": [],
-                            "lineno": 3,
-                            "type": "typeref",
-                            "column": 17,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "column": 14,
-                        "filename": "\u003cstdin\u003e"
-                    }
-                ],
-                "overriding": false,
-                "lineno": 3,
-                "outparams": [],
-                "type": "function",
-                "column": 1,
-                "filename": "\u003cstdin\u003e"
-            },
-            "lineno": 3,
-            "type": "function",
-            "column": 1,
-            "filename": "\u003cstdin\u003e"
-        },
-        {
-            "body": {
-                "lineno": 4,
-                "type": "return",
-                "column": 38,
-                "filename": "\u003cstdin\u003e"
-            },
-            "functionspec": {
-                "typeparams": [],
-                "identifier": {
-                    "value": "foo",
-                    "lineno": 4,
-                    "type": "identifier",
-                    "column": 10,
-                    "filename": "\u003cstdin\u003e"
-                },
-                "inparams": [
-                    {
-                        "identifier": {
-                            "value": "a",
-                            "lineno": 4,
-                            "type": "identifier",
-                            "column": 14,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "lineno": 4,
-                        "type": {
-                            "identifier": {
-                                "value": "integer",
-                                "lineno": 4,
-                                "type": "identifier",
-                                "column": 17,
-                                "filename": "\u003cstdin\u003e"
-                            },
-                            "typeargs": [],
-                            "lineno": 4,
-                            "type": "typeref",
-                            "column": 17,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "column": 14,
-                        "filename": "\u003cstdin\u003e"
-                    },
-                    {
-                        "identifier": {
-                            "value": "b",
-                            "lineno": 4,
-                            "type": "identifier",
-                            "column": 26,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "lineno": 4,
-                        "type": {
-                            "identifier": {
-                                "value": "integer",
-                                "lineno": 4,
-                                "type": "identifier",
-                                "column": 29,
-                                "filename": "\u003cstdin\u003e"
-                            },
-                            "typeargs": [],
-                            "lineno": 4,
-                            "type": "typeref",
-                            "column": 29,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "column": 26,
-                        "filename": "\u003cstdin\u003e"
-                    }
-                ],
-                "overriding": false,
-                "lineno": 4,
-                "outparams": [],
-                "type": "function",
-                "column": 1,
-                "filename": "\u003cstdin\u003e"
-            },
-            "lineno": 4,
-            "type": "function",
-            "column": 1,
-            "filename": "\u003cstdin\u003e"
-        },
-        {
-            "body": {
-                "lineno": 5,
-                "type": "return",
-                "column": 17,
-                "filename": "\u003cstdin\u003e"
-            },
-            "functionspec": {
-                "typeparams": [],
-                "identifier": {
-                    "value": "foo",
-                    "lineno": 5,
-                    "type": "identifier",
-                    "column": 10,
-                    "filename": "\u003cstdin\u003e"
-                },
-                "inparams": [],
-                "overriding": false,
-                "lineno": 5,
-                "outparams": [],
-                "type": "function",
-                "column": 1,
-                "filename": "\u003cstdin\u003e"
-            },
-            "lineno": 5,
-            "type": "function",
-            "column": 1,
-            "filename": "\u003cstdin\u003e"
-        },
-        {
-            "body": {
-                "lineno": 6,
-                "type": "return",
-                "column": 17,
-                "filename": "\u003cstdin\u003e"
-            },
-            "functionspec": {
-                "typeparams": [
-                    {
-                        "value": "A",
-                        "lineno": 6,
-                        "type": "identifier",
-                        "column": 14,
-                        "filename": "\u003cstdin\u003e"
-                    }
-                ],
-                "identifier": {
-                    "value": "foo",
-                    "lineno": 6,
-                    "type": "identifier",
-                    "column": 10,
-                    "filename": "\u003cstdin\u003e"
-                },
-                "inparams": [],
-                "overriding": false,
-                "lineno": 6,
-                "outparams": [],
-                "type": "function",
-                "column": 1,
-                "filename": "\u003cstdin\u003e"
-            },
-            "lineno": 6,
-            "type": "function",
-            "column": 1,
-            "filename": "\u003cstdin\u003e"
-        },
-        {
-            "body": {
-                "lineno": 7,
-                "type": "return",
-                "column": 20,
-                "filename": "\u003cstdin\u003e"
-            },
-            "functionspec": {
-                "typeparams": [
-                    {
-                        "value": "A",
-                        "lineno": 7,
-                        "type": "identifier",
-                        "column": 14,
-                        "filename": "\u003cstdin\u003e"
-                    },
-                    {
-                        "value": "B",
-                        "lineno": 7,
-                        "type": "identifier",
-                        "column": 17,
-                        "filename": "\u003cstdin\u003e"
-                    }
-                ],
-                "identifier": {
-                    "value": "foo",
-                    "lineno": 7,
-                    "type": "identifier",
-                    "column": 10,
-                    "filename": "\u003cstdin\u003e"
-                },
-                "inparams": [],
-                "overriding": false,
-                "lineno": 7,
-                "outparams": [],
-                "type": "function",
-                "column": 1,
-                "filename": "\u003cstdin\u003e"
-            },
-            "lineno": 7,
-            "type": "function",
-            "column": 1,
-            "filename": "\u003cstdin\u003e"
-        },
-        {
-            "body": {
-                "lineno": 8,
-                "type": "return",
-                "column": 18,
-                "filename": "\u003cstdin\u003e"
-            },
-            "functionspec": {
-                "typeparams": [],
-                "identifier": {
-                    "value": "foo",
-                    "lineno": 8,
-                    "type": "identifier",
-                    "column": 10,
-                    "filename": "\u003cstdin\u003e"
-                },
-                "inparams": [],
-                "overriding": false,
-                "lineno": 8,
-                "outparams": [],
-                "type": "function",
-                "column": 1,
-                "filename": "\u003cstdin\u003e"
-            },
-            "lineno": 8,
-            "type": "function",
-            "column": 1,
-            "filename": "\u003cstdin\u003e"
-        },
-        {
-            "body": {
-                "lineno": 9,
-                "type": "return",
-                "column": 28,
-                "filename": "\u003cstdin\u003e"
-            },
-            "functionspec": {
-                "typeparams": [],
-                "identifier": {
-                    "value": "foo",
-                    "lineno": 9,
-                    "type": "identifier",
-                    "column": 10,
-                    "filename": "\u003cstdin\u003e"
-                },
-                "inparams": [],
-                "overriding": false,
-                "lineno": 9,
-                "outparams": [
-                    {
-                        "identifier": {
-                            "value": "a",
-                            "lineno": 9,
-                            "type": "identifier",
-                            "column": 16,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "lineno": 9,
-                        "type": {
-                            "identifier": {
-                                "value": "integer",
-                                "lineno": 9,
-                                "type": "identifier",
-                                "column": 19,
-                                "filename": "\u003cstdin\u003e"
-                            },
-                            "typeargs": [],
-                            "lineno": 9,
-                            "type": "typeref",
-                            "column": 19,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "column": 16,
-                        "filename": "\u003cstdin\u003e"
-                    }
-                ],
-                "type": "function",
-                "column": 1,
-                "filename": "\u003cstdin\u003e"
-            },
-            "lineno": 9,
-            "type": "function",
-            "column": 1,
-            "filename": "\u003cstdin\u003e"
-        },
-        {
-            "body": {
-                "lineno": 10,
-                "type": "return",
-                "column": 40,
-                "filename": "\u003cstdin\u003e"
-            },
-            "functionspec": {
-                "typeparams": [],
-                "identifier": {
-                    "value": "foo",
-                    "lineno": 10,
-                    "type": "identifier",
-                    "column": 10,
-                    "filename": "\u003cstdin\u003e"
-                },
-                "inparams": [],
-                "overriding": false,
-                "lineno": 10,
-                "outparams": [
-                    {
-                        "identifier": {
-                            "value": "a",
-                            "lineno": 10,
-                            "type": "identifier",
-                            "column": 16,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "lineno": 10,
-                        "type": {
-                            "identifier": {
-                                "value": "integer",
-                                "lineno": 10,
-                                "type": "identifier",
-                                "column": 19,
-                                "filename": "\u003cstdin\u003e"
-                            },
-                            "typeargs": [],
-                            "lineno": 10,
-                            "type": "typeref",
-                            "column": 19,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "column": 16,
-                        "filename": "\u003cstdin\u003e"
-                    },
-                    {
-                        "identifier": {
-                            "value": "b",
-                            "lineno": 10,
-                            "type": "identifier",
-                            "column": 28,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "lineno": 10,
-                        "type": {
-                            "identifier": {
-                                "value": "integer",
-                                "lineno": 10,
-                                "type": "identifier",
-                                "column": 31,
-                                "filename": "\u003cstdin\u003e"
-                            },
-                            "typeargs": [],
-                            "lineno": 10,
-                            "type": "typeref",
-                            "column": 31,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "column": 28,
-                        "filename": "\u003cstdin\u003e"
-                    }
-                ],
-                "type": "function",
-                "column": 1,
-                "filename": "\u003cstdin\u003e"
-            },
-            "lineno": 10,
-            "type": "function",
-            "column": 1,
-            "filename": "\u003cstdin\u003e"
-        },
-        {
-            "body": {
-                "lineno": 11,
-                "type": "return",
-                "column": 64,
-                "filename": "\u003cstdin\u003e"
-            },
-            "functionspec": {
-                "typeparams": [],
-                "identifier": {
-                    "value": "foo",
-                    "lineno": 11,
-                    "type": "identifier",
-                    "column": 10,
-                    "filename": "\u003cstdin\u003e"
-                },
-                "inparams": [
-                    {
-                        "identifier": {
-                            "value": "a",
-                            "lineno": 11,
-                            "type": "identifier",
-                            "column": 14,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "lineno": 11,
-                        "type": {
-                            "identifier": {
-                                "value": "integer",
-                                "lineno": 11,
-                                "type": "identifier",
-                                "column": 17,
-                                "filename": "\u003cstdin\u003e"
-                            },
-                            "typeargs": [],
-                            "lineno": 11,
-                            "type": "typeref",
-                            "column": 17,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "column": 14,
-                        "filename": "\u003cstdin\u003e"
-                    },
-                    {
-                        "identifier": {
-                            "value": "b",
-                            "lineno": 11,
-                            "type": "identifier",
-                            "column": 26,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "lineno": 11,
-                        "type": {
-                            "identifier": {
-                                "value": "integer",
-                                "lineno": 11,
-                                "type": "identifier",
-                                "column": 29,
-                                "filename": "\u003cstdin\u003e"
-                            },
-                            "typeargs": [],
-                            "lineno": 11,
-                            "type": "typeref",
-                            "column": 29,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "column": 26,
-                        "filename": "\u003cstdin\u003e"
-                    }
-                ],
-                "overriding": false,
-                "lineno": 11,
-                "outparams": [
-                    {
-                        "identifier": {
-                            "value": "c",
-                            "lineno": 11,
-                            "type": "identifier",
-                            "column": 40,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "lineno": 11,
-                        "type": {
-                            "identifier": {
-                                "value": "integer",
-                                "lineno": 11,
-                                "type": "identifier",
-                                "column": 43,
-                                "filename": "\u003cstdin\u003e"
-                            },
-                            "typeargs": [],
-                            "lineno": 11,
-                            "type": "typeref",
-                            "column": 43,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "column": 40,
-                        "filename": "\u003cstdin\u003e"
-                    },
-                    {
-                        "identifier": {
-                            "value": "d",
-                            "lineno": 11,
-                            "type": "identifier",
-                            "column": 52,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "lineno": 11,
-                        "type": {
-                            "identifier": {
-                                "value": "integer",
-                                "lineno": 11,
-                                "type": "identifier",
-                                "column": 55,
-                                "filename": "\u003cstdin\u003e"
-                            },
-                            "typeargs": [],
-                            "lineno": 11,
-                            "type": "typeref",
-                            "column": 55,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "column": 52,
-                        "filename": "\u003cstdin\u003e"
-                    }
-                ],
-                "type": "function",
-                "column": 1,
-                "filename": "\u003cstdin\u003e"
-            },
-            "lineno": 11,
-            "type": "function",
-            "column": 1,
-            "filename": "\u003cstdin\u003e"
-        },
-        {
-            "body": {
-                "body": [
-                    {
-                        "lineno": 14,
-                        "type": "return",
-                        "column": 2,
-                        "filename": "\u003cstdin\u003e"
-                    }
-                ],
                 "lineno": 13,
-                "type": "block",
+                "type": "return",
                 "column": 14,
                 "filename": "\u003cstdin\u003e"
             },
@@ -642,6 +26,622 @@
                 "filename": "\u003cstdin\u003e"
             },
             "lineno": 13,
+            "type": "function",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "body": {
+                "lineno": 14,
+                "type": "return",
+                "column": 16,
+                "filename": "\u003cstdin\u003e"
+            },
+            "functionspec": {
+                "typeparams": [],
+                "identifier": {
+                    "value": "foo",
+                    "lineno": 14,
+                    "type": "identifier",
+                    "column": 10,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "inparams": [],
+                "overriding": false,
+                "lineno": 14,
+                "outparams": [],
+                "type": "function",
+                "column": 1,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 14,
+            "type": "function",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "body": {
+                "lineno": 15,
+                "type": "return",
+                "column": 26,
+                "filename": "\u003cstdin\u003e"
+            },
+            "functionspec": {
+                "typeparams": [],
+                "identifier": {
+                    "value": "foo",
+                    "lineno": 15,
+                    "type": "identifier",
+                    "column": 10,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "inparams": [
+                    {
+                        "identifier": {
+                            "value": "a",
+                            "lineno": 15,
+                            "type": "identifier",
+                            "column": 14,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "lineno": 15,
+                        "type": {
+                            "identifier": {
+                                "value": "integer",
+                                "lineno": 15,
+                                "type": "identifier",
+                                "column": 17,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [],
+                            "lineno": 15,
+                            "type": "typeref",
+                            "column": 17,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "column": 14,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "overriding": false,
+                "lineno": 15,
+                "outparams": [],
+                "type": "function",
+                "column": 1,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 15,
+            "type": "function",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "body": {
+                "lineno": 16,
+                "type": "return",
+                "column": 38,
+                "filename": "\u003cstdin\u003e"
+            },
+            "functionspec": {
+                "typeparams": [],
+                "identifier": {
+                    "value": "foo",
+                    "lineno": 16,
+                    "type": "identifier",
+                    "column": 10,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "inparams": [
+                    {
+                        "identifier": {
+                            "value": "a",
+                            "lineno": 16,
+                            "type": "identifier",
+                            "column": 14,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "lineno": 16,
+                        "type": {
+                            "identifier": {
+                                "value": "integer",
+                                "lineno": 16,
+                                "type": "identifier",
+                                "column": 17,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [],
+                            "lineno": 16,
+                            "type": "typeref",
+                            "column": 17,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "column": 14,
+                        "filename": "\u003cstdin\u003e"
+                    },
+                    {
+                        "identifier": {
+                            "value": "b",
+                            "lineno": 16,
+                            "type": "identifier",
+                            "column": 26,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "lineno": 16,
+                        "type": {
+                            "identifier": {
+                                "value": "integer",
+                                "lineno": 16,
+                                "type": "identifier",
+                                "column": 29,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [],
+                            "lineno": 16,
+                            "type": "typeref",
+                            "column": 29,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "column": 26,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "overriding": false,
+                "lineno": 16,
+                "outparams": [],
+                "type": "function",
+                "column": 1,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 16,
+            "type": "function",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "body": {
+                "lineno": 17,
+                "type": "return",
+                "column": 17,
+                "filename": "\u003cstdin\u003e"
+            },
+            "functionspec": {
+                "typeparams": [],
+                "identifier": {
+                    "value": "foo",
+                    "lineno": 17,
+                    "type": "identifier",
+                    "column": 10,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "inparams": [],
+                "overriding": false,
+                "lineno": 17,
+                "outparams": [],
+                "type": "function",
+                "column": 1,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 17,
+            "type": "function",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "body": {
+                "lineno": 18,
+                "type": "return",
+                "column": 17,
+                "filename": "\u003cstdin\u003e"
+            },
+            "functionspec": {
+                "typeparams": [
+                    {
+                        "value": "A",
+                        "lineno": 18,
+                        "type": "identifier",
+                        "column": 14,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "identifier": {
+                    "value": "foo",
+                    "lineno": 18,
+                    "type": "identifier",
+                    "column": 10,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "inparams": [],
+                "overriding": false,
+                "lineno": 18,
+                "outparams": [],
+                "type": "function",
+                "column": 1,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 18,
+            "type": "function",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "body": {
+                "lineno": 19,
+                "type": "return",
+                "column": 20,
+                "filename": "\u003cstdin\u003e"
+            },
+            "functionspec": {
+                "typeparams": [
+                    {
+                        "value": "A",
+                        "lineno": 19,
+                        "type": "identifier",
+                        "column": 14,
+                        "filename": "\u003cstdin\u003e"
+                    },
+                    {
+                        "value": "B",
+                        "lineno": 19,
+                        "type": "identifier",
+                        "column": 17,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "identifier": {
+                    "value": "foo",
+                    "lineno": 19,
+                    "type": "identifier",
+                    "column": 10,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "inparams": [],
+                "overriding": false,
+                "lineno": 19,
+                "outparams": [],
+                "type": "function",
+                "column": 1,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 19,
+            "type": "function",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "body": {
+                "lineno": 20,
+                "type": "return",
+                "column": 18,
+                "filename": "\u003cstdin\u003e"
+            },
+            "functionspec": {
+                "typeparams": [],
+                "identifier": {
+                    "value": "foo",
+                    "lineno": 20,
+                    "type": "identifier",
+                    "column": 10,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "inparams": [],
+                "overriding": false,
+                "lineno": 20,
+                "outparams": [],
+                "type": "function",
+                "column": 1,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 20,
+            "type": "function",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "body": {
+                "lineno": 21,
+                "type": "return",
+                "column": 28,
+                "filename": "\u003cstdin\u003e"
+            },
+            "functionspec": {
+                "typeparams": [],
+                "identifier": {
+                    "value": "foo",
+                    "lineno": 21,
+                    "type": "identifier",
+                    "column": 10,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "inparams": [],
+                "overriding": false,
+                "lineno": 21,
+                "outparams": [
+                    {
+                        "identifier": {
+                            "value": "a",
+                            "lineno": 21,
+                            "type": "identifier",
+                            "column": 16,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "lineno": 21,
+                        "type": {
+                            "identifier": {
+                                "value": "integer",
+                                "lineno": 21,
+                                "type": "identifier",
+                                "column": 19,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [],
+                            "lineno": 21,
+                            "type": "typeref",
+                            "column": 19,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "column": 16,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "type": "function",
+                "column": 1,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 21,
+            "type": "function",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "body": {
+                "lineno": 22,
+                "type": "return",
+                "column": 40,
+                "filename": "\u003cstdin\u003e"
+            },
+            "functionspec": {
+                "typeparams": [],
+                "identifier": {
+                    "value": "foo",
+                    "lineno": 22,
+                    "type": "identifier",
+                    "column": 10,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "inparams": [],
+                "overriding": false,
+                "lineno": 22,
+                "outparams": [
+                    {
+                        "identifier": {
+                            "value": "a",
+                            "lineno": 22,
+                            "type": "identifier",
+                            "column": 16,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "lineno": 22,
+                        "type": {
+                            "identifier": {
+                                "value": "integer",
+                                "lineno": 22,
+                                "type": "identifier",
+                                "column": 19,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [],
+                            "lineno": 22,
+                            "type": "typeref",
+                            "column": 19,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "column": 16,
+                        "filename": "\u003cstdin\u003e"
+                    },
+                    {
+                        "identifier": {
+                            "value": "b",
+                            "lineno": 22,
+                            "type": "identifier",
+                            "column": 28,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "lineno": 22,
+                        "type": {
+                            "identifier": {
+                                "value": "integer",
+                                "lineno": 22,
+                                "type": "identifier",
+                                "column": 31,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [],
+                            "lineno": 22,
+                            "type": "typeref",
+                            "column": 31,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "column": 28,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "type": "function",
+                "column": 1,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 22,
+            "type": "function",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "body": {
+                "lineno": 23,
+                "type": "return",
+                "column": 64,
+                "filename": "\u003cstdin\u003e"
+            },
+            "functionspec": {
+                "typeparams": [],
+                "identifier": {
+                    "value": "foo",
+                    "lineno": 23,
+                    "type": "identifier",
+                    "column": 10,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "inparams": [
+                    {
+                        "identifier": {
+                            "value": "a",
+                            "lineno": 23,
+                            "type": "identifier",
+                            "column": 14,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "lineno": 23,
+                        "type": {
+                            "identifier": {
+                                "value": "integer",
+                                "lineno": 23,
+                                "type": "identifier",
+                                "column": 17,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [],
+                            "lineno": 23,
+                            "type": "typeref",
+                            "column": 17,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "column": 14,
+                        "filename": "\u003cstdin\u003e"
+                    },
+                    {
+                        "identifier": {
+                            "value": "b",
+                            "lineno": 23,
+                            "type": "identifier",
+                            "column": 26,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "lineno": 23,
+                        "type": {
+                            "identifier": {
+                                "value": "integer",
+                                "lineno": 23,
+                                "type": "identifier",
+                                "column": 29,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [],
+                            "lineno": 23,
+                            "type": "typeref",
+                            "column": 29,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "column": 26,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "overriding": false,
+                "lineno": 23,
+                "outparams": [
+                    {
+                        "identifier": {
+                            "value": "c",
+                            "lineno": 23,
+                            "type": "identifier",
+                            "column": 40,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "lineno": 23,
+                        "type": {
+                            "identifier": {
+                                "value": "integer",
+                                "lineno": 23,
+                                "type": "identifier",
+                                "column": 43,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [],
+                            "lineno": 23,
+                            "type": "typeref",
+                            "column": 43,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "column": 40,
+                        "filename": "\u003cstdin\u003e"
+                    },
+                    {
+                        "identifier": {
+                            "value": "d",
+                            "lineno": 23,
+                            "type": "identifier",
+                            "column": 52,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "lineno": 23,
+                        "type": {
+                            "identifier": {
+                                "value": "integer",
+                                "lineno": 23,
+                                "type": "identifier",
+                                "column": 55,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [],
+                            "lineno": 23,
+                            "type": "typeref",
+                            "column": 55,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "column": 52,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "type": "function",
+                "column": 1,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 23,
+            "type": "function",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "body": {
+                "body": [
+                    {
+                        "lineno": 26,
+                        "type": "return",
+                        "column": 2,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "lineno": 25,
+                "type": "block",
+                "column": 14,
+                "filename": "\u003cstdin\u003e"
+            },
+            "functionspec": {
+                "typeparams": [],
+                "identifier": {
+                    "value": "foo",
+                    "lineno": 25,
+                    "type": "identifier",
+                    "column": 10,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "inparams": [],
+                "overriding": false,
+                "lineno": 25,
+                "outparams": [],
+                "type": "function",
+                "column": 1,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 25,
             "type": "function",
             "column": 1,
             "filename": "\u003cstdin\u003e"
