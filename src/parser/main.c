@@ -17,6 +17,7 @@ json_t* current_filename;
 int current_lineno;
 int current_column;
 bool syntax_error;
+json_t* parsed_string;
 
 json_t* simple_token(token_t* token, const char* kind)
 {
@@ -71,7 +72,10 @@ int main(int argc, const char* argv[])
 		tokeninfo.filename = current_filename;
 		tokeninfo.lineno = current_lineno;
 		tokeninfo.column = current_column;
-		tokeninfo.value = json_string(yyget_text(scanner));
+		if (token == STRING)
+			tokeninfo.value = parsed_string;
+		else
+			tokeninfo.value = json_string(yyget_text(scanner));
 
         Parse(parser, token, tokeninfo);
     }

@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 #include <jansson.h>
 
 typedef struct token {
@@ -23,6 +24,7 @@ typedef struct token {
 extern json_t* current_filename;
 extern int current_lineno;
 extern int current_column;
+extern json_t* parsed_string;
 extern bool syntax_error;
 
 extern json_t* simple_token(token_t* token, const char* kind);

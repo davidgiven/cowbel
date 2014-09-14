@@ -107,7 +107,7 @@ $(objdir)/src/parser/lexer.c: $(objdir)/src/parser/grammar.c
 endef
 
 cflags := -Ilib/include -Isrc/parser -I$(OBJ)/parser/src/parser
-ldflags := -ljansson
+ldflags := -ljansson -lunistring
 objdir := $(OBJ)/parser
 objs :=
 exe := bin/parser
