@@ -1,3 +1,12 @@
+# Written in 2014 by David Given.
+#
+# To the extent possible under law, the author has dedicated all copyright
+# and related and neighboring rights to this software to the public domain
+# worldwide. This software is distributed without any warranty.
+#
+# Please see the file COPYING.CC0 in the distribution package for more
+# information.
+
 define parser-test
 
 parser-test-$1: bin/parser test/parser/$1.cow test/parser/$1.clean

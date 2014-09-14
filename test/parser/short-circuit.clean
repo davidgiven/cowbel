@@ -6,36 +6,36 @@
                 {
                     "left": {
                         "value": 1,
-                        "lineno": 1,
+                        "lineno": 13,
                         "type": "integer",
-                        "column": 4,
+                        "column": 5,
                         "filename": "\u003cstdin\u003e"
                     },
-                    "lineno": 1,
+                    "lineno": 13,
                     "right": {
                         "value": 2,
-                        "lineno": 1,
+                        "lineno": 13,
                         "type": "integer",
-                        "column": 10,
+                        "column": 11,
                         "filename": "\u003cstdin\u003e"
                     },
                     "type": "and",
-                    "column": 6,
+                    "column": 7,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
             "names": [
                 {
                     "value": "i",
-                    "lineno": 1,
+                    "lineno": 13,
                     "type": "identifier",
-                    "column": 0,
+                    "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
-            "lineno": 1,
+            "lineno": 13,
             "type": "assign",
-            "column": 2,
+            "column": 3,
             "filename": "\u003cstdin\u003e"
         },
         {
@@ -44,15 +44,15 @@
                     "left": {
                         "left": {
                             "value": 1,
-                            "lineno": 2,
+                            "lineno": 14,
                             "type": "integer",
                             "column": 5,
                             "filename": "\u003cstdin\u003e"
                         },
-                        "lineno": 2,
+                        "lineno": 14,
                         "right": {
                             "value": 2,
-                            "lineno": 2,
+                            "lineno": 14,
                             "type": "integer",
                             "column": 11,
                             "filename": "\u003cstdin\u003e"
@@ -61,10 +61,10 @@
                         "column": 7,
                         "filename": "\u003cstdin\u003e"
                     },
-                    "lineno": 2,
+                    "lineno": 14,
                     "right": {
                         "value": 3,
-                        "lineno": 2,
+                        "lineno": 14,
                         "type": "integer",
                         "column": 17,
                         "filename": "\u003cstdin\u003e"
@@ -77,13 +77,13 @@
             "names": [
                 {
                     "value": "i",
-                    "lineno": 2,
+                    "lineno": 14,
                     "type": "identifier",
                     "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
-            "lineno": 2,
+            "lineno": 14,
             "type": "assign",
             "column": 3,
             "filename": "\u003cstdin\u003e"
@@ -93,15 +93,15 @@
                 {
                     "left": {
                         "value": 1,
-                        "lineno": 3,
+                        "lineno": 15,
                         "type": "integer",
                         "column": 5,
                         "filename": "\u003cstdin\u003e"
                     },
-                    "lineno": 3,
+                    "lineno": 15,
                     "right": {
                         "value": 2,
-                        "lineno": 3,
+                        "lineno": 15,
                         "type": "integer",
                         "column": 10,
                         "filename": "\u003cstdin\u003e"
@@ -114,13 +114,13 @@
             "names": [
                 {
                     "value": "i",
-                    "lineno": 3,
+                    "lineno": 15,
                     "type": "identifier",
                     "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
-            "lineno": 3,
+            "lineno": 15,
             "type": "assign",
             "column": 3,
             "filename": "\u003cstdin\u003e"
@@ -131,15 +131,15 @@
                     "left": {
                         "left": {
                             "value": 1,
-                            "lineno": 4,
+                            "lineno": 16,
                             "type": "integer",
                             "column": 5,
                             "filename": "\u003cstdin\u003e"
                         },
-                        "lineno": 4,
+                        "lineno": 16,
                         "right": {
                             "value": 2,
-                            "lineno": 4,
+                            "lineno": 16,
                             "type": "integer",
                             "column": 10,
                             "filename": "\u003cstdin\u003e"
@@ -148,10 +148,10 @@
                         "column": 7,
                         "filename": "\u003cstdin\u003e"
                     },
-                    "lineno": 4,
+                    "lineno": 16,
                     "right": {
                         "value": 3,
-                        "lineno": 4,
+                        "lineno": 16,
                         "type": "integer",
                         "column": 15,
                         "filename": "\u003cstdin\u003e"
@@ -164,13 +164,13 @@
             "names": [
                 {
                     "value": "i",
-                    "lineno": 4,
+                    "lineno": 16,
                     "type": "identifier",
                     "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
-            "lineno": 4,
+            "lineno": 16,
             "type": "assign",
             "column": 3,
             "filename": "\u003cstdin\u003e"
@@ -181,15 +181,15 @@
                     "left": {
                         "left": {
                             "value": 1,
-                            "lineno": 5,
+                            "lineno": 17,
                             "type": "integer",
                             "column": 5,
                             "filename": "\u003cstdin\u003e"
                         },
-                        "lineno": 5,
+                        "lineno": 17,
                         "right": {
                             "value": 2,
-                            "lineno": 5,
+                            "lineno": 17,
                             "type": "integer",
                             "column": 11,
                             "filename": "\u003cstdin\u003e"
@@ -198,10 +198,10 @@
                         "column": 7,
                         "filename": "\u003cstdin\u003e"
                     },
-                    "lineno": 5,
+                    "lineno": 17,
                     "right": {
                         "value": 3,
-                        "lineno": 5,
+                        "lineno": 17,
                         "type": "integer",
                         "column": 16,
                         "filename": "\u003cstdin\u003e"
@@ -214,13 +214,13 @@
             "names": [
                 {
                     "value": "i",
-                    "lineno": 5,
+                    "lineno": 17,
                     "type": "identifier",
                     "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
-            "lineno": 5,
+            "lineno": 17,
             "type": "assign",
             "column": 3,
             "filename": "\u003cstdin\u003e"
@@ -230,24 +230,24 @@
                 {
                     "left": {
                         "value": 1,
-                        "lineno": 6,
+                        "lineno": 18,
                         "type": "integer",
                         "column": 5,
                         "filename": "\u003cstdin\u003e"
                     },
-                    "lineno": 6,
+                    "lineno": 18,
                     "right": {
                         "left": {
                             "value": 2,
-                            "lineno": 6,
+                            "lineno": 18,
                             "type": "integer",
                             "column": 10,
                             "filename": "\u003cstdin\u003e"
                         },
-                        "lineno": 6,
+                        "lineno": 18,
                         "right": {
                             "value": 3,
-                            "lineno": 6,
+                            "lineno": 18,
                             "type": "integer",
                             "column": 16,
                             "filename": "\u003cstdin\u003e"
@@ -264,13 +264,13 @@
             "names": [
                 {
                     "value": "i",
-                    "lineno": 6,
+                    "lineno": 18,
                     "type": "identifier",
                     "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
-            "lineno": 6,
+            "lineno": 18,
             "type": "assign",
             "column": 3,
             "filename": "\u003cstdin\u003e"
@@ -280,12 +280,12 @@
                 {
                     "left": {
                         "value": 1,
-                        "lineno": 7,
+                        "lineno": 19,
                         "type": "integer",
                         "column": 9,
                         "filename": "\u003cstdin\u003e"
                     },
-                    "lineno": 7,
+                    "lineno": 19,
                     "type": "not",
                     "column": 5,
                     "filename": "\u003cstdin\u003e"
@@ -294,13 +294,13 @@
             "names": [
                 {
                     "value": "i",
-                    "lineno": 7,
+                    "lineno": 19,
                     "type": "identifier",
                     "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
-            "lineno": 7,
+            "lineno": 19,
             "type": "assign",
             "column": 3,
             "filename": "\u003cstdin\u003e"
@@ -311,20 +311,20 @@
                     "left": {
                         "left": {
                             "value": 1,
-                            "lineno": 8,
+                            "lineno": 20,
                             "type": "integer",
                             "column": 9,
                             "filename": "\u003cstdin\u003e"
                         },
-                        "lineno": 8,
+                        "lineno": 20,
                         "type": "not",
                         "column": 5,
                         "filename": "\u003cstdin\u003e"
                     },
-                    "lineno": 8,
+                    "lineno": 20,
                     "right": {
                         "value": 2,
-                        "lineno": 8,
+                        "lineno": 20,
                         "type": "integer",
                         "column": 15,
                         "filename": "\u003cstdin\u003e"
@@ -337,13 +337,13 @@
             "names": [
                 {
                     "value": "i",
-                    "lineno": 8,
+                    "lineno": 20,
                     "type": "identifier",
                     "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
-            "lineno": 8,
+            "lineno": 20,
             "type": "assign",
             "column": 3,
             "filename": "\u003cstdin\u003e"
