@@ -1,0 +1,317 @@
+{
+    "type": "object",
+    "statements": [
+        {
+            "values": [
+                {
+                    "value": "hello, world!",
+                    "lineno": 1,
+                    "type": "string",
+                    "column": 5,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "i",
+                    "lineno": 1,
+                    "type": "identifier",
+                    "column": 0,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 1,
+            "type": "assign",
+            "column": 2,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "value": "newline\n",
+                    "lineno": 2,
+                    "type": "string",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "i",
+                    "lineno": 2,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 2,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "value": "tab\r",
+                    "lineno": 3,
+                    "type": "string",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "i",
+                    "lineno": 3,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 3,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "value": "unicodeQ",
+                    "lineno": 4,
+                    "type": "string",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "i",
+                    "lineno": 4,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 4,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "value": "more unicode©",
+                    "lineno": 5,
+                    "type": "string",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "i",
+                    "lineno": 5,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 5,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "value": "even more unicode💩",
+                    "lineno": 6,
+                    "type": "string",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "i",
+                    "lineno": 6,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 6,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "value": "",
+                    "lineno": 7,
+                    "type": "string",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "i",
+                    "lineno": 7,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 7,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "value": "\n\n",
+                    "lineno": 8,
+                    "type": "string",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "i",
+                    "lineno": 8,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 8,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "value": "\n\ntext",
+                    "lineno": 9,
+                    "type": "string",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "i",
+                    "lineno": 9,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 9,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "value": "unicodeQzorb",
+                    "lineno": 10,
+                    "type": "string",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "i",
+                    "lineno": 10,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 10,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "value": "unicodeQfoo",
+                    "lineno": 11,
+                    "type": "string",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "i",
+                    "lineno": 11,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 11,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "value": "foo\"bar",
+                    "lineno": 12,
+                    "type": "string",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "i",
+                    "lineno": 12,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 12,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "value": "foo'bar",
+                    "lineno": 13,
+                    "type": "string",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "i",
+                    "lineno": 13,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 13,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        }
+    ]
+}

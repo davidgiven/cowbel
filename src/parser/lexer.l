@@ -6,6 +6,7 @@
 	 */
 
 	#include "globals.h"
+	#include <unistr.h>
 	#include "grammar.h"
 
 	#define YY_USER_ACTION \
@@ -33,6 +34,9 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\.,]+
 <INITIAL>{
 	"/*"                       { BEGIN(COMMENT); }
 	[//[^\n]*]                 {}
+
+	\"                         { BEGIN(DOUBLE_QUOTED); }
+	\'                         { BEGIN(SINGLE_QUOTED); }
 
 	";"                        { return SEMICOLON; }
 	":"                        { return COLON; }
@@ -83,6 +87,32 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\.,]+
 	[^*\n]*                    {}
 	"*"                        {}
 	"\n"                       {}
+}
+
+<SINGLE_QUOTED>{
+	"'"                        { parsed_string = json_string("");
+                                 BEGIN(INITIAL); return STRING; }
+	[^\\'\n]+                  { parsed_string = json_string(yytext); return STRING; }
+}
+
+<DOUBLE_QUOTED>{
+	"\""                       { parsed_string = json_string("");
+                                 BEGIN(INITIAL); return STRING; }
+	[^\\"\n]+                  { parsed_string = json_string(yytext); return STRING; }
+}
+
+<SINGLE_QUOTED,DOUBLE_QUOTED>{
+	\\'                        { parsed_string = json_string("'"); return STRING; }
+	\\\"                       { parsed_string = json_string("\""); return STRING; }
+	\\n                        { parsed_string = json_string("\n"); return STRING; }
+	\\t                        { parsed_string = json_string("\r"); return STRING; }
+	\\u[0-9a-fA-F]+            { uint8_t s[8];
+	                             uint32_t c = strtol(yytext+2, NULL, 16);
+								 size_t size;
+								 u32_to_u8(&c, 1, s, &size);
+								 s[size] = '\0';
+								 parsed_string = json_string(s); return STRING; }
+	\\.                        { printf("Bad string escape <%s>!\n", yytext); }
 }
 
 .                              { printf("Bad char <%s>!\n", yytext); }

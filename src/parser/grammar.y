@@ -23,7 +23,7 @@ start ::= optional_statements(IN) .
 	{
 		json_t* p = composite_token(IN, "object");
 		json_object_set(p, "statements", IN);
-		json_dumpf(p, stdout, JSON_INDENT(2));
+		json_dumpf(p, stdout, JSON_INDENT(2) | JSON_ENSURE_ASCII);
 	}
 
 %left OR .
@@ -87,6 +87,22 @@ boolean(RESULT) ::= FALSE(T) .
 		json_object_set(RESULT, "value", json_false());
 	}
 
+%type string {json_t*}
+string(RESULT) ::= STRING(T) .
+	{
+		RESULT = simple_token(&T, "string");
+		json_object_set(RESULT, "value", T.value);
+	}
+string(RESULT) ::= string(LEFT) STRING(T) .
+	{
+		RESULT = composite_token(LEFT, "string");
+		const char* s1 = json_string_value(json_object_get(LEFT, "value"));
+		const char* s2 = json_string_value(T.value);
+		char s[strlen(s1) + strlen(s2) + 1];
+		sprintf(s, "%s%s", s1, s2);
+		json_object_set(RESULT, "value", json_string(s));
+	}
+
 /* --- Utilities --------------------------------------------------------- */
 
 %type methodname {json_t*}
@@ -100,6 +116,7 @@ expression_0(RESULT) ::= identifier(IN) .            { RESULT = IN; }
 expression_0(RESULT) ::= integer(IN) .               { RESULT = IN; }
 expression_0(RESULT) ::= real(IN) .                  { RESULT = IN; }
 expression_0(RESULT) ::= boolean(IN) .               { RESULT = IN; }
+expression_0(RESULT) ::= string(IN) .                { RESULT = IN; }
 expression_0(RESULT) ::= OPEN_PARENTHESIS expression(IN) CLOSE_PARENTHESIS .
                                                      { RESULT = IN; }
 expression_0(RESULT) ::= OPEN_BRACE(T) optional_statements(BODY) CLOSE_BRACE .

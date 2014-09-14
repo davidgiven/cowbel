@@ -1,0 +1,14 @@
+i = "hello, world!";
+i = "newline\n";
+i = "tab\t";
+i = "unicode\u51";
+i = "more unicode\ua9";
+i = "even more unicode\u1f4a9";
+i = ""; /* empty */
+i = "\n\n";
+i = "\n\ntext";
+i = "unicode\u51zorb";
+i = "unicode" "\u51" "foo";
+i = "foo'bar";
+i = "foo\"bar";
+
