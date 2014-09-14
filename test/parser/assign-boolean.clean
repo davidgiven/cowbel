@@ -7,7 +7,7 @@
                     "value": true,
                     "lineno": 1,
                     "type": "boolean",
-                    "column": 5,
+                    "column": 4,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
@@ -31,7 +31,7 @@
                     "value": false,
                     "lineno": 2,
                     "type": "boolean",
-                    "column": 6,
+                    "column": 5,
                     "filename": "\u003cstdin\u003e"
                 }
             ],

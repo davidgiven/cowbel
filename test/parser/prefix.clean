@@ -8,14 +8,14 @@
                         "value": 1,
                         "lineno": 1,
                         "type": "integer",
-                        "column": 6,
+                        "column": 5,
                         "filename": "\u003cstdin\u003e"
                     },
                     "method": "-",
                     "lineno": 1,
                     "parameters": [],
                     "type": "call",
-                    "column": 5,
+                    "column": 4,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
@@ -40,14 +40,14 @@
                         "value": 1,
                         "lineno": 2,
                         "type": "integer",
-                        "column": 7,
+                        "column": 6,
                         "filename": "\u003cstdin\u003e"
                     },
                     "method": "+",
                     "lineno": 2,
                     "parameters": [],
                     "type": "call",
-                    "column": 6,
+                    "column": 5,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
@@ -72,14 +72,14 @@
                         "value": 1,
                         "lineno": 3,
                         "type": "integer",
-                        "column": 8,
+                        "column": 7,
                         "filename": "\u003cstdin\u003e"
                     },
                     "method": ",,",
                     "lineno": 3,
                     "parameters": [],
                     "type": "call",
-                    "column": 6,
+                    "column": 5,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
@@ -104,7 +104,7 @@
                         "value": 1,
                         "lineno": 4,
                         "type": "integer",
-                        "column": 9,
+                        "column": 8,
                         "filename": "\u003cstdin\u003e"
                     },
                     "method": ",,",
@@ -114,12 +114,12 @@
                             "value": 2,
                             "lineno": 4,
                             "type": "integer",
-                            "column": 12,
+                            "column": 11,
                             "filename": "\u003cstdin\u003e"
                         }
                     ],
                     "type": "call",
-                    "column": 10,
+                    "column": 9,
                     "filename": "\u003cstdin\u003e"
                 }
             ],

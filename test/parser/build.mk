@@ -23,6 +23,7 @@ $(eval $(call parser-test,simple-statements))
 $(eval $(call parser-test,function))
 $(eval $(call parser-test,object-interface))
 $(eval $(call parser-test,typedef))
+$(eval $(call parser-test,operators-vs-assign))
 
 .PHONY: parser-tests $(tests)
 parser-tests: $(tests)

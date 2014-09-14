@@ -4,32 +4,16 @@
         {
             "values": [
                 {
-                    "receiver": {
-                        "value": "i",
-                        "lineno": 1,
-                        "type": "identifier",
-                        "column": 4,
-                        "filename": "\u003cstdin\u003e"
-                    },
-                    "method": "-",
+                    "value": "b",
                     "lineno": 1,
-                    "parameters": [
-                        {
-                            "value": 1,
-                            "lineno": 1,
-                            "type": "integer",
-                            "column": 6,
-                            "filename": "\u003cstdin\u003e"
-                        }
-                    ],
-                    "type": "call",
-                    "column": 5,
+                    "type": "identifier",
+                    "column": 4,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
             "names": [
                 {
-                    "value": "i",
+                    "value": "a",
                     "lineno": 1,
                     "type": "identifier",
                     "column": 0,
@@ -45,31 +29,31 @@
             "values": [
                 {
                     "receiver": {
-                        "value": "i",
+                        "value": "b",
                         "lineno": 2,
                         "type": "identifier",
                         "column": 5,
                         "filename": "\u003cstdin\u003e"
                     },
-                    "method": "+",
+                    "method": "==",
                     "lineno": 2,
                     "parameters": [
                         {
-                            "value": 1,
+                            "value": "c",
                             "lineno": 2,
-                            "type": "integer",
-                            "column": 7,
+                            "type": "identifier",
+                            "column": 10,
                             "filename": "\u003cstdin\u003e"
                         }
                     ],
                     "type": "call",
-                    "column": 6,
+                    "column": 7,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
             "names": [
                 {
-                    "value": "i",
+                    "value": "a",
                     "lineno": 2,
                     "type": "identifier",
                     "column": 1,
@@ -85,31 +69,31 @@
             "values": [
                 {
                     "receiver": {
-                        "value": "i",
+                        "value": "b",
                         "lineno": 3,
                         "type": "identifier",
                         "column": 5,
                         "filename": "\u003cstdin\u003e"
                     },
-                    "method": "+-",
+                    "method": "=!",
                     "lineno": 3,
                     "parameters": [
                         {
-                            "value": 1,
+                            "value": "c",
                             "lineno": 3,
-                            "type": "integer",
-                            "column": 8,
+                            "type": "identifier",
+                            "column": 10,
                             "filename": "\u003cstdin\u003e"
                         }
                     ],
                     "type": "call",
-                    "column": 6,
+                    "column": 7,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
             "names": [
                 {
-                    "value": "i",
+                    "value": "a",
                     "lineno": 3,
                     "type": "identifier",
                     "column": 1,
@@ -125,31 +109,31 @@
             "values": [
                 {
                     "receiver": {
-                        "value": "i",
+                        "value": "b",
                         "lineno": 4,
                         "type": "identifier",
                         "column": 5,
                         "filename": "\u003cstdin\u003e"
                     },
-                    "method": ",,",
+                    "method": "!=",
                     "lineno": 4,
                     "parameters": [
                         {
-                            "value": 1,
+                            "value": "c",
                             "lineno": 4,
-                            "type": "integer",
-                            "column": 8,
+                            "type": "identifier",
+                            "column": 10,
                             "filename": "\u003cstdin\u003e"
                         }
                     ],
                     "type": "call",
-                    "column": 6,
+                    "column": 7,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
             "names": [
                 {
-                    "value": "i",
+                    "value": "a",
                     "lineno": 4,
                     "type": "identifier",
                     "column": 1,
@@ -164,33 +148,26 @@
         {
             "values": [
                 {
-                    "value": 1,
-                    "lineno": 5,
-                    "type": "integer",
-                    "column": 8,
-                    "filename": "\u003cstdin\u003e"
-                },
-                {
                     "receiver": {
-                        "value": "i",
+                        "value": "b",
                         "lineno": 5,
                         "type": "identifier",
-                        "column": 10,
+                        "column": 5,
                         "filename": "\u003cstdin\u003e"
                     },
-                    "method": ",,",
+                    "method": "\u003c",
                     "lineno": 5,
                     "parameters": [
                         {
-                            "value": "i",
+                            "value": "c",
                             "lineno": 5,
                             "type": "identifier",
-                            "column": 13,
+                            "column": 9,
                             "filename": "\u003cstdin\u003e"
                         }
                     ],
                     "type": "call",
-                    "column": 11,
+                    "column": 7,
                     "filename": "\u003cstdin\u003e"
                 }
             ],
@@ -201,18 +178,51 @@
                     "type": "identifier",
                     "column": 1,
                     "filename": "\u003cstdin\u003e"
-                },
-                {
-                    "value": "b",
-                    "lineno": 5,
-                    "type": "identifier",
-                    "column": 4,
-                    "filename": "\u003cstdin\u003e"
                 }
             ],
             "lineno": 5,
             "type": "assign",
-            "column": 6,
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "receiver": {
+                        "value": "b",
+                        "lineno": 6,
+                        "type": "identifier",
+                        "column": 5,
+                        "filename": "\u003cstdin\u003e"
+                    },
+                    "method": "\u003c\u003e",
+                    "lineno": 6,
+                    "parameters": [
+                        {
+                            "value": "c",
+                            "lineno": 6,
+                            "type": "identifier",
+                            "column": 10,
+                            "filename": "\u003cstdin\u003e"
+                        }
+                    ],
+                    "type": "call",
+                    "column": 7,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "a",
+                    "lineno": 6,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 6,
+            "type": "assign",
+            "column": 3,
             "filename": "\u003cstdin\u003e"
         }
     ]

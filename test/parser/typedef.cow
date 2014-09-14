@@ -1,20 +1,20 @@
-type T := Z;
-type T<A> := Z;
-type T := Z<A>;
-type T<A> := Z<A>;
+type T = Z;
+type T<A> = Z;
+type T = Z<A>;
+type T<A> = Z<A>;
 
-type T := {};
-type T := {
+type T = {};
+type T = {
 	implements Z;
 };
-type T := {
+type T = {
 	function Fnord;
 };
-type T := {
+type T = {
 	implements Z;
 	function Fnord;
 };
-type T<Q, W> := {
+type T<Q, W> = {
 	implements Z<Q, W>;
 };
 
