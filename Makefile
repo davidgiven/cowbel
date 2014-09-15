@@ -104,6 +104,7 @@ $(call cfile, src/parser/main.c)
 $(call yfile, src/parser/grammar.y)
 $(call lfile, src/parser/lexer.l)
 $(objdir)/src/parser/lexer.c: $(objdir)/src/parser/grammar.c
+src/parser/main.c: $(objdir)/src/parser/lexer.h
 endef
 
 cflags := -Ilib/include -Isrc/parser -I$(OBJ)/parser/src/parser

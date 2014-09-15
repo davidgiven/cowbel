@@ -1,0 +1,93 @@
+{
+    "type": "object",
+    "statements": [
+        {
+            "values": [
+                {
+                    "value": "b",
+                    "lineno": 1,
+                    "type": "identifier",
+                    "column": 4,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "names": [
+                {
+                    "value": "a",
+                    "lineno": 1,
+                    "type": "identifier",
+                    "column": 0,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 1,
+            "type": "assign",
+            "column": 2,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "value": "d",
+                    "lineno": 10,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "fnord"
+                }
+            ],
+            "names": [
+                {
+                    "value": "c",
+                    "lineno": 2,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 2,
+            "type": "assign",
+            "column": 3,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "values": [
+                {
+                    "receiver": {
+                        "value": "f",
+                        "lineno": 10,
+                        "type": "identifier",
+                        "column": 1,
+                        "filename": "line 7"
+                    },
+                    "method": "+",
+                    "lineno": 10,
+                    "parameters": [
+                        {
+                            "value": "g",
+                            "lineno": 10,
+                            "type": "identifier",
+                            "column": 1,
+                            "filename": "line 9"
+                        }
+                    ],
+                    "type": "call",
+                    "column": 3,
+                    "filename": "line 7"
+                }
+            ],
+            "names": [
+                {
+                    "value": "e",
+                    "lineno": 10,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "line 5"
+                }
+            ],
+            "lineno": 10,
+            "type": "assign",
+            "column": 3,
+            "filename": "line 5"
+        }
+    ]
+}
