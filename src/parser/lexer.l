@@ -23,17 +23,21 @@
 %x COMMENT
 %x SINGLE_QUOTED
 %x DOUBLE_QUOTED
+%x LINESPEC
+%x ENDOFLINESPEC
 
 IDSTART            [A-Za-z_$]
 IDCONTINUED        {IDSTART}|[0-9]
 IDENTIFIER         {IDSTART}{IDCONTINUED}*
-OPERATOR           [-!#$%^&*_+=:<>/?|\\.,]+
+OPERATOR           [-!#$%^&*_+=:<>/?|\\.,~]+
 
 %%
 
 <INITIAL>{
 	"/*"                       { BEGIN(COMMENT); }
 	[//[^\n]*]                 {}
+
+	^#                         { BEGIN(LINESPEC); }
 
 	\"                         { BEGIN(DOUBLE_QUOTED); }
 	\'                         { BEGIN(SINGLE_QUOTED); }
@@ -113,6 +117,20 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\.,]+
 								 s[size] = '\0';
 								 parsed_string = json_string(s); return STRING; }
 	\\.                        { printf("Bad string escape <%s>!\n", yytext); }
+}
+
+<LINESPEC>{
+	[0-9]+                     { yylineno = strtol(yytext, NULL, 0)-1; }
+	\"[^\"]*                   { current_filename = json_string(yytext+1);
+                                 BEGIN(ENDOFLINESPEC);
+	                           }
+
+	[ \t]*                     {}
+}
+
+<ENDOFLINESPEC>{
+	.*                         {}
+	"\n"                       { BEGIN(INITIAL); }
 }
 
 .                              { printf("Bad char <%s>!\n", yytext); }

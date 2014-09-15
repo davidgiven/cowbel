@@ -23,7 +23,7 @@ json_t* simple_token(token_t* token, const char* kind)
 {
 	json_t* t = json_object();
 	json_object_set(t, "type", json_string(kind));
-	json_object_set(t, "filename", json_string("<stdin>"));
+	json_object_set(t, "filename", token->filename);
 	json_object_set(t, "lineno", json_integer(token->lineno));
 	json_object_set(t, "column", json_integer(token->column));
 	return t;
