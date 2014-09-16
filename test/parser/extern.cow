@@ -1,0 +1,3 @@
+extern "body text here";
+extern "${escape}";
+extern "";

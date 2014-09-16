@@ -68,6 +68,7 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\.,~]+
 	"overriding"               { return OVERRIDING; }
 	"implements"               { return IMPLEMENTS; }
 	"type"                     { return TYPE; }
+	"extern"                   { return EXTERN; }
 
 	/* =, < and > are special; if they occur *on their own* they're
 	 * specific tokens. Otherwise they're just part of OPERATOR. */
