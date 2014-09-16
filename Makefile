@@ -52,6 +52,7 @@ endef
 
 define yfile
 
+$(objdir)/$(1:.y=.h): $(objdir)/$(1:.y=.c)
 $(objdir)/$(1:.y=.c): $1 Makefile
 	@echo LEMON $$@
 	@mkdir -p $$(dir $$@)
@@ -69,6 +70,7 @@ endef
 
 define lfile
 
+$(objdir)/$(1:.l=.h): $(objdir)/$(1:.l=.c)
 $(objdir)/$(1:.l=.c): $1 Makefile
 	@echo FLEX $$@
 	@mkdir -p $$(dir $$@)
