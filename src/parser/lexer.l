@@ -35,7 +35,7 @@ OPERATOR           [-!#$%^&*_+=:<>/?|\\.,~]+
 
 <INITIAL>{
 	"/*"                       { BEGIN(COMMENT); }
-	[//[^\n]*]                 {}
+	"//"[^\n]*$                {}
 
 	^#                         { BEGIN(LINESPEC); }
 
