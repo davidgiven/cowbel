@@ -442,6 +442,15 @@ statement(RESULT) ::= DO(T) statement(BODY) WHILE
 		json_object_set(RESULT, "body", BODY);
 	}
 
+/* extern statement */
+
+statement(RESULT) ::= EXTERN(T) string(TEXT) SEMICOLON .
+	{
+		RESULT = simple_token(&T, "extern");
+		json_object_set(RESULT, "text",
+			json_object_get(TEXT, "value"));
+	}
+
 /* Function definition */
 
 %type is_overriding {bool}
