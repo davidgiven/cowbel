@@ -13,17 +13,17 @@
 
 %syntax_error
 {
-	fprintf(stderr, "Parse error at %s:%d.%d\n",
-		json_string_value(current_filename),
-		current_lineno, current_column);
 	syntax_error = true;
 }
 
-start ::= optional_statements(IN) .
+start ::= optional_statements(IN) END_OF_FILE .
 	{
-		json_t* p = composite_token(IN, "object");
-		json_object_set(p, "statements", IN);
-		json_dumpf(p, stdout, JSON_INDENT(2) | JSON_ENSURE_ASCII);
+		if (!syntax_error)
+		{
+			json_t* p = composite_token(IN, "object");
+			json_object_set(p, "statements", IN);
+			json_dumpf(p, stdout, JSON_INDENT(2) | JSON_ENSURE_ASCII);
+		}
 	}
 
 %left OR .
@@ -117,13 +117,15 @@ expression_0(RESULT) ::= integer(IN) .               { RESULT = IN; }
 expression_0(RESULT) ::= real(IN) .                  { RESULT = IN; }
 expression_0(RESULT) ::= boolean(IN) .               { RESULT = IN; }
 expression_0(RESULT) ::= string(IN) .                { RESULT = IN; }
+expression ::= OPEN_PARENTHESIS expression error .
+	{ parse_error("expected ')'"); }
 expression_0(RESULT) ::= OPEN_PARENTHESIS expression(IN) CLOSE_PARENTHESIS .
                                                      { RESULT = IN; }
+expression ::= OPEN_BRACE optional_statements error .
+	{ parse_error("expected '}' or statement"); }
 expression_0(RESULT) ::= OPEN_BRACE(T) optional_statements(BODY) CLOSE_BRACE .
-	{
-		RESULT = simple_token(&T, "block");
-		json_object_set(RESULT, "body", BODY);
-	}
+	{ RESULT = simple_token(&T, "block");
+	  json_object_set(RESULT, "body", BODY); }
 
 %type expression_1 {json_t*}
 expression_1(RESULT) ::= expression_0(IN) .          { RESULT = IN; }
@@ -269,6 +271,8 @@ typestatement(RESULT) ::= functionspec(FUNC) SEMICOLON .
 
 %type typespec {json_t*}
 typespec(RESULT) ::= typeref(IN) .               { RESULT = IN; }
+typespec ::= OPEN_BRACE typestatements error .
+	{ parse_error("expected '}' or interface declaration statement"); }
 typespec(RESULT) ::= OPEN_BRACE(T) typestatements(STMTS) CLOSE_BRACE .
 	{
 		RESULT = simple_token(&T, "interfacedef");
@@ -324,25 +328,23 @@ bracketed_var_parameters(RESULT) ::= OPEN_PARENTHESIS var_parameters(IN)
 /* Used in assignments and declarations. */
 
 %type multiassign {json_t*}
+multiassign ::= identifiers ASSIGN error .
+	{ parse_error("expected list of expressions", NULL); }
 multiassign(RESULT) ::= identifiers(LEFT) ASSIGN(T) values(RIGHT) .
-	{
-		RESULT = simple_token(&T, "assign");
-		json_object_set(RESULT, "names", LEFT);
-		json_object_set(RESULT, "values", RIGHT);
-	}
+	{ RESULT = simple_token(&T, "assign");
+	  json_object_set(RESULT, "names", LEFT);
+	  json_object_set(RESULT, "values", RIGHT); }
 
 %type functionspec {json_t*}
 functionspec(RESULT) ::= FUNCTION(T) is_overriding(OVERRIDING) methodname(NAME)
 			bracketed_type_parameters(TYPES) bracketed_var_parameters(INS)
 			return_types(OUTS) .
-	{
-		RESULT = simple_token(&T, "function");
-		json_object_set(RESULT, "overriding", OVERRIDING ? json_true() : json_false());
-		json_object_set(RESULT, "identifier", NAME);
-		json_object_set(RESULT, "typeparams", TYPES);
-		json_object_set(RESULT, "inparams", INS);
-		json_object_set(RESULT, "outparams", OUTS);
-	}
+	{ RESULT = simple_token(&T, "function");
+	  json_object_set(RESULT, "overriding", OVERRIDING ? json_true() : json_false());
+	  json_object_set(RESULT, "identifier", NAME);
+	  json_object_set(RESULT, "typeparams", TYPES);
+	  json_object_set(RESULT, "inparams", INS);
+	  json_object_set(RESULT, "outparams", OUTS); }
 
 /* --- Statements -------------------------------------------------------- */
 
@@ -366,32 +368,43 @@ statements(RESULT) ::= statements(LEFT) statement(RIGHT) .
 
 /* Single-token statements */
 
-statement(RESULT) ::= BREAK(T) SEMICOLON .     { RESULT = simple_token(&T, "break"); }
-statement(RESULT) ::= CONTINUE(T) SEMICOLON .  { RESULT = simple_token(&T, "continue"); }
-statement(RESULT) ::= RETURN(T) SEMICOLON .    { RESULT = simple_token(&T, "return"); }
-
+statement ::= BREAK error .
+	{ missing_semicolon(); }
+statement(RESULT) ::= BREAK(T) SEMICOLON .
+	{ RESULT = simple_token(&T, "break"); }
+statement ::= CONTINUE error .
+	{ missing_semicolon(); }
+statement(RESULT) ::= CONTINUE(T) SEMICOLON .
+	{ RESULT = simple_token(&T, "continue"); }
+statement ::= RETURN error .
+	{ parse_error("expected ';' or expression", NULL); }
+statement(RESULT) ::= RETURN(T) SEMICOLON .
+	{ RESULT = simple_token(&T, "return"); }
+ 
 /* Return with a single value */
 
+statement ::= RETURN expression error .
+	{ missing_semicolon(); }
 statement(RESULT) ::= RETURN(T) expression(VAL) SEMICOLON .
-	{
-		RESULT = simple_token(&T, "return");
-		json_object_set(RESULT, "value", VAL);
-	}
+	{ RESULT = simple_token(&T, "return");
+	  json_object_set(RESULT, "value", VAL); }
 
 /* Constructor */
 
+statement ::= OPEN_BRACE optional_statements error .
+	{ parse_error("expected '}' or statement", NULL); }
+statement ::= OPEN_BRACE error .
+	{ parse_error("expected '}' or statement", NULL); }
 statement(RESULT) ::= OPEN_BRACE(T) optional_statements(BODY) CLOSE_BRACE .
-	{
-		RESULT = simple_token(&T, "block");
-		json_object_set(RESULT, "body", BODY);
-	}
+	{ RESULT = simple_token(&T, "block");
+	  json_object_set(RESULT, "body", BODY); }
 
 /* Assignment */
 
+statement ::= multiassign error .
+	{ missing_semicolon(); }
 statement(RESULT) ::= multiassign(LEFT) SEMICOLON .
-	{
-		RESULT = LEFT;
-	}
+	{ RESULT = LEFT; }
 
 /* Variable declaratio and assignment */
 
@@ -400,6 +413,8 @@ statement(RESULT) ::= VAR(T) multiassign(LEFT) SEMICOLON .
 		RESULT = simple_token(&T, "declare");
 		json_object_set(RESULT, "assignment", LEFT);
 	}
+statement ::= VAR multiassign error .
+	{ parse_error("expected ';'", NULL); }
 
 /* if...else */
 
@@ -461,6 +476,8 @@ is_overriding(RESULT) ::= OVERRIDING .                { RESULT = true; }
 return_types(RESULT) ::= .                            { RESULT = json_array(); }
 return_types(RESULT) ::= COLON bracketed_var_parameters(IN) . { RESULT = IN; }
 
+statement ::= functionspec error .
+	{ parse_error("invalid function body (probably unterminated"); }
 statement(RESULT) ::= functionspec(FUNC) statement(BODY) .
 	{
 		RESULT = composite_token(FUNC, "function");

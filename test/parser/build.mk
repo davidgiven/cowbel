@@ -9,26 +9,27 @@
 
 define parser-test
 
-$(objdir)/tests/parser-test-$1.dirty: bin/parser test/parser/$1.cow test/parser/$1.clean
+$(objdir)/$1.dirty: bin/parser test/parser/$1.cow test/parser/$1.clean
 	@echo PARSERTEST $1
 	@mkdir -p $$(dir $$@)
-	$(hide)bin/parser < test/parser/$1.cow | aeson-pretty > $$@
+	$(hide)bin/parser < test/parser/$1.cow | aeson-pretty > $$@ || true
 	$(hide)diff -uBb test/parser/$1.clean $$@
 
-tests += $(objdir)/tests/parser-test-$1.dirty
+tests += $(objdir)/$1.dirty
 endef
 
 define parser-test-fail
 
-$(objdir)/tests/parser-test-$1.dirty: bin/parser test/parser/$1.cow test/parser/$1.clean
+$(objdir)/$1.dirty: bin/parser test/parser/$1.cow test/parser/$1.clean
 	@echo PARSERTESTFAIL $1
 	@mkdir -p $$(dir $$@)
-	$(hide)bin/parser <test/parser/$1.cow 2>$$@ >/dev/null
+	$(hide)bin/parser <test/parser/$1.cow 2>$$@ >/dev/null || true
 	$(hide)diff -uBb test/parser/$1.clean $$@
 
-tests += $(objdir)/tests/parser-test-$1.dirty
+tests += $(objdir)/$1.dirty
 endef
 
+objdir := .obj/tests/parser
 tests :=
 # No space after the comma here; make can't cope
 $(eval $(call parser-test,empty))

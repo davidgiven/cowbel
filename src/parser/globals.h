@@ -30,6 +30,9 @@ extern bool syntax_error;
 extern json_t* simple_token(token_t* token, const char* kind);
 extern json_t* composite_token(json_t* proto, const char* kind);
 
+extern void parse_error(const char* format, ...);
+extern void missing_semicolon(void);
+
 extern json_t* json_array_single(json_t* item);
 
 #endif
