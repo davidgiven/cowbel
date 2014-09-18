@@ -1,0 +1,3 @@
+#!/bin/sh
+bin/parser <test/parser/$1.cow 2>test/parser/$1.clean
+

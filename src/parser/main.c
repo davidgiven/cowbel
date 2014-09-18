@@ -46,6 +46,25 @@ json_t* json_array_single(json_t* item)
 	return t;
 }
 
+void parse_error(const char* format, ...)
+{
+	va_list ap;
+	va_start(ap, format);
+
+	fprintf(stderr, "%s:%d:%d: error: ", 
+			json_string_value(current_filename),
+			current_lineno, current_column);
+	vfprintf(stderr, format, ap);
+	fprintf(stderr, "\n");
+
+	va_end(ap);
+}
+
+void missing_semicolon(void)
+{
+	parse_error("expected ';'");
+}
+
 int main(int argc, const char* argv[])
 {
 	yyscan_t scanner;
@@ -79,6 +98,11 @@ int main(int argc, const char* argv[])
 
         Parse(parser, token, tokeninfo);
     }
+
+	/* Lemon's error recovery doesn't seem to fire on a normal EOF token,
+	 * so we send this special one first just to make sure that errors
+	 * get reported properly. */
+	Parse(parser, END_OF_FILE, tokeninfo);
 	Parse(parser, 0, tokeninfo);
 
 	ParseFree(parser, free);
