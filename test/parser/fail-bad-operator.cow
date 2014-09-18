@@ -1,0 +1,6 @@
+i = i + + 1; // valid (the second + is prefix)
+i = i + + + 1;
+i = foo and and;
+i = foo or or;
+i = not not;
+

@@ -54,6 +54,7 @@ $(eval $(call parser-test,extern))
 $(eval $(call parser-test-fail,fail-semicolon))
 $(eval $(call parser-test-fail,fail-missing-parenthesis))
 $(eval $(call parser-test-fail,fail-missing-brace))
+$(eval $(call parser-test-fail,fail-bad-operator))
 
 .PHONY: parser-tests
 parser-tests: $(tests)

@@ -142,6 +142,9 @@ expression_1(RESULT) ::= expression_0(LEFT) DOT methodname(OP)
 
 %type expression_2 {json_t*}
 expression_2(RESULT) ::= expression_1(IN) .           { RESULT = IN; }
+expression_2 ::= operator(O) error .
+	{ parse_error("failed to parse right hand of '%s' operator",
+			json_string_value(json_object_get(O, "value"))); }
 expression_2(RESULT) ::= operator(OP) expression_1(LEFT) .
 	{
 		RESULT = composite_token(OP, "call");
@@ -152,6 +155,8 @@ expression_2(RESULT) ::= operator(OP) expression_1(LEFT) .
 
 %type expression_3 {json_t*}
 expression_3(RESULT) ::= expression_2(IN) .           { RESULT = IN; }
+expression ::= expression_3 error .
+	{ parse_error("invalid operator"); }
 expression_3(RESULT) ::= expression_3(LEFT) operator(OP) expression_2(RIGHT) .
 	{
 		RESULT = composite_token(OP, "call");
@@ -162,18 +167,24 @@ expression_3(RESULT) ::= expression_3(LEFT) operator(OP) expression_2(RIGHT) .
 
 %type expression_4 {json_t*}
 expression_4(RESULT) ::= expression_3(IN) .           { RESULT = IN; }
+expression_4 ::= expression_4 OR error .
+	{ parse_error("failed to parse right hand of 'or' operator"); }
 expression_4(RESULT) ::= expression_4(LEFT) OR(OP) expression_4(RIGHT) .
 	{
 		RESULT = simple_token(&OP, "or");
 		json_object_set(RESULT, "left", LEFT);
 		json_object_set(RESULT, "right", RIGHT);
 	}
+expression_4 ::= expression_4 AND error .
+	{ parse_error("failed to parse right hand of 'and' operator"); }
 expression_4(RESULT) ::= expression_4(LEFT) AND(OP) expression_4(RIGHT) .
 	{
 		RESULT = simple_token(&OP, "and");
 		json_object_set(RESULT, "left", LEFT);
 		json_object_set(RESULT, "right", RIGHT);
 	}
+expression_4 ::= NOT error .
+	{ parse_error("failed to parse right hand of 'not' operator"); }
 expression_4(RESULT) ::= NOT(OP) expression_3(LEFT) .
 	{
 		RESULT = simple_token(&OP, "not");
