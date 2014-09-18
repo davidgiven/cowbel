@@ -9,11 +9,24 @@
 
 define parser-test
 
-parser-test-$1: bin/parser test/parser/$1.cow test/parser/$1.clean
-	@echo PARSERTEST $$@
-	$(hide)bin/parser < test/parser/$1.cow | aeson-pretty | diff -uBb test/parser/$1.clean -
+$(objdir)/tests/parser-test-$1.dirty: bin/parser test/parser/$1.cow test/parser/$1.clean
+	@echo PARSERTEST $1
+	@mkdir -p $$(dir $$@)
+	$(hide)bin/parser < test/parser/$1.cow | aeson-pretty > $$@
+	$(hide)diff -uBb test/parser/$1.clean $$@
 
-tests += parser-test-$1
+tests += $(objdir)/tests/parser-test-$1.dirty
+endef
+
+define parser-test-fail
+
+$(objdir)/tests/parser-test-$1.dirty: bin/parser test/parser/$1.cow test/parser/$1.clean
+	@echo PARSERTESTFAIL $1
+	@mkdir -p $$(dir $$@)
+	$(hide)bin/parser <test/parser/$1.cow 2>$$@ >/dev/null
+	$(hide)diff -uBb test/parser/$1.clean $$@
+
+tests += $(objdir)/tests/parser-test-$1.dirty
 endef
 
 tests :=
@@ -37,7 +50,10 @@ $(eval $(call parser-test,typedef))
 $(eval $(call parser-test,operators-vs-assign))
 $(eval $(call parser-test,line))
 $(eval $(call parser-test,extern))
+$(eval $(call parser-test-fail,fail-semicolon))
+$(eval $(call parser-test-fail,fail-missing-parenthesis))
+$(eval $(call parser-test-fail,fail-missing-brace))
 
-.PHONY: parser-tests $(tests)
+.PHONY: parser-tests
 parser-tests: $(tests)
 
