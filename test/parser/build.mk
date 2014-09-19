@@ -9,10 +9,10 @@
 
 define parser-test
 
-$(objdir)/$1.dirty: bin/parser test/parser/$1.cow test/parser/$1.clean
+$(objdir)/$1.dirty: bin/cowbel-parser test/parser/$1.cow test/parser/$1.clean
 	@echo PARSERTEST $1
 	@mkdir -p $$(dir $$@)
-	$(hide)bin/parser < test/parser/$1.cow | aeson-pretty > $$@ || true
+	$(hide)bin/cowbel-parser < test/parser/$1.cow | aeson-pretty > $$@ || true
 	$(hide)diff -uBb test/parser/$1.clean $$@
 
 tests += $(objdir)/$1.dirty
@@ -20,10 +20,10 @@ endef
 
 define parser-test-fail
 
-$(objdir)/$1.dirty: bin/parser test/parser/$1.cow test/parser/$1.clean
+$(objdir)/$1.dirty: bin/cowbel-parser test/parser/$1.cow test/parser/$1.clean
 	@echo PARSERTESTFAIL $1
 	@mkdir -p $$(dir $$@)
-	$(hide)bin/parser <test/parser/$1.cow 2>$$@ >/dev/null || true
+	$(hide)bin/cowbel-parser <test/parser/$1.cow 2>$$@ >/dev/null || true
 	$(hide)diff -uBb test/parser/$1.clean $$@
 
 tests += $(objdir)/$1.dirty

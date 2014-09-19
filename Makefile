@@ -14,6 +14,7 @@ CC = gcc
 LEMON = lemon
 FLEX = flex
 OBJ = .obj
+BINDIR = bin
 
 override CFLAGS += \
 	-g \
@@ -23,11 +24,9 @@ override CFLAGS += \
 
 override LDFLAGS += \
 
-all: bin/parser parser-tests
+all: bin/cowbel-parser bin/cowbel parser-tests
 
 clean::
-	@echo CLEAN
-	$(hide)rm -f $(objs)
 
 # --- Builds a single C file ------------------------------------------------
 
@@ -96,26 +95,21 @@ $(exe): $(objs) Makefile
 
 clean::
 	@echo CLEAN $(exe)
-	$(hide)rm -f $(exe)
+	$(hide)rm -f $(exe) $(objs)
 endef
 
-# --- Builds the parser front end -------------------------------------------
+# --- Deploys a binary ------------------------------------------------------
 
-define build-parser
-$(call cfile, src/parser/main.c)
-$(call yfile, src/parser/grammar.y)
-$(call lfile, src/parser/lexer.l)
-$(objdir)/src/parser/lexer.c: $(objdir)/src/parser/grammar.c
-src/parser/main.c: $(objdir)/src/parser/lexer.h
+define copy
+$2: $1
+	@echo CP $$@
+	@mkdir -p $$(dir $$@)
+	$(hide) cp $$< $$@
+
+objs += $2
 endef
 
-cflags := -Ilib/include -Isrc/parser -I$(OBJ)/parser/src/parser
-ldflags := -ljansson -lunistring
-objdir := $(OBJ)/parser
-objs :=
-exe := bin/parser
-$(eval $(build-parser))
-$(eval $(clink))
-
+include src/parser/build.mk
+include src/compiler/build.mk
 include test/parser/build.mk
 -include $(DEPENDS)
