@@ -14,8 +14,8 @@ endef
 
 define build-compiler
 $(call deploy-compiler-lua,main.lua)
-$(call deploy-compiler-lua,Parser.lua)
 $(call deploy-compiler-lua,Utils.lua)
+$(call deploy-compiler-lua,AST.lua)
 endef
 
 bindir = $(BINDIR)/cowbel-compiler
