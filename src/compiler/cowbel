@@ -3,5 +3,5 @@
 # license. See the file COPYING.BSD in the distribution directory for the
 # full license text.
 
-lua $(dirname $0)/cowbel-compiler/main.lua -- "$@"
+lua $(dirname $0)/cowbel-compiler/main.lua "$@"
 

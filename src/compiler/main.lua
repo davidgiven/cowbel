@@ -1,4 +1,4 @@
--- © 2013 David Given
+-- © 2014 David Given
 -- This file is made available under the terms of the two-clause BSD
 -- license. See the file COPYING.BSD in the distribution directory for the
 -- full license text.
@@ -10,9 +10,9 @@ do
 	package.path = path .. "?.lua;" .. path .. "?/init.lua;" .. package.path
 end
 
-local pretty = require("pl.pretty").dump
-local Parser = require("Parser")
+local cjson = require("cjson")
 local Utils = require("Utils")
+local AST = require("AST")
 
 local inputfile
 local outputfile
@@ -46,7 +46,7 @@ do
 			["output"] = do_outputfile,
 
 			[" unrecognised"] = function(arg)
-				Utils.UserError("option not recognised (try --help)")
+				Utils.UserError("option '"..arg.."' not recognised (try --help)")
 			end,
 
 			[" filename"] = function(arg)
@@ -67,11 +67,11 @@ if not outputfile then
 	outputfile = inputfile:gsub("%.[a-zA-Z]+$", ".c")
 end
 
-print(outputfile)
+-- Load file.
 
-local data = Utils.LoadFile(inputfile)
-local result = Parser.Parse(inputfile, data)
-print(result)
-pretty(result)
-
+local ast
+Utils.Time("Parse", function()
+		ast = AST.Load(inputfile)
+	end)
+print(cjson.encode(ast))
 

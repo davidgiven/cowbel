@@ -1,9 +1,9 @@
--- Luje
--- © 2013 David Given
+-- © 2014 David Given
 -- This file is redistributable under the terms of the
 -- New BSD License. Please see the COPYING file in the
 -- project root for the full text.
 
+local posix = require("posix")
 local ServerDir = ServerDir
 
 --- Halts with a user error (no stack trace).
@@ -14,7 +14,7 @@ local function UserError(...)
 		local a = select(i, ...)
 		args[#args+1] = tostring(a)
 	end
-	io.stderr:write("luje: ", table.concat(args), "\n")
+	io.stderr:write("cowbel: ", table.concat(args), "\n")
 	os.exit(1)
 end
 
@@ -44,7 +44,7 @@ end
 
 local function OpenFile(filename)
 	local fp, e = io.open(filename, "r")
-	if (e) then
+	if e then
 		FatalError(e)
 	end
 	
@@ -99,6 +99,20 @@ local function Argify(s)
 		t[#t+1] = w
 	end
 	return t
+end
+
+--- Shellifies a list into an argument string.
+--
+--    list: list of arguments
+--    returns: a string
+
+local function Shellify(list)
+	local s = {}
+	for _, word in pairs(list) do
+		word = string.gsub(word, "([\\\"'$])", "\\%0")
+		s[#s+1] = '"'..word..'"'
+	end
+	return table.concat(s, " ")
 end
 
 --- Parses command line parameters.
@@ -226,6 +240,48 @@ local function FindSmallestKey(t)
 	return c
 end
 
+--- Runs a command and returns the output.
+-- Throws on error if the command fails.
+
+local function ReadPipe(command)
+	local fp, e = io.popen(command, "r")
+	if e then
+		FatalError(e)
+	end
+
+	local data = fp:read("*a")
+	local e, _, exitcode = fp:close()
+	if not e then
+		FatalError("command failed: "..exitcode)
+	end
+	return data
+end
+
+--- Runs a shell command.
+-- Throws an error if the command fails.
+
+local function System(command)
+	local e, _, exitcode = os.execute(command)
+	if not e then
+		FatalError("command failed: "..exitcode)
+	end
+end
+
+--- Times a function, and reports the result.
+
+local function Time(name, func)
+	local function now()
+		local t = posix.times()
+		return t.stime + t.cstime + t.utime + t.cutime
+	end
+
+	local starttime = now()
+	func()
+	local endtime = now()
+	local elapsed = endtime - starttime
+	print(string.format("%s: %dms", name, elapsed*1000))
+end
+
 return
 {
 	OpenFile = OpenFile,
@@ -236,9 +292,13 @@ return
 	Check = Check,
 	Assert = Assert,
 	Argify = Argify,
+	Shellify = Shellify,
 	ParseCommandLine = ParseCommandLine,
 	Unindent = Unindent,
 	Stringify = Stringify,
 	Throw = Throw,
-	FindSmallestKey = FindSmallestKey
+	FindSmallestKey = FindSmallestKey,
+	ReadPipe = ReadPipe,
+	System = System,
+	Time = Time,
 }
