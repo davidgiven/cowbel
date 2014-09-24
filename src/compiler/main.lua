@@ -11,6 +11,7 @@ do
 end
 
 local cjson = require("cjson")
+local pretty = require("pl.pretty").dump
 local Utils = require("Utils")
 local AST = require("AST")
 
@@ -72,6 +73,7 @@ end
 local ast
 Utils.Time("Parse", function()
 		ast = AST.Load(inputfile)
+		AST.Annotate(ast)
 	end)
-print(cjson.encode(ast))
+pretty(ast)
 
