@@ -282,6 +282,17 @@ local function Time(name, func)
 	print(string.format("%s: %dms", name, elapsed*1000))
 end
 
+--- Converts a vararg set of arguments to a set.
+-- Returns a table where each argument is a key to a table. The values are all true.
+
+local function Set(...)
+	local t = {}
+	for _, v in ipairs({...}) do
+		t[v] = true
+	end
+	return t
+end	
+
 return
 {
 	OpenFile = OpenFile,
@@ -301,4 +312,5 @@ return
 	ReadPipe = ReadPipe,
 	System = System,
 	Time = Time,
+	Set = Set,
 }
