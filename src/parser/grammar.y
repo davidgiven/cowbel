@@ -126,6 +126,11 @@ expression ::= OPEN_BRACE optional_statements error .
 expression_0(RESULT) ::= OPEN_BRACE(T) optional_statements(BODY) CLOSE_BRACE .
 	{ RESULT = simple_token(&T, "block");
 	  json_object_set(RESULT, "body", BODY); }
+expression_0(RESULT) ::= EXTERN string(TYPE) OPEN_BRACE(T)
+		optional_statements(BODY) CLOSE_BRACE .
+	{ RESULT = simple_token(&T, "block");
+	  json_object_set(RESULT, "nativetype", TYPE);
+	  json_object_set(RESULT, "body", BODY); }
 
 %type expression_1 {json_t*}
 expression_1(RESULT) ::= expression_0(IN) .          { RESULT = IN; }
@@ -135,7 +140,7 @@ expression_1(RESULT) ::= expression_0(LEFT) DOT methodname(OP)
 	{
 		RESULT = composite_token(OP, "call");
 		json_object_set(RESULT, "method", OP);
-		json_object_set(RESULT, "types", TYPES);
+		json_object_set(RESULT, "interfaces", TYPES);
 		json_object_set(RESULT, "receiver", LEFT);
 		json_object_set(RESULT, "parameters", RIGHT);
 	}
@@ -273,7 +278,7 @@ typestatement(RESULT) ::= IMPLEMENTS(T) typeref(TYPE) SEMICOLON .
 	  json_object_set(RESULT, "interface", TYPE);
 	}
 typestatement(RESULT) ::= functionspec(FUNC) SEMICOLON .
-	{ RESULT = composite_token(FUNC, "functiondef");
+	{ RESULT = composite_token(FUNC, "typefunction");
 	  json_object_set(RESULT, "functionspec", FUNC);
 	}
 
@@ -310,7 +315,7 @@ var_parameter(RESULT) ::= identifier(ID) COLON typeref(TYPE) .
 	{
 		RESULT = composite_token(ID, "parameter");
 		json_object_set(RESULT, "identifier", ID);
-		json_object_set(RESULT, "type", TYPE);
+		json_object_set(RESULT, "interface", TYPE);
 	}
 
 %type var_parameters {json_t*}
@@ -337,7 +342,7 @@ multiassign ::= identifiers ASSIGN error .
 	{ parse_error("expected list of expressions", NULL); }
 multiassign(RESULT) ::= identifiers(LEFT) ASSIGN(T) values(RIGHT) .
 	{ RESULT = simple_token(&T, "assign");
-	  json_object_set(RESULT, "names", LEFT);
+	  json_object_set(RESULT, "variables", LEFT);
 	  json_object_set(RESULT, "values", RIGHT); }
 
 %type functionspec {json_t*}
@@ -414,12 +419,16 @@ statement ::= multiassign error .
 statement(RESULT) ::= multiassign(LEFT) SEMICOLON .
 	{ RESULT = LEFT; }
 
-/* Variable declaratio and assignment */
+/* Variable declaration and assignment */
 
 statement(RESULT) ::= VAR(T) multiassign(LEFT) SEMICOLON .
 	{
-		RESULT = simple_token(&T, "declare");
-		json_object_set(RESULT, "assignment", LEFT);
+		json_t* declare = simple_token(&T, "declare");
+		json_object_set(declare, "variables", json_object_get(LEFT, "variables"));
+
+		RESULT = json_array();
+		json_array_append(RESULT, declare);
+		json_array_append(RESULT, LEFT);
 	}
 statement ::= VAR multiassign error .
 	{ parse_error("expected ';'", NULL); }
@@ -496,7 +505,7 @@ return_parameters(RESULT) ::= COLON bracketed_var_parameters(IN) .
 return_parameters(RESULT) ::= COLON typeref(TYPE) .
 	{ json_t* param = composite_token(TYPE, "parameter");
       json_object_set(param, "identifier", json_string("__return"));
-      json_object_set(param, "type", TYPE);
+      json_object_set(param, "interface", TYPE);
 	  RESULT = json_array_single(param);
 	}
 return_parameters ::= error .

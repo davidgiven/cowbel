@@ -3,21 +3,21 @@
     "statements": [
         {
             "body": {
+                "variables": [
+                    {
+                        "value": "i",
+                        "lineno": 13,
+                        "type": "identifier",
+                        "column": 14,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
                 "values": [
                     {
                         "value": 1,
                         "lineno": 13,
                         "type": "integer",
                         "column": 18,
-                        "filename": "\u003cstdin\u003e"
-                    }
-                ],
-                "names": [
-                    {
-                        "value": "i",
-                        "lineno": 13,
-                        "type": "identifier",
-                        "column": 14,
                         "filename": "\u003cstdin\u003e"
                     }
                 ],
@@ -40,21 +40,21 @@
         },
         {
             "body": {
+                "variables": [
+                    {
+                        "value": "i",
+                        "lineno": 14,
+                        "type": "identifier",
+                        "column": 4,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
                 "values": [
                     {
                         "value": 1,
                         "lineno": 14,
                         "type": "integer",
                         "column": 8,
-                        "filename": "\u003cstdin\u003e"
-                    }
-                ],
-                "names": [
-                    {
-                        "value": "i",
-                        "lineno": 14,
-                        "type": "identifier",
-                        "column": 4,
                         "filename": "\u003cstdin\u003e"
                     }
                 ],

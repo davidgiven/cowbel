@@ -11,12 +11,24 @@ local Utils = require("Utils")
 local astchildren =
 {
 	["assign"] = Utils.Set("names", "values"),
+	["block"] = Utils.Set("body"),
 	["boolean"] = {},
-	["call"] = Utils.Set("types", "receiver", "parameters"),
+	["call"] = Utils.Set("interfaces", "receiver", "parameters"),
+	["declare"] = Utils.Set("variables"),
+	["extern"] = {},
+	["function"] = Utils.Set("functionspec", "body"),
+	["functionspec"] = Utils.Set("typeparams", "inparams", "outparams"),
 	["identifier"] = {},
 	["ifelse"] = Utils.Set("condition", "iftrue", "iffalse"),
 	["integer"] = {},
+	["interfacedef"] = Utils.Set("body"),
 	["object"] = Utils.Set("statements"),
+	["objectimplements"] = Utils.Set("interface", "delegates"),
+	["real"] = {},
+	["string"] = {},
+	["typedef"] = Utils.Set("typeparams", "body"),
+	["typefunction"] = Utils.Set("functionspec"),
+	["typeref"] = Utils.Set("typeargs"),
 	["while"] = Utils.Set("condition", "body");
 }
 
@@ -44,15 +56,7 @@ local function ForEachChild(ast, callback)
 	for k in pairs(children) do
 		local node = ast[k]
 		if node then
-			if node.type then
-				-- A singleton node.
-				callback(node)
-			else
-				-- A list of nodes.
-				for _, v in ipairs(node) do
-					callback(v)
-				end
-			end
+			Utils.ForEach(ast[k], callback)
 		end
 	end
 end
