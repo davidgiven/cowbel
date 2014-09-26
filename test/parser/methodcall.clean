@@ -1,0 +1,44 @@
+{
+    "type": "object",
+    "statements": [
+        {
+            "variables": [
+                {
+                    "value": "i",
+                    "lineno": 1,
+                    "type": "identifier",
+                    "column": 0,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "values": [
+                {
+                    "interfaces": [],
+                    "receiver": {
+                        "value": "foo",
+                        "lineno": 1,
+                        "type": "identifier",
+                        "column": 4,
+                        "filename": "\u003cstdin\u003e"
+                    },
+                    "method": {
+                        "value": "bar",
+                        "lineno": 1,
+                        "type": "identifier",
+                        "column": 8,
+                        "filename": "\u003cstdin\u003e"
+                    },
+                    "lineno": 1,
+                    "parameters": [],
+                    "type": "call",
+                    "column": 8,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
+            "lineno": 1,
+            "type": "assign",
+            "column": 2,
+            "filename": "\u003cstdin\u003e"
+        }
+    ]
+}

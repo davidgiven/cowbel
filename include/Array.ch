@@ -67,7 +67,7 @@ var Array =
 	 
 	function New<T>(size: int, initialiser: T): Array<T>
 	{
-		var ptr: __extern = extern(__extern);
+		var ptr = __extern;
 		extern "${ptr} = calloc(${size}, sizeof(${initialiser}));";
 		
 		return
@@ -85,7 +85,7 @@ var Array =
 			function get(i: int): (result: T)
 			{
 				_boundscheck(i);
-				result = extern(initialiser);
+				result = initialiser;
 				extern "${result} = ((typeof(${result})*)${ptr})[${i}];";
 			}
 			

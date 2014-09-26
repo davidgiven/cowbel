@@ -109,6 +109,17 @@ string(RESULT) ::= string(LEFT) STRING(T) .
 methodname(RESULT) ::= identifier(IN) .              { RESULT = IN; }
 methodname(RESULT) ::= operator(IN) .                { RESULT = IN; }
 
+%type methodcall {json_t*}
+methodcall(RESULT) ::= expression_0(LEFT) DOT methodname(OP)
+			bracketed_typerefs(TYPES)
+			OPEN_PARENTHESIS optional_values(RIGHT) CLOSE_PARENTHESIS .
+	{ RESULT = composite_token(OP, "call");
+	  json_object_set(RESULT, "method", OP);
+	  json_object_set(RESULT, "interfaces", TYPES);
+	  json_object_set(RESULT, "receiver", LEFT);
+	  json_object_set(RESULT, "parameters", RIGHT);
+	}
+
 /* --- Value expressions ------------------------------------------------- */
 
 %type expression_0 {json_t*}
@@ -121,41 +132,39 @@ expression ::= OPEN_PARENTHESIS expression error .
 	{ parse_error("expected ')'"); }
 expression_0(RESULT) ::= OPEN_PARENTHESIS expression(IN) CLOSE_PARENTHESIS .
                                                      { RESULT = IN; }
-expression ::= OPEN_BRACE optional_statements error .
+expression_0 ::= OPEN_BRACE optional_statements error .
 	{ parse_error("expected '}' or statement"); }
 expression_0(RESULT) ::= OPEN_BRACE(T) optional_statements(BODY) CLOSE_BRACE .
 	{ RESULT = simple_token(&T, "block");
-	  json_object_set(RESULT, "body", BODY); }
+	  json_object_set(RESULT, "body", BODY);
+	}
+
+expression_0 ::= EXTERN error .
+	{ parse_error("invalid extern statement"); }
 expression_0(RESULT) ::= EXTERN string(TYPE) OPEN_BRACE(T)
 		optional_statements(BODY) CLOSE_BRACE .
 	{ RESULT = simple_token(&T, "block");
 	  json_object_set(RESULT, "nativetype", TYPE);
-	  json_object_set(RESULT, "body", BODY); }
-
-%type expression_1 {json_t*}
-expression_1(RESULT) ::= expression_0(IN) .          { RESULT = IN; }
-expression_1(RESULT) ::= expression_0(LEFT) DOT methodname(OP)
-			bracketed_typerefs(TYPES)
-			OPEN_PARENTHESIS optional_values(RIGHT) CLOSE_PARENTHESIS .
-	{
-		RESULT = composite_token(OP, "call");
-		json_object_set(RESULT, "method", OP);
-		json_object_set(RESULT, "interfaces", TYPES);
-		json_object_set(RESULT, "receiver", LEFT);
-		json_object_set(RESULT, "parameters", RIGHT);
+	  json_object_set(RESULT, "body", BODY);
 	}
 
+%type expression_1 {json_t*}
+expression_1(RESULT) ::= expression_0(IN) .
+	{ RESULT = IN; }
+expression_1(RESULT) ::= methodcall(CALL) .
+	{ RESULT = CALL; }
+
 %type expression_2 {json_t*}
-expression_2(RESULT) ::= expression_1(IN) .           { RESULT = IN; }
+expression_2(RESULT) ::= expression_1(IN) .
+	{ RESULT = IN; }
 expression_2 ::= operator(O) error .
 	{ parse_error("failed to parse right hand of '%s' operator",
 			json_string_value(json_object_get(O, "value"))); }
 expression_2(RESULT) ::= operator(OP) expression_1(LEFT) .
-	{
-		RESULT = composite_token(OP, "call");
-		json_object_set(RESULT, "method", json_object_get(OP, "value"));
-		json_object_set(RESULT, "receiver", LEFT);
-		json_object_set(RESULT, "parameters", json_array());
+	{ RESULT = composite_token(OP, "call");
+	  json_object_set(RESULT, "method", json_object_get(OP, "value"));
+	  json_object_set(RESULT, "receiver", LEFT);
+	  json_object_set(RESULT, "parameters", json_array());
 	}
 
 %type expression_3 {json_t*}
@@ -163,11 +172,10 @@ expression_3(RESULT) ::= expression_2(IN) .           { RESULT = IN; }
 expression ::= expression_3 error .
 	{ parse_error("invalid operator"); }
 expression_3(RESULT) ::= expression_3(LEFT) operator(OP) expression_2(RIGHT) .
-	{
-		RESULT = composite_token(OP, "call");
-		json_object_set(RESULT, "method", json_object_get(OP, "value"));
-		json_object_set(RESULT, "receiver", LEFT);
-		json_object_set(RESULT, "parameters", json_array_single(RIGHT));
+	{ RESULT = composite_token(OP, "call");
+	  json_object_set(RESULT, "method", json_object_get(OP, "value"));
+	  json_object_set(RESULT, "receiver", LEFT);
+	  json_object_set(RESULT, "parameters", json_array_single(RIGHT));
 	}
 
 %type expression_4 {json_t*}
@@ -219,6 +227,8 @@ values(RESULT) ::= values(LEFT) COMMA expression(RIGHT) .
 		RESULT = LEFT;
 		json_array_append(RESULT, RIGHT);
 	}
+values ::= values error .
+	{ parse_error("expected value"); }
 
 /* --- Lists of identifiers ---------------------------------------------- */
 
@@ -233,6 +243,8 @@ identifiers(RESULT) ::= identifiers(LEFT) COMMA identifier(ID) .
 		RESULT = LEFT;
 		json_array_append(RESULT, ID);
 	}
+identifiers ::= identifiers error .
+	{ parse_error("expected identifier"); }
 
 /* --- Lists of type names ----------------------------------------------- */
 
