@@ -340,7 +340,7 @@
             "body": {
                 "lineno": 21,
                 "type": "return",
-                "column": 28,
+                "column": 19,
                 "filename": "\u003cstdin\u003e"
             },
             "functionspec": {
@@ -357,29 +357,23 @@
                 "lineno": 21,
                 "outparams": [
                     {
-                        "identifier": {
-                            "value": "a",
-                            "lineno": 21,
-                            "type": "identifier",
-                            "column": 16,
-                            "filename": "\u003cstdin\u003e"
-                        },
+                        "identifier": "__return",
                         "lineno": 21,
                         "type": {
                             "identifier": {
-                                "value": "integer",
+                                "value": "int",
                                 "lineno": 21,
                                 "type": "identifier",
-                                "column": 19,
+                                "column": 15,
                                 "filename": "\u003cstdin\u003e"
                             },
                             "typeargs": [],
                             "lineno": 21,
                             "type": "typeref",
-                            "column": 19,
+                            "column": 15,
                             "filename": "\u003cstdin\u003e"
                         },
-                        "column": 16,
+                        "column": 15,
                         "filename": "\u003cstdin\u003e"
                     }
                 ],
@@ -396,7 +390,7 @@
             "body": {
                 "lineno": 22,
                 "type": "return",
-                "column": 40,
+                "column": 28,
                 "filename": "\u003cstdin\u003e"
             },
             "functionspec": {
@@ -437,32 +431,6 @@
                         },
                         "column": 16,
                         "filename": "\u003cstdin\u003e"
-                    },
-                    {
-                        "identifier": {
-                            "value": "b",
-                            "lineno": 22,
-                            "type": "identifier",
-                            "column": 28,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "lineno": 22,
-                        "type": {
-                            "identifier": {
-                                "value": "integer",
-                                "lineno": 22,
-                                "type": "identifier",
-                                "column": 31,
-                                "filename": "\u003cstdin\u003e"
-                            },
-                            "typeargs": [],
-                            "lineno": 22,
-                            "type": "typeref",
-                            "column": 31,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "column": 28,
-                        "filename": "\u003cstdin\u003e"
                     }
                 ],
                 "type": "function",
@@ -478,7 +446,7 @@
             "body": {
                 "lineno": 23,
                 "type": "return",
-                "column": 64,
+                "column": 40,
                 "filename": "\u003cstdin\u003e"
             },
             "functionspec": {
@@ -490,13 +458,16 @@
                     "column": 10,
                     "filename": "\u003cstdin\u003e"
                 },
-                "inparams": [
+                "inparams": [],
+                "overriding": false,
+                "lineno": 23,
+                "outparams": [
                     {
                         "identifier": {
                             "value": "a",
                             "lineno": 23,
                             "type": "identifier",
-                            "column": 14,
+                            "column": 16,
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 23,
@@ -505,16 +476,16 @@
                                 "value": "integer",
                                 "lineno": 23,
                                 "type": "identifier",
-                                "column": 17,
+                                "column": 19,
                                 "filename": "\u003cstdin\u003e"
                             },
                             "typeargs": [],
                             "lineno": 23,
                             "type": "typeref",
-                            "column": 17,
+                            "column": 19,
                             "filename": "\u003cstdin\u003e"
                         },
-                        "column": 14,
+                        "column": 16,
                         "filename": "\u003cstdin\u003e"
                     },
                     {
@@ -522,7 +493,7 @@
                             "value": "b",
                             "lineno": 23,
                             "type": "identifier",
-                            "column": 26,
+                            "column": 28,
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 23,
@@ -531,72 +502,16 @@
                                 "value": "integer",
                                 "lineno": 23,
                                 "type": "identifier",
-                                "column": 29,
+                                "column": 31,
                                 "filename": "\u003cstdin\u003e"
                             },
                             "typeargs": [],
                             "lineno": 23,
                             "type": "typeref",
-                            "column": 29,
+                            "column": 31,
                             "filename": "\u003cstdin\u003e"
                         },
-                        "column": 26,
-                        "filename": "\u003cstdin\u003e"
-                    }
-                ],
-                "overriding": false,
-                "lineno": 23,
-                "outparams": [
-                    {
-                        "identifier": {
-                            "value": "c",
-                            "lineno": 23,
-                            "type": "identifier",
-                            "column": 40,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "lineno": 23,
-                        "type": {
-                            "identifier": {
-                                "value": "integer",
-                                "lineno": 23,
-                                "type": "identifier",
-                                "column": 43,
-                                "filename": "\u003cstdin\u003e"
-                            },
-                            "typeargs": [],
-                            "lineno": 23,
-                            "type": "typeref",
-                            "column": 43,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "column": 40,
-                        "filename": "\u003cstdin\u003e"
-                    },
-                    {
-                        "identifier": {
-                            "value": "d",
-                            "lineno": 23,
-                            "type": "identifier",
-                            "column": 52,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "lineno": 23,
-                        "type": {
-                            "identifier": {
-                                "value": "integer",
-                                "lineno": 23,
-                                "type": "identifier",
-                                "column": 55,
-                                "filename": "\u003cstdin\u003e"
-                            },
-                            "typeargs": [],
-                            "lineno": 23,
-                            "type": "typeref",
-                            "column": 55,
-                            "filename": "\u003cstdin\u003e"
-                        },
-                        "column": 52,
+                        "column": 28,
                         "filename": "\u003cstdin\u003e"
                     }
                 ],
@@ -611,15 +526,150 @@
         },
         {
             "body": {
+                "lineno": 24,
+                "type": "return",
+                "column": 64,
+                "filename": "\u003cstdin\u003e"
+            },
+            "functionspec": {
+                "typeparams": [],
+                "identifier": {
+                    "value": "foo",
+                    "lineno": 24,
+                    "type": "identifier",
+                    "column": 10,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "inparams": [
+                    {
+                        "identifier": {
+                            "value": "a",
+                            "lineno": 24,
+                            "type": "identifier",
+                            "column": 14,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "lineno": 24,
+                        "type": {
+                            "identifier": {
+                                "value": "integer",
+                                "lineno": 24,
+                                "type": "identifier",
+                                "column": 17,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [],
+                            "lineno": 24,
+                            "type": "typeref",
+                            "column": 17,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "column": 14,
+                        "filename": "\u003cstdin\u003e"
+                    },
+                    {
+                        "identifier": {
+                            "value": "b",
+                            "lineno": 24,
+                            "type": "identifier",
+                            "column": 26,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "lineno": 24,
+                        "type": {
+                            "identifier": {
+                                "value": "integer",
+                                "lineno": 24,
+                                "type": "identifier",
+                                "column": 29,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [],
+                            "lineno": 24,
+                            "type": "typeref",
+                            "column": 29,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "column": 26,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "overriding": false,
+                "lineno": 24,
+                "outparams": [
+                    {
+                        "identifier": {
+                            "value": "c",
+                            "lineno": 24,
+                            "type": "identifier",
+                            "column": 40,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "lineno": 24,
+                        "type": {
+                            "identifier": {
+                                "value": "integer",
+                                "lineno": 24,
+                                "type": "identifier",
+                                "column": 43,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [],
+                            "lineno": 24,
+                            "type": "typeref",
+                            "column": 43,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "column": 40,
+                        "filename": "\u003cstdin\u003e"
+                    },
+                    {
+                        "identifier": {
+                            "value": "d",
+                            "lineno": 24,
+                            "type": "identifier",
+                            "column": 52,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "lineno": 24,
+                        "type": {
+                            "identifier": {
+                                "value": "integer",
+                                "lineno": 24,
+                                "type": "identifier",
+                                "column": 55,
+                                "filename": "\u003cstdin\u003e"
+                            },
+                            "typeargs": [],
+                            "lineno": 24,
+                            "type": "typeref",
+                            "column": 55,
+                            "filename": "\u003cstdin\u003e"
+                        },
+                        "column": 52,
+                        "filename": "\u003cstdin\u003e"
+                    }
+                ],
+                "type": "function",
+                "column": 1,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 24,
+            "type": "function",
+            "column": 1,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "body": {
                 "body": [
                     {
-                        "lineno": 26,
+                        "lineno": 27,
                         "type": "return",
                         "column": 2,
                         "filename": "\u003cstdin\u003e"
                     }
                 ],
-                "lineno": 25,
+                "lineno": 26,
                 "type": "block",
                 "column": 14,
                 "filename": "\u003cstdin\u003e"
@@ -628,20 +678,20 @@
                 "typeparams": [],
                 "identifier": {
                     "value": "foo",
-                    "lineno": 25,
+                    "lineno": 26,
                     "type": "identifier",
                     "column": 10,
                     "filename": "\u003cstdin\u003e"
                 },
                 "inparams": [],
                 "overriding": false,
-                "lineno": 25,
+                "lineno": 26,
                 "outparams": [],
                 "type": "function",
                 "column": 1,
                 "filename": "\u003cstdin\u003e"
             },
-            "lineno": 25,
+            "lineno": 26,
             "type": "function",
             "column": 1,
             "filename": "\u003cstdin\u003e"
