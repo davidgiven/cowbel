@@ -85,7 +85,7 @@
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 15,
-                        "type": {
+                        "interface": {
                             "identifier": {
                                 "value": "integer",
                                 "lineno": 15,
@@ -99,6 +99,7 @@
                             "column": 17,
                             "filename": "\u003cstdin\u003e"
                         },
+                        "type": "parameter",
                         "column": 14,
                         "filename": "\u003cstdin\u003e"
                     }
@@ -141,7 +142,7 @@
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 16,
-                        "type": {
+                        "interface": {
                             "identifier": {
                                 "value": "integer",
                                 "lineno": 16,
@@ -155,6 +156,7 @@
                             "column": 17,
                             "filename": "\u003cstdin\u003e"
                         },
+                        "type": "parameter",
                         "column": 14,
                         "filename": "\u003cstdin\u003e"
                     },
@@ -167,7 +169,7 @@
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 16,
-                        "type": {
+                        "interface": {
                             "identifier": {
                                 "value": "integer",
                                 "lineno": 16,
@@ -181,6 +183,7 @@
                             "column": 29,
                             "filename": "\u003cstdin\u003e"
                         },
+                        "type": "parameter",
                         "column": 26,
                         "filename": "\u003cstdin\u003e"
                     }
@@ -359,7 +362,7 @@
                     {
                         "identifier": "__return",
                         "lineno": 21,
-                        "type": {
+                        "interface": {
                             "identifier": {
                                 "value": "int",
                                 "lineno": 21,
@@ -373,6 +376,7 @@
                             "column": 15,
                             "filename": "\u003cstdin\u003e"
                         },
+                        "type": "parameter",
                         "column": 15,
                         "filename": "\u003cstdin\u003e"
                     }
@@ -415,7 +419,7 @@
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 22,
-                        "type": {
+                        "interface": {
                             "identifier": {
                                 "value": "integer",
                                 "lineno": 22,
@@ -429,6 +433,7 @@
                             "column": 19,
                             "filename": "\u003cstdin\u003e"
                         },
+                        "type": "parameter",
                         "column": 16,
                         "filename": "\u003cstdin\u003e"
                     }
@@ -471,7 +476,7 @@
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 23,
-                        "type": {
+                        "interface": {
                             "identifier": {
                                 "value": "integer",
                                 "lineno": 23,
@@ -485,6 +490,7 @@
                             "column": 19,
                             "filename": "\u003cstdin\u003e"
                         },
+                        "type": "parameter",
                         "column": 16,
                         "filename": "\u003cstdin\u003e"
                     },
@@ -497,7 +503,7 @@
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 23,
-                        "type": {
+                        "interface": {
                             "identifier": {
                                 "value": "integer",
                                 "lineno": 23,
@@ -511,6 +517,7 @@
                             "column": 31,
                             "filename": "\u003cstdin\u003e"
                         },
+                        "type": "parameter",
                         "column": 28,
                         "filename": "\u003cstdin\u003e"
                     }
@@ -550,7 +557,7 @@
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 24,
-                        "type": {
+                        "interface": {
                             "identifier": {
                                 "value": "integer",
                                 "lineno": 24,
@@ -564,6 +571,7 @@
                             "column": 17,
                             "filename": "\u003cstdin\u003e"
                         },
+                        "type": "parameter",
                         "column": 14,
                         "filename": "\u003cstdin\u003e"
                     },
@@ -576,7 +584,7 @@
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 24,
-                        "type": {
+                        "interface": {
                             "identifier": {
                                 "value": "integer",
                                 "lineno": 24,
@@ -590,6 +598,7 @@
                             "column": 29,
                             "filename": "\u003cstdin\u003e"
                         },
+                        "type": "parameter",
                         "column": 26,
                         "filename": "\u003cstdin\u003e"
                     }
@@ -606,7 +615,7 @@
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 24,
-                        "type": {
+                        "interface": {
                             "identifier": {
                                 "value": "integer",
                                 "lineno": 24,
@@ -620,6 +629,7 @@
                             "column": 43,
                             "filename": "\u003cstdin\u003e"
                         },
+                        "type": "parameter",
                         "column": 40,
                         "filename": "\u003cstdin\u003e"
                     },
@@ -632,7 +642,7 @@
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 24,
-                        "type": {
+                        "interface": {
                             "identifier": {
                                 "value": "integer",
                                 "lineno": 24,
@@ -646,6 +656,7 @@
                             "column": 55,
                             "filename": "\u003cstdin\u003e"
                         },
+                        "type": "parameter",
                         "column": 52,
                         "filename": "\u003cstdin\u003e"
                     }

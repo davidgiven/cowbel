@@ -18,6 +18,10 @@ $(call deploy-compiler-lua,Utils.lua)
 $(call deploy-compiler-lua,AST.lua)
 endef
 
+clean::
+	@echo CLEAN $(objs)
+	$(hide)rm -f $(objs)
+
 bindir = $(BINDIR)/cowbel-compiler
 objs :=
 luas :=
@@ -26,6 +30,6 @@ $(BINDIR)/cowbel: $(luas)
 $(eval $(call copy, src/compiler/cowbel, $(BINDIR)/cowbel))
 
 clean::
-	@echo CLEAN $(BINDIR)bin/cowbel
+	@echo CLEAN $(BINDIR)/cowbel
 	$(hide)rm -f $(luas) $(BINDIR)/cowbel
 

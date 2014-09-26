@@ -2,6 +2,15 @@
     "type": "object",
     "statements": [
         {
+            "variables": [
+                {
+                    "value": "a",
+                    "lineno": 1,
+                    "type": "identifier",
+                    "column": 0,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
             "values": [
                 {
                     "value": "b",
@@ -11,21 +20,21 @@
                     "filename": "\u003cstdin\u003e"
                 }
             ],
-            "names": [
-                {
-                    "value": "a",
-                    "lineno": 1,
-                    "type": "identifier",
-                    "column": 0,
-                    "filename": "\u003cstdin\u003e"
-                }
-            ],
             "lineno": 1,
             "type": "assign",
             "column": 2,
             "filename": "\u003cstdin\u003e"
         },
         {
+            "variables": [
+                {
+                    "value": "c",
+                    "lineno": 2,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
             "values": [
                 {
                     "value": "d",
@@ -35,21 +44,21 @@
                     "filename": "fnord"
                 }
             ],
-            "names": [
-                {
-                    "value": "c",
-                    "lineno": 2,
-                    "type": "identifier",
-                    "column": 1,
-                    "filename": "\u003cstdin\u003e"
-                }
-            ],
             "lineno": 2,
             "type": "assign",
             "column": 3,
             "filename": "\u003cstdin\u003e"
         },
         {
+            "variables": [
+                {
+                    "value": "e",
+                    "lineno": 10,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "line 5"
+                }
+            ],
             "values": [
                 {
                     "receiver": {
@@ -73,15 +82,6 @@
                     "type": "call",
                     "column": 3,
                     "filename": "line 7"
-                }
-            ],
-            "names": [
-                {
-                    "value": "e",
-                    "lineno": 10,
-                    "type": "identifier",
-                    "column": 1,
-                    "filename": "line 5"
                 }
             ],
             "lineno": 10,

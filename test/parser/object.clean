@@ -11,21 +11,21 @@
         {
             "body": [
                 {
+                    "variables": [
+                        {
+                            "value": "i",
+                            "lineno": 14,
+                            "type": "identifier",
+                            "column": 2,
+                            "filename": "\u003cstdin\u003e"
+                        }
+                    ],
                     "values": [
                         {
                             "value": 1,
                             "lineno": 14,
                             "type": "integer",
                             "column": 6,
-                            "filename": "\u003cstdin\u003e"
-                        }
-                    ],
-                    "names": [
-                        {
-                            "value": "i",
-                            "lineno": 14,
-                            "type": "identifier",
-                            "column": 2,
                             "filename": "\u003cstdin\u003e"
                         }
                     ],
@@ -55,21 +55,21 @@
             "iftrue": {
                 "body": [
                     {
+                        "variables": [
+                            {
+                                "value": "i",
+                                "lineno": 15,
+                                "type": "identifier",
+                                "column": 12,
+                                "filename": "\u003cstdin\u003e"
+                            }
+                        ],
                         "values": [
                             {
                                 "value": 2,
                                 "lineno": 15,
                                 "type": "integer",
                                 "column": 16,
-                                "filename": "\u003cstdin\u003e"
-                            }
-                        ],
-                        "names": [
-                            {
-                                "value": "i",
-                                "lineno": 15,
-                                "type": "identifier",
-                                "column": 12,
                                 "filename": "\u003cstdin\u003e"
                             }
                         ],
@@ -101,6 +101,15 @@
             "filename": "\u003cstdin\u003e"
         },
         {
+            "variables": [
+                {
+                    "value": "o",
+                    "lineno": 18,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
             "values": [
                 {
                     "body": [],
@@ -110,40 +119,40 @@
                     "filename": "\u003cstdin\u003e"
                 }
             ],
-            "names": [
-                {
-                    "value": "o",
-                    "lineno": 18,
-                    "type": "identifier",
-                    "column": 1,
-                    "filename": "\u003cstdin\u003e"
-                }
-            ],
             "lineno": 18,
             "type": "assign",
             "column": 3,
             "filename": "\u003cstdin\u003e"
         },
         {
+            "variables": [
+                {
+                    "value": "o",
+                    "lineno": 19,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
             "values": [
                 {
                     "body": [
                         {
+                            "variables": [
+                                {
+                                    "value": "i",
+                                    "lineno": 19,
+                                    "type": "identifier",
+                                    "column": 6,
+                                    "filename": "\u003cstdin\u003e"
+                                }
+                            ],
                             "values": [
                                 {
                                     "value": 1,
                                     "lineno": 19,
                                     "type": "integer",
                                     "column": 10,
-                                    "filename": "\u003cstdin\u003e"
-                                }
-                            ],
-                            "names": [
-                                {
-                                    "value": "i",
-                                    "lineno": 19,
-                                    "type": "identifier",
-                                    "column": 6,
                                     "filename": "\u003cstdin\u003e"
                                 }
                             ],
@@ -159,21 +168,21 @@
                     "filename": "\u003cstdin\u003e"
                 }
             ],
-            "names": [
-                {
-                    "value": "o",
-                    "lineno": 19,
-                    "type": "identifier",
-                    "column": 1,
-                    "filename": "\u003cstdin\u003e"
-                }
-            ],
             "lineno": 19,
             "type": "assign",
             "column": 3,
             "filename": "\u003cstdin\u003e"
         },
         {
+            "variables": [
+                {
+                    "value": "o",
+                    "lineno": 20,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
             "values": [
                 {
                     "body": [
@@ -192,21 +201,21 @@
                             "iftrue": {
                                 "body": [
                                     {
+                                        "variables": [
+                                            {
+                                                "value": "i",
+                                                "lineno": 20,
+                                                "type": "identifier",
+                                                "column": 17,
+                                                "filename": "\u003cstdin\u003e"
+                                            }
+                                        ],
                                         "values": [
                                             {
                                                 "value": 2,
                                                 "lineno": 20,
                                                 "type": "integer",
                                                 "column": 21,
-                                                "filename": "\u003cstdin\u003e"
-                                            }
-                                        ],
-                                        "names": [
-                                            {
-                                                "value": "i",
-                                                "lineno": 20,
-                                                "type": "identifier",
-                                                "column": 17,
                                                 "filename": "\u003cstdin\u003e"
                                             }
                                         ],
@@ -229,21 +238,21 @@
                     "filename": "\u003cstdin\u003e"
                 }
             ],
-            "names": [
-                {
-                    "value": "o",
-                    "lineno": 20,
-                    "type": "identifier",
-                    "column": 1,
-                    "filename": "\u003cstdin\u003e"
-                }
-            ],
             "lineno": 20,
             "type": "assign",
             "column": 3,
             "filename": "\u003cstdin\u003e"
         },
         {
+            "variables": [
+                {
+                    "value": "o",
+                    "lineno": 21,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
             "values": [
                 {
                     "body": [
@@ -258,15 +267,6 @@
                     "lineno": 21,
                     "type": "block",
                     "column": 5,
-                    "filename": "\u003cstdin\u003e"
-                }
-            ],
-            "names": [
-                {
-                    "value": "o",
-                    "lineno": 21,
-                    "type": "identifier",
-                    "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }
             ],

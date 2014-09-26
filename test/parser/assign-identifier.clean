@@ -2,21 +2,21 @@
     "type": "object",
     "statements": [
         {
+            "variables": [
+                {
+                    "value": "i",
+                    "lineno": 13,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                }
+            ],
             "values": [
                 {
                     "value": "j",
                     "lineno": 13,
                     "type": "identifier",
                     "column": 5,
-                    "filename": "\u003cstdin\u003e"
-                }
-            ],
-            "names": [
-                {
-                    "value": "i",
-                    "lineno": 13,
-                    "type": "identifier",
-                    "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }
             ],

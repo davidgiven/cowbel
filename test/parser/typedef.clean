@@ -245,7 +245,7 @@
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 23,
-                        "type": "functiondef",
+                        "type": "typefunction",
                         "column": 2,
                         "filename": "\u003cstdin\u003e"
                     }
@@ -310,7 +310,7 @@
                             "filename": "\u003cstdin\u003e"
                         },
                         "lineno": 27,
-                        "type": "functiondef",
+                        "type": "typefunction",
                         "column": 2,
                         "filename": "\u003cstdin\u003e"
                     }

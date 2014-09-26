@@ -20,7 +20,7 @@
  * and unboxing isn't support yet; don't try to implement these in your own
  * code. It won't work. */
   
-type int = extern {
+type int = {
 	function - (): int;
 	function + (o: int): int;
 	function - (o: int): int;
@@ -48,7 +48,7 @@ type int = extern {
 	function toReal(): real;
 };
 
-type real = extern {
+type real = {
 	function - (): real;
 	function + (o: real): real;
 	function - (o: real): real;
@@ -65,7 +65,7 @@ type real = extern {
 	function toString(): string;
 };
 
-type string = extern {
+type string = {
 	function + (o: string): string;
 	
 	function == (o: string): boolean;
@@ -76,7 +76,7 @@ type string = extern {
 	function >= (o: string): boolean;
 };
 
-type boolean = extern {
+type boolean = {
 	function == (o: boolean): boolean;
 	function != (o: boolean): boolean;
 	
@@ -88,7 +88,7 @@ type boolean = extern {
 	function toString(): string;
 };
 
-type __extern = extern {
+type __extern = {
 	function isNull(): boolean;
 };
 
@@ -97,174 +97,169 @@ type __extern = extern {
 /* Implementations of the above. The variable names are magic and are 
  * used internally by the compiler. */
  
-var int = {
-	type extern "s_int_t";
-	implements extern int;
+var int = extern "s_int_t" {
+	implements int;
 	
 	function - (): (r: int)
- 		{ r=extern(int); extern "${r} = -self;"; }
+ 		{ r=0; extern "${r} = -self;"; }
  
 	function + (o: int): (r: int)
- 		{ r=extern(int); extern "${r} = self + ${o};"; }
+ 		{ r=0; extern "${r} = self + ${o};"; }
  
 	function - (o: int): (r: int)
- 		{ r=extern(int); extern "${r} = self - ${o};"; }
+ 		{ r=0; extern "${r} = self - ${o};"; }
  
 	function * (o: int): (r: int)
- 		{ r=extern(int); extern "${r} = self * ${o};"; }
+ 		{ r=0; extern "${r} = self * ${o};"; }
  
 	function / (o: int): (r: int)
- 		{ r=extern(int); extern "${r} = self / ${o};"; }
+ 		{ r=0; extern "${r} = self / ${o};"; }
  
 	function % (o: int): (r: int)
- 		{ r=extern(int); extern "${r} = self % ${o};"; }
+ 		{ r=0; extern "${r} = self % ${o};"; }
 
 	function << (o: int): (r: int)
-		{ r=extern(int); extern "${r} = self << ${o};"; }
+		{ r=0; extern "${r} = self << ${o};"; }
 		
 	function >> (o: int): (r: int)
-		{ r=extern(int); extern "${r} = self >> ${o};"; }
+		{ r=0; extern "${r} = self >> ${o};"; }
 		
 	function >>> (o: int): (r: int)
-		{ r=extern(int); extern "${r} = (unsigned)self >> (unsigned)${o};"; }
+		{ r=0; extern "${r} = (unsigned)self >> (unsigned)${o};"; }
 		 
 	function ~ (): (r: int)
-		{ r=extern(int); extern "${r} = ^self;"; }
+		{ r=0; extern "${r} = ^self;"; }
 		
 	function & (o: int): (r: int)
-		{ r=extern(int); extern "${r} = self & ${o};"; }
+		{ r=0; extern "${r} = self & ${o};"; }
 		
 	function | (o: int): (r: int)
-		{ r=extern(int); extern "${r} = self | ${o};"; }
+		{ r=0; extern "${r} = self | ${o};"; }
 		
 	function ^ (o: int): (r: int)
-		{ r=extern(int); extern "${r} = self ^ ${o};"; }
+		{ r=0; extern "${r} = self ^ ${o};"; }
 		 
 	function == (o: int): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = self == ${o};"; }
+ 		{ r=false; extern "${r} = self == ${o};"; }
  
 	function != (o: int): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = self != ${o};"; }
+ 		{ r=false; extern "${r} = self != ${o};"; }
  
 	function < (o: int): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = self < ${o};"; }
+ 		{ r=false; extern "${r} = self < ${o};"; }
  
 	function <= (o: int): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = self <= ${o};"; }
+ 		{ r=false; extern "${r} = self <= ${o};"; }
  
 	function > (o: int): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = self > ${o};"; }
+ 		{ r=false; extern "${r} = self > ${o};"; }
  
 	function >= (o: int): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = self >= ${o};"; }
+ 		{ r=false; extern "${r} = self >= ${o};"; }
  
 	function toString(): (r: string)
-		{ r=extern(string); extern "S_METHOD_INT_TOSTRING(self, &${r});"; }
+		{ r=""; extern "S_METHOD_INT_TOSTRING(self, &${r});"; }
 		
 	function toReal(): (r: real)
-		{ r=extern(real); extern "${r} = self;"; }
+		{ r=0.0; extern "${r} = self;"; }
 };
 
-var real = {
-	type extern "s_real_t";
-	implements extern real;
+var real = extern "s_real_t" {
+	implements real;
 	
 	function - (): (r: real)
- 		{ r=extern(real); extern "${r} = -self;"; }
+ 		{ r=0.0; extern "${r} = -self;"; }
  
 	function + (o: real): (r: real)
- 		{ r=extern(real); extern "${r} = self + ${o};"; }
+ 		{ r=0.0; extern "${r} = self + ${o};"; }
  
 	function - (o: real): (r: real)
- 		{ r=extern(real); extern "${r} = self - ${o};"; }
+ 		{ r=0.0; extern "${r} = self - ${o};"; }
  
 	function * (o: real): (r: real)
- 		{ r=extern(real); extern "${r} = self * ${o};"; }
+ 		{ r=0.0; extern "${r} = self * ${o};"; }
  
 	function / (o: real): (r: real)
- 		{ r=extern(real); extern "${r} = self / ${o};"; }
+ 		{ r=0.0; extern "${r} = self / ${o};"; }
  
 	function == (o: real): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = self == ${o};"; }
+ 		{ r=false; extern "${r} = self == ${o};"; }
  
 	function != (o: real): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = self != ${o};"; }
+ 		{ r=false; extern "${r} = self != ${o};"; }
  
 	function < (o: real): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = self < ${o};"; }
+ 		{ r=false; extern "${r} = self < ${o};"; }
  
 	function <= (o: real): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = self <= ${o};"; }
+ 		{ r=false; extern "${r} = self <= ${o};"; }
  
 	function > (o: real): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = self > ${o};"; }
+ 		{ r=false; extern "${r} = self > ${o};"; }
  
 	function >= (o: real): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = self >= ${o};"; }
+ 		{ r=false; extern "${r} = self >= ${o};"; }
  
 	function toString(): (r: string)
-		{ r=extern(string); extern "S_METHOD_REAL_TOSTRING(self, &${r});"; }
+		{ r=""; extern "S_METHOD_REAL_TOSTRING(self, &${r});"; }
 };
 
-var string = {
-	type extern "s_string_t*";
-	implements extern string;
+var string = extern "s_string_t*" {
+	implements string;
 	
 	function + (o: string): (r: string)
-		{ r = extern(string); extern "S_METHOD_STRING__ADD(self, ${o}, &${r});"; }
+		{ r = ""; extern "S_METHOD_STRING__ADD(self, ${o}, &${r});"; }
 
 	function == (o: string): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = s_string_cmp(self, ${o}) == 0;"; }
+ 		{ r=false; extern "${r} = s_string_cmp(self, ${o}) == 0;"; }
  
 	function != (o: string): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = s_string_cmp(self, ${o}) != 0;"; }
+ 		{ r=false; extern "${r} = s_string_cmp(self, ${o}) != 0;"; }
  
 	function < (o: string): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = s_string_cmp(self, ${o}) < 0;"; }
+ 		{ r=false; extern "${r} = s_string_cmp(self, ${o}) < 0;"; }
  
 	function <= (o: string): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = s_string_cmp(self, ${o}) <= 0;"; }
+ 		{ r=false; extern "${r} = s_string_cmp(self, ${o}) <= 0;"; }
  
 	function > (o: string): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = s_string_cmp(self, ${o}) > 0;"; }
+ 		{ r=false; extern "${r} = s_string_cmp(self, ${o}) > 0;"; }
  
 	function >= (o: string): (r: boolean)
- 		{ r=extern(boolean); extern "${r} = s_string_cmp(self, ${o}) >= 0;"; }
+ 		{ r=false; extern "${r} = s_string_cmp(self, ${o}) >= 0;"; }
 };
 
-var boolean = {
-	type extern "s_boolean_t";
-	implements extern boolean;
+var boolean = extern "s_boolean_t" {
+	implements boolean;
 	
 	function == (o: boolean): (r: boolean)
-		{ r = extern(boolean); extern "${r} = self == ${o};"; }
+		{ r = false; extern "${r} = self == ${o};"; }
 		
 	function != (o: boolean): (r: boolean)
-		{ r = extern(boolean); extern "${r} = self != ${o};"; }
+		{ r = false; extern "${r} = self != ${o};"; }
 		
 	function ! (): (r: boolean)
-		{ r = extern(boolean); extern "${r} = !self;"; }
+		{ r = false; extern "${r} = !self;"; }
 		
 	function & (o: boolean): (r: boolean)
-		{ r = extern(boolean); extern "${r} = self & ${o};"; }
+		{ r = false; extern "${r} = self & ${o};"; }
 		
 	function | (o: boolean): (r: boolean)
-		{ r = extern(boolean); extern "${r} = self | ${o};"; }
+		{ r = false; extern "${r} = self | ${o};"; }
 		
 	function ^ (o: boolean): (r: boolean)
-		{ r = extern(boolean); extern "${r} = self ^ ${o};"; }
+		{ r = false; extern "${r} = self ^ ${o};"; }
 		
 	function toString(): (r: string)
-		{ r = extern(string); extern "${r} = self ? &s_true_label : &s_false_label;"; }
+		{ r = ""; extern "${r} = self ? &s_true_label : &s_false_label;"; }
 };
 
-var __extern = {
-	type extern "void*";
-	implements extern __extern;
+var __extern = extern "void*" {
+	implements __extern;
 	
 	function isNull(): (result: boolean)
 	{
-		result = extern(boolean);
+		result = false;
 		extern '${result} = !self;';
 	}
 };

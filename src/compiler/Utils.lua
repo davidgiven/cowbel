@@ -293,6 +293,17 @@ local function Set(...)
 	return t
 end	
 
+--- Calls a callback on an object or list of objects.
+local function ForEach(object, callback)
+	if object.type then
+		callback(object)
+	else
+		for _, o in ipairs(object) do
+			ForEach(o, callback)
+		end
+	end
+end
+
 return
 {
 	OpenFile = OpenFile,
@@ -313,4 +324,5 @@ return
 	System = System,
 	Time = Time,
 	Set = Set,
+	ForEach = ForEach,
 }
