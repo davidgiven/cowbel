@@ -254,59 +254,56 @@ bracketed_typerefs(RESULT) ::= OPEN_ANGLE optional_typerefs(IN) CLOSE_ANGLE .
 
 %type typeref {json_t*}
 typeref(RESULT) ::= identifier(ID) bracketed_typerefs(TYPES) .
-	{
-		RESULT = composite_token(ID, "typeref");
-		json_object_set(RESULT, "identifier", ID);
-		json_object_set(RESULT, "typeargs", TYPES);
+	{ RESULT = composite_token(ID, "typeref");
+	  json_object_set(RESULT, "identifier", ID);
+	  json_object_set(RESULT, "typeargs", TYPES);
 	}
 
 %type typestatements {json_t*}
-typestatements(RESULT) ::= .                     { RESULT = json_array(); }
+typestatements(RESULT) ::= .
+	{ RESULT = json_array(); }
 typestatements(RESULT) ::= typestatements(LEFT) typestatement(RIGHT) .
-	{
-		RESULT = LEFT;
-		json_array_append(RESULT, RIGHT);
+	{ RESULT = LEFT;
+	  json_array_append(RESULT, RIGHT);
 	}
 
 %type typestatement {json_t*}
 typestatement(RESULT) ::= IMPLEMENTS(T) typeref(TYPE) SEMICOLON .
-	{
-		RESULT = simple_token(&T, "typeimplements");
-		json_object_set(RESULT, "interface", TYPE);
+	{ RESULT = simple_token(&T, "typeimplements");
+	  json_object_set(RESULT, "interface", TYPE);
 	}
 typestatement(RESULT) ::= functionspec(FUNC) SEMICOLON .
-	{
-		RESULT = composite_token(FUNC, "functiondef");
-		json_object_set(RESULT, "functionspec", FUNC);
+	{ RESULT = composite_token(FUNC, "functiondef");
+	  json_object_set(RESULT, "functionspec", FUNC);
 	}
 
 %type typespec {json_t*}
-typespec(RESULT) ::= typeref(IN) .               { RESULT = IN; }
+typespec(RESULT) ::= typeref(IN) .
+	{ RESULT = IN; }
 typespec ::= OPEN_BRACE typestatements error .
 	{ parse_error("expected '}' or interface declaration statement"); }
 typespec(RESULT) ::= OPEN_BRACE(T) typestatements(STMTS) CLOSE_BRACE .
-	{
-		RESULT = simple_token(&T, "interfacedef");
-		json_object_set(RESULT, "body", STMTS);
+	{ RESULT = simple_token(&T, "interfacedef");
+	  json_object_set(RESULT, "body", STMTS);
 	}
 
 /* --- Function parameters ----------------------------------------------- */
 
 %type type_parameters {json_t*}
-type_parameters(RESULT) ::= identifier(RIGHT) .  { RESULT = json_array_single(RIGHT); }
+type_parameters(RESULT) ::= identifier(RIGHT) .
+	{ RESULT = json_array_single(RIGHT); }
 type_parameters(RESULT) ::= type_parameters(LEFT) COMMA identifier(RIGHT) .
-	{
-		RESULT = LEFT;
-		json_array_append(LEFT, RIGHT);
+	{ RESULT = LEFT;
+	  json_array_append(LEFT, RIGHT);
 	}
 
 %type bracketed_type_parameters {json_t*}
-bracketed_type_parameters(RESULT) ::= .          { RESULT = json_array(); }
-bracketed_type_parameters(RESULT) ::= OPEN_ANGLE CLOSE_ANGLE . { RESULT = json_array(); }
+bracketed_type_parameters(RESULT) ::= .
+	{ RESULT = json_array(); }
+bracketed_type_parameters(RESULT) ::= OPEN_ANGLE CLOSE_ANGLE .
+	{ RESULT = json_array(); }
 bracketed_type_parameters(RESULT) ::= OPEN_ANGLE type_parameters(IN) CLOSE_ANGLE .
-	{
-		RESULT = IN;
-	}
+	{ RESULT = IN; }
 
 %type var_parameter {json_t*}
 var_parameter(RESULT) ::= identifier(ID) COLON typeref(TYPE) .
@@ -317,22 +314,19 @@ var_parameter(RESULT) ::= identifier(ID) COLON typeref(TYPE) .
 	}
 
 %type var_parameters {json_t*}
-var_parameters(RESULT) ::= var_parameter(LEFT) . { RESULT = json_array_single(LEFT); }
+var_parameters(RESULT) ::= var_parameter(LEFT) .
+	{ RESULT = json_array_single(LEFT); }
 var_parameters(RESULT) ::= var_parameters(LEFT) COMMA var_parameter(RIGHT) .
-	{
-		RESULT = LEFT;
-		json_array_append(LEFT, RIGHT);
+	{ RESULT = LEFT;
+      json_array_append(LEFT, RIGHT);
 	}
 
 %type bracketed_var_parameters {json_t*}
-bracketed_var_parameters(RESULT) ::= .          { RESULT = json_array(); }
 bracketed_var_parameters(RESULT) ::= OPEN_PARENTHESIS CLOSE_PARENTHESIS .
-												{ RESULT = json_array(); }
+	{ RESULT = json_array(); }
 bracketed_var_parameters(RESULT) ::= OPEN_PARENTHESIS var_parameters(IN)
 		CLOSE_PARENTHESIS .
-	{
-		RESULT = IN;
-	}
+	{ RESULT = IN; }
 
 /* --- Bits of statement ------------------------------------------------- */
 
@@ -348,14 +342,17 @@ multiassign(RESULT) ::= identifiers(LEFT) ASSIGN(T) values(RIGHT) .
 
 %type functionspec {json_t*}
 functionspec(RESULT) ::= FUNCTION(T) is_overriding(OVERRIDING) methodname(NAME)
-			bracketed_type_parameters(TYPES) bracketed_var_parameters(INS)
-			return_types(OUTS) .
+			bracketed_type_parameters(TYPES) input_parameters(INS)
+			return_parameters(OUTS) .
 	{ RESULT = simple_token(&T, "function");
 	  json_object_set(RESULT, "overriding", OVERRIDING ? json_true() : json_false());
 	  json_object_set(RESULT, "identifier", NAME);
 	  json_object_set(RESULT, "typeparams", TYPES);
 	  json_object_set(RESULT, "inparams", INS);
 	  json_object_set(RESULT, "outparams", OUTS); }
+
+functionspec ::= FUNCTION error .
+	{ parse_error("invalid function declaration"); }
 
 /* --- Statements -------------------------------------------------------- */
 
@@ -480,20 +477,37 @@ statement(RESULT) ::= EXTERN(T) string(TEXT) SEMICOLON .
 /* Function definition */
 
 %type is_overriding {bool}
-is_overriding(RESULT) ::= .                           { RESULT = false; }
-is_overriding(RESULT) ::= OVERRIDING .                { RESULT = true; }
+is_overriding(RESULT) ::= .
+	{ RESULT = false; }
+is_overriding(RESULT) ::= OVERRIDING .
+	{ RESULT = true; }
 
-%type return_types {json_t*}
-return_types(RESULT) ::= .                            { RESULT = json_array(); }
-return_types(RESULT) ::= COLON bracketed_var_parameters(IN) . { RESULT = IN; }
+%type input_parameters {json_t*}
+input_parameters(RESULT) ::= .
+	{ RESULT = json_array(); }
+input_parameters(RESULT) ::= bracketed_var_parameters(IN) .
+	{ RESULT = IN; }
+	
+%type return_parameters {json_t*}
+return_parameters(RESULT) ::= .
+	{ RESULT = json_array(); }
+return_parameters(RESULT) ::= COLON bracketed_var_parameters(IN) .
+	{ RESULT = IN; }
+return_parameters(RESULT) ::= COLON typeref(TYPE) .
+	{ json_t* param = composite_token(TYPE, "parameter");
+      json_object_set(param, "identifier", json_string("__return"));
+      json_object_set(param, "type", TYPE);
+	  RESULT = json_array_single(param);
+	}
+return_parameters ::= error .
+	{ parse_error("invalid function return parameters"); }
 
 statement ::= functionspec error .
-	{ parse_error("invalid function body (probably unterminated"); }
+	{ parse_error("invalid function body (probably unterminated)"); }
 statement(RESULT) ::= functionspec(FUNC) statement(BODY) .
-	{
-		RESULT = composite_token(FUNC, "function");
-		json_object_set(RESULT, "functionspec", FUNC);
-		json_object_set(RESULT, "body", BODY);
+	{ RESULT = composite_token(FUNC, "function");
+	  json_object_set(RESULT, "functionspec", FUNC);
+	  json_object_set(RESULT, "body", BODY);
 	}
 
 /* Object implements interface */
