@@ -46,6 +46,12 @@ json_t* json_array_single(json_t* item)
 	return t;
 }
 
+void yyerror(const char* message)
+{
+	syntax_error = true;
+	parse_error("%s", message);
+}
+
 void parse_error(const char* format, ...)
 {
 	va_list ap;
@@ -77,36 +83,29 @@ int main(int argc, const char* argv[])
 	current_column = 1;
 	syntax_error = false;
 
-	void* parser = ParseAlloc(malloc);
-	//ParseTrace(stdout, ":");
+	yypstate* parser = yypstate_new();
 
 	int token;
-	token_t tokeninfo;
-	for (;;)
+	YYSTYPE tokeninfo;
+	int status;
+	do
 	{
         token = yylex(scanner);
 		if (token == 0)
 			break;
 
-		tokeninfo.filename = current_filename;
-		tokeninfo.lineno = current_lineno;
-		tokeninfo.column = current_column;
+		tokeninfo.token.filename = current_filename;
+		tokeninfo.token.lineno = current_lineno;
+		tokeninfo.token.column = current_column;
 		if (token == STRING)
-			tokeninfo.value = parsed_string;
+			tokeninfo.token.value = parsed_string;
 		else
-			tokeninfo.value = json_string(yyget_text(scanner));
+			tokeninfo.token.value = json_string(yyget_text(scanner));
 
-        Parse(parser, token, tokeninfo);
+		status = yypush_parse(parser, token, &tokeninfo);
     }
-
-	/* Lemon's error recovery doesn't seem to fire on a normal EOF token,
-	 * so we send this special one first just to make sure that errors
-	 * get reported properly. */
-	Parse(parser, END_OF_FILE, tokeninfo);
-	Parse(parser, 0, tokeninfo);
-
-	ParseFree(parser, free);
-	yylex_destroy(scanner);
+	while (status == YYPUSH_MORE);
+	yypush_parse(parser, 0, NULL);
 
 	return syntax_error ? 1 : 0;
 }

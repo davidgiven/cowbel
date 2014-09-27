@@ -1,4 +1,4 @@
-<stdin>:1:10: error: expected ')'
-<stdin>:2:10: error: expected ';'
-<stdin>:3:13: error: expected ')'
-<stdin>:4:12: error: expected ';'
+<stdin>:1:10: error: syntax error, unexpected ;
+<stdin>:2:10: error: syntax error, unexpected )
+<stdin>:3:13: error: syntax error, unexpected ;
+<stdin>:4:12: error: syntax error, unexpected )

@@ -4,556 +4,622 @@
  * full license text.
  */
 
-%include {
+%{
 	#include "globals.h"
 	#include <assert.h>
+%}
+
+%define api.pure full
+%define api.push-pull push
+%define parse.error verbose
+%define parse.lac full
+
+%union {
+	token_t token;
+	json_t* node;
 }
 
-%token_type {token_t}
+%token END 0 "end of file"
+%token <token> AND "and"
+%token <token> ASSIGN "="
+%token <token> BREAK "break"
+%token <token> CLOSE_ANGLE ">"
+%token <token> CLOSE_BRACE "}"
+%token <token> CLOSE_PARENTHESIS ")"
+%token <token> COLON ":"
+%token <token> COMMA ","
+%token <token> CONTINUE "continue"
+%token <token> DO "do"
+%token <token> DOT "."
+%token <token> ELSE "else"
+%token <token> EXTERN "extern"
+%token <token> FALSE "false"
+%token <token> FUNCTION "function"
+%token <token> IDENTIFIER "identifier"
+%token <token> IF "if"
+%token <token> IMPLEMENTS "implements"
+%token <token> INTEGER "integer"
+%token <token> NOT "not"
+%token <token> OPEN_ANGLE "<"
+%token <token> OPEN_BRACE "{"
+%token <token> OPEN_PARENTHESIS "("
+%token <token> OPERATOR "operator"
+%token <token> OR "or"
+%token <token> OVERRIDING "overriding"
+%token <token> REAL "real"
+%token <token> RETURN "return"
+%token <token> SEMICOLON ";"
+%token <token> STRING "string"
+%token <token> TRUE "true"
+%token <token> TYPE "type"
+%token <token> VAR "var"
+%token <token> WHILE "while"
+%type <node> boolean
+%type <node> bracketed_type_parameters
+%type <node> bracketed_typerefs
+%type <node> bracketed_var_parameters
+%type <node> expression
+%type <node> expression_0
+%type <node> expression_1
+%type <node> expression_2
+%type <node> expression_3
+%type <node> expression_4
+%type <node> functionspec
+%type <node> identifier
+%type <node> identifiers
+%type <node> input_parameters
+%type <node> integer
+%type <node> is_overriding
+%type <node> methodcall
+%type <node> methodname
+%type <node> multiassign
+%type <node> operator
+%type <node> optional_statements
+%type <node> optional_typerefs
+%type <node> optional_values
+%type <node> real
+%type <node> return_parameters
+%type <node> statement
+%type <node> statements
+%type <node> string
+%type <node> type_parameters
+%type <node> typeref
+%type <node> typerefs
+%type <node> values
+%type <node> var_parameter
+%type <node> var_parameters
+%type <node> typedef
+%type <node> typestatement
+%type <node> typestatements
 
-%syntax_error
-{
-	syntax_error = true;
-}
+%right ELSE IF
+%left OR
+%left AND
+%left NOT
 
-start ::= optional_statements(IN) END_OF_FILE .
-	{
-		if (!syntax_error)
+%%
+
+start:
+	optional_statements 
 		{
-			json_t* p = composite_token(IN, "object");
-			json_object_set(p, "statements", IN);
-			json_dumpf(p, stdout, JSON_INDENT(2) | JSON_ENSURE_ASCII);
+			if (yynerrs == 0)
+			{
+				json_t* p = composite_token($1, "object");
+				json_object_set(p, "statements", $1);
+				json_dumpf(p, stdout, JSON_INDENT(2) | JSON_ENSURE_ASCII);
+			}
 		}
-	}
-
-%left OR .
-%left AND .
-%left IF .
-%left ELSE .
+	;
 
 /* --- Primitives -------------------------------------------------------- */
 
-%type identifier {json_t*}
-identifier(RESULT) ::= IDENTIFIER(T) .
-	{
-		RESULT = simple_token(&T, "identifier");
-		json_object_set(RESULT, "value", T.value);
-	}
+identifier:
+	IDENTIFIER
+		{
+			$$ = simple_token(&$1, "identifier");
+			json_object_set($$, "value", $1.value);
+		}
+	;
 
-%type operator {json_t*}
-operator(RESULT) ::= OPERATOR(T) .
-	{
-		RESULT = simple_token(&T, "identifier");
-		json_object_set(RESULT, "value", T.value);
-	}
-operator(RESULT) ::= OPEN_ANGLE(T) .
-	{
-		RESULT = simple_token(&T, "identifier");
-		json_object_set(RESULT, "value", json_string("<"));
-	}
-operator(RESULT) ::= CLOSE_ANGLE(T) .
-	{
-		RESULT = simple_token(&T, "identifier");
-		json_object_set(RESULT, "value", json_string(">"));
-	}
+operator:
+	OPERATOR
+		{
+			$$ = simple_token(&$1, "identifier");
+			json_object_set($$, "value", $1.value);
+		}
+	| "<"
+		{
+			$$ = simple_token(&$1, "identifier");
+			json_object_set($$, "value", json_string("<"));
+		}
+	| ">"
+		{
+			$$ = simple_token(&$1, "identifier");
+			json_object_set($$, "value", json_string("<"));
+		}
+	;
 
-%type integer {json_t*}
-integer(RESULT) ::= INTEGER(T) .
-	{
-		long value = strtol(json_string_value(T.value), NULL, 0);
+integer:
+	INTEGER
+		{
+			long value = strtol(json_string_value($1.value), NULL, 0);
 
-		RESULT = simple_token(&T, "integer");
-		json_object_set(RESULT, "value", json_integer(value));
-	}
+			$$ = simple_token(&$1, "integer");
+			json_object_set($$, "value", json_integer(value));
+		}
+	;
 
-%type real {json_t*}
-real(RESULT) ::= REAL(T) .
-	{
-		double value = strtod(json_string_value(T.value), NULL);
+real:
+	REAL
+		{
+			double value = strtod(json_string_value($1.value), NULL);
 
-		RESULT = simple_token(&T, "real");
-		json_object_set(RESULT, "value", json_real(value));
-	}
+			$$ = simple_token(&$1, "real");
+			json_object_set($$, "value", json_real(value));
+		}
+	;
 
-%type boolean {json_t*}
-boolean(RESULT) ::= TRUE(T) .
-	{
-		RESULT = simple_token(&T, "boolean");
-		json_object_set(RESULT, "value", json_true());
-	}
-boolean(RESULT) ::= FALSE(T) .
-	{
-		RESULT = simple_token(&T, "boolean");
-		json_object_set(RESULT, "value", json_false());
-	}
+boolean:
+	TRUE
+		{
+			$$ = simple_token(&$1, "boolean");
+			json_object_set($$, "value", json_true());
+		}
+	| FALSE
+		{
+			$$ = simple_token(&$1, "boolean");
+			json_object_set($$, "value", json_false());
+		}
+	;
 
-%type string {json_t*}
-string(RESULT) ::= STRING(T) .
-	{
-		RESULT = simple_token(&T, "string");
-		json_object_set(RESULT, "value", T.value);
-	}
-string(RESULT) ::= string(LEFT) STRING(T) .
-	{
-		RESULT = composite_token(LEFT, "string");
-		const char* s1 = json_string_value(json_object_get(LEFT, "value"));
-		const char* s2 = json_string_value(T.value);
-		char s[strlen(s1) + strlen(s2) + 1];
-		sprintf(s, "%s%s", s1, s2);
-		json_object_set(RESULT, "value", json_string(s));
-	}
+string:
+	STRING
+		{
+			$$ = simple_token(&$1, "string");
+			json_object_set($$, "value", $1.value);
+		}
+	| string STRING
+		{
+			$$ = composite_token($1, "string");
+			const char* s1 = json_string_value(json_object_get($1, "value"));
+			const char* s2 = json_string_value($2.value);
+			char s[strlen(s1) + strlen(s2) + 1];
+			sprintf(s, "%s%s", s1, s2);
+			json_object_set($$, "value", json_string(s));
+		}
+	;
+
 
 /* --- Utilities --------------------------------------------------------- */
 
-%type methodname {json_t*}
-methodname(RESULT) ::= identifier(IN) .              { RESULT = IN; }
-methodname(RESULT) ::= operator(IN) .                { RESULT = IN; }
+methodname:
+	identifier
+		{ $$ = $1; }
+	| operator
+		{ $$ = $1; }
+	;
 
-%type methodcall {json_t*}
-methodcall(RESULT) ::= expression_0(LEFT) DOT methodname(OP)
-			bracketed_typerefs(TYPES)
-			OPEN_PARENTHESIS optional_values(RIGHT) CLOSE_PARENTHESIS .
-	{ RESULT = composite_token(OP, "call");
-	  json_object_set(RESULT, "method", OP);
-	  json_object_set(RESULT, "interfaces", TYPES);
-	  json_object_set(RESULT, "receiver", LEFT);
-	  json_object_set(RESULT, "parameters", RIGHT);
-	}
+methodcall:
+	expression_0[expr] "."[t] methodname bracketed_typerefs "("
+	optional_values ")"
+		{
+			$$ = simple_token(&$t, "call");
+			json_object_set($$, "method", $methodname);
+			json_object_set($$, "interfaces", $bracketed_typerefs);
+			json_object_set($$, "receiver", $expr);
+			json_object_set($$, "parameters", $optional_values);
+		}
+	;
 
 /* --- Value expressions ------------------------------------------------- */
 
-%type expression_0 {json_t*}
-expression_0(RESULT) ::= identifier(IN) .            { RESULT = IN; }
-expression_0(RESULT) ::= integer(IN) .               { RESULT = IN; }
-expression_0(RESULT) ::= real(IN) .                  { RESULT = IN; }
-expression_0(RESULT) ::= boolean(IN) .               { RESULT = IN; }
-expression_0(RESULT) ::= string(IN) .                { RESULT = IN; }
-expression ::= OPEN_PARENTHESIS expression error .
-	{ parse_error("expected ')'"); }
-expression_0(RESULT) ::= OPEN_PARENTHESIS expression(IN) CLOSE_PARENTHESIS .
-                                                     { RESULT = IN; }
-expression_0 ::= OPEN_BRACE optional_statements error .
-	{ parse_error("expected '}' or statement"); }
-expression_0(RESULT) ::= OPEN_BRACE(T) optional_statements(BODY) CLOSE_BRACE .
-	{ RESULT = simple_token(&T, "block");
-	  json_object_set(RESULT, "body", BODY);
-	}
+expression_0:
+	identifier
+		{ $$ = $1; }
+	| integer
+		{ $$ = $1; }
+	| real
+		{ $$ = $1; }
+	| boolean
+		{ $$ = $1; }
+	| string
+		{ $$ = $1; }
+	| "(" expression ")"
+		{ $$ = $2; }
+	| "{" optional_statements "}"
+		{
+			$$ = simple_token(&$1, "block");
+			json_object_set($$, "body", $2);
+		}
+	| EXTERN string "{" optional_statements "}"
+		{
+			$$ = simple_token(&$3, "block");
+			json_object_set($$, "nativetype", $2);
+			json_object_set($$, "body", $4);
+		}
+	;
 
-expression_0 ::= EXTERN error .
-	{ parse_error("invalid extern statement"); }
-expression_0(RESULT) ::= EXTERN string(TYPE) OPEN_BRACE(T)
-		optional_statements(BODY) CLOSE_BRACE .
-	{ RESULT = simple_token(&T, "block");
-	  json_object_set(RESULT, "nativetype", TYPE);
-	  json_object_set(RESULT, "body", BODY);
-	}
+expression_1:
+	expression_0
+		{ $$ = $1; }
+	| methodcall
+		{ $$ = $1; }
+	;
 
-%type expression_1 {json_t*}
-expression_1(RESULT) ::= expression_0(IN) .
-	{ RESULT = IN; }
-expression_1(RESULT) ::= methodcall(CALL) .
-	{ RESULT = CALL; }
+expression_2:
+	expression_1
+		{ $$ = $1; }
+	| operator expression_1
+		{
+			$$ = composite_token($1, "call");
+			json_object_set($$, "method", json_object_get($1, "value"));
+			json_object_set($$, "receiver", $2);
+			json_object_set($$, "parameters", json_array());
+		}
+	;
 
-%type expression_2 {json_t*}
-expression_2(RESULT) ::= expression_1(IN) .
-	{ RESULT = IN; }
-expression_2 ::= operator(O) error .
-	{ parse_error("failed to parse right hand of '%s' operator",
-			json_string_value(json_object_get(O, "value"))); }
-expression_2(RESULT) ::= operator(OP) expression_1(LEFT) .
-	{ RESULT = composite_token(OP, "call");
-	  json_object_set(RESULT, "method", json_object_get(OP, "value"));
-	  json_object_set(RESULT, "receiver", LEFT);
-	  json_object_set(RESULT, "parameters", json_array());
-	}
+expression_3:
+	expression_2
+		{ $$ = $1; }
+	| expression_3 operator expression_2
+		{
+			$$ = composite_token($2, "call");
+			json_object_set($$, "method", json_object_get($2, "value"));
+			json_object_set($$, "receiver", $1);
+			json_object_set($$, "parameters", json_array_single($3));
+		}
+	;
 
-%type expression_3 {json_t*}
-expression_3(RESULT) ::= expression_2(IN) .           { RESULT = IN; }
-expression ::= expression_3 error .
-	{ parse_error("invalid operator"); }
-expression_3(RESULT) ::= expression_3(LEFT) operator(OP) expression_2(RIGHT) .
-	{ RESULT = composite_token(OP, "call");
-	  json_object_set(RESULT, "method", json_object_get(OP, "value"));
-	  json_object_set(RESULT, "receiver", LEFT);
-	  json_object_set(RESULT, "parameters", json_array_single(RIGHT));
-	}
+expression_4:
+	expression_3
+		{ $$ = $1; }
+	| expression_4 OR expression_4
+		{
+			$$ = simple_token(&$2, "or");
+			json_object_set($$, "left", $1);
+			json_object_set($$, "right", $3);
+		}
+	| expression_4 AND expression_4
+		{
+			$$ = simple_token(&$2, "and");
+			json_object_set($$, "left", $1);
+			json_object_set($$, "right", $3);
+		}
+	| NOT expression_4
+		{
+			$$ = simple_token(&$1, "not");
+			json_object_set($$, "left", $2);
+		}
+	;
 
-%type expression_4 {json_t*}
-expression_4(RESULT) ::= expression_3(IN) .           { RESULT = IN; }
-expression_4 ::= expression_4 OR error .
-	{ parse_error("failed to parse right hand of 'or' operator"); }
-expression_4(RESULT) ::= expression_4(LEFT) OR(OP) expression_4(RIGHT) .
-	{
-		RESULT = simple_token(&OP, "or");
-		json_object_set(RESULT, "left", LEFT);
-		json_object_set(RESULT, "right", RIGHT);
-	}
-expression_4 ::= expression_4 AND error .
-	{ parse_error("failed to parse right hand of 'and' operator"); }
-expression_4(RESULT) ::= expression_4(LEFT) AND(OP) expression_4(RIGHT) .
-	{
-		RESULT = simple_token(&OP, "and");
-		json_object_set(RESULT, "left", LEFT);
-		json_object_set(RESULT, "right", RIGHT);
-	}
-expression_4 ::= NOT error .
-	{ parse_error("failed to parse right hand of 'not' operator"); }
-expression_4(RESULT) ::= NOT(OP) expression_3(LEFT) .
-	{
-		RESULT = simple_token(&OP, "not");
-		json_object_set(RESULT, "left", LEFT);
-	}
+expression:
+	expression_4
+		{ $$ = $1; }
+	;
 
-%type expression {json_t*}
-expression(RESULT) ::= expression_4(IN) .             { RESULT = IN; }
 
 /* --- Lists of values --------------------------------------------------- */
 
-%type optional_values {json_t*}
-optional_values(RESULT) ::= .
-	{
-		RESULT = json_array();
-	}
-optional_values(RESULT) ::= values(IN) .         { RESULT = IN; }
+optional_values:
+	%empty
+		{ $$ = json_array(); }
+	| values
+		{ $$ = $1; }
+	;
 
-%type values {json_t*}
-values(RESULT) ::= expression(IN) .
-	{
-		RESULT = json_array();
-		json_array_append(RESULT, IN);
-	}
-values(RESULT) ::= values(LEFT) COMMA expression(RIGHT) .
-	{
-		RESULT = LEFT;
-		json_array_append(RESULT, RIGHT);
-	}
-values ::= values error .
-	{ parse_error("expected value"); }
+values:
+	expression
+		{ $$ = json_array_single($1); }
+	| values "," expression
+		{
+			$$ = $1;
+			json_array_append($$, $3);
+		}
+	;
 
 /* --- Lists of identifiers ---------------------------------------------- */
 
-%type identifiers {json_t*}
-identifiers(RESULT) ::= identifier(ID) .
-	{
-		RESULT = json_array();
-		json_array_append(RESULT, ID);
-	}
-identifiers(RESULT) ::= identifiers(LEFT) COMMA identifier(ID) .
-	{
-		RESULT = LEFT;
-		json_array_append(RESULT, ID);
-	}
-identifiers ::= identifiers error .
-	{ parse_error("expected identifier"); }
+identifiers:
+	identifier
+		{ $$ = json_array_single($1); }
+	| identifiers "," identifier
+		{
+			$$ = $1;
+			json_array_append($$, $3);
+		}
+	;
 
 /* --- Lists of type names ----------------------------------------------- */
 
-%type optional_typerefs {json_t*}
-optional_typerefs(RESULT) ::= .                 { RESULT = json_array(); }
-optional_typerefs(RESULT) ::= typerefs(IN) .   { RESULT = IN; }
+optional_typerefs:
+	%empty
+		{ $$ = json_array(); }
+	| typerefs
+		{ $$ = $1; }
+	;
 
-%type typerefs {json_t*}
-typerefs(RESULT) ::= typeref(IN) .             { RESULT = json_array_single(IN); }
-typerefs(RESULT) ::= typerefs(LEFT) COMMA typeref(RIGHT) .
-	{
-		RESULT = LEFT;
-		json_array_append(RESULT, RIGHT);
-	}
+typerefs:
+	typeref
+		{ $$ = json_array_single($1); }
+	| typerefs "," typeref
+		{
+			$$ = $1;
+			json_array_append($$, $3);
+		}
+	;
 
-%type bracketed_typerefs {json_t*}
-bracketed_typerefs(RESULT) ::= .                { RESULT = json_array(); }
-bracketed_typerefs(RESULT) ::= OPEN_ANGLE optional_typerefs(IN) CLOSE_ANGLE .
-	{
-		RESULT = IN;
-	}
+bracketed_typerefs:
+	%empty
+		{ $$ = json_array(); }
+	| "<" optional_typerefs ">"
+		{ $$ = $2; }
+	;
 
 /* --- Type expressions -------------------------------------------------- */
 
-%type typeref {json_t*}
-typeref(RESULT) ::= identifier(ID) bracketed_typerefs(TYPES) .
-	{ RESULT = composite_token(ID, "typeref");
-	  json_object_set(RESULT, "identifier", ID);
-	  json_object_set(RESULT, "typeargs", TYPES);
-	}
+typeref:
+	identifier bracketed_typerefs
+		{
+			$$ = composite_token($1, "typeref");
+			json_object_set($$, "identifier", $1);
+			json_object_set($$, "typeargs", $2);
+		}
+	;
 
-%type typestatements {json_t*}
-typestatements(RESULT) ::= .
-	{ RESULT = json_array(); }
-typestatements(RESULT) ::= typestatements(LEFT) typestatement(RIGHT) .
-	{ RESULT = LEFT;
-	  json_array_append(RESULT, RIGHT);
-	}
+typestatements:
+	%empty
+		{ $$ = json_array(); }
+	| typestatements[left] typestatement[right]
+		{
+			$$ = $left;
+			json_array_append($$, $right);
+		}
+	;
 
-%type typestatement {json_t*}
-typestatement(RESULT) ::= IMPLEMENTS(T) typeref(TYPE) SEMICOLON .
-	{ RESULT = simple_token(&T, "typeimplements");
-	  json_object_set(RESULT, "interface", TYPE);
-	}
-typestatement(RESULT) ::= functionspec(FUNC) SEMICOLON .
-	{ RESULT = composite_token(FUNC, "typefunction");
-	  json_object_set(RESULT, "functionspec", FUNC);
-	}
+typestatement:
+	IMPLEMENTS typeref ";"
+		{
+			$$ = simple_token(&$IMPLEMENTS, "typeimplements");
+			json_object_set($$, "interface", $typeref);
+		}
+	| functionspec ";"
+		{
+			$$ = composite_token($functionspec, "typefunction");
+			json_object_set($$, "functionspec", $functionspec);
+		}
+	;
 
-%type typespec {json_t*}
-typespec(RESULT) ::= typeref(IN) .
-	{ RESULT = IN; }
-typespec ::= OPEN_BRACE typestatements error .
-	{ parse_error("expected '}' or interface declaration statement"); }
-typespec(RESULT) ::= OPEN_BRACE(T) typestatements(STMTS) CLOSE_BRACE .
-	{ RESULT = simple_token(&T, "interfacedef");
-	  json_object_set(RESULT, "body", STMTS);
-	}
+typedef:
+	typeref
+		{ $$ = $typeref; }
+	| "{"[t] typestatements "}"
+		{
+			$$ = simple_token(&$t, "interfacedef");
+			json_object_set($$, "body", $typestatements);
+		}
+	;
 
 /* --- Function parameters ----------------------------------------------- */
 
-%type type_parameters {json_t*}
-type_parameters(RESULT) ::= identifier(RIGHT) .
-	{ RESULT = json_array_single(RIGHT); }
-type_parameters(RESULT) ::= type_parameters(LEFT) COMMA identifier(RIGHT) .
-	{ RESULT = LEFT;
-	  json_array_append(LEFT, RIGHT);
-	}
+type_parameters:
+	identifier
+		{ $$ = json_array_single($identifier); }
+	| type_parameters "," identifier
+		{
+			$$ = $1;
+			json_array_append($$, $identifier);
+		}
+	;
 
-%type bracketed_type_parameters {json_t*}
-bracketed_type_parameters(RESULT) ::= .
-	{ RESULT = json_array(); }
-bracketed_type_parameters(RESULT) ::= OPEN_ANGLE CLOSE_ANGLE .
-	{ RESULT = json_array(); }
-bracketed_type_parameters(RESULT) ::= OPEN_ANGLE type_parameters(IN) CLOSE_ANGLE .
-	{ RESULT = IN; }
+bracketed_type_parameters:
+	%empty
+		{ $$ = json_array(); }
+	| "<" ">"
+		{ $$ = json_array(); }
+	| "<" type_parameters ">"
+		{ $$ = $type_parameters; }
+	;
 
-%type var_parameter {json_t*}
-var_parameter(RESULT) ::= identifier(ID) COLON typeref(TYPE) .
-	{
-		RESULT = composite_token(ID, "parameter");
-		json_object_set(RESULT, "identifier", ID);
-		json_object_set(RESULT, "interface", TYPE);
-	}
+var_parameter:
+	identifier ":" typeref
+		{
+			$$ = composite_token($identifier, "parameter");
+			json_object_set($$, "identifier", $identifier);
+			json_object_set($$, "interface", $typeref);
+		}
+	;
 
-%type var_parameters {json_t*}
-var_parameters(RESULT) ::= var_parameter(LEFT) .
-	{ RESULT = json_array_single(LEFT); }
-var_parameters(RESULT) ::= var_parameters(LEFT) COMMA var_parameter(RIGHT) .
-	{ RESULT = LEFT;
-      json_array_append(LEFT, RIGHT);
-	}
+var_parameters:
+	var_parameter
+		{ $$ = json_array_single($1); }
+	| var_parameters "," var_parameter
+		{
+			$$ = $1;
+			json_array_append($$, $var_parameter);
+		}
+	;
 
-%type bracketed_var_parameters {json_t*}
-bracketed_var_parameters(RESULT) ::= OPEN_PARENTHESIS CLOSE_PARENTHESIS .
-	{ RESULT = json_array(); }
-bracketed_var_parameters(RESULT) ::= OPEN_PARENTHESIS var_parameters(IN)
-		CLOSE_PARENTHESIS .
-	{ RESULT = IN; }
+bracketed_var_parameters:
+	"(" ")"
+		{ $$ = json_array(); }
+	| "(" var_parameters ")"
+		{ $$ = $var_parameters; }
+	;
 
 /* --- Bits of statement ------------------------------------------------- */
 
 /* Used in assignments and declarations. */
 
-%type multiassign {json_t*}
-multiassign ::= identifiers ASSIGN error .
-	{ parse_error("expected list of expressions", NULL); }
-multiassign(RESULT) ::= identifiers(LEFT) ASSIGN(T) values(RIGHT) .
-	{ RESULT = simple_token(&T, "assign");
-	  json_object_set(RESULT, "variables", LEFT);
-	  json_object_set(RESULT, "values", RIGHT); }
+multiassign:
+	identifiers "=" values
+		{
+			$$ = simple_token(&$2, "assign");
+			json_object_set($$, "variables", $1);
+			json_object_set($$, "values", $3);
+		}
+	;
 
-%type functionspec {json_t*}
-functionspec(RESULT) ::= FUNCTION(T) is_overriding(OVERRIDING) methodname(NAME)
-			bracketed_type_parameters(TYPES) input_parameters(INS)
-			return_parameters(OUTS) .
-	{ RESULT = simple_token(&T, "function");
-	  json_object_set(RESULT, "overriding", OVERRIDING ? json_true() : json_false());
-	  json_object_set(RESULT, "identifier", NAME);
-	  json_object_set(RESULT, "typeparams", TYPES);
-	  json_object_set(RESULT, "inparams", INS);
-	  json_object_set(RESULT, "outparams", OUTS); }
+functionspec:
+	FUNCTION is_overriding methodname bracketed_type_parameters input_parameters
+	return_parameters
+		{
+			$$ = simple_token(&$FUNCTION, "function");
+			json_object_set($$, "overriding", $is_overriding);
+			json_object_set($$, "identifier", $methodname);
+			json_object_set($$, "typeparams", $bracketed_type_parameters);
+			json_object_set($$, "inparams", $input_parameters);
+			json_object_set($$, "outparams", $return_parameters);
+		}
+	;
 
-functionspec ::= FUNCTION error .
-	{ parse_error("invalid function declaration"); }
+is_overriding:
+	%empty
+		{ $$ = json_false(); }
+	| OVERRIDING
+		{ $$ = json_true(); }
+	;
+
+input_parameters:
+	%empty
+		{ $$ = json_array(); }
+	| bracketed_var_parameters
+		{ $$ = $1; }
+	;
+
+return_parameters:
+	%empty
+		{ $$ = json_array(); }
+	| ":" bracketed_var_parameters
+		{ $$ = $bracketed_var_parameters; }
+	| ":" typeref
+		{
+			json_t* param = composite_token($typeref, "parameter");
+			json_object_set(param, "identifier", json_string("__return"));
+			json_object_set(param, "interface", $typeref);
+			$$ = json_array_single(param);
+		}
+	;
 
 /* --- Statements -------------------------------------------------------- */
 
-%type optional_statements {json_t*}
-optional_statements(RESULT) ::= .                { RESULT = json_array(); }
-optional_statements(RESULT) ::= statements(IN) . { RESULT = IN; }
+optional_statements:
+	%empty
+		{ $$ = json_array(); }
+	| statements
+		{ $$ = $1; }
+	;
 
-%type statements {json_t*}
-statements(RESULT) ::= statement(IN) .
-	{
-		RESULT = json_array();
-		json_array_append(RESULT, IN);
-	}
-statements(RESULT) ::= statements(LEFT) statement(RIGHT) .
-	{
-		RESULT = LEFT;
-		json_array_append(RESULT, RIGHT);
-	}
+statements:
+	statement
+		{ $$ = json_array_single($1); }
+	| statements statement
+		{
+			$$ = $1;
+			json_array_append($$, $2);
+		}
+	;
 
-%type statement {json_t*}
-
+statement:
 /* Single-token statements */
-
-statement ::= BREAK error .
-	{ missing_semicolon(); }
-statement(RESULT) ::= BREAK(T) SEMICOLON .
-	{ RESULT = simple_token(&T, "break"); }
-statement ::= CONTINUE error .
-	{ missing_semicolon(); }
-statement(RESULT) ::= CONTINUE(T) SEMICOLON .
-	{ RESULT = simple_token(&T, "continue"); }
-statement ::= RETURN error .
-	{ parse_error("expected ';' or expression", NULL); }
-statement(RESULT) ::= RETURN(T) SEMICOLON .
-	{ RESULT = simple_token(&T, "return"); }
- 
+	BREAK ";"
+		{ $$ = simple_token(&$1, "break"); }
+	| CONTINUE ";"
+		{ $$ = simple_token(&$1, "continue"); }
+	| RETURN ";"
+		{ $$ = simple_token(&$1, "return"); }
 /* Return with a single value */
-
-statement ::= RETURN expression error .
-	{ missing_semicolon(); }
-statement(RESULT) ::= RETURN(T) expression(VAL) SEMICOLON .
-	{ RESULT = simple_token(&T, "return");
-	  json_object_set(RESULT, "value", VAL); }
-
-/* Constructor */
-
-statement ::= OPEN_BRACE optional_statements error .
-	{ parse_error("expected '}' or statement", NULL); }
-statement ::= OPEN_BRACE error .
-	{ parse_error("expected '}' or statement", NULL); }
-statement(RESULT) ::= OPEN_BRACE(T) optional_statements(BODY) CLOSE_BRACE .
-	{ RESULT = simple_token(&T, "block");
-	  json_object_set(RESULT, "body", BODY); }
-
+	| RETURN expression ";"
+		{
+			$$ = simple_token(&$1, "return");
+		    json_object_set($$, "value", $2);
+		}
+/* Statement constructor */
+	| "{" optional_statements "}"
+		{
+			$$ = simple_token(&$1, "block");
+			json_object_set($$, "body", $2);
+		}
 /* Assignment */
-
-statement ::= multiassign error .
-	{ missing_semicolon(); }
-statement(RESULT) ::= multiassign(LEFT) SEMICOLON .
-	{ RESULT = LEFT; }
-
+	| multiassign ";"
+		{ $$ = $1; }
 /* Variable declaration and assignment */
+	| VAR multiassign ";"
+		{
+			json_t* declare = simple_token(&$1, "declare");
+			json_object_set(declare, "variables", json_object_get($2, "variables"));
 
-statement(RESULT) ::= VAR(T) multiassign(LEFT) SEMICOLON .
-	{
-		json_t* declare = simple_token(&T, "declare");
-		json_object_set(declare, "variables", json_object_get(LEFT, "variables"));
-
-		RESULT = json_array();
-		json_array_append(RESULT, declare);
-		json_array_append(RESULT, LEFT);
-	}
-statement ::= VAR multiassign error .
-	{ parse_error("expected ';'", NULL); }
-
+			$$ = json_array();
+			json_array_append($$, declare);
+			json_array_append($$, $2);
+		}
 /* if...else */
-
-statement(RESULT) ::= IF(T) OPEN_PARENTHESIS expression(LEFT) CLOSE_PARENTHESIS
-			statement(IFTRUE) ELSE statement(IFFALSE) .
-	{
-		RESULT = simple_token(&T, "ifelse");
-		json_object_set(RESULT, "condition", LEFT);
-		json_object_set(RESULT, "iftrue", IFTRUE);
-		json_object_set(RESULT, "iffalse", IFFALSE);
-	}
-
+	| IF "(" expression ")" statement ELSE statement
+	%prec ELSE
+		{
+			$$ = simple_token(&$1, "ifelse");
+			json_object_set($$, "condition", $3);
+			json_object_set($$, "iftrue", $5);
+			json_object_set($$, "iffalse", $7);
+		}
 /* if without else */
-
-statement(RESULT) ::= IF(T) OPEN_PARENTHESIS expression(LEFT) CLOSE_PARENTHESIS
-			statement(IFTRUE) .
-	{
-		RESULT = simple_token(&T, "ifelse");
-		json_object_set(RESULT, "condition", LEFT);
-		json_object_set(RESULT, "iftrue", IFTRUE);
-	}
-
+	| IF "(" expression ")" statement
+	%prec IF
+		{
+			$$ = simple_token(&$1, "ifelse");
+			json_object_set($$, "condition", $3);
+			json_object_set($$, "iftrue", $5);
+		}
 /* while {} */
-
-statement(RESULT) ::= WHILE(T) OPEN_PARENTHESIS expression(COND) CLOSE_PARENTHESIS
-			statement(BODY) .
-	{
-		RESULT = simple_token(&T, "while");
-		json_object_set(RESULT, "condition", COND);
-		json_object_set(RESULT, "body", BODY);
-	}
-
+	| WHILE "(" expression ")" statement
+		{
+			$$ = simple_token(&$1, "while");
+			json_object_set($$, "condition", $3);
+			json_object_set($$, "body", $5);
+		}
 /* do ... while */
-
-statement(RESULT) ::= DO(T) statement(BODY) WHILE
-			OPEN_PARENTHESIS expression(COND) CLOSE_PARENTHESIS SEMICOLON .
-	{
-		RESULT = simple_token(&T, "dowhile");
-		json_object_set(RESULT, "condition", COND);
-		json_object_set(RESULT, "body", BODY);
-	}
-
+	| DO statement WHILE "(" expression ")" ";"
+		{
+			$$ = simple_token(&$1, "dowhile");
+			json_object_set($$, "condition", $5);
+			json_object_set($$, "body", $2);
+		}
 /* extern statement */
-
-statement(RESULT) ::= EXTERN(T) string(TEXT) SEMICOLON .
-	{
-		RESULT = simple_token(&T, "extern");
-		json_object_set(RESULT, "text",
-			json_object_get(TEXT, "value"));
-	}
-
+	| EXTERN string ";"
+		{
+			$$ = simple_token(&$1, "extern");
+			json_object_set($$, "text",
+				json_object_get($2, "value"));
+		}
 /* Function definition */
-
-%type is_overriding {bool}
-is_overriding(RESULT) ::= .
-	{ RESULT = false; }
-is_overriding(RESULT) ::= OVERRIDING .
-	{ RESULT = true; }
-
-%type input_parameters {json_t*}
-input_parameters(RESULT) ::= .
-	{ RESULT = json_array(); }
-input_parameters(RESULT) ::= bracketed_var_parameters(IN) .
-	{ RESULT = IN; }
-	
-%type return_parameters {json_t*}
-return_parameters(RESULT) ::= .
-	{ RESULT = json_array(); }
-return_parameters(RESULT) ::= COLON bracketed_var_parameters(IN) .
-	{ RESULT = IN; }
-return_parameters(RESULT) ::= COLON typeref(TYPE) .
-	{ json_t* param = composite_token(TYPE, "parameter");
-      json_object_set(param, "identifier", json_string("__return"));
-      json_object_set(param, "interface", TYPE);
-	  RESULT = json_array_single(param);
-	}
-return_parameters ::= error .
-	{ parse_error("invalid function return parameters"); }
-
-statement ::= functionspec error .
-	{ parse_error("invalid function body (probably unterminated)"); }
-statement(RESULT) ::= functionspec(FUNC) statement(BODY) .
-	{ RESULT = composite_token(FUNC, "function");
-	  json_object_set(RESULT, "functionspec", FUNC);
-	  json_object_set(RESULT, "body", BODY);
-	}
-
+	| functionspec statement[body]
+		{
+			$$ = composite_token($functionspec, "function");
+			json_object_set($$, "functionspec", $functionspec);
+			json_object_set($$, "body", $body);
+		}
 /* Object implements interface */
-
-%type delegates {json_t*}
-delegates(RESULT) ::= .                               { RESULT = NULL; }
-delegates(RESULT) ::= OPEN_PARENTHESIS expression(IN) CLOSE_PARENTHESIS .
-                                                      { RESULT = IN; }
-
-statement(RESULT) ::= IMPLEMENTS(T) typeref(TYPE) delegates(DELEGATES) SEMICOLON .
-	{
-		RESULT = simple_token(&T, "objectimplements");
-		json_object_set(RESULT, "interface", TYPE);
-		if (DELEGATES)
-			json_object_set(RESULT, "delegates", DELEGATES);
-	}
-
+	| IMPLEMENTS typeref ";"
+		{
+			$$ = simple_token(&$1, "objectimplements");
+			json_object_set($$, "interface", $2);
+		}
+	| IMPLEMENTS typeref "(" expression ")" ";"
+		{
+			$$ = simple_token(&$1, "objectimplements");
+			json_object_set($$, "interface", $2);
+			json_object_set($$, "delegates", $4);
+		}
 /* Type definition */
-
-statement(RESULT) ::= TYPE(T) identifier(ID) bracketed_type_parameters(TYPES)
-		ASSIGN typespec(TYPESPEC) SEMICOLON .
-	{
-		RESULT = simple_token(&T, "typedef");
-		json_object_set(RESULT, "identifier", ID);
-		json_object_set(RESULT, "typeparams", TYPES);
-		json_object_set(RESULT, "body", TYPESPEC);
-	}
+	| TYPE identifier bracketed_type_parameters "=" typedef ";"
+		{
+			$$ = simple_token(&$TYPE, "typedef");
+			json_object_set($$, "identifier", $identifier);
+			json_object_set($$, "typeparams", $bracketed_type_parameters);
+			json_object_set($$, "body", $typedef);
+		}
+	;
+/* Error recovery */
+	| error ";"
+		{ yyerrok; }
+%%
 
