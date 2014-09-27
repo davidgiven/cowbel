@@ -25,11 +25,11 @@ extern json_t* current_filename;
 extern int current_lineno;
 extern int current_column;
 extern json_t* parsed_string;
-extern bool syntax_error;
 
 extern json_t* simple_token(token_t* token, const char* kind);
 extern json_t* composite_token(json_t* proto, const char* kind);
 
+extern void yyerror(const char* message);
 extern void parse_error(const char* format, ...);
 extern void missing_semicolon(void);
 

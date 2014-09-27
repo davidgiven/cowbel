@@ -1,0 +1,131 @@
+{
+    "type": "object",
+    "statements": [
+        {
+            "lineno": 1,
+            "type": "ifelse",
+            "condition": {
+                "value": true,
+                "lineno": 1,
+                "type": "boolean",
+                "column": 4,
+                "filename": "\u003cstdin\u003e"
+            },
+            "column": 0,
+            "filename": "\u003cstdin\u003e",
+            "iftrue": {
+                "lineno": 1,
+                "type": "return",
+                "column": 10,
+                "filename": "\u003cstdin\u003e"
+            }
+        },
+        {
+            "lineno": 2,
+            "iffalse": {
+                "lineno": 2,
+                "type": "return",
+                "column": 24,
+                "filename": "\u003cstdin\u003e"
+            },
+            "type": "ifelse",
+            "condition": {
+                "value": false,
+                "lineno": 2,
+                "type": "boolean",
+                "column": 5,
+                "filename": "\u003cstdin\u003e"
+            },
+            "column": 1,
+            "filename": "\u003cstdin\u003e",
+            "iftrue": {
+                "lineno": 2,
+                "type": "break",
+                "column": 12,
+                "filename": "\u003cstdin\u003e"
+            }
+        },
+        {
+            "lineno": 4,
+            "type": "ifelse",
+            "condition": {
+                "value": true,
+                "lineno": 4,
+                "type": "boolean",
+                "column": 5,
+                "filename": "\u003cstdin\u003e"
+            },
+            "column": 1,
+            "filename": "\u003cstdin\u003e",
+            "iftrue": {
+                "lineno": 5,
+                "iffalse": {
+                    "lineno": 8,
+                    "type": "continue",
+                    "column": 3,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "type": "ifelse",
+                "condition": {
+                    "value": true,
+                    "lineno": 5,
+                    "type": "boolean",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "column": 2,
+                "filename": "\u003cstdin\u003e",
+                "iftrue": {
+                    "lineno": 6,
+                    "type": "break",
+                    "column": 3,
+                    "filename": "\u003cstdin\u003e"
+                }
+            }
+        },
+        {
+            "lineno": 10,
+            "iffalse": {
+                "lineno": 16,
+                "type": "continue",
+                "column": 2,
+                "filename": "\u003cstdin\u003e"
+            },
+            "type": "ifelse",
+            "condition": {
+                "value": true,
+                "lineno": 10,
+                "type": "boolean",
+                "column": 5,
+                "filename": "\u003cstdin\u003e"
+            },
+            "column": 1,
+            "filename": "\u003cstdin\u003e",
+            "iftrue": {
+                "lineno": 11,
+                "iffalse": {
+                    "lineno": 14,
+                    "type": "return",
+                    "column": 3,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "type": "ifelse",
+                "condition": {
+                    "value": true,
+                    "lineno": 11,
+                    "type": "boolean",
+                    "column": 6,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "column": 2,
+                "filename": "\u003cstdin\u003e",
+                "iftrue": {
+                    "lineno": 12,
+                    "type": "break",
+                    "column": 3,
+                    "filename": "\u003cstdin\u003e"
+                }
+            }
+        }
+    ]
+}

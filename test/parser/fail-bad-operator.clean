@@ -1,6 +1,4 @@
-<stdin>:2:11: error: failed to parse right hand of '+' operator
-<stdin>:3:13: error: failed to parse right hand of 'and' operator
-<stdin>:3:16: error: failed to parse right hand of 'and' operator
-<stdin>:4:12: error: failed to parse right hand of 'or' operator
-<stdin>:4:14: error: failed to parse right hand of 'or' operator
-<stdin>:5:9: error: failed to parse right hand of 'not' operator
+<stdin>:2:11: error: syntax error, unexpected operator
+<stdin>:3:13: error: syntax error, unexpected and
+<stdin>:4:12: error: syntax error, unexpected or
+<stdin>:5:12: error: syntax error, unexpected ;

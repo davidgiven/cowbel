@@ -11,7 +11,7 @@ hide = @
 .DELETE_ON_ERROR:
 
 CC = gcc
-LEMON = lemon
+BISON = bison -t
 FLEX = flex
 OBJ = .obj
 BINDIR = bin
@@ -47,16 +47,19 @@ DEPENDS += $(objdir)/$(1:.c=.d)
 objs += $(objdir)/$(1:.c=.o)
 endef
 
-# --- Processes and builds a Lemon file -------------------------------------
+# --- Processes and builds a Bison file -------------------------------------
 
 define yfile
 
 $(objdir)/$(1:.y=.h): $(objdir)/$(1:.y=.c)
 $(objdir)/$(1:.y=.c): $1 Makefile
-	@echo LEMON $$@
+	@echo BISON $$@
 	@mkdir -p $$(dir $$@)
-	$(hide)$(LEMON) $1
-	$(hide)mv $(1:.y=.c) $(1:.y=.h) $$(dir $$@)
+	$(hide)$(BISON) $1 \
+		--verbose \
+		--defines=$(objdir)/$(1:.y=.h) \
+		--output=$(objdir)/$(1:.y=.c) \
+		--report-file=$(1:.y=.out)
 
 clean::
 	@echo CLEAN $(objdir)/$(1:.y=.c)
