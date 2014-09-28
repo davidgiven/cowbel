@@ -14,6 +14,8 @@
 %define parse.error verbose
 %define parse.lac full
 
+%expect 1
+
 %union {
 	token_t token;
 	json_t* node;
@@ -200,7 +202,7 @@ methodname:
 	;
 
 methodcall:
-	expression_0[expr] "."[t] methodname bracketed_typerefs "("
+	expression_1[expr] "."[t] methodname bracketed_typerefs "("
 	optional_values ")"
 		{
 			$$ = simple_token(&$t, "call");
@@ -541,6 +543,9 @@ statement:
 		}
 /* Assignment */
 	| multiassign ";"
+		{ $$ = $1; }
+/* Void method call */
+	| methodcall ";"
 		{ $$ = $1; }
 /* Variable declaration and assignment */
 	| VAR multiassign ";"
