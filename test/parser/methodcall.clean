@@ -39,6 +39,65 @@
             "type": "assign",
             "column": 2,
             "filename": "\u003cstdin\u003e"
+        },
+        {
+            "interfaces": [],
+            "receiver": {
+                "value": "foo",
+                "lineno": 2,
+                "type": "identifier",
+                "column": 1,
+                "filename": "\u003cstdin\u003e"
+            },
+            "method": {
+                "value": "bar",
+                "lineno": 2,
+                "type": "identifier",
+                "column": 5,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 2,
+            "parameters": [],
+            "type": "call",
+            "column": 4,
+            "filename": "\u003cstdin\u003e"
+        },
+        {
+            "interfaces": [],
+            "receiver": {
+                "interfaces": [],
+                "receiver": {
+                    "value": "foo",
+                    "lineno": 3,
+                    "type": "identifier",
+                    "column": 1,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "method": {
+                    "value": "bar",
+                    "lineno": 3,
+                    "type": "identifier",
+                    "column": 5,
+                    "filename": "\u003cstdin\u003e"
+                },
+                "lineno": 3,
+                "parameters": [],
+                "type": "call",
+                "column": 4,
+                "filename": "\u003cstdin\u003e"
+            },
+            "method": {
+                "value": "baz",
+                "lineno": 3,
+                "type": "identifier",
+                "column": 11,
+                "filename": "\u003cstdin\u003e"
+            },
+            "lineno": 3,
+            "parameters": [],
+            "type": "call",
+            "column": 10,
+            "filename": "\u003cstdin\u003e"
         }
     ]
 }
