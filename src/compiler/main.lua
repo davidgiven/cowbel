@@ -14,6 +14,7 @@ local cjson = require("cjson")
 local pretty = require("pl.pretty").dump
 local Utils = require("Utils")
 local AST = require("AST")
+local Symbols = require("Symbols")
 
 local inputfile
 local outputfile
@@ -75,5 +76,10 @@ Utils.Time("Parse", function()
 		ast = AST.Load(inputfile)
 		AST.Annotate(ast)
 	end)
+
+Utils.Time("Resolve symbols", function()
+		Symbols.Resolve(ast)
+	end)
+
 pretty(ast)
 

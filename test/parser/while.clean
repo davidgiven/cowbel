@@ -5,9 +5,15 @@
             "body": {
                 "variables": [
                     {
-                        "value": "i",
+                        "identifier": {
+                            "value": "i",
+                            "lineno": 13,
+                            "type": "identifier",
+                            "column": 14,
+                            "filename": "\u003cstdin\u003e"
+                        },
                         "lineno": 13,
-                        "type": "identifier",
+                        "type": "parameter",
                         "column": 14,
                         "filename": "\u003cstdin\u003e"
                     }
@@ -42,9 +48,15 @@
             "body": {
                 "variables": [
                     {
-                        "value": "i",
+                        "identifier": {
+                            "value": "i",
+                            "lineno": 14,
+                            "type": "identifier",
+                            "column": 4,
+                            "filename": "\u003cstdin\u003e"
+                        },
                         "lineno": 14,
-                        "type": "identifier",
+                        "type": "parameter",
                         "column": 4,
                         "filename": "\u003cstdin\u003e"
                     }

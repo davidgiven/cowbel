@@ -10,7 +10,7 @@ local Utils = require("Utils")
 
 local astchildren =
 {
-	["assign"] = Utils.Set("names", "values"),
+	["assign"] = Utils.Set("variables", "values"),
 	["block"] = Utils.Set("body"),
 	["boolean"] = {},
 	["call"] = Utils.Set("interfaces", "receiver", "parameters"),
@@ -24,6 +24,7 @@ local astchildren =
 	["interfacedef"] = Utils.Set("body"),
 	["object"] = Utils.Set("statements"),
 	["objectimplements"] = Utils.Set("interface", "delegates"),
+	["parameter"] = Utils.Set("interfaces"),
 	["real"] = {},
 	["string"] = {},
 	["typedef"] = Utils.Set("typeparams", "body"),

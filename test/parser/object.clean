@@ -13,9 +13,15 @@
                 {
                     "variables": [
                         {
-                            "value": "i",
+                            "identifier": {
+                                "value": "i",
+                                "lineno": 14,
+                                "type": "identifier",
+                                "column": 2,
+                                "filename": "\u003cstdin\u003e"
+                            },
                             "lineno": 14,
-                            "type": "identifier",
+                            "type": "parameter",
                             "column": 2,
                             "filename": "\u003cstdin\u003e"
                         }
@@ -57,9 +63,15 @@
                     {
                         "variables": [
                             {
-                                "value": "i",
+                                "identifier": {
+                                    "value": "i",
+                                    "lineno": 15,
+                                    "type": "identifier",
+                                    "column": 12,
+                                    "filename": "\u003cstdin\u003e"
+                                },
                                 "lineno": 15,
-                                "type": "identifier",
+                                "type": "parameter",
                                 "column": 12,
                                 "filename": "\u003cstdin\u003e"
                             }
@@ -103,9 +115,15 @@
         {
             "variables": [
                 {
-                    "value": "o",
+                    "identifier": {
+                        "value": "o",
+                        "lineno": 18,
+                        "type": "identifier",
+                        "column": 1,
+                        "filename": "\u003cstdin\u003e"
+                    },
                     "lineno": 18,
-                    "type": "identifier",
+                    "type": "parameter",
                     "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }
@@ -127,9 +145,15 @@
         {
             "variables": [
                 {
-                    "value": "o",
+                    "identifier": {
+                        "value": "o",
+                        "lineno": 19,
+                        "type": "identifier",
+                        "column": 1,
+                        "filename": "\u003cstdin\u003e"
+                    },
                     "lineno": 19,
-                    "type": "identifier",
+                    "type": "parameter",
                     "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }
@@ -140,9 +164,15 @@
                         {
                             "variables": [
                                 {
-                                    "value": "i",
+                                    "identifier": {
+                                        "value": "i",
+                                        "lineno": 19,
+                                        "type": "identifier",
+                                        "column": 6,
+                                        "filename": "\u003cstdin\u003e"
+                                    },
                                     "lineno": 19,
-                                    "type": "identifier",
+                                    "type": "parameter",
                                     "column": 6,
                                     "filename": "\u003cstdin\u003e"
                                 }
@@ -176,9 +206,15 @@
         {
             "variables": [
                 {
-                    "value": "o",
+                    "identifier": {
+                        "value": "o",
+                        "lineno": 20,
+                        "type": "identifier",
+                        "column": 1,
+                        "filename": "\u003cstdin\u003e"
+                    },
                     "lineno": 20,
-                    "type": "identifier",
+                    "type": "parameter",
                     "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }
@@ -203,9 +239,15 @@
                                     {
                                         "variables": [
                                             {
-                                                "value": "i",
+                                                "identifier": {
+                                                    "value": "i",
+                                                    "lineno": 20,
+                                                    "type": "identifier",
+                                                    "column": 17,
+                                                    "filename": "\u003cstdin\u003e"
+                                                },
                                                 "lineno": 20,
-                                                "type": "identifier",
+                                                "type": "parameter",
                                                 "column": 17,
                                                 "filename": "\u003cstdin\u003e"
                                             }
@@ -246,9 +288,15 @@
         {
             "variables": [
                 {
-                    "value": "o",
+                    "identifier": {
+                        "value": "o",
+                        "lineno": 21,
+                        "type": "identifier",
+                        "column": 1,
+                        "filename": "\u003cstdin\u003e"
+                    },
                     "lineno": 21,
-                    "type": "identifier",
+                    "type": "parameter",
                     "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }
