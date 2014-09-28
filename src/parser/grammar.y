@@ -59,7 +59,7 @@
 %type <node> boolean
 %type <node> bracketed_type_parameters
 %type <node> bracketed_typerefs
-%type <node> bracketed_var_parameters
+%type <node> bracketed_typed_var_parameters
 %type <node> expression
 %type <node> expression_0
 %type <node> expression_1
@@ -68,13 +68,15 @@
 %type <node> expression_4
 %type <node> functionspec
 %type <node> identifier
-%type <node> identifiers
 %type <node> input_parameters
 %type <node> integer
 %type <node> is_overriding
+%type <node> maybetyped_var_parameter
+%type <node> maybetyped_var_parameters
 %type <node> methodcall
 %type <node> methodname
 %type <node> multiassign
+%type <node> multideclare
 %type <node> operator
 %type <node> optional_statements
 %type <node> optional_typerefs
@@ -85,14 +87,16 @@
 %type <node> statements
 %type <node> string
 %type <node> type_parameters
+%type <node> typed_var_parameter
+%type <node> typed_var_parameters
+%type <node> typedef
 %type <node> typeref
 %type <node> typerefs
-%type <node> values
-%type <node> var_parameter
-%type <node> var_parameters
-%type <node> typedef
 %type <node> typestatement
 %type <node> typestatements
+%type <node> untyped_var_parameter
+%type <node> untyped_var_parameters
+%type <node> values
 
 %right ELSE IF
 %left OR
@@ -319,18 +323,6 @@ values:
 		}
 	;
 
-/* --- Lists of identifiers ---------------------------------------------- */
-
-identifiers:
-	identifier
-		{ $$ = json_array_single($1); }
-	| identifiers "," identifier
-		{
-			$$ = $1;
-			json_array_append($$, $3);
-		}
-	;
-
 /* --- Lists of type names ----------------------------------------------- */
 
 optional_typerefs:
@@ -422,7 +414,7 @@ bracketed_type_parameters:
 		{ $$ = $type_parameters; }
 	;
 
-var_parameter:
+typed_var_parameter:
 	identifier ":" typeref
 		{
 			$$ = composite_token($identifier, "parameter");
@@ -431,21 +423,56 @@ var_parameter:
 		}
 	;
 
-var_parameters:
-	var_parameter
-		{ $$ = json_array_single($1); }
-	| var_parameters "," var_parameter
+untyped_var_parameter:
+	identifier
 		{
-			$$ = $1;
-			json_array_append($$, $var_parameter);
+			$$ = composite_token($identifier, "parameter");
+			json_object_set($$, "identifier", $identifier);
 		}
 	;
 
-bracketed_var_parameters:
+maybetyped_var_parameter:
+	typed_var_parameter
+		{ $$ = $1; }
+	| untyped_var_parameter
+		{ $$ = $1; }
+	;
+
+typed_var_parameters:
+	typed_var_parameter
+		{ $$ = json_array_single($1); }
+	| typed_var_parameters[left] "," typed_var_parameter[right]
+		{
+			$$ = $left;
+			json_array_append($$, $right);
+		}
+	;
+
+maybetyped_var_parameters:
+	maybetyped_var_parameter
+		{ $$ = json_array_single($1); }
+	| maybetyped_var_parameters[left] "," maybetyped_var_parameter[right]
+		{
+			$$ = $left;
+			json_array_append($$, $right);
+		}
+	;
+
+untyped_var_parameters:
+	untyped_var_parameter
+		{ $$ = json_array_single($1); }
+	| untyped_var_parameters[left] "," untyped_var_parameter[right]
+		{
+			$$ = $left;
+			json_array_append($$, $right);
+		}
+	;
+
+bracketed_typed_var_parameters:
 	"(" ")"
 		{ $$ = json_array(); }
-	| "(" var_parameters ")"
-		{ $$ = $var_parameters; }
+	| "(" typed_var_parameters ")"
+		{ $$ = $typed_var_parameters; }
 	;
 
 /* --- Bits of statement ------------------------------------------------- */
@@ -453,11 +480,20 @@ bracketed_var_parameters:
 /* Used in assignments and declarations. */
 
 multiassign:
-	identifiers "=" values
+	untyped_var_parameters[left] "="[t] values[right]
 		{
-			$$ = simple_token(&$2, "assign");
-			json_object_set($$, "variables", $1);
-			json_object_set($$, "values", $3);
+			$$ = simple_token(&$t, "assign");
+			json_object_set($$, "variables", $left);
+			json_object_set($$, "values", $right);
+		}
+	;
+
+multideclare:
+	VAR[t] maybetyped_var_parameters[left] "=" values[right]
+		{
+			$$ = simple_token(&$t, "declare");
+			json_object_set($$, "variables", $left);
+			json_object_set($$, "values", $right);
 		}
 	;
 
@@ -484,15 +520,15 @@ is_overriding:
 input_parameters:
 	%empty
 		{ $$ = json_array(); }
-	| bracketed_var_parameters
+	| bracketed_typed_var_parameters
 		{ $$ = $1; }
 	;
 
 return_parameters:
 	%empty
 		{ $$ = json_array(); }
-	| ":" bracketed_var_parameters
-		{ $$ = $bracketed_var_parameters; }
+	| ":" bracketed_typed_var_parameters
+		{ $$ = $bracketed_typed_var_parameters; }
 	| ":" typeref
 		{
 			json_t* param = composite_token($typeref, "parameter");
@@ -541,22 +577,15 @@ statement:
 			$$ = simple_token(&$1, "block");
 			json_object_set($$, "body", $2);
 		}
-/* Assignment */
-	| multiassign ";"
-		{ $$ = $1; }
 /* Void method call */
 	| methodcall ";"
 		{ $$ = $1; }
-/* Variable declaration and assignment */
-	| VAR multiassign ";"
-		{
-			json_t* declare = simple_token(&$1, "declare");
-			json_object_set(declare, "variables", json_object_get($2, "variables"));
-
-			$$ = json_array();
-			json_array_append($$, declare);
-			json_array_append($$, $2);
-		}
+/* Assignment */
+	| multiassign ";"
+		{ $$ = $1; }
+/* Declaration (subtly different semantically from assignment) */
+	| multideclare ";"
+		{ $$ = $1; }
 /* if...else */
 	| IF "(" expression ")" statement ELSE statement
 	%prec ELSE

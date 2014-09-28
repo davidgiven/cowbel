@@ -4,9 +4,15 @@
         {
             "variables": [
                 {
-                    "value": "i",
+                    "identifier": {
+                        "value": "i",
+                        "lineno": 13,
+                        "type": "identifier",
+                        "column": 1,
+                        "filename": "\u003cstdin\u003e"
+                    },
                     "lineno": 13,
-                    "type": "identifier",
+                    "type": "parameter",
                     "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }
@@ -28,9 +34,15 @@
         {
             "variables": [
                 {
-                    "value": "i",
+                    "identifier": {
+                        "value": "i",
+                        "lineno": 14,
+                        "type": "identifier",
+                        "column": 1,
+                        "filename": "\u003cstdin\u003e"
+                    },
                     "lineno": 14,
-                    "type": "identifier",
+                    "type": "parameter",
                     "column": 1,
                     "filename": "\u003cstdin\u003e"
                 }

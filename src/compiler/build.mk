@@ -16,6 +16,7 @@ define build-compiler
 $(call deploy-compiler-lua,main.lua)
 $(call deploy-compiler-lua,Utils.lua)
 $(call deploy-compiler-lua,AST.lua)
+$(call deploy-compiler-lua,Symbols.lua)
 endef
 
 clean::
